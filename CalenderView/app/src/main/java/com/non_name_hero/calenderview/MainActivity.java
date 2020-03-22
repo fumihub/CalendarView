@@ -7,8 +7,9 @@ import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView titleText;
+    //private TextView titleText;
     private GridView calendarGridView;
+    private CalendarAdapter calendarAdapter;
     /*ボタン作成しないためコメントアウト
     private Button prevButton, nextButton;
     private CalendarAdapter mCalendarAdapter;
@@ -18,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        titleText = findViewById(R.id.titleText);
+        //titleText = findViewById(R.id.titleText);
         /*ボタン作成しないためコメントアウト
         prevButton = findViewById(R.id.prevButton);
         prevButton.setOnClickListener(new View.OnClickListener() {
@@ -38,9 +39,9 @@ public class MainActivity extends AppCompatActivity {
         });
          */
         calendarGridView = findViewById(R.id.calendarGridView);
-        CalendarAdapter = new CalendarAdapter(this);
-        calendarGridView.setAdapter(CalendarAdapter);
-        titleText.setText(CalendarAdapter.getTitle());
+        calendarAdapter = new CalendarAdapter(this);
+        calendarGridView.setAdapter(calendarAdapter);
+        //titleText.setText(calendarAdapter.getTitle());
     }
 
 }
