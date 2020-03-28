@@ -20,7 +20,6 @@ public class DateManager {
     public List<Date> getDays(){
         //現在の状態を保持
         Date startDate = mCalendar.getTime();
-
         //GridViewに表示するマスの合計を計算
         int count = getWeeks() * 7 ;
 
@@ -53,9 +52,9 @@ public class DateManager {
         }
     }
 
-    //週数を取得
+    //週数を取得(6週で固定)
     public int getWeeks(){
-        return mCalendar.getActualMaximum(Calendar.WEEK_OF_MONTH);
+        return 6/*mCalendar.getActualMaximum(Calendar.WEEK_OF_MONTH)*/;
     }
 
     //曜日を取得
