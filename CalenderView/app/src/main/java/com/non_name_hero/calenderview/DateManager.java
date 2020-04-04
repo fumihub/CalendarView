@@ -10,7 +10,7 @@ import java.util.Locale;
 //日付の操作を設定するクラス
 public class DateManager {
     Calendar mCalendar;
-
+    Date startDate;
     //コンストラクタ
     public DateManager(){
         mCalendar = Calendar.getInstance();
@@ -19,14 +19,15 @@ public class DateManager {
     //当月の要素を取得
     public List<Date> getDays(){
         //現在の状態を保持
-        Date startDate = mCalendar.getTime();
+        startDate = mCalendar.getTime();
         //GridViewに表示するマスの合計を計算
         int count = getWeeks() * 7 ;
 
         //当月のカレンダーに表示される前月分の日数を計算
-        mCalendar.set(Calendar.DATE, 1);
-        int dayOfWeek = mCalendar.get(Calendar.DAY_OF_WEEK) - 1;
-        mCalendar.add(Calendar.DATE, -dayOfWeek);
+        mCalendar.set(Calendar.DATE, 1);//日付に1日を設定
+        //DAY_OF_WEEK=SUNDAY:1,MONDAY:2,TUESDAY:3,WEDNESDAY:4,THURSDAY:5,FRIDAY:6,SATURDAY:7
+        int dayOfWeek = mCalendar.get(Calendar.DAY_OF_WEEK) - 2;//今月の曜日から1引くことで前月の最後の曜日を取得
+        mCalendar.add(Calendar.DATE, -dayOfWeek);//日付を前月表示分巻き戻す
 
         List<Date> days = new ArrayList<>();
 
@@ -52,9 +53,9 @@ public class DateManager {
         }
     }
 
-    //週数を取得(6週で固定)
+    //週数を取得(月始まりが、金土日の場合6週表示(金曜日の場合31日の月のみ)、その他5周表示）
     public int getWeeks(){
-        return 6/*mCalendar.getActualMaximum(Calendar.WEEK_OF_MONTH)*/;
+        return 5/*mCalendar.getActualMaximum(Calendar.WEEK_OF_MONTH)*/;
     }
 
     //曜日を取得
@@ -74,5 +75,6 @@ public class DateManager {
     public void prevMonth(){
         mCalendar.add(Calendar.MONTH, -1);
     }
+
 }
 

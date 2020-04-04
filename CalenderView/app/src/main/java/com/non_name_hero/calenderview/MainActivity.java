@@ -1,25 +1,25 @@
 package com.non_name_hero.calenderview;
 
-import androidx.appcompat.app.AppCompatActivity;
-import android.widget.GridView;
-import android.widget.TextView;
+
 import android.os.Bundle;
+import android.widget.GridView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 
 public class MainActivity extends AppCompatActivity {
 
     //private TextView titleText;
-    private GridView calendarGridView;
-    private CalendarAdapter calendarAdapter;
-    private AdView mAdView;
-    /*ボタン作成しないためコメントアウト
-    private Button prevButton, nextButton;
+    //private Button prevButton, nextButton;
     private CalendarAdapter mCalendarAdapter;
-     */
+    private GridView calendarGridView;
+    private AdView mAdView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,8 +38,8 @@ public class MainActivity extends AppCompatActivity {
         //広告読み込み
         mAdView.loadAd(adRequest);
 
-        //titleText = findViewById(R.id.titleText);
-        /*ボタン作成しないためコメントアウト
+/*      ボタンとタイトルは表示させないためコメントアウト
+        titleText = findViewById(R.id.titleText);
         prevButton = findViewById(R.id.prevButton);
         prevButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,11 +56,12 @@ public class MainActivity extends AppCompatActivity {
                 titleText.setText(mCalendarAdapter.getTitle());
             }
         });
-         */
+
+ */
         calendarGridView = findViewById(R.id.calendarGridView);
-        calendarAdapter = new CalendarAdapter(this);
-        calendarGridView.setAdapter(calendarAdapter);
-        //titleText.setText(calendarAdapter.getTitle());
+        mCalendarAdapter = new CalendarAdapter(this);
+        calendarGridView.setAdapter(mCalendarAdapter);
+        //titleText.setText(mCalendarAdapter.getTitle());
     }
 
 }
