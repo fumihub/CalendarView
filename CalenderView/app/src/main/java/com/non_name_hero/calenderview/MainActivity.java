@@ -23,6 +23,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // ここで1秒間スリープし、スプラッシュを表示させたままにする。
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+        }
+        // スプラッシュthemeを通常themeに変更する
+        setTheme(R.style.AppTheme);
+
         setContentView(R.layout.activity_main);
 
         //広告の読み込み
@@ -63,5 +72,30 @@ public class MainActivity extends AppCompatActivity {
         calendarGridView.setAdapter(mCalendarAdapter);
         //titleText.setText(mCalendarAdapter.getTitle());
     }
+
+//    private boolean isScrolling() {
+//        float scrolledX = Math.abs(accumulatedScrollOffset.x);
+//        int expectedScrollX = Math.abs(width * monthsScrolledSoFar);
+//        return scrolledX < expectedScrollX - 5 || scrolledX > expectedScrollX + 5;
+//    }
+//
+//    boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+//        //ignore scrolling callback if already smooth scrolling
+//        if (isSmoothScrolling) {
+//            return true;
+//        }
+//
+//        if (currentDirection == CompactCalendarController.Direction.NONE) {
+//            if (Math.abs(distanceX) > Math.abs(distanceY)) {
+//                currentDirection = CompactCalendarController.Direction.HORIZONTAL;
+//            } else {
+//                currentDirection = CompactCalendarController.Direction.VERTICAL;
+//            }
+//        }
+//
+//        isScrolling = true;
+//        this.distanceX = distanceX;
+//        return true;
+//    }
 
 }
