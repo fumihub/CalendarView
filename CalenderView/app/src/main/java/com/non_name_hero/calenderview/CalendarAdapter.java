@@ -71,23 +71,6 @@ public class CalendarAdapter extends BaseAdapter {
             convertView.setBackgroundColor(Color.LTGRAY);
         }
 
-        /*
-        for(int i = 0; i < dateArray.size(); i++)
-        {
-            //当月以外のセルをグレーアウト
-            if (mDateManager.isCurrentMonth(dateArray.get(i))){
-                //当日の背景を黄色に
-                if (mDateManager.startDate.equals(dateArray.get(i))){
-                    convertView.setBackgroundColor(Color.YELLOW);
-                }else{
-                    convertView.setBackgroundColor(Color.WHITE);
-                }
-            }else {
-                convertView.setBackgroundColor(Color.LTGRAY);
-            }
-        }
-         */
-
         //日曜日を赤、土曜日を青に
         int colorId;
         switch (mDateManager.getDayOfWeek(dateArray.get(position))){

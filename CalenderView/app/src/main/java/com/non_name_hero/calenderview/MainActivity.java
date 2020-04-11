@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.GridView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -33,6 +34,9 @@ public class MainActivity extends AppCompatActivity {
         setTheme(R.style.AppTheme);
 
         setContentView(R.layout.activity_main);
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(myToolbar);
 
         //広告の読み込み
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
@@ -71,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         mCalendarAdapter = new CalendarAdapter(this);
         calendarGridView.setAdapter(mCalendarAdapter);
         //titleText.setText(mCalendarAdapter.getTitle());
+        myToolbar.setTitle(mCalendarAdapter.getTitle());
     }
 
 //    private boolean isScrolling() {

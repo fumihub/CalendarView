@@ -4,7 +4,7 @@
     android:opacity="opaque"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+    <!--起動時画像表示****************************-->
     <item
         android:drawable="@color/whiteColor"/>
 
@@ -13,5 +13,6 @@
             android:gravity="center"
             android:src="@mipmap/splash"/>
     </item>
+    <!--********************************************-->
 
 </layer-list>

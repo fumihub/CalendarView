@@ -58,14 +58,16 @@ public class DateManager {
         }
     }
 
-    //週数を取得(月始まりが、土日の場合6週表示(土曜日の場合31日の月のみ)、その他5周表示）
+    //週数を取得(月始まりが、土日の場合6週表示(土曜日の場合31日の月のみ)、その他5週表示(2月は絶対5周)）
     //引数：dayOfWeek = 月初めの曜日
     public int getWeeks(){
         //当月の要素を月初めの曜日を取得
         mCalendar.set(Calendar.DATE, 1);//日付に1日を設定
         int dayOfWeek = mCalendar.get(Calendar.DAY_OF_WEEK);
 
-        if (dayOfWeek == 7) {//土曜日の時
+        if (mCalendar.get(Calendar.MONTH) == 1) {//2月
+            return 5/*mCalendar.getActualMaximum(Calendar.WEEK_OF_MONTH)*/;
+        } else if (dayOfWeek == 7) {//土曜日の時
             //MONTH = JANUARY(0), FEBRUARY(1), MARCH(2), APRIL(3), MAY(4), JUNE(5), JULY(6), AUGUST(7), SEPTEMBER(8), OCTOBER(9), NOVEMBER(10), DECEMBER(11)
             if (mCalendar.get(Calendar.MONTH) == 0//1月
             || mCalendar.get(Calendar.MONTH) == 2//3月
@@ -73,7 +75,7 @@ public class DateManager {
             || mCalendar.get(Calendar.MONTH) == 6//7月
             || mCalendar.get(Calendar.MONTH) == 7//8月
             || mCalendar.get(Calendar.MONTH) == 9//10月
-            || mCalendar.get(Calendar.MONTH) == 11) {//11月
+            || mCalendar.get(Calendar.MONTH) == 11) {//12月
                 return 6/*mCalendar.getActualMaximum(Calendar.WEEK_OF_MONTH)*/;
             }else{
                 return 5/*mCalendar.getActualMaximum(Calendar.WEEK_OF_MONTH)*/;
