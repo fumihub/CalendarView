@@ -1,4 +1,4 @@
-package com.non_name_hero.calenderview;
+package com.non_name_hero.calenderview.calendar;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.non_name_hero.calenderview.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

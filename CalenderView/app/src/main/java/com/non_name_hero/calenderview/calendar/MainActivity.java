@@ -1,4 +1,4 @@
-package com.non_name_hero.calenderview;
+package com.non_name_hero.calenderview.calendar;
 
 
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.non_name_hero.calenderview.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,56 +52,11 @@ public class MainActivity extends AppCompatActivity {
         //広告読み込み
         mAdView.loadAd(adRequest);
 
-/*      ボタンとタイトルは表示させないためコメントアウト
-        titleText = findViewById(R.id.titleText);
-        prevButton = findViewById(R.id.prevButton);
-        prevButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCalendarAdapter.prevMonth();
-                titleText.setText(mCalendarAdapter.getTitle());
-            }
-        });
-        nextButton = findViewById(R.id.nextButton);
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCalendarAdapter.nextMonth();
-                titleText.setText(mCalendarAdapter.getTitle());
-            }
-        });
-
- */
         calendarGridView = findViewById(R.id.calendarGridView);
         mCalendarAdapter = new CalendarAdapter(this);
         calendarGridView.setAdapter(mCalendarAdapter);
         //titleText.setText(mCalendarAdapter.getTitle());
         myToolbar.setTitle(mCalendarAdapter.getTitle());
     }
-
-//    private boolean isScrolling() {
-//        float scrolledX = Math.abs(accumulatedScrollOffset.x);
-//        int expectedScrollX = Math.abs(width * monthsScrolledSoFar);
-//        return scrolledX < expectedScrollX - 5 || scrolledX > expectedScrollX + 5;
-//    }
-//
-//    boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-//        //ignore scrolling callback if already smooth scrolling
-//        if (isSmoothScrolling) {
-//            return true;
-//        }
-//
-//        if (currentDirection == CompactCalendarController.Direction.NONE) {
-//            if (Math.abs(distanceX) > Math.abs(distanceY)) {
-//                currentDirection = CompactCalendarController.Direction.HORIZONTAL;
-//            } else {
-//                currentDirection = CompactCalendarController.Direction.VERTICAL;
-//            }
-//        }
-//
-//        isScrolling = true;
-//        this.distanceX = distanceX;
-//        return true;
-//    }
 
 }
