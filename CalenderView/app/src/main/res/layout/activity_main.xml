@@ -22,7 +22,93 @@
         app:titleTextAppearance="@style/Toolbar.TitleText"
         app:titleTextColor="#2B2B2B" />
 
+    <!--罫線の設定-->
+    <!--ヘッダー情報の登録(曜日)-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginVertical="1dp"
+        android:layout_weight="0"
+        android:orientation="horizontal">
 
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="0dp"
+            android:layout_weight="1"
+            android:background="@color/whiteColor"
+            android:text="月"
+            android:textAlignment="center"
+            android:textColor="@color/blackColor"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="0dp"
+            android:layout_weight="1"
+            android:background="@color/whiteColor"
+            android:text="火"
+            android:textAlignment="center"
+            android:textColor="@color/blackColor"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="0dp"
+            android:layout_weight="1"
+            android:background="@color/whiteColor"
+            android:text="水"
+            android:textAlignment="center"
+            android:textColor="@color/blackColor"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="0dp"
+            android:layout_weight="1"
+            android:background="@color/whiteColor"
+            android:text="木"
+            android:textAlignment="center"
+            android:textColor="@color/blackColor"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="0dp"
+            android:layout_weight="1"
+            android:background="@color/whiteColor"
+            android:text="金"
+            android:textAlignment="center"
+            android:textColor="@color/blackColor"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="0dp"
+            android:layout_weight="1"
+            android:background="@color/whiteColor"
+            android:text="土"
+            android:textAlignment="center"
+            android:textColor="@color/blueColor"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="0dp"
+            android:layout_weight="1"
+            android:background="@color/whiteColor"
+            android:text="日"
+            android:textAlignment="center"
+            android:textColor="@color/redColor"
+            android:textStyle="bold" />
+
+    </LinearLayout>
 
     <!--広告のデザイン-->
     <fragment
@@ -30,7 +116,7 @@
         android:name="com.non_name_hero.calenderview.calendar.ScreenSlidePageFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0" />
+        android:layout_weight="1" />
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
@@ -38,6 +124,7 @@
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_weight="0"
         app:adSize="BANNER"
         app:adUnitId="ca-app-pub-3940256099942544/6300978111"></com.google.android.gms.ads.AdView>
 

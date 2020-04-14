@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
         // ここで1秒間スリープし、スプラッシュを表示させたままにする。
         try {
-            Thread.sleep(5000);
+            Thread.sleep(10000);
         } catch (InterruptedException e) {
         }
         // スプラッシュthemeを通常themeに変更する
