@@ -2,7 +2,10 @@ package com.non_name_hero.calenderview.calendar;
 
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -16,8 +19,8 @@ import com.non_name_hero.calenderview.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    //private TextView titleText;
-    //private Button prevButton, nextButton;
+    private TextView titleText;
+    private Button prevButton, nextButton;
     private CalendarAdapter mCalendarAdapter;
     private GridView calendarGridView;
     private AdView mAdView;
@@ -36,8 +39,27 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
+        titleText = findViewById(R.id.titleText);
+        prevButton = findViewById(R.id.prevButton);
+        prevButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCalendarAdapter.prevMonth();
+                titleText.setText(mCalendarAdapter.getTitle());
+                myToolbar.setTitle(mCalendarAdapter.getTitle());
+            }
+        });
+        nextButton = findViewById(R.id.nextButton);
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCalendarAdapter.nextMonth();
+                titleText.setText(mCalendarAdapter.getTitle());
+                myToolbar.setTitle(mCalendarAdapter.getTitle());
+            }
+        });
 
         //広告の読み込み
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
@@ -55,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         calendarGridView = findViewById(R.id.calendarGridView);
         mCalendarAdapter = new CalendarAdapter(this);
         calendarGridView.setAdapter(mCalendarAdapter);
-        //titleText.setText(mCalendarAdapter.getTitle());
+        titleText.setText(mCalendarAdapter.getTitle());
         myToolbar.setTitle(mCalendarAdapter.getTitle());
     }
 

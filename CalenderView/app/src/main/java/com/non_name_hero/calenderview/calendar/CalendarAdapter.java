@@ -64,7 +64,7 @@ public class CalendarAdapter extends BaseAdapter {
         //当月以外のセルをグレーアウト
         if (mDateManager.isCurrentMonth(dateArray.get(position))){
             //当日の背景を黄色に
-            if (mDateManager.startDate.equals(dateArray.get(position))){
+            if (mDateManager.currentDate.equals(dateArray.get(position))){
                 convertView.setBackgroundColor(Color.YELLOW);
             }else{
                 convertView.setBackgroundColor(Color.WHITE);

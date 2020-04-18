@@ -11,6 +11,9 @@ import java.util.Locale;
 public class DateManager {
     Calendar mCalendar;
     Date startDate;
+    Date currentDate;
+    Boolean currentDayFlg = Boolean.FALSE;
+
     //コンストラクタ
     public DateManager(){
         mCalendar = Calendar.getInstance();
@@ -20,6 +23,12 @@ public class DateManager {
     public List<Date> getDays(){
         //現在の状態を保持
         startDate = mCalendar.getTime();
+        if (currentDayFlg == Boolean.FALSE) {
+            //当月の日付を取得し、変更しない
+            currentDate = mCalendar.getTime();
+            currentDayFlg = Boolean.TRUE;
+        }
+
 
         //当月のカレンダーに表示される前月分の日数を計算
         mCalendar.set(Calendar.DATE, 1);//日付に1日を設定
@@ -32,7 +41,11 @@ public class DateManager {
         if (dayOfWeek <= 0) {
             dayOfWeek += 7;
         }
-        mCalendar.add(Calendar.DATE, -dayOfWeek);//日付を前月表示分巻き戻す
+
+        //当月の最初の曜日が月曜日以外の場合
+        if (mCalendar.get(Calendar.DAY_OF_WEEK) != 2) {
+            mCalendar.add(Calendar.DATE, -dayOfWeek);//日付を前月表示分巻き戻す
+        }
 
         List<Date> days = new ArrayList<>();
 
@@ -66,6 +79,11 @@ public class DateManager {
         int dayOfWeek = mCalendar.get(Calendar.DAY_OF_WEEK);
 
         if (mCalendar.get(Calendar.MONTH) == 1) {//2月
+            if (mCalendar.getActualMaximum(Calendar.DATE) == 28) {//月の最終日が28日
+                if (dayOfWeek == 2) {//月の初めが月曜日の場合
+                    return 4/*mCalendar.getActualMaximum(Calendar.WEEK_OF_MONTH)*/;
+                }
+            }
             return 5/*mCalendar.getActualMaximum(Calendar.WEEK_OF_MONTH)*/;
         } else if (dayOfWeek == 7) {//土曜日の時
             //MONTH = JANUARY(0), FEBRUARY(1), MARCH(2), APRIL(3), MAY(4), JUNE(5), JULY(6), AUGUST(7), SEPTEMBER(8), OCTOBER(9), NOVEMBER(10), DECEMBER(11)
