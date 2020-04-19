@@ -1,6 +1,7 @@
 package com.non_name_hero.calenderview.calendar;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +21,7 @@ import com.non_name_hero.calenderview.R;
 public class MainActivity extends AppCompatActivity {
 
     private TextView titleText;
+    private TextView accountingText;
     private Button prevButton, nextButton;
     private CalendarAdapter mCalendarAdapter;
     private GridView calendarGridView;
@@ -31,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         // ここで1秒間スリープし、スプラッシュを表示させたままにする。
         try {
-            Thread.sleep(10000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
         }
         // スプラッシュthemeを通常themeに変更する
@@ -61,6 +63,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //収入支出ブロックの背景色変更
+        accountingText = findViewById(R.id.accounting);
+        accountingText.setBackgroundColor(Color.YELLOW);
         //広告の読み込み
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
