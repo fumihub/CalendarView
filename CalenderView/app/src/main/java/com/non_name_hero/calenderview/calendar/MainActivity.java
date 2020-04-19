@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView titleText;
     private TextView accountingText;
-    private Button prevButton, nextButton;
+    private Button prevButton, nextButton, scheduleButton;
     private CalendarAdapter mCalendarAdapter;
     private GridView calendarGridView;
     private AdView mAdView;
@@ -66,6 +66,15 @@ public class MainActivity extends AppCompatActivity {
         //収入支出ブロックの背景色変更
         accountingText = findViewById(R.id.accounting);
         accountingText.setBackgroundColor(Color.YELLOW);
+
+//        scheduleButton = findViewById(R.id.clearButton);
+//        scheduleButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                accountingText.setText("aaaa");
+//            }
+//        });
+
         //広告の読み込み
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override

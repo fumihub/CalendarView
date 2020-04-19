@@ -104,18 +104,6 @@ public class CalendarAdapter extends BaseAdapter {
                 holder.dateText.setTextColor(Color.BLUE);
                 refreshHoliday(holder);
             }
-//            //月曜日の場合
-//            else if (day == 2) {
-//                //日曜日が祝日の場合
-//                if (mDateManager.getHoliday(dateArray.get(position - 1)) != "") {
-//                    holder.holidayText.setTextColor(Color.WHITE);
-//                    holder.holidayText.setText("振替休日");
-//                    return Color.RED;
-//                }
-//                else {
-//                    return Color.BLACK;
-//                }
-//            }
             //平日の場合
             else {
                 holder.dateText.setTextColor(Color.BLACK);
