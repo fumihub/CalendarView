@@ -1,6 +1,7 @@
 package com.non_name_hero.calenderview.calendar;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,6 +10,11 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -19,11 +25,22 @@ import com.non_name_hero.calenderview.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView titleText;
-    private Button prevButton, nextButton;
-    private CalendarAdapter mCalendarAdapter;
-    private GridView calendarGridView;
     private AdView mAdView;
+    /**
+     * The number of pages (wizard steps) to show in this demo.
+     */
+    private static final int NUM_PAGES = 5;
+
+    /**
+     * The pager widget, which handles animation and allows swiping horizontally to access previous
+     * and next wizard steps.
+     */
+    private ViewPager mPager;
+
+    /**
+     * The pager adapter, which provides the pages to the view pager widget.
+     */
+    private PagerAdapter pagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         // ここで1秒間スリープし、スプラッシュを表示させたままにする。
         try {
-            Thread.sleep(10000);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
         }
         // スプラッシュthemeを通常themeに変更する
@@ -41,25 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
-        titleText = findViewById(R.id.titleText);
-        prevButton = findViewById(R.id.prevButton);
-        prevButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCalendarAdapter.prevMonth();
-                titleText.setText(mCalendarAdapter.getTitle());
-                myToolbar.setTitle(mCalendarAdapter.getTitle());
-            }
-        });
-        nextButton = findViewById(R.id.nextButton);
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mCalendarAdapter.nextMonth();
-                titleText.setText(mCalendarAdapter.getTitle());
-                myToolbar.setTitle(mCalendarAdapter.getTitle());
-            }
-        });
+        //myToolbar.setTitle(mCalendarAdapter.getTitle());
 
         //広告の読み込み
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
@@ -74,11 +73,46 @@ public class MainActivity extends AppCompatActivity {
         //広告読み込み
         mAdView.loadAd(adRequest);
 
-        calendarGridView = findViewById(R.id.calendarGridView);
-        mCalendarAdapter = new CalendarAdapter(this);
-        calendarGridView.setAdapter(mCalendarAdapter);
-        titleText.setText(mCalendarAdapter.getTitle());
-        myToolbar.setTitle(mCalendarAdapter.getTitle());
+
+
+
+        // Instantiate a ViewPager and a PagerAdapter.
+        mPager = (ViewPager) findViewById(R.id.pager);
+        pagerAdapter = new MainActivity.ScreenSlidePagerAdapter(getSupportFragmentManager());
+        mPager.setAdapter(pagerAdapter);
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        if (mPager.getCurrentItem() == 0) {
+            // If the user is currently looking at the first step, allow the system to handle the
+            // Back button. This calls finish() on this activity and pops the back stack.
+            super.onBackPressed();
+        } else {
+            // Otherwise, select the previous step.
+            mPager.setCurrentItem(mPager.getCurrentItem() - 1);
+        }
+    }
+
+    /**
+     * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
+     * sequence.
+     */
+    private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
+        public ScreenSlidePagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return new ScreenSlidePageFragment();
+        }
+
+        @Override
+        public int getCount() {
+            return NUM_PAGES;
+        }
     }
 
 }
