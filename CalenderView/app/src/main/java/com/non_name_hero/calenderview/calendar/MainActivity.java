@@ -1,9 +1,11 @@
 package com.non_name_hero.calenderview.calendar;
 
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
@@ -17,15 +19,18 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.non_name_hero.calenderview.R;
+import com.non_name_hero.calenderview.inputForm.InputActivity;
 
 public class MainActivity extends AppCompatActivity {
 
     private TextView titleText;
     private TextView accountingText;
-    private Button prevButton, nextButton, scheduleButton;
+    private Button prevButton;
+    private Button nextButton;
     private CalendarAdapter mCalendarAdapter;
     private GridView calendarGridView;
     private AdView mAdView;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        final Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar myToolbar = (Toolbar) findViewById(R.id.mainToolbar);
         setSupportActionBar(myToolbar);
         titleText = findViewById(R.id.titleText);
         prevButton = findViewById(R.id.prevButton);
@@ -67,20 +72,13 @@ public class MainActivity extends AppCompatActivity {
         accountingText = findViewById(R.id.accounting);
         accountingText.setBackgroundColor(Color.YELLOW);
 
-//        scheduleButton = findViewById(R.id.clearButton);
-//        scheduleButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                accountingText.setText("aaaa");
-//            }
-//        });
-
         //広告の読み込み
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
             }
         });
+
         //UI部分のバナー広告とIDを接続
         mAdView = findViewById(R.id.adView);
         //インスタンス生成
@@ -91,6 +89,14 @@ public class MainActivity extends AppCompatActivity {
         calendarGridView = findViewById(R.id.calendarGridView);
         mCalendarAdapter = new CalendarAdapter(this);
         calendarGridView.setAdapter(mCalendarAdapter);
+        calendarGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //入力画面に遷移
+                intent = new Intent(MainActivity.this, InputActivity.class);
+                startActivity(intent);
+            }
+        });
         titleText.setText(mCalendarAdapter.getTitle());
         myToolbar.setTitle(mCalendarAdapter.getTitle());
     }

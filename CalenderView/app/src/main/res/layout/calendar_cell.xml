@@ -2,41 +2,41 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 android:layout_width="match_parent"
 android:layout_height="match_parent">
-    <FrameLayout
+<!--    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent">-->
 
-        <LinearLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/dateText"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:textAlignment="gravity"
+            android:textSize="@dimen/textSize"
+            android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/dateText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="left"
-                android:textAlignment="gravity"
-                android:textSize="@dimen/textSize"
-                android:textStyle="bold" />
+        <TextView
+            android:id="@+id/holidayText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:textAlignment="gravity"
+            android:textSize="@dimen/scheduleTextSize"
+            android:textStyle="bold" />
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/holidayText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="left"
-                android:textAlignment="gravity"
-                android:textSize="@dimen/scheduleTextSize"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <!--透明なボタンを追加-->
+<!--        &lt;!&ndash;透明なボタンを追加&ndash;&gt;
         <Button
             android:id="@+id/clearButton"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/clear_button_bg" />
+            android:background="@drawable/clear_button_bg" />-->
 
-    </FrameLayout>
+<!--    </FrameLayout>-->
 
 </RelativeLayout>

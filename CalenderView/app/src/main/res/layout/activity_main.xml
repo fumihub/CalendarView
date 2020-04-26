@@ -10,7 +10,7 @@
     tools:context=".calendar.MainActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+        android:id="@+id/mainToolbar"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_weight="0"
