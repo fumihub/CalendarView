@@ -6,7 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.non_name_hero.calenderview.R;
@@ -22,6 +25,7 @@ public class CalendarAdapter extends BaseAdapter {
     private Context mContext;
     private DateManager mDateManager;
     private LayoutInflater mLayoutInflater;
+    private String mSelectedDate;
 
     //カスタムセルを拡張したらここでWigetを定義
     private static class ViewHolder {
@@ -35,20 +39,36 @@ public class CalendarAdapter extends BaseAdapter {
         dateArray = mDateManager.getDays();
     }
 
+    /**
+     * カレンダー表示する際に使用する日数
+     * @return dateManagerから取得した日数が返却される
+     */
     @Override
     public int getCount() {
         return dateArray.size();
     }
 
+    /**
+     *Adapterクラスのメソッド
+     * @param position {int}
+     * @param convertView {View}
+     * @param parent
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
+        //初回時の処理 convertViewがnullの場合にはinflateしたViewを代入する。
         if (convertView == null) {
+            //convertViewに
             convertView = mLayoutInflater.inflate(R.layout.calendar_cell, null);
+            /*------カレンダーセルの作成-----*/
             holder = new ViewHolder();
+            //holderインスタンスのdateTextにIDを格納
             holder.dateText = convertView.findViewById(R.id.dateText);
+            /*------/カレンダーセルの作成-----*/
             convertView.setTag(holder);
         } else {
+            //convertViewがnullでなければconvertViewを再利用する。
             holder = (ViewHolder)convertView.getTag();
         }
 
@@ -59,7 +79,9 @@ public class CalendarAdapter extends BaseAdapter {
 
         //日付のみ表示させる
         SimpleDateFormat dateFormat = new SimpleDateFormat("d", Locale.US);
+        //holder.dateTextに日付をセットする。
         holder.dateText.setText(dateFormat.format(dateArray.get(position)));
+        //mSelectedDate =
 
         //当月以外のセルをグレーアウト
         if (mDateManager.isCurrentMonth(dateArray.get(position))){
@@ -89,17 +111,22 @@ public class CalendarAdapter extends BaseAdapter {
         }
         holder.dateText.setTextColor(colorId);
 
+
         return convertView;
     }
 /*拡張機能*/
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     @Override
     public Object getItem(int position) {
         return null;
+    }
+
+    public String getSelectedDate(int position){
+        return mSelectedDate;
     }
 /**********/
 
