@@ -1,4 +1,4 @@
-package com.non_name_hero.calenderview;
+package com.non_name_hero.calenderview.calendar;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.non_name_hero.calenderview.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,6 +26,7 @@ public class CalendarAdapter extends BaseAdapter {
     //カスタムセルを拡張したらここでWigetを定義
     private static class ViewHolder {
         public TextView dateText;
+        public TextView holidayText;
     }
 
     public CalendarAdapter(Context context){
@@ -44,7 +47,10 @@ public class CalendarAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = mLayoutInflater.inflate(R.layout.calendar_cell, null);
             holder = new ViewHolder();
+            //日付
             holder.dateText = convertView.findViewById(R.id.dateText);
+            //祝日名
+            holder.holidayText = convertView.findViewById(R.id.holidayText);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder)convertView.getTag();
@@ -62,7 +68,7 @@ public class CalendarAdapter extends BaseAdapter {
         //当月以外のセルをグレーアウト
         if (mDateManager.isCurrentMonth(dateArray.get(position))){
             //当日の背景を黄色に
-            if (mDateManager.startDate.equals(dateArray.get(position))){
+            if (mDateManager.currentDate.equals(dateArray.get(position))){
                 convertView.setBackgroundColor(Color.YELLOW);
             }else{
                 convertView.setBackgroundColor(Color.WHITE);
@@ -71,24 +77,46 @@ public class CalendarAdapter extends BaseAdapter {
             convertView.setBackgroundColor(Color.LTGRAY);
         }
 
-        //日曜日を赤、土曜日を青に
-        int colorId;
-        switch (mDateManager.getDayOfWeek(dateArray.get(position))){
-            case 7:
-                colorId = Color.BLUE;
-                break;
-            case 1:
-                colorId = Color.RED;
-                break;
-
-            default:
-                colorId = Color.BLACK;
-                break;
-        }
-        holder.dateText.setTextColor(colorId);
+        //祝日、日曜日を赤、土曜日を青に
+        judgeHoliday(holder, position, mDateManager.getDayOfWeek(dateArray.get(position)));
 
         return convertView;
     }
+
+    //祝日を判定
+    private void judgeHoliday (ViewHolder holder, int position, int day) {
+        //祝日の場合
+        if (mDateManager.getHoliday(dateArray.get(position)) != "") {
+            holder.holidayText.setVisibility(View.VISIBLE);
+            holder.holidayText.setTextColor(Color.WHITE);
+            holder.holidayText.setText(mDateManager.getHoliday(dateArray.get(position)));
+            holder.holidayText.setBackgroundColor(Color.RED);
+            holder.dateText.setTextColor(Color.RED);
+        }
+        else {
+            //日曜日の場合
+            if (day == 1) {
+                holder.dateText.setTextColor(Color.RED);
+                refreshHoliday(holder);
+            }
+            //土曜日の場合
+            else if (day == 7){
+                holder.dateText.setTextColor(Color.BLUE);
+                refreshHoliday(holder);
+            }
+            //平日の場合
+            else {
+                holder.dateText.setTextColor(Color.BLACK);
+                refreshHoliday(holder);
+            }
+        }
+    }
+
+    //holidayTextのリフレッシュ
+    private void refreshHoliday (ViewHolder holder) {
+        holder.holidayText.setVisibility(View.GONE);
+    }
+
 /*拡張機能*/
     @Override
     public long getItemId(int position) {

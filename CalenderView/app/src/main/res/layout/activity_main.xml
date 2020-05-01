@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!-- fragment_screen_slide_page.xml -->
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/content"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -13,47 +7,10 @@
     android:layout_height="wrap_content"
     android:background="@color/grayColor"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".calendar.MainActivity">
 
-    <!-- タイトル部分の登録 -->
-   <!-- <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0"
-        android:background="@color/whiteColor">
-
-        <TextView
-            android:id="@+id/titleText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="2018.2"
-            android:textSize="20sp" />
-
-        <Button
-            android:id="@+id/prevButton"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_marginVertical="10dp"
-            android:layout_marginLeft="10dp"
-            android:background="@color/colorAccent"
-            android:text="Prev" />
-
-        <Button
-            android:id="@+id/nextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_marginVertical="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@color/colorAccent"
-            android:text="Next" />
-    </RelativeLayout>-->
-
-    <!--月表示-->
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+        android:id="@+id/mainToolbar"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_weight="0"
@@ -62,8 +19,44 @@
         android:theme="?attr/actionBarTheme"
         app:title="ああ"
         app:titleTextAppearance="@style/Toolbar.TitleText"
-        app:titleTextColor="#FFFFFF" />
+        app:titleTextColor="#2B2B2B" />
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:background="@color/whiteColor">
+
+        <TextView
+            android:id="@+id/titleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2018.2"
+            android:textSize="20sp"
+            android:layout_centerInParent="true"/>
+
+        <Button
+            android:id="@+id/prevButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Prev"
+            android:layout_alignParentLeft="true"
+            android:layout_marginVertical="10dp"
+            android:layout_marginLeft="10dp"
+            android:background="@color/colorAccent"/>
+
+        <Button
+            android:id="@+id/nextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Next"
+            android:layout_alignParentRight="true"
+            android:layout_marginVertical="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@color/colorAccent"/>
+    </RelativeLayout>
+
+    <!--月表示-->
 
     <!--罫線の設定-->
     <!--ヘッダー情報の登録(曜日)-->
@@ -153,36 +146,22 @@
 
     </LinearLayout>
 
-    <GridView
-        android:id="@+id/calendarGridView"
-        android:layout_width="match_parent"
-        android:layout_height="731dp"
-        android:layout_marginLeft="1dp"
-        android:layout_weight="15"
-        android:horizontalSpacing="1dp"
-        android:numColumns="7"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="1dp" />
-
-    <TextView
-        android:id="@+id/accounting"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:text="支出：xxxxx円　収入：xxxxx円"
-        android:textAlignment="center"
-        android:textColor="@color/blueColor"
-        android:textSize="18sp" />
-
     <!--広告のデザイン-->
+    <fragment
+        android:id="@+id/fragment"
+        android:name="com.non_name_hero.calenderview.calendar.ScreenSlidePageFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_weight="0"
         app:adSize="BANNER"
         app:adUnitId="ca-app-pub-3940256099942544/6300978111"></com.google.android.gms.ads.AdView>
 
 </LinearLayout>
-
-</ScrollView>

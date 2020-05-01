@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/grayColor"
+        android:orientation="vertical"
+        tools:context=".calendar.MainActivity">
+
+        <GridView
+            android:id="@+id/calendarGridView"
+            android:layout_width="match_parent"
+            android:layout_height="731dp"
+            android:layout_marginLeft="1dp"
+            android:layout_weight="1"
+            android:horizontalSpacing="1dp"
+            android:numColumns="7"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="1dp" />
+
+        <TextView
+            android:id="@+id/accounting"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_weight="0"
+            android:text="支出：xxxxx円　収入：xxxxx円"
+            android:textAlignment="center"
+            android:textColor="@color/blueColor"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+</HorizontalScrollView>

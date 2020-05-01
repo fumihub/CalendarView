@@ -2,16 +2,41 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 android:layout_width="match_parent"
 android:layout_height="match_parent">
+<!--    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">-->
 
-<TextView
-    android:id="@+id/dateText"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:textAlignment="gravity"
-    android:gravity="left"
-    android:textSize="@dimen/textSize"
-    android:textStyle="bold"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-<!--ここに拡張可能-->
+        <TextView
+            android:id="@+id/dateText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:textAlignment="gravity"
+            android:textSize="@dimen/textSize"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/holidayText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:textAlignment="gravity"
+            android:textSize="@dimen/scheduleTextSize"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+<!--        &lt;!&ndash;透明なボタンを追加&ndash;&gt;
+        <Button
+            android:id="@+id/clearButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/clear_button_bg" />-->
+
+<!--    </FrameLayout>-->
 
 </RelativeLayout>
