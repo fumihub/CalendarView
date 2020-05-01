@@ -46,15 +46,25 @@ public class ScreenSlidePageFragment extends Fragment {
         calendarGridView.setAdapter(mCalendarAdapter);
         //ツールバーに現在月を表示させる処理
         //titleText.setText(mCalendarAdapter.getTitle());
+        //クリックリスナー
         calendarGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            /**
+             * GridViewのクリックリスナー
+             * @param parent 表示されているAdapterViewのインスタンス参照
+             * @param view 選択されたItemのViewインスタンス参照
+             * @param position GridView内でのポジション
+             * @param id Adapter内メソッドgetItemIdで設定した値　ここではpositionをそのまま返してる
+             */
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                GridView lv = (GridView) parent;
-                Log.d("ClickEvent:","clicked position ->"+Integer.toString(position));
-                View targetView = lv.getChildAt(position);
-                String message = (position-1) + "日が選択されました。";
+                //選択されたセルのViewIdを取得
+                TextView selectedDateText =(TextView) view.findViewById(R.id.dateText);
+                //トーストメッセージ作成
+                String message = selectedDateText.getText().toString() + "日が選択されました。";
+                //トーストを表示
                 Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-                lv.getChildAt(position);
+                //ログだし
+                Log.d("ClickEvent:","clicked position ->"+Integer.toString(position));
             }
         });
         return rootView;
