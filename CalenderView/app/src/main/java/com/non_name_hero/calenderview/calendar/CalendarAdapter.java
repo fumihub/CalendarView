@@ -6,13 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.Adapter;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.non_name_hero.calenderview.R;
+import com.non_name_hero.calenderview.utils.DateManager;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,11 +19,10 @@ import java.util.List;
 import java.util.Locale;
 
 public class CalendarAdapter extends BaseAdapter {
-    private List<Date> dateArray = new ArrayList();
+    private List<Date> dateArray;
     private Context mContext;
     private DateManager mDateManager;
     private LayoutInflater mLayoutInflater;
-    private String mSelectedDate;
 
     //カスタムセルを拡張したらここでWigetを定義
     private static class ViewHolder {
@@ -33,7 +30,7 @@ public class CalendarAdapter extends BaseAdapter {
         public TextView holidayText;
     }
 
-    public CalendarAdapter(Context context){
+    public CalendarAdapter(Context context) {
         mContext = context;
         mLayoutInflater = LayoutInflater.from(mContext);
         mDateManager = new DateManager();
@@ -42,6 +39,7 @@ public class CalendarAdapter extends BaseAdapter {
 
     /**
      * カレンダー表示する際に使用する日数
+     *
      * @return dateManagerから取得した日数が返却される
      */
     @Override
@@ -50,8 +48,9 @@ public class CalendarAdapter extends BaseAdapter {
     }
 
     /**
-     *Adapterクラスのメソッド
-     * @param position {int}
+     * Adapterクラスのメソッド
+     *
+     * @param position    {int}
      * @param convertView {View}
      * @param parent
      */
@@ -73,12 +72,12 @@ public class CalendarAdapter extends BaseAdapter {
             convertView.setTag(holder);
         } else {
             //convertViewがnullでなければconvertViewを再利用する。
-            holder = (ViewHolder)convertView.getTag();
+            holder = (ViewHolder) convertView.getTag();
         }
 
         //セルのサイズを指定
         float dp = mContext.getResources().getDisplayMetrics().density;
-        AbsListView.LayoutParams params = new AbsListView.LayoutParams(parent.getWidth()/7 - (int)dp, (parent.getHeight() - (int)dp * mDateManager.getWeeks() ) / mDateManager.getWeeks());
+        AbsListView.LayoutParams params = new AbsListView.LayoutParams(parent.getWidth() / 7 - (int) dp, (parent.getHeight() - (int) dp * mDateManager.getWeeks()) / mDateManager.getWeeks());
         convertView.setLayoutParams(params);
 
         //日付のみ表示させる
@@ -88,14 +87,14 @@ public class CalendarAdapter extends BaseAdapter {
         //mSelectedDate =
 
         //当月以外のセルをグレーアウト
-        if (mDateManager.isCurrentMonth(dateArray.get(position))){
+        if (mDateManager.isCurrentMonth(dateArray.get(position))) {
             //当日の背景を黄色に
-            if (mDateManager.currentDate.equals(dateArray.get(position))){
+            if (mDateManager.getCurrentDate().equals(dateArray.get(position))) {
                 convertView.setBackgroundColor(Color.YELLOW);
-            }else{
+            } else {
                 convertView.setBackgroundColor(Color.WHITE);
             }
-        }else {
+        } else {
             convertView.setBackgroundColor(Color.LTGRAY);
         }
 
@@ -107,7 +106,7 @@ public class CalendarAdapter extends BaseAdapter {
     }
 
     //祝日を判定
-    private void judgeHoliday (ViewHolder holder, int position, int day) {
+    private void judgeHoliday(ViewHolder holder, int position, int day) {
         //祝日の場合
         if (mDateManager.getHoliday(dateArray.get(position)) != "") {
             holder.holidayText.setVisibility(View.VISIBLE);
@@ -115,15 +114,14 @@ public class CalendarAdapter extends BaseAdapter {
             holder.holidayText.setText(mDateManager.getHoliday(dateArray.get(position)));
             holder.holidayText.setBackgroundColor(Color.RED);
             holder.dateText.setTextColor(Color.RED);
-        }
-        else {
+        } else {
             //日曜日の場合
             if (day == 1) {
                 holder.dateText.setTextColor(Color.RED);
                 refreshHoliday(holder);
             }
             //土曜日の場合
-            else if (day == 7){
+            else if (day == 7) {
                 holder.dateText.setTextColor(Color.BLUE);
                 refreshHoliday(holder);
             }
@@ -136,11 +134,11 @@ public class CalendarAdapter extends BaseAdapter {
     }
 
     //holidayTextのリフレッシュ
-    private void refreshHoliday (ViewHolder holder) {
+    private void refreshHoliday(ViewHolder holder) {
         holder.holidayText.setVisibility(View.GONE);
     }
 
-/*拡張機能*/
+    /*拡張機能*/
     @Override
     public long getItemId(int position) {
         return position;
@@ -150,30 +148,34 @@ public class CalendarAdapter extends BaseAdapter {
     public Object getItem(int position) {
         return null;
     }
-
-    public String getSelectedDate(int position){
-        return mSelectedDate;
-    }
-/**********/
+    /**********/
 
     //表示月を取得
-    public String getTitle(){
+    public String getTitle() {
         SimpleDateFormat format = new SimpleDateFormat("yyyy.MM", Locale.US);
-        return format.format(mDateManager.mCalendar.getTime());
+        return format.format(mDateManager.getCalendar().getTime());
     }
+
 
     /*次月前月はスライド式で表示したいため保留*/
     //翌月表示
-    public void nextMonth(){
+    public void nextMonth() {
         mDateManager.nextMonth();
         dateArray = mDateManager.getDays();
         this.notifyDataSetChanged();
     }
 
     //前月表示
-    public void prevMonth(){
+    public void prevMonth() {
         mDateManager.prevMonth();
         dateArray = mDateManager.getDays();
         this.notifyDataSetChanged();
     }
+
+    public void setProgressMonth(int gap){
+        mDateManager.setMonthByGap(gap);
+        dateArray = mDateManager.getDays();
+        this.notifyDataSetChanged();
+    }
+
 }

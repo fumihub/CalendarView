@@ -1,36 +1,37 @@
 package com.non_name_hero.calenderview.calendar;
 
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.CalendarView;
 import android.widget.GridView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.widget.ListViewAutoScrollHelper;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.formats.NativeAdViewHolder;
 import com.non_name_hero.calenderview.R;
+import com.non_name_hero.calenderview.inputForm.InputActivity;
+
+import java.util.Date;
 
 //フラグメントにカレンダーのビューを表示させる
-public class ScreenSlidePageFragment extends Fragment {
+public class CalendarPageFragment extends Fragment {
 
-    private TextView titleText;
+    private Intent intent;
+    private Date mTargetDate;
     private CalendarAdapter mCalendarAdapter;
     private GridView calendarGridView;
+    private int mProgressMonth;
 
     //コンストラクタ
-    public ScreenSlidePageFragment(){
-
+    public CalendarPageFragment(int progressMonth){
+        mProgressMonth = progressMonth;
     }
     //onCreateViewは戻り値のビューを表示させる
     @Override
@@ -38,14 +39,13 @@ public class ScreenSlidePageFragment extends Fragment {
                              Bundle savedInstanceState) {
         //表示させるViewを指定
         ViewGroup rootView = (ViewGroup) inflater.inflate(
-                R.layout.fragment_screen_slide_page, container, false);
+                R.layout.calendar_fragment_screen_slide_page, container, false);
         //カレンダのIDを取得
         calendarGridView = rootView.findViewById(R.id.calendarGridView);
-        //カレンダーのアダプターを使用して
+        //カレンダーのアダプターを使用してViewを作成
         mCalendarAdapter = new CalendarAdapter(getContext());
+        mCalendarAdapter.setProgressMonth(mProgressMonth);
         calendarGridView.setAdapter(mCalendarAdapter);
-        //ツールバーに現在月を表示させる処理
-        //titleText.setText(mCalendarAdapter.getTitle());
         //クリックリスナー
         calendarGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             /**
@@ -65,9 +65,22 @@ public class ScreenSlidePageFragment extends Fragment {
                 Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
                 //ログだし
                 Log.d("ClickEvent:","clicked position ->"+Integer.toString(position));
+
+                //入力画面に遷移
+                intent = new Intent(getContext(), InputActivity.class);
+                startActivity(intent);
             }
         });
         return rootView;
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+    }
+
+    public void setProgressMonth(int num){
+        mCalendarAdapter.setProgressMonth(num);
+    }
 }
