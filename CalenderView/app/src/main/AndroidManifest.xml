@@ -9,13 +9,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".calendar.MainActivity"
+            android:theme="@style/SplashTheme">
+            <!--thema=起動時の画像-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--入力画面アクティビティ-->
+        <activity android:name=".inputForm.InputActivity"/>
         <!--広告用設定-->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

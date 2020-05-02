@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,15 +7,29 @@
     android:layout_height="wrap_content"
     android:background="@color/grayColor"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".calendar.MainActivity">
 
-    <!--ヘッダー情報の登録(曜日)-->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/mainToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_weight="0"
+        android:background="#FFEB3B"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:title="ああ"
+        app:titleTextAppearance="@style/Toolbar.TitleText"
+        app:titleTextColor="#2B2B2B" />
+
+    <!--月表示-->
 
     <!--罫線の設定-->
+    <!--ヘッダー情報の登録(曜日)-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginVertical="1dp"
+        android:layout_weight="0"
         android:orientation="horizontal">
 
         <TextView
@@ -95,26 +110,12 @@
             android:textStyle="bold" />
 
     </LinearLayout>
-
-    <GridView
-        android:id="@+id/calendarGridView"
+    <!--ViewPager-->
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="731dp"
-        android:layout_marginLeft="1dp"
-        android:layout_weight="15"
-        android:horizontalSpacing="1dp"
-        android:numColumns="7"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="1dp" />
-
-    <TextView
-        android:id="@+id/accounting"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:text="支出：xxxxx円　収入：xxxxx円"
-        android:textAlignment="center"
-        android:textColor="@color/blueColor"
-        android:textSize="18sp" />
+        android:layout_height="wrap_content"
+        ></androidx.viewpager.widget.ViewPager>
 
     <!--広告のデザイン-->
     <com.google.android.gms.ads.AdView
@@ -123,6 +124,7 @@
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_weight="0"
         app:adSize="BANNER"
         app:adUnitId="ca-app-pub-3940256099942544/6300978111"></com.google.android.gms.ads.AdView>
 
