@@ -1,131 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/grayColor"
-    android:orientation="vertical"
+    android:layout_height="match_parent"
     tools:context=".calendar.MainActivity">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/mainToolbar"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_weight="0"
-        android:background="#FFEB3B"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        app:title="ああ"
-        app:titleTextAppearance="@style/Toolbar.TitleText"
-        app:titleTextColor="#2B2B2B" />
-
-    <!--月表示-->
-
-    <!--罫線の設定-->
-    <!--ヘッダー情報の登録(曜日)-->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginVertical="1dp"
-        android:layout_weight="0"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="0dp"
-            android:layout_weight="1"
-            android:background="@color/whiteColor"
-            android:text="月"
-            android:textAlignment="center"
-            android:textColor="@color/blackColor"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="0dp"
-            android:layout_weight="1"
-            android:background="@color/whiteColor"
-            android:text="火"
-            android:textAlignment="center"
-            android:textColor="@color/blackColor"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="0dp"
-            android:layout_weight="1"
-            android:background="@color/whiteColor"
-            android:text="水"
-            android:textAlignment="center"
-            android:textColor="@color/blackColor"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="0dp"
-            android:layout_weight="1"
-            android:background="@color/whiteColor"
-            android:text="木"
-            android:textAlignment="center"
-            android:textColor="@color/blackColor"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="0dp"
-            android:layout_weight="1"
-            android:background="@color/whiteColor"
-            android:text="金"
-            android:textAlignment="center"
-            android:textColor="@color/blackColor"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="0dp"
-            android:layout_weight="1"
-            android:background="@color/whiteColor"
-            android:text="土"
-            android:textAlignment="center"
-            android:textColor="@color/blueColor"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="0dp"
-            android:layout_weight="1"
-            android:background="@color/whiteColor"
-            android:text="日"
-            android:textAlignment="center"
-            android:textColor="@color/redColor"
-            android:textStyle="bold" />
-
-    </LinearLayout>
-    <!--ViewPager-->
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/pager"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        ></androidx.viewpager.widget.ViewPager>
+        android:background="@color/grayColor"
+        android:orientation="vertical"
+        tools:context=".calendar.MainActivity">
 
-    <!--広告のデザイン-->
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/adView"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_weight="0"
-        app:adSize="BANNER"
-        app:adUnitId="ca-app-pub-3940256099942544/6300978111"></com.google.android.gms.ads.AdView>
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/mainToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_weight="0"
+            android:background="#FFEB3B"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:title="ああ"
+            app:titleTextAppearance="@style/Toolbar.TitleText"
+            app:titleTextColor="#2B2B2B" />
 
-</LinearLayout>
+        <!--月表示-->
+
+
+        <!--広告のデザイン-->
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0">
+
+        </FrameLayout>
+
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_weight="0"
+            app:adSize="BANNER"
+            app:adUnitId="ca-app-pub-3940256099942544/6300978111"></com.google.android.gms.ads.AdView>
+
+    </LinearLayout>
+
+</androidx.drawerlayout.widget.DrawerLayout>

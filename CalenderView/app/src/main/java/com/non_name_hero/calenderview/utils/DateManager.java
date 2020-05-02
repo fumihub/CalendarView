@@ -1,4 +1,6 @@
-package com.non_name_hero.calenderview.calendar;
+package com.non_name_hero.calenderview.utils;
+
+import androidx.annotation.Nullable;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -9,11 +11,11 @@ import java.util.Locale;
 
 //日付の操作を設定するクラス
 public class DateManager {
-    Calendar mCalendar;
-    Date startDate;
-    Date currentDate;
-    Date holiday;
-    Boolean currentDayFlg = Boolean.FALSE;
+    private Calendar mCalendar;
+    private Date startDate;
+    private Date currentDate;
+    public Date holiday;
+    private Boolean currentDayFlg = Boolean.FALSE;
 
     //コンストラクタ
     public DateManager(){
@@ -223,6 +225,14 @@ public class DateManager {
         }
     }
 
+
+    public Date getCurrentDate(){
+        return currentDate;
+    }
+    public Calendar getCalendar(){
+        return mCalendar;
+    }
+
     /* スライドで次月前月移動させたいためコメントアウト*/
     //翌月へ
     public void nextMonth(){
@@ -232,6 +242,14 @@ public class DateManager {
     //前月へ
     public void prevMonth(){
         mCalendar.add(Calendar.MONTH, -1);
+    }
+
+    /**
+     * 指定した月の日にち配列を受け取る。
+     * @param monthGap 表示月との差
+     */
+    public void setMonthByGap(int monthGap){
+        mCalendar.add(Calendar.MONTH, monthGap);
     }
 
 }
