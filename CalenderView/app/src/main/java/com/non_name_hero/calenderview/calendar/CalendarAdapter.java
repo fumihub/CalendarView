@@ -148,6 +148,7 @@ public class CalendarAdapter extends BaseAdapter {
     public Object getItem(int position) {
         return null;
     }
+
     /**********/
 
     //表示月を取得
@@ -172,10 +173,17 @@ public class CalendarAdapter extends BaseAdapter {
         this.notifyDataSetChanged();
     }
 
-    public void setProgressMonth(int gap){
-        mDateManager.setMonthByGap(gap);
+    public void setProgressMonth(int gap) {
+        while (gap != 0) {
+            if (gap < 0) {
+                mDateManager.prevMonth();
+                gap++;
+            } else if (gap > 0) {
+                mDateManager.nextMonth();
+                gap--;
+            }
+        }
         dateArray = mDateManager.getDays();
         this.notifyDataSetChanged();
     }
-
 }

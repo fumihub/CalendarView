@@ -1,6 +1,7 @@
 package com.non_name_hero.calenderview.calendar;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,16 +58,23 @@ public class CalendarFragment extends Fragment implements CalendarContract.View 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         mPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+                Log.d(
+                        "$tag: onPageScrolled",
+                        "position => $position, positionOffset => $positionOffset, positionOffsetPixels => $positionOffsetPixels"
+                );
+            }
 
             public void onPageSelected(int position) {
+                CalendarPagerAdapter adapter = (CalendarPagerAdapter) mPager.getAdapter();
                 if (position == 0) {
                     jumpPosition = 3;
-                    CalendarPagerAdapter adapter = (CalendarPagerAdapter) mPager.getAdapter();
                     adapter.rewindData();
                 } else if (position == 4) {
                     jumpPosition = 1;
-                    CalendarPagerAdapter adapter = (CalendarPagerAdapter) mPager.getAdapter();
                     adapter.forwardData();// 先ほど用意した、後データの補填 method
                 }
             }
@@ -114,6 +122,7 @@ public class CalendarFragment extends Fragment implements CalendarContract.View 
             dateList = new ArrayList<Integer>();
         }
 
+
         @NonNull
         @Override
         public Fragment createFragment(int position) {
@@ -121,7 +130,6 @@ public class CalendarFragment extends Fragment implements CalendarContract.View 
             Fragment view = new CalendarPageFragment(dateList.get(position));
             return view;
         }
-
 
         @Override
         public int getItemCount() {
@@ -140,19 +148,17 @@ public class CalendarFragment extends Fragment implements CalendarContract.View 
                 dateList.remove(0);
             }
             for (int i = 0; i < 3; i++) {
-                dateList.add(dateList.get(1) + i); // 後データの補填
+                dateList.add(dateList.get(1) + i + 1); // 後データの補填
             }
         }
 
         public void rewindData() {
-            for (int i = 0; i > 3; i++) {
-                dateList.remove(NUM_PAGES - i - 1);
+            for (int i = 0; i < 3; i++) {
+                dateList.remove(NUM_PAGES -1 -i);
             }
-            for (int i = 0; i > 3; i++) {
-                dateList.add(0, dateList.get(3)); // 前データの補填
+            for (int i = 0; i < 3; i++) {
+                dateList.add(0, dateList.get(0) - 1); // 前データの補填
             }
         }
-
     }
-
 }

@@ -31,8 +31,10 @@ public class CalendarPageFragment extends Fragment {
 
     //コンストラクタ
     public CalendarPageFragment(int progressMonth){
+
         mProgressMonth = progressMonth;
     }
+
     //onCreateViewは戻り値のビューを表示させる
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,7 +67,6 @@ public class CalendarPageFragment extends Fragment {
                 Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
                 //ログだし
                 Log.d("ClickEvent:","clicked position ->"+Integer.toString(position));
-
                 //入力画面に遷移
                 intent = new Intent(getContext(), InputActivity.class);
                 startActivity(intent);
@@ -78,9 +79,5 @@ public class CalendarPageFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-    }
-
-    public void setProgressMonth(int num){
-        mCalendarAdapter.setProgressMonth(num);
     }
 }
