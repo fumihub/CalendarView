@@ -173,16 +173,8 @@ public class CalendarAdapter extends BaseAdapter {
         this.notifyDataSetChanged();
     }
 
-    public void setProgressMonth(int gap) {
-        while (gap != 0) {
-            if (gap < 0) {
-                mDateManager.prevMonth();
-                gap++;
-            } else if (gap > 0) {
-                mDateManager.nextMonth();
-                gap--;
-            }
-        }
+    public void setJumpMonth(int jump) {
+        mDateManager.jumpMonth(jump);
         dateArray = mDateManager.getDays();
         this.notifyDataSetChanged();
     }

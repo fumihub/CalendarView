@@ -243,5 +243,7 @@ public class DateManager {
     public void prevMonth(){
         mCalendar.add(Calendar.MONTH, -1);
     }
+
+    public void jumpMonth(int jump){mCalendar.add(Calendar.MONTH, jump);}
 }
 
