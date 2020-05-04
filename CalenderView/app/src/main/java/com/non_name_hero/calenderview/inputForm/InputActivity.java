@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,13 +14,13 @@ import com.non_name_hero.calenderview.R;
 
 public class InputActivity extends AppCompatActivity {
 
-    private TextView title;
-    private TextView time;
+    private EditText title;
+    private EditText time;
     private TextView color;
-    private TextView myBudget;
-    private TextView price;
+    private EditText myBudget;
+    private EditText price;
     private TextView place;
-    private TextView memo;
+    private EditText memo;
     private TextView picture;
 
     private Button detailButton;
@@ -36,7 +37,6 @@ public class InputActivity extends AppCompatActivity {
 
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.inputToolbar);
         setSupportActionBar(myToolbar);
-        myToolbar.setTitle("新規作成");
 
         /*入力画面表示*********************************************************************/
         //カレンダーセルのボタンが押された場合
@@ -62,6 +62,7 @@ public class InputActivity extends AppCompatActivity {
         //最初非表示
         myBudget.setVisibility(View.GONE);
         price.setVisibility(View.GONE);
+        place.setVisibility(View.GONE);
         memo.setVisibility(View.GONE);
         picture.setVisibility(View.GONE);
 
@@ -70,8 +71,10 @@ public class InputActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //詳細入力表示に
+                detailButton.setVisibility(View.GONE);
                 myBudget.setVisibility(View.VISIBLE);
                 price.setVisibility(View.VISIBLE);
+                place.setVisibility(View.VISIBLE);
                 memo.setVisibility(View.VISIBLE);
                 picture.setVisibility(View.VISIBLE);
             }

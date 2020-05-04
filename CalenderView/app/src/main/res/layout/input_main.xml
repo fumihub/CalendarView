@@ -17,21 +17,26 @@
             android:layout_height="wrap_content"
             android:background="#FFEB3B"
             android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme" />
+            android:theme="?attr/actionBarTheme"
+            app:title="新規作成"
+            app:titleMarginEnd="130dp"
+            app:titleMarginStart="130dp" />
 
-        <TextView
+        <EditText
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text="タイトル" />
+            android:inputType="text"
+            android:hint="タイトル" />
 
-        <TextView
+        <EditText
             android:id="@+id/time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text="日時" />
+            android:inputType="date"
+            android:hint="日時" />
 
         <TextView
             android:id="@+id/color"
@@ -42,34 +47,32 @@
 
         <Button
             android:id="@+id/detailButton"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="150dp"
+            android:layout_marginLeft="100dp"
             android:layout_marginTop="10dp"
-            android:layout_marginRight="150dp"
+            android:layout_marginRight="100dp"
             android:layout_marginBottom="10dp"
-            android:text="詳細" />
+            android:background="#00000000"
+            android:text="詳細表示"
+            android:textColor="@color/colorPrimary" />
 
-        <TextView
+        <EditText
             android:id="@+id/myBudget"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text="予算" />
+            android:inputType="number"
+            android:hint="予算" />
 
-        <TextView
+        <EditText
             android:id="@+id/price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text="費用or収益" />
-
-        <TextView
-            android:id="@+id/category"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="カテゴリー" />
+            android:inputType="number"
+            android:hint="費用or収益" />
 
         <TextView
             android:id="@+id/place"
@@ -78,12 +81,13 @@
             android:layout_margin="10dp"
             android:text="場所" />
 
-        <TextView
+        <EditText
             android:id="@+id/memo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text="メモ" />
+            android:inputType="textMultiLine"
+            android:hint="メモ" />
 
         <TextView
             android:id="@+id/picture"
@@ -99,22 +103,22 @@
 
             <Button
                 android:id="@+id/cancelButton"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="50dp"
+                android:layout_marginLeft="30dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginRight="50dp"
+                android:layout_marginRight="30dp"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
                 android:text="キャンセル" />
 
             <Button
                 android:id="@+id/doneButton"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="50dp"
+                android:layout_marginLeft="30dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginRight="50dp"
+                android:layout_marginRight="30dp"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
                 android:text="完了" />
