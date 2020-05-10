@@ -44,9 +44,9 @@ public class InputActivity extends AppCompatActivity {
         setContentView(R.layout.input_main);
 
         Intent intent = getIntent();
-        int year = Integer.valueOf(intent.getStringExtra("year"));
+        /*int year = Integer.valueOf(intent.getStringExtra("year"));
         int month = Integer.valueOf(intent.getStringExtra("month"));
-        int day = Integer.valueOf(intent.getStringExtra("day"));
+        int day = Integer.valueOf(intent.getStringExtra("day"));*/
 
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.inputToolbar);
         setSupportActionBar(myToolbar);
