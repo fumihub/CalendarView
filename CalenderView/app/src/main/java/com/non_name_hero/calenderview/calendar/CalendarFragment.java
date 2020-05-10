@@ -1,7 +1,6 @@
 package com.non_name_hero.calenderview.calendar;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +8,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -40,6 +38,7 @@ public class CalendarFragment extends Fragment implements CalendarContract.View 
         mPagerAdapter.initializeData();
         // Instantiate a ViewPager and a PagerAdapter.
         mPager.setAdapter(mPagerAdapter);
+        mPager.setOffscreenPageLimit(2);
         mPager.setCurrentItem(50, false);
         return rootView;
     }
