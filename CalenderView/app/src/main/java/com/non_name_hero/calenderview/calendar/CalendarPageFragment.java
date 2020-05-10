@@ -2,7 +2,6 @@ package com.non_name_hero.calenderview.calendar;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +16,12 @@ import androidx.fragment.app.Fragment;
 
 import com.non_name_hero.calenderview.R;
 import com.non_name_hero.calenderview.inputForm.InputActivity;
+import com.non_name_hero.calenderview.utils.DateManager;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 //フラグメントにカレンダーのビューを表示させる
 public class CalendarPageFragment extends Fragment {
@@ -28,10 +31,12 @@ public class CalendarPageFragment extends Fragment {
     private CalendarAdapter mCalendarAdapter;
     private GridView calendarGridView;
     private int mProgressMonth;
+    private DateManager mDateManager;
+    private List<Date> dateArray;
 
     //コンストラクタ
     public CalendarPageFragment(int progressMonth){
-
+        dateArray = mDateManager.getDays();
         mProgressMonth = progressMonth;
     }
 
@@ -64,6 +69,10 @@ public class CalendarPageFragment extends Fragment {
              */
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //年月日のフォーマット
+                SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy", Locale.US);
+                SimpleDateFormat monthFormat = new SimpleDateFormat("MM", Locale.US);
+                SimpleDateFormat dayFormat = new SimpleDateFormat("dd", Locale.US);
                 //選択されたセルのViewIdを取得
                 TextView selectedDateText =(TextView) view.findViewById(R.id.dateText);
                 //トーストメッセージ作成
@@ -72,6 +81,10 @@ public class CalendarPageFragment extends Fragment {
                 Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
                 //入力画面に遷移
                 intent = new Intent(getContext(), InputActivity.class);
+                //入力画面に引数で年月日を渡す
+                intent.putExtra("year", yearFormat.format(dateArray.get(position)));
+                intent.putExtra("month", monthFormat.format(dateArray.get(position)));
+                intent.putExtra("day", dayFormat.format(dateArray.get(position)));
                 startActivity(intent);
             }
         });

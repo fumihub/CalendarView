@@ -22,29 +22,122 @@
             app:titleMarginEnd="130dp"
             app:titleMarginStart="130dp" />
 
+        <!--タイトル入力**********************************-->
         <EditText
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
+            android:focusable="false"
             android:inputType="text"
             android:hint="タイトル" />
+        <!--**********************************************-->
 
-        <EditText
-            android:id="@+id/time"
+        <!--日付入力**************************************-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/startDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:focusable="false"
+                android:hint="開始日付"
+                android:inputType="date" />
+
+            <TextView
+                android:id="@+id/dateArrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginBottom="10dp"
+                android:text=">"
+                android:textSize="30dp"
+                android:textStyle="bold"/>
+
+            <EditText
+                android:id="@+id/endDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:focusable="false"
+                android:hint="終了日付"
+                android:inputType="date" />
+
+        </LinearLayout>
+        <!--**********************************************-->
+
+        <!--background="#00000000"　=　透明色-->
+        <!--style="?android:attr/borderlessButtonStyle"　=　影なし-->
+        <Button
+            android:id="@+id/timeButton"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:inputType="date"
-            android:hint="日時" />
+            android:layout_marginLeft="100dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="100dp"
+            android:layout_marginBottom="10dp"
+            android:background="#00000000"
+            android:text="時間入力"
+            android:textColor="@color/colorPrimary" />
 
+        <!--時間入力**************************************-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/startTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:focusable="false"
+                android:hint="開始時間"
+                android:inputType="time" />
+
+            <TextView
+                android:id="@+id/timeArrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginBottom="10dp"
+                android:text=">"
+                android:textSize="30dp"
+                android:textStyle="bold"/>
+
+            <EditText
+                android:id="@+id/endTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:focusable="false"
+                android:hint="終了時間"
+                android:inputType="time" />
+
+        </LinearLayout>
+        <!--**********************************************-->
+
+        <!--色選択****************************************-->
         <TextView
             android:id="@+id/color"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:text="表示色" />
+        <!--**********************************************-->
 
+        <!--詳細入力ボタン*********************************-->
+        <!--background="#00000000"　=　透明色-->
+        <!--style="?android:attr/borderlessButtonStyle"　=　影なし-->
         <Button
             android:id="@+id/detailButton"
             style="?android:attr/borderlessButtonStyle"
@@ -57,7 +150,9 @@
             android:background="#00000000"
             android:text="詳細表示"
             android:textColor="@color/colorPrimary" />
+        <!--**********************************************-->
 
+        <!--予算入力**************************************-->
         <EditText
             android:id="@+id/myBudget"
             android:layout_width="match_parent"
@@ -65,7 +160,9 @@
             android:layout_margin="10dp"
             android:inputType="number"
             android:hint="予算" />
+        <!--**********************************************-->
 
+        <!--金額入力**************************************-->
         <EditText
             android:id="@+id/price"
             android:layout_width="match_parent"
@@ -73,14 +170,18 @@
             android:layout_margin="10dp"
             android:inputType="number"
             android:hint="費用or収益" />
+        <!--**********************************************-->
 
+        <!--場所入力**************************************-->
         <TextView
             android:id="@+id/place"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:text="場所" />
+        <!--**********************************************-->
 
+        <!--メモ******************************************-->
         <EditText
             android:id="@+id/memo"
             android:layout_width="match_parent"
@@ -88,14 +189,18 @@
             android:layout_margin="10dp"
             android:inputType="textMultiLine"
             android:hint="メモ" />
+        <!--**********************************************-->
 
+        <!--写真******************************************-->
         <TextView
             android:id="@+id/picture"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:text="写真" />
+        <!--**********************************************-->
 
+        <!--完了/キャンセルボタン*********************************-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -123,6 +228,7 @@
                 android:layout_weight="1"
                 android:text="完了" />
         </LinearLayout>
+        <!--**********************************************-->
 
     </LinearLayout>
 
