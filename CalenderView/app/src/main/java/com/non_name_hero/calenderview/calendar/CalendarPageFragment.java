@@ -31,8 +31,10 @@ public class CalendarPageFragment extends Fragment {
 
     //コンストラクタ
     public CalendarPageFragment(int progressMonth){
+
         mProgressMonth = progressMonth;
     }
+
     //onCreateViewは戻り値のビューを表示させる
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,10 +44,15 @@ public class CalendarPageFragment extends Fragment {
                 R.layout.calendar_fragment_screen_slide_page, container, false);
         //カレンダのIDを取得
         calendarGridView = rootView.findViewById(R.id.calendarGridView);
-        //カレンダーのアダプターを使用してViewを作成
+
+
+        //カレンダーのアダプターを使用してViewを作成-
         mCalendarAdapter = new CalendarAdapter(getContext());
-        mCalendarAdapter.setProgressMonth(mProgressMonth);
         calendarGridView.setAdapter(mCalendarAdapter);
+
+
+        mCalendarAdapter.setJumpMonth(mProgressMonth);
+
         //クリックリスナー
         calendarGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             /**
@@ -63,9 +70,6 @@ public class CalendarPageFragment extends Fragment {
                 String message = selectedDateText.getText().toString() + "日が選択されました。";
                 //トーストを表示
                 Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-                //ログだし
-                Log.d("ClickEvent:","clicked position ->"+Integer.toString(position));
-
                 //入力画面に遷移
                 intent = new Intent(getContext(), InputActivity.class);
                 startActivity(intent);
@@ -78,9 +82,5 @@ public class CalendarPageFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-    }
-
-    public void setProgressMonth(int num){
-        mCalendarAdapter.setProgressMonth(num);
     }
 }

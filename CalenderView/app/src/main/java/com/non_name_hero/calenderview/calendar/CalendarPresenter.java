@@ -21,4 +21,9 @@ public class CalendarPresenter implements CalendarContract.Presenter {
     public void start() {
 
     }
+
+    @Override
+    public void setCurrentMonth(String mCurrentMonth) {
+
+    }
 }
