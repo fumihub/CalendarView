@@ -25,6 +25,7 @@ public class InputActivity extends AppCompatActivity {
     private EditText endDate;
     private EditText startTime;
     private EditText endTime;
+    private TextView timeArrow;
     private TextView color;
     private EditText myBudget;
     private EditText price;
@@ -44,9 +45,9 @@ public class InputActivity extends AppCompatActivity {
         setContentView(R.layout.input_main);
 
         Intent intent = getIntent();
-        /*int year = Integer.valueOf(intent.getStringExtra("year"));
+        int year = Integer.valueOf(intent.getStringExtra("year"));
         int month = Integer.valueOf(intent.getStringExtra("month"));
-        int day = Integer.valueOf(intent.getStringExtra("day"));*/
+        int day = Integer.valueOf(intent.getStringExtra("day"));
 
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.inputToolbar);
         setSupportActionBar(myToolbar);
@@ -59,6 +60,7 @@ public class InputActivity extends AppCompatActivity {
         timeButton = findViewById(R.id.timeButton);
         startTime = findViewById(R.id.startTime);
         endTime = findViewById(R.id.endTime);
+        timeArrow = findViewById(R.id.timeArrow);
         color = findViewById(R.id.color);
         detailButton = findViewById(R.id.detailButton);
         myBudget = findViewById(R.id.myBudget);
@@ -81,22 +83,23 @@ public class InputActivity extends AppCompatActivity {
         //最初非表示
         startTime.setVisibility(View.GONE);
         endTime.setVisibility(View.GONE);
+        timeArrow.setVisibility(View.GONE);
         myBudget.setVisibility(View.GONE);
         price.setVisibility(View.GONE);
         place.setVisibility(View.GONE);
         memo.setVisibility(View.GONE);
         picture.setVisibility(View.GONE);
 
-        /*タイトルEditTextが押されたとき********************/
-        title.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //フォーカスを当てる
-                title.setFocusable(true);
-                title.setFocusableInTouchMode(true);
-            }
-        });
-        /**************************************************/
+//        /*タイトルEditTextが押されたとき********************/
+//        title.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //フォーカスを当てる
+//                title.setFocusable(true);
+//                title.setFocusableInTouchMode(true);
+//            }
+//        });
+//        /**************************************************/
 
         /*開始日時EditTextが押されたとき********************/
         startDate.setOnClickListener(new View.OnClickListener() {
