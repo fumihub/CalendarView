@@ -64,10 +64,10 @@ public class CalendarAdapter extends BaseAdapter {
             /*------カレンダーセルの作成-----*/
             holder = new ViewHolder();
 
-            //日付
-            holder.dateText = convertView.findViewById(R.id.dateText);
-            //祝日名
-            holder.holidayText = convertView.findViewById(R.id.holidayText);
+//            //日付
+//            holder.dateText = convertView.findViewById(R.id.dateText);
+//            //祝日名
+//            holder.holidayText = convertView.findViewById(R.id.holidayText);
 
             convertView.setTag(holder);
         } else {
@@ -82,8 +82,8 @@ public class CalendarAdapter extends BaseAdapter {
 
         //日付のみ表示させる
         SimpleDateFormat dateFormat = new SimpleDateFormat("d", Locale.US);
-        //holder.dateTextに日付をセットする。
-        holder.dateText.setText(dateFormat.format(dateArray.get(position)));
+//        //holder.dateTextに日付をセットする。
+//        holder.dateText.setText(dateFormat.format(dateArray.get(position)));
         //mSelectedDate =
 
         //当月以外のセルをグレーアウト
@@ -108,29 +108,29 @@ public class CalendarAdapter extends BaseAdapter {
     //祝日を判定
     private void judgeHoliday(ViewHolder holder, int position, int day) {
         //祝日の場合
-        if (mDateManager.getHoliday(dateArray.get(position)) != "") {
-            holder.holidayText.setVisibility(View.VISIBLE);
-            holder.holidayText.setTextColor(Color.WHITE);
-            holder.holidayText.setText(mDateManager.getHoliday(dateArray.get(position)));
-            holder.holidayText.setBackgroundColor(Color.RED);
-            holder.dateText.setTextColor(Color.RED);
-        } else {
-            //日曜日の場合
-            if (day == 1) {
-                holder.dateText.setTextColor(Color.RED);
-                refreshHoliday(holder);
-            }
-            //土曜日の場合
-            else if (day == 7) {
-                holder.dateText.setTextColor(Color.BLUE);
-                refreshHoliday(holder);
-            }
-            //平日の場合
-            else {
-                holder.dateText.setTextColor(Color.BLACK);
-                refreshHoliday(holder);
-            }
-        }
+//        if (mDateManager.getHoliday(dateArray.get(position)) != "") {
+//            holder.holidayText.setVisibility(View.VISIBLE);
+//            holder.holidayText.setTextColor(Color.WHITE);
+//            holder.holidayText.setText(mDateManager.getHoliday(dateArray.get(position)));
+//            holder.holidayText.setBackgroundColor(Color.RED);
+//            holder.dateText.setTextColor(Color.RED);
+//        } else {
+//            //日曜日の場合
+//            if (day == 1) {
+//                holder.dateText.setTextColor(Color.RED);
+//                refreshHoliday(holder);
+//            }
+//            //土曜日の場合
+//            else if (day == 7) {
+//                holder.dateText.setTextColor(Color.BLUE);
+//                refreshHoliday(holder);
+//            }
+//            //平日の場合
+//            else {
+//                holder.dateText.setTextColor(Color.BLACK);
+//                refreshHoliday(holder);
+//            }
+//        }
     }
 
     //holidayTextのリフレッシュ

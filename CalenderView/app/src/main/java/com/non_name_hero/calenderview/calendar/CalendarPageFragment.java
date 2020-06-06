@@ -74,12 +74,12 @@ public class CalendarPageFragment extends Fragment {
                 SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy", Locale.US);
                 SimpleDateFormat monthFormat = new SimpleDateFormat("MM", Locale.US);
                 SimpleDateFormat dayFormat = new SimpleDateFormat("dd", Locale.US);
-                //選択されたセルのViewIdを取得
-                TextView selectedDateText =(TextView) view.findViewById(R.id.dateText);
-                //トーストメッセージ作成
-                String message = selectedDateText.getText().toString() + "日が選択されました。";
-                //トーストを表示
-                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+//                //選択されたセルのViewIdを取得
+//                TextView selectedDateText =(TextView) view.findViewById(R.id.dateText);
+//                //トーストメッセージ作成
+//                String message = selectedDateText.getText().toString() + "日が選択されました。";
+//                //トーストを表示
+//                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
                 //入力画面に遷移
                 intent = new Intent(getContext(), InputActivity.class);
                 //入力画面に引数で年月日を渡す
