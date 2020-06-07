@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "682037005522",
+    "firebase_url": "https://piglead-ba176.firebaseio.com",
+    "project_id": "piglead-ba176",
+    "storage_bucket": "piglead-ba176.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:682037005522:android:c7f783a561a70603b3f10b",
+        "android_client_info": {
+          "package_name": "com.non_name_hero.calenderview"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "682037005522-4dil3cu4eeseb89mm7ttqkek3kpnv895.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWgdj68HN8NskttYAEyWi3lmwBrjclm2k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "682037005522-4dil3cu4eeseb89mm7ttqkek3kpnv895.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
