@@ -77,7 +77,7 @@ public class CalendarPageFragment extends Fragment {
                 //選択されたセルのViewIdを取得
                 TextView selectedDateText =(TextView) view.findViewById(R.id.dateText);
                 //トーストメッセージ作成
-                String message = selectedDateText.getText().toString() + "日が選択されました。";
+                String message = selectedDateText.getText().toString();
                 //トーストを表示
                 Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
                 //入力画面に遷移
@@ -85,7 +85,7 @@ public class CalendarPageFragment extends Fragment {
                 //入力画面に引数で年月日を渡す
                 intent.putExtra("year", yearFormat.format(dateArray.get(position)));
                 intent.putExtra("month", monthFormat.format(dateArray.get(position)));
-                intent.putExtra("day", dayFormat.format(dateArray.get(position)));
+                intent.putExtra("day", message);
                 startActivity(intent);
             }
         });
