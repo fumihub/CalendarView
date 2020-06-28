@@ -1,5 +1,7 @@
 package com.non_name_hero.calenderview.utils;
 
+import android.util.Log;
+
 import androidx.annotation.Nullable;
 
 import java.text.SimpleDateFormat;
@@ -31,7 +33,6 @@ public class DateManager {
             currentDate = mCalendar.getTime();
             currentDayFlg = Boolean.TRUE;
         }
-
 
         //当月のカレンダーに表示される前月分の日数を計算
         mCalendar.set(Calendar.DATE, 1);//日付に1日を設定
@@ -225,7 +226,6 @@ public class DateManager {
         }
     }
 
-
     public Date getCurrentDate(){
         return currentDate;
     }
@@ -244,13 +244,6 @@ public class DateManager {
         mCalendar.add(Calendar.MONTH, -1);
     }
 
-    /**
-     * 指定した月の日にち配列を受け取る。
-     * @param monthGap 表示月との差
-     */
-    public void setMonthByGap(int monthGap){
-        mCalendar.add(Calendar.MONTH, monthGap);
-    }
-
+    public void jumpMonth(int jump){mCalendar.add(Calendar.MONTH, jump);}
 }
 

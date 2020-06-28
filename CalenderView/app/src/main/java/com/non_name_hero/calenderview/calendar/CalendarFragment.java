@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -24,22 +23,11 @@ public class CalendarFragment extends Fragment implements CalendarContract.View 
     }
 
     public CalendarContract.Presenter mPresenter;
-    /**
-     * The number of pages (wizard steps) to show in this demo.
-     */
-    private static final int NUM_PAGES = 5;
 
-    /**
-     * The pager widget, which handles animation and allows swiping horizontally to access previous
-     * and next wizard steps.
-     */
+    private static final int NUM_PAGES = 100;
     private ViewPager2 mPager;
-
-    /**
-     * The pager adapter, which provides the pages to the view pager widget.
-     */
     private CalendarPagerAdapter mPagerAdapter;
-    private int jumpPosition = -1;
+    private String mCurrentMonth;
 
     @Nullable
     @Override
@@ -50,34 +38,36 @@ public class CalendarFragment extends Fragment implements CalendarContract.View 
         mPagerAdapter.initializeData();
         // Instantiate a ViewPager and a PagerAdapter.
         mPager.setAdapter(mPagerAdapter);
-        mPager.setCurrentItem(1, false);
+        mPager.setOffscreenPageLimit(2);
+        mPager.setCurrentItem(50, false);
         return rootView;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         mPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+//                Log.d(
+//                        "$tag: onPageScrolled",
+//                        "position => $position, positionOffset => $positionOffset, positionOffsetPixels => $positionOffsetPixels"
+//                );
+
+            }
 
             public void onPageSelected(int position) {
-                if (position == 0) {
-                    jumpPosition = 3;
-                    CalendarPagerAdapter adapter = (CalendarPagerAdapter) mPager.getAdapter();
-                    adapter.rewindData();
-                } else if (position == 4) {
-                    jumpPosition = 1;
-                    CalendarPagerAdapter adapter = (CalendarPagerAdapter) mPager.getAdapter();
-                    adapter.forwardData();// 先ほど用意した、後データの補填 method
-                }
+                mPresenter.setCurrentMonth(mCurrentMonth);
             }
 
             public void onPageScrollStateChanged(int state) {
                 //アニメーションが終わるのを待ってから飛ぶ。
                 // onPageSelected(int position) でやると、スクロールアニメーションがキャンセルされてしまう。
-                if (state == ViewPager.SCROLL_STATE_IDLE && jumpPosition >= 0) {
-                    mPager.setCurrentItem(jumpPosition, false);
-                    jumpPosition = -1;
-                }
+//                if (state == ViewPager.SCROLL_STATE_IDLE && jumpPosition >= 0) {
+//                    mPager.setCurrentItem(jumpPosition, false);
+//                    jumpPosition = -1;
+//                }
             }
         });
     }
@@ -117,11 +107,9 @@ public class CalendarFragment extends Fragment implements CalendarContract.View 
         @NonNull
         @Override
         public Fragment createFragment(int position) {
-            currentMonthGap = position;
-            Fragment view = new CalendarPageFragment(dateList.get(position));
+            Fragment view = new CalendarPageFragment(position - 50);
             return view;
         }
-
 
         @Override
         public int getItemCount() {
@@ -130,29 +118,10 @@ public class CalendarFragment extends Fragment implements CalendarContract.View 
 
         public void initializeData() {
             dateList.clear();
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 100; i++) {
                 dateList.add(i); // 初期データの設定
             }
         }
 
-        public void forwardData() {
-            for (int i = 0; i < 3; i++) {
-                dateList.remove(0);
-            }
-            for (int i = 0; i < 3; i++) {
-                dateList.add(dateList.get(1) + i); // 後データの補填
-            }
-        }
-
-        public void rewindData() {
-            for (int i = 0; i > 3; i++) {
-                dateList.remove(NUM_PAGES - i - 1);
-            }
-            for (int i = 0; i > 3; i++) {
-                dateList.add(0, dateList.get(3)); // 前データの補填
-            }
-        }
-
     }
-
 }
