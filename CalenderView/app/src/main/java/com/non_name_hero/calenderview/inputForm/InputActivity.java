@@ -131,7 +131,8 @@ public class InputActivity extends AppCompatActivity {
                             }
                         },
                         year,
-                        month,
+                        //monthは0が1月のため-1する必要がある
+                        month - 1,
                         day
                 );
 
@@ -163,7 +164,8 @@ public class InputActivity extends AppCompatActivity {
                             }
                         },
                         year,
-                        month,
+                        //monthは0が1月のため-1する必要がある
+                        month - 1,
                         day
                 );
 
