@@ -131,7 +131,7 @@ public class InputActivity extends AppCompatActivity {
                             }
                         },
                         year,
-                        month,
+                        month - 1,
                         day
                 );
 
@@ -163,7 +163,7 @@ public class InputActivity extends AppCompatActivity {
                             }
                         },
                         year,
-                        month,
+                        month - 1,
                         day
                 );
 
