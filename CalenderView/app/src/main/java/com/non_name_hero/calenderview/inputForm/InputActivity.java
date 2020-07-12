@@ -26,7 +26,6 @@ public class InputActivity extends AppCompatActivity {
     private EditText startTime;
     private EditText endTime;
     private TextView timeArrow;
-    private EditText color;
     private EditText myBudget;
     private EditText price;
     private TextView place;
@@ -34,6 +33,8 @@ public class InputActivity extends AppCompatActivity {
     private TextView picture;
 
     private Button timeButton;
+    private Button color1;
+    private Button color2;
     private Button detailButton;
     private Button cancelButton;
     private Button doneButton;
@@ -68,7 +69,8 @@ public class InputActivity extends AppCompatActivity {
         startTime = findViewById(R.id.startTime);
         endTime = findViewById(R.id.endTime);
         timeArrow = findViewById(R.id.timeArrow);
-        color = findViewById(R.id.color);
+        color1 = findViewById(R.id.colorButton1);
+        color2 = findViewById(R.id.colorButton2);
         detailButton = findViewById(R.id.detailButton);
         myBudget = findViewById(R.id.myBudget);
         price = findViewById(R.id.price);
@@ -83,7 +85,8 @@ public class InputActivity extends AppCompatActivity {
         startDate.setVisibility(View.VISIBLE);
         endDate.setVisibility(View.VISIBLE);
         timeButton.setVisibility(View.VISIBLE);
-        color.setVisibility(View.VISIBLE);
+        color1.setVisibility(View.VISIBLE);
+        color2.setVisibility(View.VISIBLE);
         detailButton.setVisibility(View.VISIBLE);
         cancelButton.setVisibility(View.VISIBLE);
         doneButton.setVisibility(View.VISIBLE);
@@ -249,8 +252,15 @@ public class InputActivity extends AppCompatActivity {
         });
         /**************************************************/
 
-        /*表示色EditTextが押されたとき*********************/
-        color.setOnClickListener(new View.OnClickListener() {
+        /*表示色ボタンが押されたとき*********************/
+        color1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //色選択画面へ遷移
+                startActivity(intentOut);
+            }
+        });
+        color2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //色選択画面へ遷移

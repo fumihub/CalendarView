@@ -14,7 +14,9 @@ import com.non_name_hero.calenderview.R;
 public class colorCreateActivity extends AppCompatActivity {
 
     private EditText colorCreateTitle;
-    private EditText color;
+
+    private Button color1;
+    private Button color2;
     private Button cancelButton;
     private Button doneButton;
 
@@ -32,12 +34,20 @@ public class colorCreateActivity extends AppCompatActivity {
         intentOut = new Intent(this, colorActivity.class);
 
         colorCreateTitle = findViewById(R.id.colorCreateTitle);
-        color = findViewById(R.id.color);
+        color1 = findViewById(R.id.colorButton1);
+        color2 = findViewById(R.id.colorButton2);
         cancelButton = findViewById(R.id.cancelButton);
         doneButton = findViewById(R.id.doneButton);
 
-        /*色EditTextが押されたとき******************/
-        color.setOnClickListener(new View.OnClickListener() {
+        /*色ボタンが押されたとき******************/
+        color1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //色画面に遷移
+                startActivity(intentOut);
+            }
+        });
+        color2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //色画面に遷移
