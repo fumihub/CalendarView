@@ -10,7 +10,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -27,7 +26,7 @@ public class InputActivity extends AppCompatActivity {
     private EditText startTime;
     private EditText endTime;
     private TextView timeArrow;
-    private TextView color;
+    private EditText color;
     private EditText myBudget;
     private EditText price;
     private TextView place;
@@ -39,7 +38,8 @@ public class InputActivity extends AppCompatActivity {
     private Button cancelButton;
     private Button doneButton;
 
-    private Intent intent;
+    private Intent intentIn;
+    private Intent intentOut;
     private String month;
     private String day;
 
@@ -52,9 +52,12 @@ public class InputActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
 
         //カレンダー初期値用
-        intent = getIntent();
-        month = intent.getStringExtra("month");
-        day = intent.getStringExtra("day");
+        intentIn = getIntent();
+        month = intentIn.getStringExtra("month");
+        day = intentIn.getStringExtra("day");
+
+        //色選択画面遷移用intent
+        intentOut = new Intent(this, colorSelectActivity.class);
 
         /*入力画面表示*********************************************************************/
         //カレンダーセルのボタンが押された場合
@@ -116,10 +119,10 @@ public class InputActivity extends AppCompatActivity {
             public void onClick(View v) {
                           //Calendarインスタンスを取得
                 final Calendar startCalendar = Calendar.getInstance();
-                Intent intent = getIntent();
-                int year = Integer.valueOf(intent.getStringExtra("year"));
-                int month = Integer.valueOf(intent.getStringExtra("month"));
-                int day = Integer.valueOf(intent.getStringExtra("day"));
+                Intent intentIn = getIntent();
+                int year = Integer.valueOf(intentIn.getStringExtra("year"));
+                int month = Integer.valueOf(intentIn.getStringExtra("month"));
+                int day = Integer.valueOf(intentIn.getStringExtra("day"));
                 //DatePickerDialogインスタンスを取得
                 DatePickerDialog startDatePickerDialog = new DatePickerDialog(
                         InputActivity.this,
@@ -149,10 +152,10 @@ public class InputActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //Calendarインスタンスを取得
                 final Calendar endCalendar = Calendar.getInstance();
-                Intent intent = getIntent();
-                int year = Integer.valueOf(intent.getStringExtra("year"));
-                int month = Integer.valueOf(intent.getStringExtra("month"));
-                int day = Integer.valueOf(intent.getStringExtra("day"));
+                Intent intentIn = getIntent();
+                int year = Integer.valueOf(intentIn.getStringExtra("year"));
+                int month = Integer.valueOf(intentIn.getStringExtra("month"));
+                int day = Integer.valueOf(intentIn.getStringExtra("day"));
                 //DatePickerDialogインスタンスを取得
                 DatePickerDialog endDatePickerDialog = new DatePickerDialog(
                         InputActivity.this,
@@ -246,6 +249,16 @@ public class InputActivity extends AppCompatActivity {
         });
         /**************************************************/
 
+        /*表示色EditTextが押されたとき*********************/
+        color.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //色選択画面へ遷移
+                startActivity(intentOut);
+            }
+        });
+        /************************************************/
+
         /*詳細ボタンが押されたとき************************/
         detailButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -265,9 +278,8 @@ public class InputActivity extends AppCompatActivity {
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
                 //カレンダー表示画面に遷移
-
+                finish();
             }
         });
         /************************************************/

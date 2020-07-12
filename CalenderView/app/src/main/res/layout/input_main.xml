@@ -17,10 +17,19 @@
             android:layout_height="wrap_content"
             android:background="#FFEB3B"
             android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme"
-            app:title="新規作成"
-            app:titleMarginEnd="130dp"
-            app:titleMarginStart="130dp" />
+            android:theme="?attr/actionBarTheme">
+
+            <TextView
+                android:id="@+id/inputToolbar_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="新規作成"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
+
+        </androidx.appcompat.widget.Toolbar>
 
         <!--タイトル入力**********************************-->
         <EditText
@@ -126,12 +135,13 @@
         <!--**********************************************-->
 
         <!--色選択****************************************-->
-        <TextView
+        <EditText
             android:id="@+id/color"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text="表示色" />
+            android:inputType="text"
+            android:hint="表示色" />
         <!--**********************************************-->
 
         <!--詳細入力ボタン*********************************-->
