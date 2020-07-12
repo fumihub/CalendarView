@@ -20,14 +20,23 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/mainToolbar"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_weight="0"
+            android:layout_height="wrap_content"
             android:background="#FFEB3B"
             android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme"
-            app:title="ああ"
-            app:titleTextAppearance="@style/Toolbar.TitleText"
-            app:titleTextColor="#2B2B2B" />
+            android:theme="?attr/actionBarTheme">
+
+            <TextView
+                android:id="@+id/mainToolbar_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="left|center_vertical"
+                android:text="ああ"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                android:textColor="@color/blackColor"
+                tools:ignore="HardcodedText" />
+
+        </androidx.appcompat.widget.Toolbar>
 
         <!--月表示-->
         <FrameLayout

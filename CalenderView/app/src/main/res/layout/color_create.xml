@@ -23,6 +23,7 @@
             android:text="色作成"
             android:textSize="25sp"
             android:textStyle="bold"
+            android:textColor="@color/blackColor"
             tools:ignore="HardcodedText" />
 
     </androidx.appcompat.widget.Toolbar>
