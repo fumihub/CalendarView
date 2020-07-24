@@ -30,6 +30,12 @@
     </androidx.appcompat.widget.Toolbar>
 
     <!--未分類ボタン**********************************-->
+    <!--**********************************************-->
+
+    <!--ここに色ボタン追加していく*********************-->
+
+    <!--色作成ボタン**********************************-->
+
     <Button
         android:id="@+id/noCategoryButton"
         style="?android:attr/borderlessButtonStyle"
@@ -43,11 +49,7 @@
         android:gravity="left|center_vertical"
         android:text="●　未分類"
         android:textColor="@color/blackColor" />
-    <!--**********************************************-->
 
-    <!--ここに色ボタン追加していく*********************-->
-
-    <!--色作成ボタン**********************************-->
     <Button
         android:id="@+id/colorCreateButton"
         style="?android:attr/borderlessButtonStyle"
