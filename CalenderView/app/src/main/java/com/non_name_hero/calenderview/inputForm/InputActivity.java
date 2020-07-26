@@ -10,6 +10,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -50,17 +51,15 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
     private Button cancelButton;
     private Button doneButton;
 
+    private Intent intent;
+    private String month;
+    private String day;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.input_main);
-
-        Intent intent = getIntent();
-        int year = Integer.valueOf(intent.getStringExtra("year"));
-        int month = Integer.valueOf(intent.getStringExtra("month"));
-        int day = Integer.valueOf(intent.getStringExtra("day"));
-
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.inputToolbar);
         setSupportActionBar(myToolbar);
 
@@ -70,6 +69,12 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
                 ScheduleDataRemoteSource.getInstance());
 
         new InputPresenter(this, scheduleRepository);
+
+        //カレンダー初期値用
+        intent = getIntent();
+        month = intent.getStringExtra("month");
+        day = intent.getStringExtra("day");
+
 
         /*入力画面表示*********************************************************************/
         //カレンダーセルのボタンが押された場合
@@ -122,13 +127,21 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
 //        });
 //        /**************************************************/
 
+        //初期値を設定
+        startDate.setText( month + "/" + day);
+        endDate.setText(month + "/" + day);
+
         /*開始日時EditTextが押されたとき********************/
         startDate.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                //Calendarインスタンスを取得
+                          //Calendarインスタンスを取得
                 final Calendar startCalendar = Calendar.getInstance();
-
+                Intent intent = getIntent();
+                int year = Integer.valueOf(intent.getStringExtra("year"));
+                int month = Integer.valueOf(intent.getStringExtra("month"));
+                int day = Integer.valueOf(intent.getStringExtra("day"));
                 //DatePickerDialogインスタンスを取得
                 DatePickerDialog startDatePickerDialog = new DatePickerDialog(
                         InputActivity.this,
@@ -141,9 +154,10 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
                                 mStartAtDatetime.set(year, month ,dayOfMonth);
                             }
                         },
-                        startCalendar.get(Calendar.YEAR),
-                        startCalendar.get(Calendar.MONTH),
-                        startCalendar.get(Calendar.DATE)
+                        year,
+                        //monthは0が1月のため-1する必要がある
+                        month - 1,
+                        day
                 );
 
                 //dialogを表示
@@ -159,7 +173,10 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
             public void onClick(View v) {
                 //Calendarインスタンスを取得
                 final Calendar endCalendar = Calendar.getInstance();
-
+                Intent intent = getIntent();
+                int year = Integer.valueOf(intent.getStringExtra("year"));
+                int month = Integer.valueOf(intent.getStringExtra("month"));
+                int day = Integer.valueOf(intent.getStringExtra("day"));
                 //DatePickerDialogインスタンスを取得
                 DatePickerDialog endDatePickerDialog = new DatePickerDialog(
                         InputActivity.this,
@@ -171,14 +188,14 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
                                 mEndAtDatetime.set(year, month ,dayOfMonth);
                             }
                         },
-                        endCalendar.get(Calendar.YEAR),
-                        endCalendar.get(Calendar.MONTH),
-                        endCalendar.get(Calendar.DATE)
+                        year,
+                        //monthは0が1月のため-1する必要がある
+                        month - 1,
+                        day
                 );
 
                 //dialogを表示
                 endDatePickerDialog.show();
-
             }
         });
         /**************************************************/
@@ -189,6 +206,7 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
             public void onClick(View v) {
                 //詳細入力表示に
                 timeButton.setVisibility(View.GONE);
+                timeArrow.setVisibility(View.VISIBLE);
                 startTime.setVisibility(View.VISIBLE);
                 endTime.setVisibility(View.VISIBLE);
             }
