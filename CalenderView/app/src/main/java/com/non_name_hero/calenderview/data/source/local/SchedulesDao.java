@@ -3,23 +3,27 @@ package com.non_name_hero.calenderview.data.source.local;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+
+import com.non_name_hero.calenderview.data.Schedule;
+
+import java.util.List;
 
 @Dao
 public interface SchedulesDao {
-    @Query("SELECT * FROM schedule")
-    List<User> getAll();
+    @Query("SELECT * FROM schedule ORDER BY start_at_datetime")
+    List<Schedule> getAll();
 
     @Query("SELECT * FROM schedule WHERE schedule_id IN (:scheduleIds)")
-    List<User> loadAllByIds(int[] userIds);
+    List<Schedule> loadSchedulesByIds(long[] scheduleIds);
 
-    @Query("SELECT * FROM schedule WHERE first_name LIKE :first AND " +
-            "last_name LIKE :last LIMIT 1")
-    User findByName(String first, String last);
+    @Query("SELECT *, datetime(start_at_datetime) as start_timestamp, datetime(end_at_datetime) as end_timestamp FROM schedule WHERE start_timestamp LIKE :targetYearMonth AND end_timestamp LIKE :targetYearMonth")
+    List<Schedule> findByYearMonth(String targetYearMonth);
 
-    @Insert
-    void insertAll(User... users);
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertSchedule(Schedule schedule);
 
     @Delete
-    void delete(User user);
+    void delete(Schedule schedule);
 }
