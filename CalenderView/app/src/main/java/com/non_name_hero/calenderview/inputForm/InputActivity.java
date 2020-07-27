@@ -16,10 +16,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.non_name_hero.calenderview.R;
+import com.non_name_hero.calenderview.calendar.CalendarContract;
+import com.non_name_hero.calenderview.data.source.ScheduleRepository;
+import com.non_name_hero.calenderview.data.source.local.PigLeadDatabase;
+import com.non_name_hero.calenderview.data.source.local.ScheduleDataLocalSource;
+import com.non_name_hero.calenderview.data.source.remote.ScheduleDataRemoteSource;
+import com.non_name_hero.calenderview.utils.AppExecutors;
 
 import java.util.Calendar;
 
-public class InputActivity extends AppCompatActivity {
+public class InputActivity extends AppCompatActivity implements InputContract.View {
+
+    private InputContract.Presenter mInputPresenter;
+    private InputContract.View mView;
+
+    private Calendar mStartAtDatetime;
+    private Calendar mEndAtDatetime;
 
     private EditText title;
     private EditText startDate;
@@ -51,10 +63,18 @@ public class InputActivity extends AppCompatActivity {
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.inputToolbar);
         setSupportActionBar(myToolbar);
 
+        PigLeadDatabase pigLeadDatabase = PigLeadDatabase.getInstance(getApplicationContext());
+        ScheduleRepository scheduleRepository = ScheduleRepository.getInstance(
+                ScheduleDataLocalSource.getInstance(new AppExecutors(), pigLeadDatabase.scheduleDao()),
+                ScheduleDataRemoteSource.getInstance());
+
+        new InputPresenter(this, scheduleRepository);
+
         //カレンダー初期値用
         intent = getIntent();
         month = intent.getStringExtra("month");
         day = intent.getStringExtra("day");
+
 
         /*入力画面表示*********************************************************************/
         //カレンダーセルのボタンが押された場合
@@ -93,7 +113,9 @@ public class InputActivity extends AppCompatActivity {
         place.setVisibility(View.GONE);
         memo.setVisibility(View.GONE);
         picture.setVisibility(View.GONE);
-
+        //
+        mStartAtDatetime = Calendar.getInstance();
+        mEndAtDatetime = Calendar.getInstance();
 //        /*タイトルEditTextが押されたとき********************/
 //        title.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -128,6 +150,8 @@ public class InputActivity extends AppCompatActivity {
                             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                                 //setした日付を取得して表示
                                 startDate.setText(String.format("%02d / %02d", month+1, dayOfMonth));
+                                //Calendarオブジェクトを作成
+                                mStartAtDatetime.set(year, month ,dayOfMonth);
                             }
                         },
                         year,
@@ -161,6 +185,7 @@ public class InputActivity extends AppCompatActivity {
                             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                                 //setした日付を取得して表示
                                 endDate.setText(String.format("%02d / %02d", month+1, dayOfMonth));
+                                mEndAtDatetime.set(year, month ,dayOfMonth);
                             }
                         },
                         year,
@@ -203,6 +228,8 @@ public class InputActivity extends AppCompatActivity {
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                                 //setした時間を取得して表示
                                 startTime.setText(String.format("%02d : %02d", hourOfDay, minute));
+                                mStartAtDatetime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                                mStartAtDatetime.set(Calendar.MINUTE, minute);
                             }
                         },
                         startTimeCalendar.get(Calendar.HOUR_OF_DAY),
@@ -232,6 +259,9 @@ public class InputActivity extends AppCompatActivity {
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                                 //setした時間を取得して表示
                                 endTime.setText(String.format("%02d : %02d", hourOfDay, minute));
+                                //Calendarオブジェクトを作成
+                                mEndAtDatetime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                                mEndAtDatetime.set(Calendar.MINUTE, minute);
                             }
                         },
                         endTimeCalendar.get(Calendar.HOUR_OF_DAY),
@@ -265,9 +295,10 @@ public class InputActivity extends AppCompatActivity {
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //保存処理を実行
+                mInputPresenter.saveSchedule(title.toString(),memo.toString(),mStartAtDatetime, mEndAtDatetime, 0,0);
                 finish();
                 //カレンダー表示画面に遷移
-
             }
         });
         /************************************************/
@@ -284,5 +315,10 @@ public class InputActivity extends AppCompatActivity {
 
         /*********************************************************************************/
 
+    }
+
+    @Override
+    public void setPresenter(InputContract.Presenter presenter) {
+        mInputPresenter = presenter;
     }
 }
