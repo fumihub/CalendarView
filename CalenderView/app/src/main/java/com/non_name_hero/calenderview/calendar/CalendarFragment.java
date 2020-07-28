@@ -27,7 +27,6 @@ public class CalendarFragment extends Fragment implements CalendarContract.View 
     private static final int NUM_PAGES = 100;
     private ViewPager2 mPager;
     private CalendarPagerAdapter mPagerAdapter;
-    private String mCurrentMonth;
 
     @Nullable
     @Override
@@ -35,11 +34,11 @@ public class CalendarFragment extends Fragment implements CalendarContract.View 
         View rootView = inflater.inflate(R.layout.calendar_fragment, container, false);
         mPager = (ViewPager2) rootView.findViewById(R.id.pager);
         mPagerAdapter = new CalendarPagerAdapter(this);
-        mPagerAdapter.initializeData();
         // Instantiate a ViewPager and a PagerAdapter.
         mPager.setAdapter(mPagerAdapter);
-        mPager.setOffscreenPageLimit(2);
+        mPager.setOffscreenPageLimit(ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT);
         mPager.setCurrentItem(50, false);
+
         return rootView;
     }
 
@@ -47,34 +46,12 @@ public class CalendarFragment extends Fragment implements CalendarContract.View 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
-//                Log.d(
-//                        "$tag: onPageScrolled",
-//                        "position => $position, positionOffset => $positionOffset, positionOffsetPixels => $positionOffsetPixels"
-//                );
-
-            }
-
-            public void onPageSelected(int position) {
-                mPresenter.setCurrentMonth(mCurrentMonth);
-            }
-
-            public void onPageScrollStateChanged(int state) {
-                //アニメーションが終わるのを待ってから飛ぶ。
-                // onPageSelected(int position) でやると、スクロールアニメーションがキャンセルされてしまう。
-//                if (state == ViewPager.SCROLL_STATE_IDLE && jumpPosition >= 0) {
-//                    mPager.setCurrentItem(jumpPosition, false);
-//                    jumpPosition = -1;
-//                }
-            }
-        });
     }
 
     @Override
     public void setPresenter(CalendarContract.Presenter presenter) {
         mPresenter = presenter;
+
     }
 /*
     @Override
@@ -95,32 +72,22 @@ public class CalendarFragment extends Fragment implements CalendarContract.View 
      * sequence.
      */
     private class CalendarPagerAdapter extends FragmentStateAdapter {
-        private int currentMonthGap;
-        private List<Integer> dateList;
 
-
-        public CalendarPagerAdapter(Fragment fm) {
-            super(fm);
-            dateList = new ArrayList<Integer>();
+        public CalendarPagerAdapter(Fragment f) {
+            super(f);
         }
 
         @NonNull
         @Override
         public Fragment createFragment(int position) {
             Fragment view = new CalendarPageFragment(position - 50);
+            ((CalendarPageFragment) view).setPresenter(mPresenter);
             return view;
         }
 
         @Override
         public int getItemCount() {
             return NUM_PAGES;
-        }
-
-        public void initializeData() {
-            dateList.clear();
-            for (int i = 0; i < 100; i++) {
-                dateList.add(i); // 初期データの設定
-            }
         }
 
     }

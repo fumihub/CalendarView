@@ -15,6 +15,12 @@ public interface ScheduleDataSource {
         void onDataNotAvailable();
     }
 
+    interface SaveScheduleCallback{
+        void onScheduleSaved();
+        void onDataNotSaved();
+    }
+
     void getSchedule(@NonNull long[]  ScheduleIds, @NonNull GetScheduleCallback callback);
-    void setSchedule(Schedule schedule);
+    void setSchedule(Schedule schedule, @NonNull SaveScheduleCallback callback);
+    void getAllSchedules(@NonNull GetScheduleCallback callback);
 }

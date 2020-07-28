@@ -21,6 +21,11 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.non_name_hero.calenderview.R;
+import com.non_name_hero.calenderview.data.source.ScheduleRepository;
+import com.non_name_hero.calenderview.data.source.local.PigLeadDatabase;
+import com.non_name_hero.calenderview.data.source.local.ScheduleDataLocalSource;
+import com.non_name_hero.calenderview.data.source.remote.ScheduleDataRemoteSource;
+import com.non_name_hero.calenderview.utils.AppExecutors;
 
 import java.util.Date;
 
@@ -83,7 +88,12 @@ public class MainActivity extends AppCompatActivity {
             addFragmentToActivity(getSupportFragmentManager(), calendarFragment, R.id.fragment_container);
         }
 
-        new CalendarPresenter(calendarFragment);
+        PigLeadDatabase pigLeadDatabase = PigLeadDatabase.getInstance(getApplicationContext());
+        ScheduleRepository scheduleRepository = ScheduleRepository.getInstance(
+                ScheduleDataLocalSource.getInstance(new AppExecutors(), pigLeadDatabase.scheduleDao()),
+                ScheduleDataRemoteSource.getInstance());
+
+        new CalendarPresenter(calendarFragment ,scheduleRepository);
 
 
     }

@@ -297,7 +297,6 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
             public void onClick(View v) {
                 //保存処理を実行
                 mInputPresenter.saveSchedule(title.toString(),memo.toString(),mStartAtDatetime, mEndAtDatetime, 0,0);
-                finish();
                 //カレンダー表示画面に遷移
             }
         });
@@ -315,6 +314,11 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
 
         /*********************************************************************************/
 
+    }
+
+    @Override
+    public void finishInput(){
+        finish();
     }
 
     @Override

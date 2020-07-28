@@ -28,7 +28,12 @@ public class ScheduleDataRemoteSource implements ScheduleDataSource {
     }
 
     @Override
-    public void setSchedule(Schedule schedule) {
+    public void setSchedule(Schedule schedule, @NonNull SaveScheduleCallback callback) {
+
+    }
+
+    @Override
+    public void getAllSchedules(@NonNull GetScheduleCallback callback) {
 
     }
 }

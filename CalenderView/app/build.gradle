@@ -29,6 +29,7 @@ dependencies {
     implementation 'com.github.sundeepk:compact-calendar-view:3.0.0'
     /*広告用ライブラリ*/
     implementation 'com.google.android.gms:play-services-ads:19.0.1'
+    /*テスト用ライブラリ*/
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
