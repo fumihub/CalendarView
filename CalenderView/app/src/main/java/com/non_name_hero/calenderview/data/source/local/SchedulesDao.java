@@ -18,7 +18,7 @@ public interface SchedulesDao {
     @Query("SELECT * FROM schedule WHERE schedule_id IN (:scheduleIds)")
     List<Schedule> loadSchedulesByIds(long[] scheduleIds);
 
-    @Query("SELECT *, datetime(start_at_datetime) as start_timestamp, datetime(end_at_datetime) as end_timestamp FROM schedule WHERE start_timestamp LIKE :targetYearMonth AND end_timestamp LIKE :targetYearMonth")
+    @Query("SELECT *, datetime(start_at_datetime, 'unixepoch') as start_timestamp, datetime(end_at_datetime, 'unixepoch') as end_timestamp FROM schedule WHERE start_timestamp LIKE :targetYearMonth AND end_timestamp LIKE :targetYearMonth")
     List<Schedule> findByYearMonth(String targetYearMonth);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
