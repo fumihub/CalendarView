@@ -1,14 +1,11 @@
 package com.non_name_hero.calenderview.data.source.local;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
-import com.non_name_hero.calenderview.R;
 import com.non_name_hero.calenderview.data.Schedule;
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource;
 import com.non_name_hero.calenderview.utils.AppExecutors;
 
-import java.util.Calendar;
 import java.util.List;
 
 public class ScheduleDataLocalSource implements ScheduleDataSource {

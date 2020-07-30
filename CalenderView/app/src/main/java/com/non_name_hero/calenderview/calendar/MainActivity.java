@@ -1,19 +1,10 @@
 package com.non_name_hero.calenderview.calendar;
 
-import android.content.Intent;
-import android.graphics.Color;
-
 import android.os.Bundle;
-import android.widget.GridView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -22,10 +13,7 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.non_name_hero.calenderview.R;
 import com.non_name_hero.calenderview.data.source.ScheduleRepository;
-import com.non_name_hero.calenderview.data.source.local.PigLeadDatabase;
-import com.non_name_hero.calenderview.data.source.local.ScheduleDataLocalSource;
-import com.non_name_hero.calenderview.data.source.remote.ScheduleDataRemoteSource;
-import com.non_name_hero.calenderview.utils.AppExecutors;
+import com.non_name_hero.calenderview.utils.Injection;
 
 import java.util.Date;
 
@@ -82,16 +70,14 @@ public class MainActivity extends AppCompatActivity {
         mAdView.loadAd(adRequest);
 
         //アクティビティのfragmentを取得（初回時はnull）
+
         CalendarFragment calendarFragment = (CalendarFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if(calendarFragment == null) {
             calendarFragment = CalendarFragment.newInstance();
             addFragmentToActivity(getSupportFragmentManager(), calendarFragment, R.id.fragment_container);
         }
 
-        PigLeadDatabase pigLeadDatabase = PigLeadDatabase.getInstance(getApplicationContext());
-        ScheduleRepository scheduleRepository = ScheduleRepository.getInstance(
-                ScheduleDataLocalSource.getInstance(new AppExecutors(), pigLeadDatabase.scheduleDao()),
-                ScheduleDataRemoteSource.getInstance());
+        ScheduleRepository scheduleRepository = Injection.provideScheduleRepository(getApplicationContext());
 
         new CalendarPresenter(calendarFragment ,scheduleRepository);
 

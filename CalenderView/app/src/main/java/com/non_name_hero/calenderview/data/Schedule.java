@@ -7,10 +7,7 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import java.time.LocalDateTime;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.UUID;
 
 @Entity(tableName = "schedule")
 public class Schedule {
@@ -134,7 +131,7 @@ public class Schedule {
         return mGroupId;
     }
 
-    public void setmGroupId(int mGroupId) {
+    public void setGroupId(int mGroupId) {
         this.mGroupId = mGroupId;
     }
 
