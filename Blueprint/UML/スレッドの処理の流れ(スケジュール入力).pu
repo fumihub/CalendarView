@@ -1,0 +1,36 @@
+@startuml
+title スレッド処理とRunnable
+actor User
+participant Android
+participant MainThread
+participant IOThread
+
+activate Android
+==アプリ起動==
+User -> Android: アプリを起動
+Android -> MainThread: MainThread起動
+activate MainThread
+note right of Android: UIに関する処理はMainThreadでしか処理できない。
+MainThread --> IOThread: IOThread起動\nその他のサブスレッドも起動
+activate IOThread
+note right of MainThread: Android本体やメモリに問い合わせるなど非同期処理をIOThreadで実行
+IOThread -> IOThread: while(){...}でループ
+MainThread -> MainThread: Activityを作成..\n(onCreate())
+MainThread -> MainThread: UIを作成..onClick登録..
+MainThread -> User: 画面に表示
+==入力画面に遷移==
+User -> MainThread: カレンダーセルをタップ
+MainThread -> MainThread: 入力画面に遷移
+MainThread -> MainThread: InputActivityを作成..\n(onCreate())
+MainThread -> MainThread: UIを作成..onClick登録..
+MainThread -> User: 画面に表示
+User -> MainThread: スケジュール情報を入力
+==完了ボタンを押下==
+MainThread -> MainThread: Scheduleオブジェクトを作成
+note right of MainThread: @Entity\nClass Schedule{\ntitle,\ndescription,\nstartAtDate,\nendAtDate...\n}
+MainThread --> IOThread:  Runnable(無名)クラスを送信
+note right of MainThread: new Runnable(){\n  @Override\n  run(){\n    //DBにInsert処理\n   ...\n  }\n}
+MainThread -> User: カレンダー画面に遷移
+IOThread -> IOThread: Runnable()のを実行\n(DBへのInsert処理を実行)
+
+@enduml
