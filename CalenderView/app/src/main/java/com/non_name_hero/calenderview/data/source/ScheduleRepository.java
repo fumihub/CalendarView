@@ -61,8 +61,13 @@ public class ScheduleRepository implements ScheduleDataSource {
     }
 
     @Override
-    public void setSchedule(Schedule schedule) {
+    public void setSchedule(Schedule schedule, @NonNull SaveScheduleCallback callback) {
         checkNotNull(schedule);
-        mScheduleDataLocalSource.setSchedule(schedule);
+        mScheduleDataLocalSource.setSchedule(schedule, callback);
+    }
+
+    @Override
+    public void getAllSchedules(@NonNull GetScheduleCallback callback) {
+        mScheduleDataLocalSource.getAllSchedules(callback);
     }
 }

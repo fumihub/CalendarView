@@ -24,7 +24,9 @@ import java.util.List;
 import java.util.Locale;
 
 //フラグメントにカレンダーのビューを表示させる
-public class CalendarPageFragment extends Fragment {
+public class CalendarPageFragment extends Fragment implements CalendarContract.View {
+
+    private CalendarContract.Presenter mPresenter;
 
     private Intent intent;
     private Date mTargetDate;
@@ -50,7 +52,6 @@ public class CalendarPageFragment extends Fragment {
                 R.layout.calendar_fragment_screen_slide_page, container, false);
         //カレンダのIDを取得
         calendarGridView = rootView.findViewById(R.id.calendarGridView);
-
 
         //カレンダーのアダプターを使用してViewを作成-
         mCalendarAdapter = new CalendarAdapter(getContext());
@@ -89,6 +90,21 @@ public class CalendarPageFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        calendarGridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
+
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+//                //選択されたセルのViewIdを取得
+//                TextView selectedDateText =(TextView) view.findViewById(R.id.dateText);
+//                //トーストメッセージ作成
+//                String message = selectedDateText.getText().toString();
+//                //トーストを表示
+//                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+                mPresenter.getSchedules();
+                return true;
+            }
+        });
         return rootView;
     }
 
@@ -96,5 +112,10 @@ public class CalendarPageFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+    }
+
+    @Override
+    public void setPresenter(CalendarContract.Presenter presenter) {
+        mPresenter = presenter;
     }
 }

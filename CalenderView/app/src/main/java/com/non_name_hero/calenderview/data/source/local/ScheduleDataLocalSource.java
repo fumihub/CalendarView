@@ -1,13 +1,11 @@
 package com.non_name_hero.calenderview.data.source.local;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.non_name_hero.calenderview.data.Schedule;
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource;
 import com.non_name_hero.calenderview.utils.AppExecutors;
 
-import java.util.Calendar;
 import java.util.List;
 
 public class ScheduleDataLocalSource implements ScheduleDataSource {
@@ -63,11 +61,35 @@ public class ScheduleDataLocalSource implements ScheduleDataSource {
 
 
     @Override
-    public void setSchedule(final Schedule schedule) {
+    public void setSchedule(final Schedule schedule, @NonNull final SaveScheduleCallback callback) {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
+
                 mSchedulesDao.insertSchedule(schedule);
+                mAppExecutors.mainThread().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onScheduleSaved();
+                    }
+                });
+            }
+        };
+        mAppExecutors.diskIO().execute(runnable);
+    }
+
+    @Override
+    public void getAllSchedules(@NonNull final GetScheduleCallback callback) {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                final List<Schedule> schedules = mSchedulesDao.getAll();
+                mAppExecutors.mainThread().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onScheduleLoaded(schedules);
+                    }
+                });
             }
         };
         mAppExecutors.diskIO().execute(runnable);
