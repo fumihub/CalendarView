@@ -15,9 +15,11 @@ public class Injection {
     public static ScheduleRepository provideScheduleRepository(@NonNull Context context) {
         checkNotNull(context);
         PigLeadDatabase pigLeadDatabase = PigLeadDatabase.getInstance(context);
+        AppExecutors appExecutors = new AppExecutors();
+
         ScheduleRepository scheduleRepository = ScheduleRepository.getInstance(
-                ScheduleDataLocalSource.getInstance(new AppExecutors(), pigLeadDatabase.scheduleDao()),
-                ScheduleDataRemoteSource.getInstance());
+                ScheduleDataLocalSource.getInstance(appExecutors, pigLeadDatabase.scheduleDao()),
+                ScheduleDataRemoteSource.getInstance(appExecutors));
         return scheduleRepository;
     }
 }

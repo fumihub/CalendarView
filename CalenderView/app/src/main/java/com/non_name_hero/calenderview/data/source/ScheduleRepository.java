@@ -1,11 +1,10 @@
 package com.non_name_hero.calenderview.data.source;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import com.non_name_hero.calenderview.data.Schedule;
 
-import java.util.Calendar;
+import java.util.List;
 import java.util.Map;
 
 import static com.google.android.gms.internal.ads.zzdlg.checkNotNull;
@@ -17,6 +16,7 @@ public class ScheduleRepository implements ScheduleDataSource {
     private final ScheduleDataSource mScheduleDataRemoteSource;
 
     Map<String, Schedule> mCachedSchedules;
+    List<Schedule> mCachedHolidaySchedules;
 
     boolean mCacheIsDirty = false;
     //コンストラクタ
@@ -69,5 +69,14 @@ public class ScheduleRepository implements ScheduleDataSource {
     @Override
     public void getAllSchedules(@NonNull GetScheduleCallback callback) {
         mScheduleDataLocalSource.getAllSchedules(callback);
+    }
+
+    @Override
+    public void getHoliday(@NonNull GetScheduleCallback callback) {
+        if (mCachedHolidaySchedules == null){
+            mScheduleDataRemoteSource.getHoliday(callback);
+        }else{
+            callback.onScheduleLoaded(mCachedHolidaySchedules);
+        }
     }
 }

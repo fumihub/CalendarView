@@ -111,7 +111,7 @@ public class CalendarPageFragment extends Fragment implements CalendarContract.V
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        mPresenter.createdCalendar();
     }
 
     @Override

@@ -94,4 +94,9 @@ public class ScheduleDataLocalSource implements ScheduleDataSource {
         };
         mAppExecutors.diskIO().execute(runnable);
     }
+
+    @Override
+    public void getHoliday(GetScheduleCallback callback) {
+        //ローカルデータソースは使用しない
+    }
 }
