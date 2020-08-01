@@ -1,5 +1,6 @@
 package com.non_name_hero.calenderview.inputForm;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +14,10 @@ import com.non_name_hero.calenderview.R;
 public class colorActivity  extends AppCompatActivity {
 
     private final int ARRAYLENGTH = 49;
+
+    private Intent intentOut;
+
+    private int cnt;
     private Boolean[] checkFlag = new Boolean[49];
     private Button[] colorButton = new Button[49];
     private TextView[] checkText = new TextView[49];
@@ -30,7 +35,8 @@ public class colorActivity  extends AppCompatActivity {
                                     R.id.yellowCheckText1, R.id.yellowCheckText2, R.id.yellowCheckText3, R.id.yellowCheckText4, R.id.yellowCheckText5, R.id.yellowCheckText6, R.id.yellowCheckText7,
                                     R.id.brownCheckText1, R.id.brownCheckText2, R.id.brownCheckText3, R.id.brownCheckText4, R.id.brownCheckText5, R.id.brownCheckText6, R.id.brownCheckText7,
                                     R.id.blackCheckText1, R.id.blackCheckText2, R.id.blackCheckText3, R.id.blackCheckText4, R.id.blackCheckText5, R.id.blackCheckText6, R.id.blackCheckText7};
-    
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,19 +46,20 @@ public class colorActivity  extends AppCompatActivity {
         setSupportActionBar(myToolbar);
 
         /* フラグ初期化 */
-        for (int cnt = 0; cnt < ARRAYLENGTH; cnt++) {
+        for (cnt = 0; cnt < ARRAYLENGTH; cnt++) {
             checkFlag[cnt] = Boolean.FALSE;
         }
 
+        checkFlag[42] = Boolean.TRUE;
 
         /* 変数宣言 */
-        for (int cnt = 0; cnt < ARRAYLENGTH; cnt++) {
+        for (cnt = 0; cnt < ARRAYLENGTH; cnt++) {
             colorButton[cnt] = findViewById(colorButtonId[cnt]);
             checkText[cnt] = findViewById(checkTextId[cnt]);
         }
 
         /* 最初表示判定 */
-        for (int cnt = 0; cnt < ARRAYLENGTH; cnt++) {
+        for (cnt = 0; cnt < ARRAYLENGTH; cnt++) {
             if (checkFlag[cnt]) {
                 checkText[cnt].setVisibility(View.VISIBLE);
             }
@@ -61,11 +68,15 @@ public class colorActivity  extends AppCompatActivity {
             }
         }
 
-        /*色作成ボタンが押されたとき************************/
-        for (int cnt = 0; cnt < ARRAYLENGTH; cnt++) {
+        /*色ボタンが押されたとき***************************/
+        for (cnt = 0; cnt < ARRAYLENGTH; cnt++) {
             colorButton[cnt].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //色番号を遷移先へreturn
+                    intentOut = getIntent();
+                    intentOut.putExtra("ColorNumber", cnt);
+                    setResult(RESULT_OK, intentOut);
                     //色作成画面に遷移
                     finish();
                 }

@@ -10,7 +10,7 @@
     <color name="blackColor">#000</color>
     <!--赤色7種類-->
     <color name="redColor1">#DC143C</color>
-    <color name="redColor2">#F00</color>
+    <color name="redColor2">#FF4081</color>
     <color name="redColor3">#FF4500</color>
     <color name="redColor4">#FF6347</color>
     <color name="redColor5">#FFA07A</color>

@@ -42,13 +42,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginRight="0dp"
-        android:layout_marginBottom="0dp"
-        android:background="#00000000"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/blackColor1"
         android:gravity="left|center_vertical"
-        android:text="●　未分類"
-        android:textColor="@color/blackColor" />
+        android:padding="10dp"
+        android:text="未分類"
+        android:textColor="@color/whiteColor"
+        android:textSize="15sp"
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/colorCreateButton"
@@ -56,13 +59,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginRight="0dp"
-        android:layout_marginBottom="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
         android:background="#00000000"
         android:gravity="left|center_vertical"
         android:text="＋　色作成"
-        android:textColor="@color/colorPrimary" />
+        android:textColor="@color/colorPrimary"
+        android:textSize="15sp"
+        android:textStyle="bold"/>
     <!--**********************************************-->
 
 </LinearLayout>

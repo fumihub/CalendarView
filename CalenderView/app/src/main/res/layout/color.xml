@@ -53,7 +53,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/redColor1"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/redCheckText1"
@@ -69,7 +69,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -93,7 +93,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/redColor2"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/redCheckText2"
@@ -109,7 +109,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -132,7 +132,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/redColor3"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/redCheckText3"
@@ -148,7 +148,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -171,7 +171,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/redColor4"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/redCheckText4"
@@ -187,7 +187,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -210,7 +210,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/redColor5"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/redCheckText5"
@@ -226,7 +226,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -249,7 +249,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/redColor6"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/redCheckText6"
@@ -265,7 +265,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -288,7 +288,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/redColor7"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/redCheckText7"
@@ -304,7 +304,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -336,7 +336,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/purpleColor1"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/purpleCheckText1"
@@ -352,7 +352,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -376,7 +376,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/purpleColor2"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/purpleCheckText2"
@@ -392,7 +392,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -415,7 +415,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/purpleColor3"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/purpleCheckText3"
@@ -431,7 +431,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -454,7 +454,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/purpleColor4"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/purpleCheckText4"
@@ -470,7 +470,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -493,7 +493,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/purpleColor5"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/purpleCheckText5"
@@ -509,7 +509,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -532,7 +532,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/purpleColor6"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/purpleCheckText6"
@@ -548,7 +548,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -571,7 +571,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/purpleColor7"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/purpleCheckText7"
@@ -587,7 +587,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -619,7 +619,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/blueColor1"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/blueCheckText1"
@@ -635,7 +635,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -659,7 +659,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/blueColor2"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/blueCheckText2"
@@ -675,7 +675,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -698,7 +698,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/blueColor3"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/blueCheckText3"
@@ -714,7 +714,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -737,7 +737,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/blueColor4"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/blueCheckText4"
@@ -753,7 +753,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -776,7 +776,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/blueColor5"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/blueCheckText5"
@@ -792,7 +792,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -815,7 +815,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/blueColor6"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/blueCheckText6"
@@ -831,7 +831,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -854,7 +854,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/blueColor7"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/blueCheckText7"
@@ -870,7 +870,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -902,7 +902,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/greenColor1"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/greenCheckText1"
@@ -918,7 +918,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -942,7 +942,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/greenColor2"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/greenCheckText2"
@@ -958,7 +958,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -981,7 +981,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/greenColor3"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/greenCheckText3"
@@ -997,7 +997,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -1020,7 +1020,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/greenColor4"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/greenCheckText4"
@@ -1036,7 +1036,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -1059,7 +1059,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/greenColor5"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/greenCheckText5"
@@ -1075,7 +1075,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -1098,7 +1098,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/greenColor6"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/greenCheckText6"
@@ -1114,7 +1114,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -1137,7 +1137,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/greenColor7"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/greenCheckText7"
@@ -1153,7 +1153,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -1185,7 +1185,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/yellowColor1"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/yellowCheckText1"
@@ -1201,7 +1201,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -1225,7 +1225,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/yellowColor2"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/yellowCheckText2"
@@ -1241,7 +1241,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -1264,7 +1264,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/yellowColor3"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/yellowCheckText3"
@@ -1280,7 +1280,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -1303,7 +1303,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/yellowColor4"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/yellowCheckText4"
@@ -1319,7 +1319,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -1342,7 +1342,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/yellowColor5"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/yellowCheckText5"
@@ -1358,7 +1358,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -1381,7 +1381,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/yellowColor6"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/yellowCheckText6"
@@ -1397,7 +1397,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -1420,7 +1420,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/yellowColor7"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/yellowCheckText7"
@@ -1436,7 +1436,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -1468,7 +1468,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/brownColor1"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/brownCheckText1"
@@ -1484,7 +1484,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -1508,7 +1508,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/brownColor2"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/brownCheckText2"
@@ -1524,7 +1524,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -1547,7 +1547,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/brownColor3"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/brownCheckText3"
@@ -1563,7 +1563,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -1586,7 +1586,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/brownColor4"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/brownCheckText4"
@@ -1602,7 +1602,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -1625,7 +1625,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/brownColor5"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/brownCheckText5"
@@ -1641,7 +1641,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -1664,7 +1664,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/brownColor6"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/brownCheckText6"
@@ -1680,7 +1680,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -1703,7 +1703,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/brownColor7"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/brownCheckText7"
@@ -1719,7 +1719,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -1751,7 +1751,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/blackColor1"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/blackCheckText1"
@@ -1767,7 +1767,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -1791,7 +1791,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/blackColor2"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/blackCheckText2"
@@ -1807,7 +1807,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -1830,7 +1830,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/blackColor3"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/blackCheckText3"
@@ -1846,7 +1846,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -1869,7 +1869,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/blackColor4"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/blackCheckText4"
@@ -1885,7 +1885,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -1908,7 +1908,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/blackColor5"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/blackCheckText5"
@@ -1924,7 +1924,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -1947,7 +1947,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/blackColor6"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/blackCheckText6"
@@ -1963,7 +1963,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
@@ -1986,7 +1986,7 @@
                 android:gravity="center"
                 android:text="●"
                 android:textColor="@color/blackColor7"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/blackCheckText7"
@@ -2002,7 +2002,7 @@
                 android:gravity="center"
                 android:text="×"
                 android:textColor="@color/whiteColor"
-                android:textSize="50sp" />
+                android:textSize="25sp" />
 
         </FrameLayout>
 
