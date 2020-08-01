@@ -17,10 +17,20 @@
             android:layout_height="wrap_content"
             android:background="#FFEB3B"
             android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme"
-            app:title="新規作成"
-            app:titleMarginEnd="130dp"
-            app:titleMarginStart="130dp" />
+            android:theme="?attr/actionBarTheme">
+
+            <TextView
+                android:id="@+id/inputToolbar_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="新規作成"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                android:textColor="@color/blackColor"
+                tools:ignore="HardcodedText" />
+
+        </androidx.appcompat.widget.Toolbar>
 
         <!--タイトル入力**********************************-->
         <EditText
@@ -125,13 +135,44 @@
         </LinearLayout>
         <!--**********************************************-->
 
-        <!--色選択****************************************-->
-        <TextView
-            android:id="@+id/color"
+        <!--表示色ボタン***********************************-->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="表示色" />
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/colorButton1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="0dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:background="#00000000"
+                android:gravity="left|center_vertical"
+                android:text="表示色"
+                android:textColor="@color/grayColor"
+                style="?android:attr/borderlessButtonStyle"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/colorButton2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:background="#00000000"
+                android:gravity="right|center_vertical"
+                android:text=">"
+                android:textColor="@color/grayColor"
+                style="?android:attr/borderlessButtonStyle"
+                android:textSize="24sp" />
+        </LinearLayout>
         <!--**********************************************-->
 
         <!--詳細入力ボタン*********************************-->

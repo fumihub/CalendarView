@@ -34,7 +34,6 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
     private EditText startTime;
     private EditText endTime;
     private TextView timeArrow;
-    private TextView color;
     private EditText myBudget;
     private EditText price;
     private TextView place;
@@ -42,11 +41,14 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
     private TextView picture;
 
     private Button timeButton;
+    private Button color1;
+    private Button color2;
     private Button detailButton;
     private Button cancelButton;
     private Button doneButton;
 
-    private Intent intent;
+    private Intent intentIn;
+    private Intent intentOut;
     private String month;
     private String day;
 
@@ -63,9 +65,12 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
         new InputPresenter(this, scheduleRepository);
 
         //カレンダー初期値用
-        intent = getIntent();
-        month = intent.getStringExtra("month");
-        day = intent.getStringExtra("day");
+        intentIn = getIntent();
+        month = intentIn.getStringExtra("month");
+        day = intentIn.getStringExtra("day");
+
+        //色選択画面遷移用intent
+        intentOut = new Intent(this, colorSelectActivity.class);
 
 
         /*入力画面表示*********************************************************************/
@@ -77,7 +82,8 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
         startTime = findViewById(R.id.startTime);
         endTime = findViewById(R.id.endTime);
         timeArrow = findViewById(R.id.timeArrow);
-        color = findViewById(R.id.color);
+        color1 = findViewById(R.id.colorButton1);
+        color2 = findViewById(R.id.colorButton2);
         detailButton = findViewById(R.id.detailButton);
         myBudget = findViewById(R.id.myBudget);
         price = findViewById(R.id.price);
@@ -92,7 +98,8 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
         startDate.setVisibility(View.VISIBLE);
         endDate.setVisibility(View.VISIBLE);
         timeButton.setVisibility(View.VISIBLE);
-        color.setVisibility(View.VISIBLE);
+        color1.setVisibility(View.VISIBLE);
+        color2.setVisibility(View.VISIBLE);
         detailButton.setVisibility(View.VISIBLE);
         cancelButton.setVisibility(View.VISIBLE);
         doneButton.setVisibility(View.VISIBLE);
@@ -130,10 +137,10 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
             public void onClick(View v) {
                           //Calendarインスタンスを取得
                 final Calendar startCalendar = Calendar.getInstance();
-                Intent intent = getIntent();
-                int year = Integer.valueOf(intent.getStringExtra("year"));
-                int month = Integer.valueOf(intent.getStringExtra("month"));
-                int day = Integer.valueOf(intent.getStringExtra("day"));
+                Intent intentIn = getIntent();
+                int year = Integer.valueOf(intentIn.getStringExtra("year"));
+                int month = Integer.valueOf(intentIn.getStringExtra("month"));
+                int day = Integer.valueOf(intentIn.getStringExtra("day"));
                 //DatePickerDialogインスタンスを取得
                 DatePickerDialog startDatePickerDialog = new DatePickerDialog(
                         InputActivity.this,
@@ -165,10 +172,10 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
             public void onClick(View v) {
                 //Calendarインスタンスを取得
                 final Calendar endCalendar = Calendar.getInstance();
-                Intent intent = getIntent();
-                int year = Integer.valueOf(intent.getStringExtra("year"));
-                int month = Integer.valueOf(intent.getStringExtra("month"));
-                int day = Integer.valueOf(intent.getStringExtra("day"));
+                Intent intentIn = getIntent();
+                int year = Integer.valueOf(intentIn.getStringExtra("year"));
+                int month = Integer.valueOf(intentIn.getStringExtra("month"));
+                int day = Integer.valueOf(intentIn.getStringExtra("day"));
                 //DatePickerDialogインスタンスを取得
                 DatePickerDialog endDatePickerDialog = new DatePickerDialog(
                         InputActivity.this,
@@ -268,6 +275,23 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
         });
         /**************************************************/
 
+        /*表示色ボタンが押されたとき*********************/
+        color1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //色選択画面へ遷移
+                startActivity(intentOut);
+            }
+        });
+        color2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //色選択画面へ遷移
+                startActivity(intentOut);
+            }
+        });
+        /************************************************/
+
         /*詳細ボタンが押されたとき************************/
         detailButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -286,7 +310,7 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
         /*完了ボタンが押されたとき************************/
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
                 //保存処理を実行
                 mInputPresenter.saveSchedule(title.getText().toString(),memo.getText().toString(),mStartAtDatetime, mEndAtDatetime, 0,0);
                 //カレンダー表示画面に遷移
