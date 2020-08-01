@@ -17,7 +17,6 @@ public class colorActivity  extends AppCompatActivity {
 
     private Intent intentOut;
 
-    private int cnt;
     private Boolean[] checkFlag = new Boolean[49];
     private Button[] colorButton = new Button[49];
     private TextView[] checkText = new TextView[49];
@@ -46,20 +45,20 @@ public class colorActivity  extends AppCompatActivity {
         setSupportActionBar(myToolbar);
 
         /* フラグ初期化 */
-        for (cnt = 0; cnt < ARRAYLENGTH; cnt++) {
+        for (int cnt = 0; cnt < ARRAYLENGTH; cnt++) {
             checkFlag[cnt] = Boolean.FALSE;
         }
 
         checkFlag[42] = Boolean.TRUE;
 
         /* 変数宣言 */
-        for (cnt = 0; cnt < ARRAYLENGTH; cnt++) {
+        for (int cnt = 0; cnt < ARRAYLENGTH; cnt++) {
             colorButton[cnt] = findViewById(colorButtonId[cnt]);
             checkText[cnt] = findViewById(checkTextId[cnt]);
         }
 
         /* 最初表示判定 */
-        for (cnt = 0; cnt < ARRAYLENGTH; cnt++) {
+        for (int cnt = 0; cnt < ARRAYLENGTH; cnt++) {
             if (checkFlag[cnt]) {
                 checkText[cnt].setVisibility(View.VISIBLE);
             }
@@ -69,13 +68,14 @@ public class colorActivity  extends AppCompatActivity {
         }
 
         /*色ボタンが押されたとき***************************/
-        for (cnt = 0; cnt < ARRAYLENGTH; cnt++) {
+        for (int cnt = 0; cnt < ARRAYLENGTH; cnt++) {
             colorButton[cnt].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //色番号を遷移先へreturn
+                    Button color = (Button)v;
+                    //ボタンの色を遷移先へreturn
                     intentOut = getIntent();
-                    intentOut.putExtra("ColorNumber", cnt);
+                    intentOut.putExtra("ColorNumber", color.getCurrentTextColor());
                     setResult(RESULT_OK, intentOut);
                     //色作成画面に遷移
                     finish();

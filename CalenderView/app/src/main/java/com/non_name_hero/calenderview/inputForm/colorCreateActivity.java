@@ -24,7 +24,6 @@ public class colorCreateActivity extends AppCompatActivity {
     private Button cancelButton;
     private Button doneButton;
 
-    private int colorNumber = 0;
     private int[] colorId = {R.color.redColor1, R.color.redColor2, R.color.redColor3, R.color.redColor4, R.color.redColor5, R.color.redColor6, R.color.redColor7,
             R.color.purpleColor1, R.color.purpleColor2, R.color.purpleColor3, R.color.purpleColor4, R.color.purpleColor5, R.color.purpleColor6, R.color.purpleColor7,
             R.color.blueColor1, R.color.blueColor2, R.color.blueColor3, R.color.blueColor4, R.color.blueColor5, R.color.blueColor6, R.color.blueColor7,
@@ -57,8 +56,6 @@ public class colorCreateActivity extends AppCompatActivity {
         color1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //戻り値初期化
-                colorNumber = 0;
                 //戻り値を設定して色画面に遷移
                 startActivityForResult(intentOut, REQUEST_CODE);
             }
@@ -66,22 +63,11 @@ public class colorCreateActivity extends AppCompatActivity {
         color2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //戻り値初期化
-                colorNumber = 0;
                 //戻り値を設定して色画面に遷移
                 startActivityForResult(intentOut, REQUEST_CODE);
             }
         });
         /************************************************/
-
-
-        if (colorNumber != 0) {
-            //ボタンの背景色を色番号の色に変更
-            color2.setBackgroundColor(colorId[colorNumber]);
-        }
-        else {
-            /* 何もしない */
-        }
 
         /*キャンセルボタンが押されたとき******************/
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -113,8 +99,11 @@ public class colorCreateActivity extends AppCompatActivity {
             //colorActivityから戻ってきた場合
             case (REQUEST_CODE):
                 if (resultCode == RESULT_OK) {
-                    //色番号受け取り
-                    colorNumber = data.getIntExtra("ColorNumber", 0);
+                    //色ボタンのテキスト色受け取り
+                    int colorNumber = data.getIntExtra("ColorNumber", 0);
+
+                    //ボタンの背景色を色ボタンの色に変更
+                    color2.setBackgroundColor(colorNumber);
                 }
                 else if (resultCode == RESULT_CANCELED) {
                     //キャンセルボタンを押して戻ってきたときの処理
