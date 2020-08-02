@@ -10,18 +10,12 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.non_name_hero.calenderview.R;
-import com.non_name_hero.calenderview.calendar.CalendarContract;
-import com.non_name_hero.calenderview.data.source.ScheduleRepository;
-import com.non_name_hero.calenderview.data.source.local.PigLeadDatabase;
-import com.non_name_hero.calenderview.data.source.local.ScheduleDataLocalSource;
-import com.non_name_hero.calenderview.data.source.remote.ScheduleDataRemoteSource;
-import com.non_name_hero.calenderview.utils.AppExecutors;
+import com.non_name_hero.calenderview.utils.Injection;
 
 import java.util.Calendar;
 
@@ -63,12 +57,8 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.inputToolbar);
         setSupportActionBar(myToolbar);
 
-        PigLeadDatabase pigLeadDatabase = PigLeadDatabase.getInstance(getApplicationContext());
-        ScheduleRepository scheduleRepository = ScheduleRepository.getInstance(
-                ScheduleDataLocalSource.getInstance(new AppExecutors(), pigLeadDatabase.scheduleDao()),
-                ScheduleDataRemoteSource.getInstance());
 
-        new InputPresenter(this, scheduleRepository);
+        new InputPresenter(this, Injection.provideScheduleRepository(getApplicationContext()));
 
         //カレンダー初期値用
         intent = getIntent();
@@ -296,7 +286,7 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
             @Override
             public void onClick(View v) {
                 //保存処理を実行
-                mInputPresenter.saveSchedule(title.toString(),memo.toString(),mStartAtDatetime, mEndAtDatetime, 0,0);
+                mInputPresenter.saveSchedule(title.getText().toString(),memo.getText().toString(),mStartAtDatetime, mEndAtDatetime, 0,0);
                 //カレンダー表示画面に遷移
             }
         });

@@ -67,6 +67,8 @@ public class ScheduleDataLocalSource implements ScheduleDataSource {
             public void run() {
 
                 mSchedulesDao.insertSchedule(schedule);
+                //insert完了
+
                 mAppExecutors.mainThread().execute(new Runnable() {
                     @Override
                     public void run() {

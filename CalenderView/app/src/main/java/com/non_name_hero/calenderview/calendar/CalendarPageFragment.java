@@ -95,12 +95,7 @@ public class CalendarPageFragment extends Fragment implements CalendarContract.V
 
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-//                //選択されたセルのViewIdを取得
-//                TextView selectedDateText =(TextView) view.findViewById(R.id.dateText);
-//                //トーストメッセージ作成
-//                String message = selectedDateText.getText().toString();
-//                //トーストを表示
-//                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+
                 mPresenter.getSchedules();
                 return true;
             }

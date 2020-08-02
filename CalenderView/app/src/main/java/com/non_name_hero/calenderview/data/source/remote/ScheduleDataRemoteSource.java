@@ -13,6 +13,9 @@ import com.non_name_hero.calenderview.data.Schedule;
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource;
 import com.non_name_hero.calenderview.utils.AppExecutors;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 import java.util.Map;
 
 public class ScheduleDataRemoteSource implements ScheduleDataSource {
@@ -23,11 +26,11 @@ public class ScheduleDataRemoteSource implements ScheduleDataSource {
     private final String HOLIDAY_DOCUMENT = "holiday";
 
     //リモートデータベース
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+    private FirebaseFirestore db;
 
     public ScheduleDataRemoteSource(@NonNull AppExecutors appExecutors) {
         mAppExecutors = appExecutors;
+        db = FirebaseFirestore.getInstance();
     }
 
     public static ScheduleDataRemoteSource getInstance(@NonNull AppExecutors appExecutors) {
@@ -56,8 +59,7 @@ public class ScheduleDataRemoteSource implements ScheduleDataSource {
 
     @Override
     public void getHoliday(@NonNull final GetScheduleCallback callback) {
-
-//        final List<Schedule> holidaySchedules =
+        //以下は別スレッドにて実行
         db.collection(PIGLEAD_SCHEDULES)
                 .document(HOLIDAY_DOCUMENT)
                 .get()
@@ -69,17 +71,30 @@ public class ScheduleDataRemoteSource implements ScheduleDataSource {
                             //documentにドキュメントデータがあればtrue
                             if (document.exists()) {
                                 Map<String, Object> holiday = document.getData();//documentからholidayNameのバリューを取得
+                                //受け取ったデータを整形
+                                final List<Schedule> holidaySchedules = new ArrayList<Schedule>();
+                                Calendar c = Calendar.getInstance();
+                                for(Object obj :holiday.values()){
 
-                                Log.d(ContentValues.TAG, "DocumentSnapshot data: " + holiday);
+                                    Map<String,Object> holidayData = (Map<String, Object>)obj;
+
+                                    c.setTimeInMillis((Long)holidayData.get("date"));
+
+                                    holidaySchedules.add(new Schedule((String)holidayData.get("nameInJapan"),c));
+
+
+                                }
+                                //callbackに引数を渡す(データ配列)
+                                callback.onScheduleLoaded(holidaySchedules);
+                                Log.d(ContentValues.TAG, holiday.toString());
                             } else {
                                 Log.d(ContentValues.TAG, "No such document");
                             }
                         } else {
-
+                            Log.d(ContentValues.TAG, "failure task firebase");
                         }
                         Log.d(ContentValues.TAG, "get failed with ", task.getException());
                     }
-
                 });
     }
 }

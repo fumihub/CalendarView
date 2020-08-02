@@ -43,14 +43,14 @@ public class AppExecutors {
      * @return Executor
      */
     public Executor diskIO() {
-        return diskIO;
+        return diskIO;//diskIO.execute(new Runnable{....
     }
 
-    public Executor networkIO() {
+    public Executor networkIO() {//diskIO.execute(new Runnable{....
         return networkIO;
     }
 
-    public Executor mainThread() {
+    public Executor mainThread() {//mainThread().execute(new Runnable{....
         return mainThread;
     }
 
