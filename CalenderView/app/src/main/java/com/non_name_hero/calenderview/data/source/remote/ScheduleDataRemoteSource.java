@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.non_name_hero.calenderview.data.Schedule;
@@ -76,9 +77,9 @@ public class ScheduleDataRemoteSource implements ScheduleDataSource {
                                 Calendar c = Calendar.getInstance();
                                 for(Object obj :holiday.values()){
 
-                                    Map<String,Object> holidayData = (Map<String, Object>)obj;
-
-                                    c.setTimeInMillis((Long)holidayData.get("date"));
+                                    Map<String,Object> holidayData = autoCast(obj);
+                                    Long date = ((Timestamp)holidayData.get("date")).getSeconds()*1000;
+                                    c.setTimeInMillis(date);
 
                                     holidaySchedules.add(new Schedule((String)holidayData.get("nameInJapan"),c));
 
@@ -96,6 +97,12 @@ public class ScheduleDataRemoteSource implements ScheduleDataSource {
                         Log.d(ContentValues.TAG, "get failed with ", task.getException());
                     }
                 });
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T autoCast(Object obj) {
+        T castObj = (T) obj;
+        return castObj;
     }
 }
 
