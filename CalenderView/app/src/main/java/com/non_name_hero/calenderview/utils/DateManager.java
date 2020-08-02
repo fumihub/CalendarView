@@ -1,9 +1,5 @@
 package com.non_name_hero.calenderview.utils;
 
-import android.util.Log;
-
-import androidx.annotation.Nullable;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -52,7 +48,6 @@ public class DateManager {
         }
 
         List<Date> days = new ArrayList<>();
-
         for (int i = 0; i < count; i ++){
             days.add(mCalendar.getTime());
             mCalendar.add(Calendar.DATE, 1);

@@ -1,11 +1,13 @@
 package com.non_name_hero.calenderview.utils;
 
+import android.annotation.SuppressLint;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import static com.google.android.gms.common.internal.Asserts.checkNotNull;
+import static androidx.core.util.Preconditions.checkNotNull;
 
 /**
  * This provides methods to help Activities load their UI.
@@ -17,6 +19,7 @@ public class ActivityUtils {
      * performed by the {@code fragmentManager}.
      *
      */
+    @SuppressLint("RestrictedApi")
     public static void addFragmentToActivity (@NonNull FragmentManager fragmentManager,
                                               @NonNull Fragment fragment, int frameId) {
         checkNotNull(fragmentManager);
