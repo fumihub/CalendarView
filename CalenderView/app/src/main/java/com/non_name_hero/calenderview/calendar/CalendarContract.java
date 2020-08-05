@@ -18,7 +18,7 @@ public interface CalendarContract {
     interface Presenter extends BasePresenter {
         //TODO カレンダー取得インターフェース
         void setCurrentMonth(String currentMouth);
-
+        void getSchedules();
     }
 
 
