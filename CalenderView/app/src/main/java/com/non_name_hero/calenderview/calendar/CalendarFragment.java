@@ -12,8 +12,8 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.non_name_hero.calenderview.R;
+import com.non_name_hero.calenderview.data.Schedule;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CalendarFragment extends Fragment implements CalendarContract.View {
@@ -33,10 +33,10 @@ public class CalendarFragment extends Fragment implements CalendarContract.View 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.calendar_fragment, container, false);
         mPager = (ViewPager2) rootView.findViewById(R.id.pager);
+        mPager.setOffscreenPageLimit(ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT);
         mPagerAdapter = new CalendarPagerAdapter(this);
         // Instantiate a ViewPager and a PagerAdapter.
         mPager.setAdapter(mPagerAdapter);
-        mPager.setOffscreenPageLimit(ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT);
         mPager.setCurrentItem(50, false);
 
         return rootView;

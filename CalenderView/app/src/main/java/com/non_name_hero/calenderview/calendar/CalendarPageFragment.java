@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.non_name_hero.calenderview.R;
+import com.non_name_hero.calenderview.data.Schedule;
 import com.non_name_hero.calenderview.inputForm.InputActivity;
 import com.non_name_hero.calenderview.utils.DateManager;
 
@@ -54,11 +55,8 @@ public class CalendarPageFragment extends Fragment implements CalendarContract.V
         calendarGridView = rootView.findViewById(R.id.calendarGridView);
 
         //カレンダーのアダプターを使用してViewを作成-
-        mCalendarAdapter = new CalendarAdapter(getContext());
+        mCalendarAdapter = new CalendarAdapter(getContext(), mProgressMonth);
         calendarGridView.setAdapter(mCalendarAdapter);
-
-
-        mCalendarAdapter.setJumpMonth(mProgressMonth);
 
         //クリックリスナー
         calendarGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

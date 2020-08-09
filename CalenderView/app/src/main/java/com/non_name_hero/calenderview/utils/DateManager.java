@@ -12,12 +12,14 @@ public class DateManager {
     private Calendar mCalendar;
     private Date startDate;
     private Date currentDate;
+    private Date mCurrentDate;
     public Date holiday;
     private Boolean currentDayFlg = Boolean.FALSE;
 
     //コンストラクタ
     public DateManager(){
         mCalendar = Calendar.getInstance();
+        mCurrentDate = mCalendar.getTime();
     }
 
     //当月の要素を取得
@@ -222,7 +224,7 @@ public class DateManager {
     }
 
     public Date getCurrentDate(){
-        return currentDate;
+        return mCurrentDate;
     }
     public Calendar getCalendar(){
         return mCalendar;

@@ -29,10 +29,11 @@ public class CalendarAdapter extends BaseAdapter {
         public TextView holidayText;
     }
 
-    public CalendarAdapter(Context context) {
+    public CalendarAdapter(Context context, int month) {
         mContext = context;
         mLayoutInflater = LayoutInflater.from(mContext);
         mDateManager = new DateManager();
+        mDateManager.jumpMonth(month);
         dateArray = mDateManager.getDays();
     }
 
