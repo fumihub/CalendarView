@@ -17,8 +17,11 @@ import com.non_name_hero.calenderview.R;
 public class colorCreateActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE = 1;
+    private final int ARRAYLENGTH = 49;
 
-    private colorActivity colorActivity;
+   /* private colorActivity colorActivity;*/
+
+    private boolean[] checkFlag = new boolean[49];
 
     private EditText colorCreateTitle;
 
@@ -31,7 +34,7 @@ public class colorCreateActivity extends AppCompatActivity {
     private RadioButton textColorWhite;
 
     //colorActivityでも使用したいためpublic
-    public int colorNumberPre = 255;
+    private int colorNumberPre = 255;
     private int colorNumber = 255;
     private int color = 0;
 
@@ -39,7 +42,22 @@ public class colorCreateActivity extends AppCompatActivity {
 
     //コンストラクタ
     public colorCreateActivity(){
-        colorActivity = new colorActivity();
+        /*フラグ初期化*/
+        for (int cnt = 0; cnt < ARRAYLENGTH; cnt++) {
+            //初回
+            if (colorNumber == 255) {//255：colorNumberPreの初期値
+                /* 何もしない */
+            }
+            else if (colorNumber == cnt) {
+                checkFlag[cnt] = Boolean.TRUE;
+            }
+            //初回以外
+            else {
+                checkFlag[cnt] = Boolean.FALSE;
+            }
+        }
+        checkFlag[42] = Boolean.TRUE;
+
     }
 
     @Override
@@ -104,6 +122,10 @@ public class colorCreateActivity extends AppCompatActivity {
     public void goColorActivity(){
         //色画面遷移用intent
         intentOut = new Intent(this, colorActivity.class);
+        //チェックフラグを引数で色画面に渡す
+        intentOut.putExtra("checkFlag", checkFlag);
+        //色番号前回値を引数で色画面に渡す
+        intentOut.putExtra("colorNumberPre", colorNumberPre);
         //戻り値を設定して色画面に遷移
         startActivityForResult(intentOut, REQUEST_CODE);
     }
@@ -119,7 +141,7 @@ public class colorCreateActivity extends AppCompatActivity {
 
         setResult(RESULT_OK, intentOut);
         //押されたボタンに「×」印をつける
-        colorActivity.checkFlag[colorNumber] = Boolean.TRUE;
+        checkFlag[colorNumber] = Boolean.TRUE;
         finish();
     }
 

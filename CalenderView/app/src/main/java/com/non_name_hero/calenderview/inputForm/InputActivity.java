@@ -310,7 +310,7 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
         /*完了ボタンが押されたとき************************/
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
+            public void onClick(View v) {
                 //保存処理を実行
                 mInputPresenter.saveSchedule(title.getText().toString(),memo.getText().toString(),mStartAtDatetime, mEndAtDatetime, 0,0);
                 //カレンダー表示画面に遷移

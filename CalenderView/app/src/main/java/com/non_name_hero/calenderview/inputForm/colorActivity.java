@@ -15,11 +15,8 @@ public class colorActivity  extends AppCompatActivity {
 
     private final int ARRAYLENGTH = 49;
 
-    private colorCreateActivity colorCreateActivity;
+    private Intent intentIn;
     private Intent intentOut;
-
-    //色内容が保存されたときに変更するためpublic
-    public Boolean[] checkFlag = new Boolean[49];
 
     private Button[] colorButton = new Button[49];
     private TextView[] checkText = new TextView[49];
@@ -39,15 +36,6 @@ public class colorActivity  extends AppCompatActivity {
                                     R.id.blackCheckText1, R.id.blackCheckText2, R.id.blackCheckText3, R.id.blackCheckText4, R.id.blackCheckText5, R.id.blackCheckText6, R.id.blackCheckText7};
 
 
-    //コンストラクタ
-    public colorActivity(){
-        colorCreateActivity = new colorCreateActivity();
-        /* フラグ初期化 */
-        for (int cnt = 0; cnt < ARRAYLENGTH; cnt++) {
-            checkFlag[cnt] = Boolean.FALSE;
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +44,9 @@ public class colorActivity  extends AppCompatActivity {
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.colorToolbar);
         setSupportActionBar(myToolbar);
 
-        checkFlag[42] = Boolean.TRUE;
+        intentIn = getIntent();
+        //チェックフラグ取得
+        boolean[] checkFlag = intentIn.getBooleanArrayExtra("checkFlag");
 
         /* 変数宣言 */
         for (int cnt = 0; cnt < ARRAYLENGTH; cnt++) {
@@ -81,14 +71,16 @@ public class colorActivity  extends AppCompatActivity {
             });
         }
 
+        //色番号前回値を取得
+        int colorNumberPre = intentIn.getIntExtra("colorNumberPre", 255);
         //前回押された色ボタンのテキストを「〇」に
         //初回
-        if (colorCreateActivity.colorNumberPre == 255) {//255：colorNumberPreの初期値
+        if (colorNumberPre == 255) {//255：colorNumberPreの初期値
             /* 何もしない */
         }
         //初回以外
         else {
-            colorButton[colorCreateActivity.colorNumberPre].setText("○");
+            colorButton[colorNumberPre].setText("○");
         }
 
     }
