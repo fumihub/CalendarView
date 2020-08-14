@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -19,8 +21,6 @@ public class colorCreateActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 1;
     private final int ARRAYLENGTH = 49;
 
-   /* private colorActivity colorActivity;*/
-
     private boolean[] checkFlag = new boolean[49];
 
     private EditText colorCreateTitle;
@@ -30,10 +30,10 @@ public class colorCreateActivity extends AppCompatActivity {
     private Button cancelButton;
     private Button doneButton;
 
-    private RadioButton textColorBlack;
-    private RadioButton textColorWhite;
+    private RadioGroup radioGroup;
 
-    //colorActivityでも使用したいためpublic
+    private String textColor;
+
     private int colorNumberPre = 255;
     private int colorNumber = 255;
     private int color = 0;
@@ -68,15 +68,12 @@ public class colorCreateActivity extends AppCompatActivity {
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.colorCreateToolbar);
         setSupportActionBar(myToolbar);
 
-
-
         colorCreateTitle = findViewById(R.id.colorCreateTitle);
         color1 = findViewById(R.id.colorButton1);
         color2 = findViewById(R.id.colorButton2);
         cancelButton = findViewById(R.id.cancelButton);
         doneButton = findViewById(R.id.doneButton);
-        textColorBlack = findViewById(R.id.RadioButton1);
-        textColorBlack = findViewById(R.id.RadioButton2);
+        radioGroup = findViewById(R.id.RadioGroup);
 
         /*色ボタンが押されたとき**************************/
         color1.setOnClickListener(new View.OnClickListener() {
@@ -94,8 +91,6 @@ public class colorCreateActivity extends AppCompatActivity {
             }
         });
         /************************************************/
-
-
 
         /*キャンセルボタンが押されたとき******************/
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -131,18 +126,51 @@ public class colorCreateActivity extends AppCompatActivity {
     }
 
     public void returnColorSelectActivity(){
-        //色選択遷移用intent
-        intentOut = getIntent();
-        //ボタンの色を遷移先へreturn
-        intentOut.putExtra("Color", color);
-        //色タイトルを遷移先へreturn
-        intentOut.putExtra("ColorTitle", colorCreateTitle.getText());
-        //文字色を遷移先へreturn
 
-        setResult(RESULT_OK, intentOut);
-        //押されたボタンに「×」印をつける
-        checkFlag[colorNumber] = Boolean.TRUE;
-        finish();
+        int checkedId = radioGroup.getCheckedRadioButtonId();
+        if (checkedId != -1) {
+            // 選択されているラジオボタンの取得
+            // (Fragmentの場合は「getActivity().findViewById」にする)
+            RadioButton radioButton = (RadioButton) findViewById(checkedId);
+
+            // ラジオボタンのテキスト(色)を取得
+            textColor = radioButton.getText().toString();
+        }
+        /*else {
+            //トースト表示
+            Toast errorToast = Toast.makeText(
+                    getApplicationContext(),
+                    "黒か白かを選択してください！",
+                    Toast.LENGTH_SHORT
+            );
+            errorToast.show();
+        }*/
+
+        //エラー処理
+        if (color == 0 || textColor == "" || colorCreateTitle.getText().toString() == "") {
+            //トースト表示
+            Toast errorToast = Toast.makeText(
+                    getApplicationContext(),
+                    "全ての項目を埋めてください！",
+                    Toast.LENGTH_SHORT
+            );
+            errorToast.show();
+        }
+        else {
+            //色選択遷移用intent
+            intentOut = getIntent();
+            //ボタンの色を遷移先へreturn
+            intentOut.putExtra("Color", color);
+            //色タイトルを遷移先へreturn
+            intentOut.putExtra("ColorTitle", colorCreateTitle.getText().toString());
+            //文字色を遷移先へreturn
+            intentOut.putExtra("textColor", textColor);
+            setResult(RESULT_OK, intentOut);
+            //押されたボタンに「×」印をつける
+            checkFlag[colorNumber] = Boolean.TRUE;
+            finish();
+        }
+
     }
 
     //Activityから戻り値(色番号)を受け取る処理

@@ -1,11 +1,13 @@
 package com.non_name_hero.calenderview.inputForm;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -18,6 +20,8 @@ import java.util.List;
 public class colorSelectActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE = 1;
+
+    private LinearLayout linearLayout;
 
     private List<Button> categoryList = new ArrayList<Button>();
     private Button colorCreateButton;
@@ -34,6 +38,8 @@ public class colorSelectActivity extends AppCompatActivity {
 
         //色作成画面用intent
         intentOut = new Intent(this, colorCreateActivity.class);
+
+        linearLayout = findViewById(R.id.linearLayout);
 
         categoryList.add((Button) (findViewById(R.id.noCategoryButton)));
         colorCreateButton = findViewById(R.id.colorCreateButton);
@@ -70,7 +76,6 @@ public class colorSelectActivity extends AppCompatActivity {
 
     public void returnInputActivity(View v) {
 
-        Button category = (Button)v;
         ColorDrawable backgroundColor = (ColorDrawable) ((Button) v).getBackground();
         int colorId = backgroundColor.getColor();
         //色選択遷移用intent
@@ -78,7 +83,7 @@ public class colorSelectActivity extends AppCompatActivity {
         //ボタンの色IDを遷移先へreturn
         intentOut.putExtra("ColorId", colorId);
         //色タイトルを遷移先へreturn
-        intentOut.putExtra("ColorTitle", ((Button) v).getText());
+        intentOut.putExtra("ColorTitle", ((Button) v).getText().toString());
         //文字色を遷移先へreturn
         intentOut.putExtra("textColor", ((Button) v).getCurrentTextColor());
         setResult(RESULT_OK, intentOut);
@@ -95,11 +100,27 @@ public class colorSelectActivity extends AppCompatActivity {
             case (REQUEST_CODE):
                 if (resultCode == RESULT_OK) {
                     //色タイトルの受け取り
-                    int colorTitle = data.getIntExtra("ColorTitle", 0);//defaultValue:ColorNumberキーに値が入っていなかった時に返す値
+                    String colorTitle = data.getStringExtra("ColorTitle");
                     //ボタンの色の受け取り
                     int color = data.getIntExtra("Color",0);
                     //文字色の受け取り
+                    String textColor = data.getStringExtra("textColor");
 
+                    //色ボタン作成
+                    Button colorButton = new Button(this);
+                    colorButton.setText(colorTitle);
+                    colorButton.setBackgroundColor(color);
+                    if (textColor.equals("黒")) {
+                        colorButton.setTextColor(Color.BLACK);
+                    }
+                    else {
+                        colorButton.setTextColor(Color.WHITE);
+                    }
+
+                    //リニアレイアウトに色ボタン追加
+                    linearLayout.addView(colorButton);
+                    //色ボタンをカテゴリーリストに追加
+                    categoryList.add(colorButton);
                 }
                 else if (resultCode == RESULT_CANCELED) {
                     //キャンセルボタンを押して戻ってきたときの処理
