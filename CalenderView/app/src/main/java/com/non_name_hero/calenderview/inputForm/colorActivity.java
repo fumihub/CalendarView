@@ -1,6 +1,8 @@
 package com.non_name_hero.calenderview.inputForm;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,8 +20,11 @@ public class colorActivity  extends AppCompatActivity {
     private Intent intentIn;
     private Intent intentOut;
 
+    private SharedPreferences prefs;
+
     private Button[] colorButton = new Button[49];
     private TextView[] checkText = new TextView[49];
+    private boolean[] checkFlag = new boolean[49];
     private int[] colorButtonId = {R.id.redButton1, R.id.redButton2, R.id.redButton3, R.id.redButton4, R.id.redButton5, R.id.redButton6, R.id.redButton7,
                                     R.id.purpleButton1, R.id.purpleButton2, R.id.purpleButton3, R.id.purpleButton4, R.id.purpleButton5, R.id.purpleButton6, R.id.purpleButton7,
                                     R.id.blueButton1, R.id.blueButton2, R.id.blueButton3, R.id.blueButton4, R.id.blueButton5, R.id.blueButton6, R.id.blueButton7,
@@ -35,6 +40,25 @@ public class colorActivity  extends AppCompatActivity {
                                     R.id.brownCheckText1, R.id.brownCheckText2, R.id.brownCheckText3, R.id.brownCheckText4, R.id.brownCheckText5, R.id.brownCheckText6, R.id.brownCheckText7,
                                     R.id.blackCheckText1, R.id.blackCheckText2, R.id.blackCheckText3, R.id.blackCheckText4, R.id.blackCheckText5, R.id.blackCheckText6, R.id.blackCheckText7};
 
+    //コンストラクタ
+    public colorActivity() {
+        //↓ここでエラーが起きる
+        prefs = getSharedPreferences("SaveData", Context.MODE_PRIVATE);
+        /*フラグ初期化*/
+        for (int cnt = 0; cnt < ARRAYLENGTH; cnt++) {
+            //cntをString型に変換
+            String strCnt = String.valueOf(cnt);
+            //SharedPreferenceに値が保存されていたら
+            if (prefs.getBoolean(strCnt,Boolean.FALSE)) {//ここをif (cnt == データベースに保存されているColorNumber) {にしたら俺のしたいことが実現できる
+                checkFlag[cnt] = Boolean.TRUE;
+            }
+            //保存されていなければ
+            else {
+                checkFlag[cnt] = Boolean.FALSE;
+            }
+        }
+        checkFlag[42] = Boolean.TRUE;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +67,6 @@ public class colorActivity  extends AppCompatActivity {
         setContentView(R.layout.color);
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.colorToolbar);
         setSupportActionBar(myToolbar);
-
-        intentIn = getIntent();
-        //チェックフラグ取得
-        boolean[] checkFlag = intentIn.getBooleanArrayExtra("checkFlag");
 
         /* 変数宣言 */
         for (int cnt = 0; cnt < ARRAYLENGTH; cnt++) {

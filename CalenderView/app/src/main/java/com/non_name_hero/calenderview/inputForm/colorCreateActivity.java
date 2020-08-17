@@ -1,6 +1,8 @@
 package com.non_name_hero.calenderview.inputForm;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,9 +21,10 @@ import com.non_name_hero.calenderview.R;
 public class colorCreateActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE = 1;
-    private final int ARRAYLENGTH = 49;
 
-    private boolean[] checkFlag = new boolean[49];
+    private Intent intentOut;
+
+    private SharedPreferences prefs;
 
     private EditText colorCreateTitle;
 
@@ -38,25 +41,8 @@ public class colorCreateActivity extends AppCompatActivity {
     private int colorNumber = 255;
     private int color = 0;
 
-    private Intent intentOut;
-
     //コンストラクタ
     public colorCreateActivity(){
-        /*フラグ初期化*/
-        for (int cnt = 0; cnt < ARRAYLENGTH; cnt++) {
-            //初回
-            if (colorNumber == 255) {//255：colorNumberPreの初期値
-                /* 何もしない */
-            }
-            else if (colorNumber == cnt) {
-                checkFlag[cnt] = Boolean.TRUE;
-            }
-            //初回以外
-            else {
-                checkFlag[cnt] = Boolean.FALSE;
-            }
-        }
-        checkFlag[42] = Boolean.TRUE;
 
     }
 
@@ -117,8 +103,6 @@ public class colorCreateActivity extends AppCompatActivity {
     public void goColorActivity(){
         //色画面遷移用intent
         intentOut = new Intent(this, colorActivity.class);
-        //チェックフラグを引数で色画面に渡す
-        intentOut.putExtra("checkFlag", checkFlag);
         //色番号前回値を引数で色画面に渡す
         intentOut.putExtra("colorNumberPre", colorNumberPre);
         //戻り値を設定して色画面に遷移
@@ -136,15 +120,6 @@ public class colorCreateActivity extends AppCompatActivity {
             // ラジオボタンのテキスト(色)を取得
             textColor = radioButton.getText().toString();
         }
-        /*else {
-            //トースト表示
-            Toast errorToast = Toast.makeText(
-                    getApplicationContext(),
-                    "黒か白かを選択してください！",
-                    Toast.LENGTH_SHORT
-            );
-            errorToast.show();
-        }*/
 
         //エラー処理
         if (color == 0 || textColor == "" || colorCreateTitle.getText().toString() == "") {
@@ -165,9 +140,16 @@ public class colorCreateActivity extends AppCompatActivity {
             intentOut.putExtra("ColorTitle", colorCreateTitle.getText().toString());
             //文字色を遷移先へreturn
             intentOut.putExtra("textColor", textColor);
+            //ボタンの色番号を遷移先へreturn
+            intentOut.putExtra("ColorNumber", colorNumber);
             setResult(RESULT_OK, intentOut);
-            //押されたボタンに「×」印をつける
-            checkFlag[colorNumber] = Boolean.TRUE;
+            //colorNumberをString型に変換
+            String strColorNumber = String.valueOf(colorNumber);
+            //SharedPreferenceに「colorNumber(数字)」の形で保存
+            //↓ここでエラーが起きる
+            prefs = getSharedPreferences("SaveData", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean(strColorNumber,Boolean.TRUE);
             finish();
         }
 
@@ -182,8 +164,9 @@ public class colorCreateActivity extends AppCompatActivity {
             //colorActivityから戻ってきた場合
             case (REQUEST_CODE):
                 if (resultCode == RESULT_OK) {
-                    //色ボタンのテキスト色受け取り
+                    //色番号
                     colorNumber = data.getIntExtra("ColorNumber", 0);//defaultValue:ColorNumberキーに値が入っていなかった時に返す値
+                    //色ボタンのテキスト色受け取り
                     color = data.getIntExtra("Color",0);
 
                     //ボタンの背景色を色ボタンの色に変更

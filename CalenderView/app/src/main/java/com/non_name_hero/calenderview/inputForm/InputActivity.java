@@ -3,6 +3,7 @@ package com.non_name_hero.calenderview.inputForm;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +22,8 @@ import com.non_name_hero.calenderview.utils.Injection;
 import java.util.Calendar;
 
 public class InputActivity extends AppCompatActivity implements InputContract.View {
+
+    private static final int REQUEST_CODE = 1;
 
     private InputContract.Presenter mInputPresenter;
     private InputContract.View mView;
@@ -49,8 +52,10 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
 
     private Intent intentIn;
     private Intent intentOut;
+
     private String month;
     private String day;
+    private int colorNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -280,14 +285,14 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
             @Override
             public void onClick(View v) {
                 //色選択画面へ遷移
-                startActivity(intentOut);
+                goColorSelectActivity();
             }
         });
         color2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //色選択画面へ遷移
-                startActivity(intentOut);
+                goColorSelectActivity();
             }
         });
         /************************************************/
@@ -330,6 +335,36 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
 
         /*********************************************************************************/
 
+    }
+
+    public void goColorSelectActivity() {
+        startActivity(intentOut);
+        //戻り値を設定して色選択画面に遷移
+        startActivityForResult(intentOut, REQUEST_CODE);
+    }
+
+    //Activityから戻り値(色番号)を受け取る処理
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            //colorSelectActivityから戻ってきた場合
+            case (REQUEST_CODE):
+                if (resultCode == RESULT_OK) {
+                    //色番号受け取り
+                    colorNumber = data.getIntExtra("ColorNumber", 0);//defaultValue:ColorNumberキーに値が入っていなかった時に返す値
+                }
+                else if (resultCode == RESULT_CANCELED) {
+                    //キャンセルボタンを押して戻ってきたときの処理
+                }
+                else {
+                    //その他
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
