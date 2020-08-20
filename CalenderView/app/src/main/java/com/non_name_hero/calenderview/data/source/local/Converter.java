@@ -1,23 +1,15 @@
 package com.non_name_hero.calenderview.data.source.local;
 
-import android.text.format.DateFormat;
-
 import androidx.room.TypeConverter;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
+import java.util.Date;
 
 public class Converter {
     @TypeConverter
-    public static Calendar toCalendar(Long l) {
-        Calendar c = Calendar.getInstance();
-        c.setTimeInMillis(l);
-        return c;
-    }
+    public static Date toDate(Long l) {return new Date(l); }
 
     @TypeConverter
-    public static Long fromCalendar(Calendar c){
-        return c == null ? null : c.getTime().getTime();
+    public static Long fromCalendar(Date date){
+        return date == null ? null : date.getTime();
     }
 }

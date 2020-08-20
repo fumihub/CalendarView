@@ -7,7 +7,7 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import java.util.Calendar;
+import java.util.Date;
 
 @Entity(tableName = "schedule")
 public class Schedule {
@@ -27,11 +27,11 @@ public class Schedule {
 
     @NonNull
     @ColumnInfo(name = "start_at_datetime")
-    private Calendar mStartAtDatetime;
+    private Date mStartAtDatetime;
 
     @Nullable
     @ColumnInfo(name = "end_at_datetime")
-    private Calendar mEndAtDatetime;
+    private Date mEndAtDatetime;
 
     @Nullable
     @ColumnInfo(name = "payment_id")
@@ -54,8 +54,8 @@ public class Schedule {
     public Schedule(@NonNull long scheduleId,
                     @NonNull String title,
                     @NonNull String description,
-                    @NonNull Calendar startAtDatetime,
-                    @Nullable Calendar endAtDatetime,
+                    @NonNull Date startAtDatetime,
+                    @Nullable Date endAtDatetime,
                     @Nullable int groupId,
                     @Nullable int paymentId) {
         mScheduleId = scheduleId;
@@ -71,15 +71,15 @@ public class Schedule {
     @Ignore
     public Schedule(@NonNull String title,
                     @NonNull String description,
-                    @NonNull Calendar startAtDatetime,
-                    @Nullable Calendar endAtDatetime,
+                    @NonNull Date startAtDatetime,
+                    @Nullable Date endAtDatetime,
                     @Nullable int groupId,
                     @Nullable int paymentId) {
         this(0, title, description, startAtDatetime, endAtDatetime, groupId, paymentId);
     }
     @Ignore
     public Schedule(@NonNull String title,
-                    @Nullable Calendar datetime) {
+                    @Nullable Date datetime) {
         this(0, title, "", datetime, datetime, 0, 0);
     }
 
@@ -123,20 +123,20 @@ public class Schedule {
     }
 
     @Nullable
-    public Calendar getStartAtDatetime() {
+    public Date getStartAtDatetime() {
         return mStartAtDatetime;
     }
 
-    public void setStartAtDatetime(@NonNull Calendar mStartAtDatetime) {
+    public void setStartAtDatetime(@NonNull Date mStartAtDatetime) {
         this.mStartAtDatetime = mStartAtDatetime;
     }
 
     @Nullable
-    public Calendar getEndAtDatetime() {
+    public Date getEndAtDatetime() {
         return mEndAtDatetime;
     }
 
-    public void setEndAtDatetime(@Nullable Calendar mEndAtDatetime) {
+    public void setEndAtDatetime(@Nullable Date mEndAtDatetime) {
         this.mEndAtDatetime = mEndAtDatetime;
     }
 
