@@ -5,6 +5,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -14,6 +16,7 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 import com.non_name_hero.calenderview.R;
 import com.non_name_hero.calenderview.data.source.ScheduleRepository;
 import com.non_name_hero.calenderview.utils.Injection;
+import com.non_name_hero.calenderview.utils.ViewModelFactory;
 
 import java.util.Date;
 
@@ -84,7 +87,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-
+    public static CalendarViewModel obtainViewModel(FragmentActivity activity){
+        ViewModelFactory factory = ViewModelFactory.getInstance(activity.getApplication());
+        return new ViewModelProvider(activity, factory).get(CalendarViewModel.class);
+    }
 
 }
