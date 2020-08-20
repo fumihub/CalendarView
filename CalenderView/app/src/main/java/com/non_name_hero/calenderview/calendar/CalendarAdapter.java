@@ -16,26 +16,36 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class CalendarAdapter extends BaseAdapter {
     private List<Date> dateArray;
     private Context mContext;
     private DateManager mDateManager;
     private LayoutInflater mLayoutInflater;
+    private SimpleDateFormat formatYYYYMMDD = new SimpleDateFormat("yyyy.MM.dd", Locale.US);
+    private Map<String, String> mCalendarMap;
 
     //カスタムセルを拡張したらここでWigetを定義
     private static class ViewHolder {
         public TextView dateText;
         public TextView holidayText;
     }
-
-    public CalendarAdapter(Context context) {
+    public CalendarAdapter(Context context, int month) {
         mContext = context;
         mLayoutInflater = LayoutInflater.from(mContext);
         mDateManager = new DateManager();
+        mDateManager.jumpMonth(month);
         dateArray = mDateManager.getDays();
     }
 
+    public void setCalendarMap(Map<String,String> calendarMap){
+        mCalendarMap = calendarMap;
+    }
+
+    public List<Date> getDateArray(){
+        return dateArray;
+    }
     /**
      * カレンダー表示する際に使用する日数
      *
@@ -100,17 +110,17 @@ public class CalendarAdapter extends BaseAdapter {
         //祝日、日曜日を赤、土曜日を青に
         judgeHoliday(holder, position, mDateManager.getDayOfWeek(dateArray.get(position)));
 
-
+        convertView.findViewById(R.id.dateText).setTag(formatYYYYMMDD.format(dateArray.get(position)));
         return convertView;
     }
 
     //祝日を判定
     private void judgeHoliday(ViewHolder holder, int position, int day) {
         //祝日の場合
-        if (mDateManager.getHoliday(dateArray.get(position)) != "") {
+        if (mCalendarMap.containsKey(formatYYYYMMDD.format(dateArray.get(position)))) {
             holder.holidayText.setVisibility(View.VISIBLE);
             holder.holidayText.setTextColor(Color.WHITE);
-            holder.holidayText.setText(mDateManager.getHoliday(dateArray.get(position)));
+            holder.holidayText.setText(mCalendarMap.get(formatYYYYMMDD.format(dateArray.get(position))));
             holder.holidayText.setBackgroundColor(Color.RED);
             holder.dateText.setTextColor(Color.RED);
         } else {

@@ -13,9 +13,6 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.non_name_hero.calenderview.R;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class CalendarFragment extends Fragment implements CalendarContract.View {
 
     public static CalendarFragment newInstance() {
@@ -27,16 +24,20 @@ public class CalendarFragment extends Fragment implements CalendarContract.View 
     private static final int NUM_PAGES = 100;
     private ViewPager2 mPager;
     private CalendarPagerAdapter mPagerAdapter;
+    private CalendarViewModel mViewModel;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.calendar_fragment, container, false);
+        mViewModel = MainActivity.obtainViewModel(getActivity());
+        loadData();
         mPager = (ViewPager2) rootView.findViewById(R.id.pager);
         mPagerAdapter = new CalendarPagerAdapter(this);
         // Instantiate a ViewPager and a PagerAdapter.
+        //mPager.setOffscreenPageLimit(ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT);
+        mPager.setOffscreenPageLimit(5);
         mPager.setAdapter(mPagerAdapter);
-        mPager.setOffscreenPageLimit(ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT);
         mPager.setCurrentItem(50, false);
 
         return rootView;
@@ -45,7 +46,7 @@ public class CalendarFragment extends Fragment implements CalendarContract.View 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        loadData();
     }
 
     @Override
@@ -53,6 +54,17 @@ public class CalendarFragment extends Fragment implements CalendarContract.View 
         mPresenter = presenter;
 
     }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+    }
+
+    private void loadData(){
+      mViewModel.start();
+    }
+
 /*
     @Override
     public void onBackPressed() {
@@ -81,7 +93,6 @@ public class CalendarFragment extends Fragment implements CalendarContract.View 
         @Override
         public Fragment createFragment(int position) {
             Fragment view = new CalendarPageFragment(position - 50);
-            ((CalendarPageFragment) view).setPresenter(mPresenter);
             return view;
         }
 

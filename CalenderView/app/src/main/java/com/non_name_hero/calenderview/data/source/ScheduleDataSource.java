@@ -5,12 +5,17 @@ import androidx.annotation.NonNull;
 import com.non_name_hero.calenderview.data.Schedule;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ScheduleDataSource {
 
     interface GetScheduleCallback{
         void onScheduleLoaded(List<Schedule> schedules);
         void onDataNotAvailable();
+    }
+
+    interface GetScheduleMapCallback{
+        void onScheduleMapLoaded(Map<String,String> scheduleStringMap);
     }
 
     interface SaveScheduleCallback{

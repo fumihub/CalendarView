@@ -1,5 +1,5 @@
 package com.non_name_hero.calenderview.calendar;
-//utill からベースを取得
+//util からベースを取得
 
 import com.non_name_hero.calenderview.utils.BasePresenter;
 import com.non_name_hero.calenderview.utils.BaseView;
@@ -17,9 +17,6 @@ public interface CalendarContract {
     //Presenterへの入力、出力のインターフェース
     interface Presenter extends BasePresenter {
         //TODO カレンダー取得インターフェース
-        void setCurrentMonth(String currentMouth);
-        void getSchedules();
-        void createdCalendar();
     }
 
 
