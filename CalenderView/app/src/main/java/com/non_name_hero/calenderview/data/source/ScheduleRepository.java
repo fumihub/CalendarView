@@ -35,9 +35,9 @@ public class ScheduleRepository implements ScheduleDataSource {
     /**
      * シングルトン、インスタンスの返却.
      *
-     * @param scheduleDataLocalSource  the device storage data source
-     * @param scheduleDataRemoteSource the backend data source
-     * @return the {@link ScheduleRepository} instance
+     * @param scheduleDataLocalSource  デバイス上のストレージ(ローカルデータソース)
+     * @param scheduleDataRemoteSource リモートのデータソース
+     * @return the {@link ScheduleRepository} リポジトリのインスタンス
      */
     public static ScheduleRepository getInstance(ScheduleDataSource scheduleDataLocalSource,
                                               ScheduleDataSource scheduleDataRemoteSource) {
@@ -56,8 +56,9 @@ public class ScheduleRepository implements ScheduleDataSource {
     }
 
     /**
-     * @param scheduleId
-     * @param callback
+     * スケジュールIDを指定して情報を取得
+     * @param scheduleId 情報を取得したいスケジュールID
+     * @param callback 情報取得後の処理
      */
     @SuppressLint("RestrictedApi")
     @Override
@@ -67,6 +68,11 @@ public class ScheduleRepository implements ScheduleDataSource {
         mScheduleDataLocalSource.getSchedule(scheduleId, callback);
     }
 
+    /**
+     * スケジュール情報をDBに格納する
+     * @param schedule 格納するスケジュールオブジェクト
+     * @param callback 格納後の処理
+     */
     @SuppressLint("RestrictedApi")
     @Override
     public void setSchedule(Schedule schedule, @NonNull SaveScheduleCallback callback) {
@@ -74,11 +80,19 @@ public class ScheduleRepository implements ScheduleDataSource {
         mScheduleDataLocalSource.setSchedule(schedule, callback);
     }
 
+    /**
+     * 全てのスケジュールデータを取得
+     * @param callback
+     */
     @Override
     public void getAllSchedules(@NonNull GetScheduleCallback callback) {
         mScheduleDataLocalSource.getAllSchedules(callback);
     }
 
+    /**
+     * 祝日データを取得
+     * @param callback 取得後の処理
+     */
     @Override
     public void getHoliday(@NonNull final GetScheduleCallback callback) {
         if (mCachedHolidaySchedules == null){
