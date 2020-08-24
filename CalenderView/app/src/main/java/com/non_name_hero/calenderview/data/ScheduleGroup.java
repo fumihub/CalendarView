@@ -18,7 +18,7 @@ public class ScheduleGroup {
 
     @NonNull
     @ColumnInfo(name = "character_color")
-    private int mCharacterNumber;
+    private String mCharacterColor;
 
     @NonNull
     @ColumnInfo(name = "background_color")
@@ -26,12 +26,16 @@ public class ScheduleGroup {
 
     public ScheduleGroup(@NonNull int colorNumber,
                          @NonNull String groupName,
-                         @NonNull int character_color,
+                         @NonNull String characterColor,
                          @NonNull int backgroundColor){
         mColorNumber = colorNumber;
         mGroupName = groupName;
-        mCharacterNumber = character_color;
+        mCharacterColor = characterColor;
         mBackgroundColor = backgroundColor;
     }
 
+    public int getColorNumber() {return mColorNumber;}
+    public String getGroupName() {return mGroupName;}
+    public String getCharacterColor() {return mCharacterColor;}
+    public int getBackgroundColor() {return mBackgroundColor;}
 }

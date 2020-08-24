@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import androidx.annotation.NonNull;
 
 import com.non_name_hero.calenderview.data.Schedule;
+import com.non_name_hero.calenderview.data.ScheduleGroup;
 
 import java.util.List;
 
@@ -97,5 +98,43 @@ public class ScheduleRepository implements ScheduleDataSource {
         }else{
             callback.onScheduleLoaded(mCachedHolidaySchedules);
         }
+    }
+
+    /**
+     * グループ情報DBに追加する
+     * @param group グループオブジェクト
+     * @param callback　保存完了後の処理、保存失敗時の処理
+     */
+    @Override
+    public void insertScheduleGroup(@NonNull ScheduleGroup group, @NonNull SaveScheduleGroupCallback callback) {
+        mScheduleDataLocalSource.insertScheduleGroup(group, callback);
+    }
+
+    /**
+     * colorNumberを指定してグループ情報を削除
+     * @param colorNumber カラー番号
+     */
+    @Override
+    public void deleteScheduleGroup(@NonNull int colorNumber) {
+        mScheduleDataLocalSource.deleteScheduleGroup(colorNumber);
+    }
+
+    /**
+     * colorNumberを指定してグループ情報を取得
+     * @param colorNumber　カラー番号
+     * @param callback 取得後の処理。引数に取得した情報をとる
+     */
+    @Override
+    public void getScheduleGroup(@NonNull int colorNumber, @NonNull GetScheduleGroupCallback callback) {
+        mScheduleDataLocalSource.getScheduleGroup(colorNumber, callback);
+    }
+
+    /**
+     * グループ情報を全権取得
+     * @param callback - onScheduleGroupsLoaded(List<ScheduleGroup> scheduleGroups) 情報取得後の処理。引数に全件グループ情報を保持
+     */
+    @Override
+    public void getListScheduleGroup(@NonNull GetScheduleGroupsCallback callback) {
+        mScheduleDataLocalSource.getListScheduleGroup(callback);
     }
 }
