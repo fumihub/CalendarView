@@ -16,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.non_name_hero.calenderview.R;
-import com.non_name_hero.calenderview.data.source.ScheduleRepository;
 import com.non_name_hero.calenderview.utils.Injection;
 
 import java.util.Calendar;
@@ -65,9 +64,9 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.inputToolbar);
         setSupportActionBar(myToolbar);
 
-        ScheduleRepository scheduleRepository = Injection.provideScheduleRepository(getApplicationContext());
 
-        new InputPresenter(this, scheduleRepository);
+
+        new InputPresenter(this, Injection.provideScheduleRepository(getApplicationContext()));
 
         //カレンダー初期値用
         intentIn = getIntent();
@@ -315,6 +314,7 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
         /*完了ボタンが押されたとき************************/
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
+
             public void onClick(View v) {
                 //保存処理を実行
                 mInputPresenter.saveSchedule(title.getText().toString(),memo.getText().toString(),mStartAtDatetime, mEndAtDatetime, 0,0);

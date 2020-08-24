@@ -47,13 +47,17 @@ public class Schedule {
     @ColumnInfo(name = "end_timestamp")
     private String mEndTimestamp;
 
+    //DBでは管理されないフィールド
+    @Ignore
+    private boolean mEditable;
+
     public Schedule(@NonNull long scheduleId,
                     @NonNull String title,
                     @NonNull String description,
                     @NonNull Calendar startAtDatetime,
                     @Nullable Calendar endAtDatetime,
                     @Nullable int groupId,
-                    @Nullable int paymentId){
+                    @Nullable int paymentId) {
         mScheduleId = scheduleId;
         mTitle = title;
         mDescription = description;
@@ -61,16 +65,24 @@ public class Schedule {
         mEndAtDatetime = endAtDatetime;
         mPaymentId = paymentId;
         mGroupId = groupId;
+        mEditable = true;
     }
+
     @Ignore
     public Schedule(@NonNull String title,
                     @NonNull String description,
                     @NonNull Calendar startAtDatetime,
                     @Nullable Calendar endAtDatetime,
                     @Nullable int groupId,
-                    @Nullable int paymentId){
+                    @Nullable int paymentId) {
         this(0, title, description, startAtDatetime, endAtDatetime, groupId, paymentId);
     }
+    @Ignore
+    public Schedule(@NonNull String title,
+                    @Nullable Calendar datetime) {
+        this(0, title, "", datetime, datetime, 0, 0);
+    }
+
 
 //    /**
 //     * Use this constructor to create a new active schedule.
@@ -88,7 +100,9 @@ public class Schedule {
         return mScheduleId;
     }
 
-    public void setScheduleId(@Nullable long scheduleId) { this.mScheduleId = scheduleId; }
+    public void setScheduleId(@Nullable long scheduleId) {
+        this.mScheduleId = scheduleId;
+    }
 
     @Nullable
     public String getDescription() {
@@ -144,15 +158,23 @@ public class Schedule {
         this.mPaymentId = mPaymentId;
     }
 
-    public String getStartTimestamp(){ return mStartTimestamp; }
+    public String getStartTimestamp() {
+        return mStartTimestamp;
+    }
 
-    public void setStartTimestamp(String startTimestamp){
+    public void setStartTimestamp(String startTimestamp) {
         mStartTimestamp = startTimestamp;
     }
 
-    public String getEndTimestamp() { return mEndTimestamp; }
+    public String getEndTimestamp() {
+        return mEndTimestamp;
+    }
 
-    public void setEndTimestamp(String startTimestamp){
+    public void setEndTimestamp(String startTimestamp) {
         mEndTimestamp = startTimestamp;
+    }
+
+    public void setUneditable() {
+        mEditable = false;
     }
 }

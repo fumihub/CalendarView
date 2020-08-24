@@ -13,7 +13,6 @@ import com.non_name_hero.calenderview.R;
 import com.non_name_hero.calenderview.utils.DateManager;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;

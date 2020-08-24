@@ -9,10 +9,9 @@ import com.non_name_hero.calenderview.data.Schedule;
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource;
 import com.non_name_hero.calenderview.data.source.ScheduleRepository;
 
-import java.util.Date;
 import java.util.List;
 
-import static com.google.android.gms.internal.ads.zzdlg.checkNotNull;
+import static androidx.core.util.Preconditions.checkNotNull;
 
 
 public class CalendarPresenter implements CalendarContract.Presenter {
@@ -20,6 +19,7 @@ public class CalendarPresenter implements CalendarContract.Presenter {
     private final ScheduleRepository mScheduleRepository;
 
 
+    @SuppressLint("RestrictedApi")
     public CalendarPresenter(@NonNull CalendarContract.View calendarFragment, @NonNull ScheduleRepository scheduleRepository){
         mCalendarView = checkNotNull(calendarFragment);
         mScheduleRepository = checkNotNull(scheduleRepository);
@@ -47,6 +47,21 @@ public class CalendarPresenter implements CalendarContract.Presenter {
             @Override
             public void onDataNotAvailable() {
                 //TODO 失敗時の処理を記載
+            }
+        });
+    }
+
+    @Override
+    public void createdCalendar() {
+        mScheduleRepository.getHoliday(new ScheduleDataSource.GetScheduleCallback() {
+            @Override
+            public void onScheduleLoaded(List<Schedule> schedules) {
+                Log.d("tag","holiday");
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+
             }
         });
     }
