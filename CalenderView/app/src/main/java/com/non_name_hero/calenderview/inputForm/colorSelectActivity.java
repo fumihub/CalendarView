@@ -102,7 +102,6 @@ public class colorSelectActivity extends AppCompatActivity {
     }
 
     public void goColorCreateActivity() {
-        startActivity(intentOut);
         //戻り値を設定して色画面に遷移
         startActivityForResult(intentOut, REQUEST_CODE);
     }

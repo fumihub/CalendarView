@@ -338,7 +338,6 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
     }
 
     public void goColorSelectActivity() {
-        startActivity(intentOut);
         //戻り値を設定して色選択画面に遷移
         startActivityForResult(intentOut, REQUEST_CODE);
     }
