@@ -1,154 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/content"
+    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:gravity="left"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/colorSelectToolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="left"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:background="#FFEB3B"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:contentInsetStart="0dp">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/colorSelectToolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#FFEB3B"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme"
-            app:contentInsetStart="0dp">
-
-            <TextView
-                android:id="@+id/colorSelectToolbar_title"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="色選択"
-                android:textSize="25sp"
-                android:textStyle="bold"
-                android:textColor="@color/blackColor"
-                tools:ignore="HardcodedText" />
-
-        </androidx.appcompat.widget.Toolbar>
-
-        <!--未分類ボタン**********************************-->
-        <Button
-            android:id="@+id/noCategoryButton"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="@color/blackColor1"
-            android:gravity="left|center_vertical"
-            android:padding="10dp"
-            android:text="未分類"
-            android:textColor="@color/whiteColor"
-            android:textSize="15sp"
-            android:textStyle="bold" />
-
-        <!--ここに色ボタン追加していく*********************-->
-
-        <!--色ボタン1*************************************-->
-        <LinearLayout
-            android:id="@+id/linearLayout1"
+        <TextView
+            android:id="@+id/colorSelectToolbar_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="left"
-            android:orientation="horizontal">
+            android:gravity="center"
+            android:text="色選択"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:textColor="@color/blackColor"
+            tools:ignore="HardcodedText" />
 
-            <Button
-                android:id="@+id/CategoryButton1"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_weight="1"
-                android:gravity="left|center_vertical"
-                android:padding="10dp"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+    </androidx.appcompat.widget.Toolbar>
 
-            <LinearLayout
-                android:id="@+id/subLinearLayout1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="left"
-                android:orientation="horizontal">
-                <!--編集ボタン*****************************-->
-                <Button
-                    android:id="@+id/colorEditButton1"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_weight="1"
-                    android:background="@color/colorPrimary"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    android:text=">"
-                    android:textColor="@color/whiteColor"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-                <!--***************************************-->
+    <!--未分類ボタン**********************************-->
+    <Button
+        android:id="@+id/noCategoryButton"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/blackColor1"
+        android:gravity="left|center_vertical"
+        android:padding="10dp"
+        android:text="未分類"
+        android:textColor="@color/whiteColor"
+        android:textSize="15sp"
+        android:textStyle="bold" />
 
-                <!--削除ボタン*****************************-->
-                <Button
-                    android:id="@+id/colorDestroyButton1"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_weight="1"
-                    android:background="@color/colorAccent"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    android:text="×"
-                    android:textColor="@color/whiteColor"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-                <!--***************************************-->
-            </LinearLayout>
+    <!--ここに色ボタン追加していく*********************-->
 
-        </LinearLayout>
-        <!--**********************************************-->
+    <!--list_cell.xml-->
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-        <!--**********************************************-->
+    <!--**********************************************-->
 
-        <!--色作成ボタン**********************************-->
-        <Button
-            android:id="@+id/colorCreateButton"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="#00000000"
-            android:gravity="left|center_vertical"
-            android:text="＋　色作成"
-            android:textColor="@color/colorPrimary"
-            android:textSize="15sp"
-            android:textStyle="bold"/>
-        <!--**********************************************-->
+    <!--色作成ボタン**********************************-->
+    <Button
+        android:id="@+id/colorCreateButton"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="#00000000"
+        android:gravity="left|center_vertical"
+        android:text="＋　色作成"
+        android:textColor="@color/colorPrimary"
+        android:textSize="15sp"
+        android:textStyle="bold"/>
+    <!--**********************************************-->
 
-    </LinearLayout>
-
-</ScrollView>
+</LinearLayout>
