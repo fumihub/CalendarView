@@ -147,9 +147,9 @@ public class colorCreateActivity extends AppCompatActivity {
             String strColorNumber = String.valueOf(colorNumber);
             //SharedPreferenceに「colorNumber(数字)」の形で保存
             //↓ここでエラーが起きる
-            prefs = getSharedPreferences("SaveData", Context.MODE_PRIVATE);
+            /*prefs = getSharedPreferences("SaveData", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
-            editor.putBoolean(strColorNumber,Boolean.TRUE);
+            editor.putBoolean(strColorNumber,Boolean.TRUE);*/
             finish();
         }
 

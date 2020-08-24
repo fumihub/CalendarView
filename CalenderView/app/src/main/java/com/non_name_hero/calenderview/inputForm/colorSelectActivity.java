@@ -2,10 +2,15 @@ package com.non_name_hero.calenderview.inputForm;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
@@ -118,7 +123,10 @@ public class colorSelectActivity extends AppCompatActivity {
 
                     //色ボタン作成
                     Button colorButton = new Button(this);
-                    colorButton.setText(colorTitle);
+                    //テキストスタイルを太字に設定
+                    SpannableString spanString = new SpannableString(colorTitle);
+                    spanString.setSpan(new StyleSpan(Typeface.BOLD), 0, spanString.length(), 0);
+                    colorButton.setText(spanString);
                     colorButton.setBackgroundColor(color);
                     if (textColor.equals("黒")) {
                         colorButton.setTextColor(Color.BLACK);
@@ -126,11 +134,28 @@ public class colorSelectActivity extends AppCompatActivity {
                     else {
                         colorButton.setTextColor(Color.WHITE);
                     }
-
+                    //ボタンのmarginを設定
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT);
+                    ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) layoutParams;
+                    marginLayoutParams.setMargins(30, 30, 30, 30);//単位はdp
+                    colorButton.setLayoutParams(marginLayoutParams);
+                    colorButton.setGravity(Gravity.LEFT);
                     //リニアレイアウトに色ボタン追加
-                    linearLayout.addView(colorButton);
+                    linearLayout.addView(colorButton, 1);
                     //色ボタンをカテゴリーリストに追加
                     categoryList.add(colorButton);
+                    //クリックリスナーの追加
+                    for (Button b :categoryList) {
+                        b.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                //input画面に遷移
+                                returnInputActivity(v);
+                            }
+                        });
+                    }
                 }
                 else if (resultCode == RESULT_CANCELED) {
                     //キャンセルボタンを押して戻ってきたときの処理

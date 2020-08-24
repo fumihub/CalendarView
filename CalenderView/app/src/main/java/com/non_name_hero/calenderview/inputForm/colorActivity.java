@@ -43,10 +43,10 @@ public class colorActivity  extends AppCompatActivity {
     //コンストラクタ
     public colorActivity() {
         //↓ここでエラーが起きる
-        prefs = getSharedPreferences("SaveData", Context.MODE_PRIVATE);
+        //prefs = getSharedPreferences("SaveData", Context.MODE_PRIVATE);
         /*フラグ初期化*/
         for (int cnt = 0; cnt < ARRAYLENGTH; cnt++) {
-            //cntをString型に変換
+            /*//cntをString型に変換
             String strCnt = String.valueOf(cnt);
             //SharedPreferenceに値が保存されていたら
             if (prefs.getBoolean(strCnt,Boolean.FALSE)) {//ここをif (cnt == データベースに保存されているColorNumber) {にしたら俺のしたいことが実現できる
@@ -55,7 +55,8 @@ public class colorActivity  extends AppCompatActivity {
             //保存されていなければ
             else {
                 checkFlag[cnt] = Boolean.FALSE;
-            }
+            }*/
+            checkFlag[cnt] = Boolean.FALSE;
         }
         checkFlag[42] = Boolean.TRUE;
     }
@@ -92,6 +93,7 @@ public class colorActivity  extends AppCompatActivity {
         }
 
         //色番号前回値を取得
+        intentIn = getIntent();
         int colorNumberPre = intentIn.getIntExtra("colorNumberPre", 255);
         //前回押された色ボタンのテキストを「〇」に
         //初回

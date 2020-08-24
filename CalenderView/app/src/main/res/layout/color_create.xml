@@ -59,7 +59,7 @@
             android:gravity="left|center_vertical"
             android:text="色"
             android:textColor="@color/grayColor"
-            android:textSize="18sp" />
+            android:textSize="24sp" />
 
         <Button
             android:id="@+id/colorButton2"
