@@ -1,12 +1,17 @@
 package com.non_name_hero.calenderview.inputForm;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -17,6 +22,10 @@ public class colorCreateActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE = 1;
 
+    private Intent intentOut;
+
+    private SharedPreferences prefs;
+
     private EditText colorCreateTitle;
 
     private Button color1;
@@ -24,16 +33,18 @@ public class colorCreateActivity extends AppCompatActivity {
     private Button cancelButton;
     private Button doneButton;
 
-    private int[] colorId = {R.color.redColor1, R.color.redColor2, R.color.redColor3, R.color.redColor4, R.color.redColor5, R.color.redColor6, R.color.redColor7,
-            R.color.purpleColor1, R.color.purpleColor2, R.color.purpleColor3, R.color.purpleColor4, R.color.purpleColor5, R.color.purpleColor6, R.color.purpleColor7,
-            R.color.blueColor1, R.color.blueColor2, R.color.blueColor3, R.color.blueColor4, R.color.blueColor5, R.color.blueColor6, R.color.blueColor7,
-            R.color.greenColor1, R.color.greenColor2, R.color.greenColor3, R.color.greenColor4, R.color.greenColor5, R.color.greenColor6, R.color.greenColor7,
-            R.color.yellowColor1, R.color.yellowColor2, R.color.yellowColor3, R.color.yellowColor4, R.color.yellowColor5, R.color.yellowColor6, R.color.yellowColor7,
-            R.color.brownColor1, R.color.brownColor2, R.color.brownColor3, R.color.brownColor4, R.color.brownColor5, R.color.brownColor6, R.color.brownColor7,
-            R.color.blackColor1, R.color.blackColor2, R.color.blackColor3, R.color.blackColor4, R.color.blackColor5, R.color.blackColor6, R.color.blackColor7};
+    private RadioGroup radioGroup;
 
+    private String textColor;
 
-    private Intent intentOut;
+    private int colorNumberPre = 255;
+    private int colorNumber = 255;
+    private int color = 0;
+
+    //コンストラクタ
+    public colorCreateActivity(){
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,28 +54,26 @@ public class colorCreateActivity extends AppCompatActivity {
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.colorCreateToolbar);
         setSupportActionBar(myToolbar);
 
-        //色画面遷移用intent
-        intentOut = new Intent(this, colorActivity.class);
-
         colorCreateTitle = findViewById(R.id.colorCreateTitle);
         color1 = findViewById(R.id.colorButton1);
         color2 = findViewById(R.id.colorButton2);
         cancelButton = findViewById(R.id.cancelButton);
         doneButton = findViewById(R.id.doneButton);
+        radioGroup = findViewById(R.id.RadioGroup);
 
         /*色ボタンが押されたとき**************************/
         color1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //戻り値を設定して色画面に遷移
-                startActivityForResult(intentOut, REQUEST_CODE);
+                //色画面に遷移
+                goColorActivity();
             }
         });
         color2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //戻り値を設定して色画面に遷移
-                startActivityForResult(intentOut, REQUEST_CODE);
+                //色画面に遷移
+                goColorActivity();
             }
         });
         /************************************************/
@@ -84,10 +93,65 @@ public class colorCreateActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //色選択画面に遷移
-                finish();
+                returnColorSelectActivity();
             }
         });
         /************************************************/
+
+    }
+
+    public void goColorActivity(){
+        //色画面遷移用intent
+        intentOut = new Intent(this, colorActivity.class);
+        //色番号前回値を引数で色画面に渡す
+        intentOut.putExtra("colorNumberPre", colorNumberPre);
+        //戻り値を設定して色画面に遷移
+        startActivityForResult(intentOut, REQUEST_CODE);
+    }
+
+    public void returnColorSelectActivity(){
+
+        int checkedId = radioGroup.getCheckedRadioButtonId();
+        if (checkedId != -1) {
+            // 選択されているラジオボタンの取得
+            // (Fragmentの場合は「getActivity().findViewById」にする)
+            RadioButton radioButton = (RadioButton) findViewById(checkedId);
+
+            // ラジオボタンのテキスト(色)を取得
+            textColor = radioButton.getText().toString();
+        }
+
+        //エラー処理
+        if (color == 0 || textColor == "" || colorCreateTitle.getText().toString() == "") {
+            //トースト表示
+            Toast errorToast = Toast.makeText(
+                    getApplicationContext(),
+                    "全ての項目を埋めてください！",
+                    Toast.LENGTH_SHORT
+            );
+            errorToast.show();
+        }
+        else {
+            //色選択遷移用intent
+            intentOut = getIntent();
+            //ボタンの色を遷移先へreturn
+            intentOut.putExtra("Color", color);
+            //色タイトルを遷移先へreturn
+            intentOut.putExtra("ColorTitle", colorCreateTitle.getText().toString());
+            //文字色を遷移先へreturn
+            intentOut.putExtra("textColor", textColor);
+            //ボタンの色番号を遷移先へreturn
+            intentOut.putExtra("ColorNumber", colorNumber);
+            setResult(RESULT_OK, intentOut);
+            //colorNumberをString型に変換
+            String strColorNumber = String.valueOf(colorNumber);
+            //SharedPreferenceに「colorNumber(数字)」の形で保存
+            //↓ここでエラーが起きる
+            /*prefs = getSharedPreferences("SaveData", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean(strColorNumber,Boolean.TRUE);*/
+            finish();
+        }
 
     }
 
@@ -95,15 +159,21 @@ public class colorCreateActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         switch (requestCode) {
             //colorActivityから戻ってきた場合
             case (REQUEST_CODE):
                 if (resultCode == RESULT_OK) {
+                    //色番号
+                    colorNumber = data.getIntExtra("ColorNumber", 0);//defaultValue:ColorNumberキーに値が入っていなかった時に返す値
                     //色ボタンのテキスト色受け取り
-                    int colorNumber = data.getIntExtra("ColorNumber", 0);
+                    color = data.getIntExtra("Color",0);
 
                     //ボタンの背景色を色ボタンの色に変更
-                    color2.setBackgroundColor(colorNumber);
+                    color2.setBackgroundColor(color);
+
+                    //colorNumberを前回値として保持
+                    colorNumberPre = colorNumber;
                 }
                 else if (resultCode == RESULT_CANCELED) {
                     //キャンセルボタンを押して戻ってきたときの処理

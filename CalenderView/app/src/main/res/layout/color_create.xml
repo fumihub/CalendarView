@@ -59,7 +59,7 @@
             android:gravity="left|center_vertical"
             android:text="色"
             android:textColor="@color/grayColor"
-            android:textSize="18sp" />
+            android:textSize="24sp" />
 
         <Button
             android:id="@+id/colorButton2"
@@ -104,15 +104,12 @@
             android:layout_width="wrap_content"
             android:id="@+id/RadioGroup">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:orientation="horizontal">
-                <RadioButton android:text="黒"
+
+                <RadioButton
+                    android:id="@+id/RadioButton1"
+                    android:text="黒"
                     android:textColor="@color/grayColor"
                     android:textSize="18sp"
-                    android:id="@+id/RadioButton1"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
                     android:layout_marginLeft="10dp"
@@ -120,20 +117,21 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="10dp">
                 </RadioButton>
-            </LinearLayout>
-        </RadioGroup>
 
-        <RadioButton
-            android:id="@+id/RadioButton2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
-            android:text="白"
-            android:textColor="@color/grayColor"
-            android:textSize="18sp"></RadioButton>
+                <RadioButton
+                    android:id="@+id/RadioButton2"
+                    android:text="白"
+                    android:textColor="@color/grayColor"
+                    android:textSize="18sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="10dp">
+                </RadioButton>
+
+        </RadioGroup>
     </LinearLayout>
     <!--**********************************************-->
 
