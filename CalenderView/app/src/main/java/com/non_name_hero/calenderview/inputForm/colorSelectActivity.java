@@ -21,6 +21,10 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.non_name_hero.calenderview.R;
 import com.non_name_hero.calenderview.calendar.CalendarAdapter;
+import com.non_name_hero.calenderview.data.ScheduleGroup;
+import com.non_name_hero.calenderview.data.source.ScheduleDataSource;
+import com.non_name_hero.calenderview.data.source.ScheduleRepository;
+import com.non_name_hero.calenderview.utils.Injection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,10 +41,12 @@ public class colorSelectActivity extends AppCompatActivity {
     private Button colorCreateButton;
 
     private Intent intentOut;
+    private ScheduleRepository repository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        repository = Injection.provideScheduleRepository(getApplicationContext());
 
         setContentView(R.layout.color_select);
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.colorSelectToolbar);
@@ -54,10 +60,13 @@ public class colorSelectActivity extends AppCompatActivity {
         mListAdapter = new listAdapter(getApplicationContext(), this);
         listView.setAdapter(mListAdapter);
 
+        //DBから情報を取得
+        loadColorList();
+
         //色作成画面用intent
         intentOut = new Intent(this, colorCreateActivity.class);
 
-        noCategoryButton = findViewById(R.id.noCategoryButton);
+//        noCategoryButton = findViewById(R.id.noCategoryButton);
         colorCreateButton = findViewById(R.id.colorCreateButton);
 
         /*編集ボタンが押されたとき*************************/
@@ -82,19 +91,19 @@ public class colorSelectActivity extends AppCompatActivity {
         });
         /************************************************/
 
-        /*未分類ボタンが押されたとき************************/
-        noCategoryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //input画面に遷移
-                //色選択遷移用intent
-                intentOut = new Intent();
-                //ボタンの色番号を遷移先へreturn
-                //intentOut.putExtra("ColorNumber", colorNumber);
-                setResult(RESULT_OK, intentOut);
-                finish();
-            }
-        });
+//        /*未分類ボタンが押されたとき************************/
+//        noCategoryButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //input画面に遷移
+//                //色選択遷移用intent
+//                intentOut = new Intent();
+//                //ボタンの色番号を遷移先へreturn
+//                //intentOut.putExtra("ColorNumber", colorNumber);
+//                setResult(RESULT_OK, intentOut);
+//                finish();
+//            }
+//        });
         /************************************************/
 
         /*色作成ボタンが押されたとき************************/
@@ -142,6 +151,8 @@ public class colorSelectActivity extends AppCompatActivity {
             //colorCreateActivityから戻ってきた場合
             case (REQUEST_CODE):
                 if (resultCode == RESULT_OK) {
+                    //DB問い合わせて更新
+                    loadColorList();
                     /*ここから*/
                     //TODO　データベース問い合わせてから、Adapter更新
                     /*//色タイトルの受け取り
@@ -202,5 +213,20 @@ public class colorSelectActivity extends AppCompatActivity {
             default:
                 break;
         }
+    }
+    
+    private void loadColorList(){
+        repository.getListScheduleGroup(new ScheduleDataSource.GetScheduleGroupsCallback() {
+            @Override
+            public void onScheduleGroupsLoaded(List<ScheduleGroup> Groups) {
+                //取得後の処理
+                mListAdapter.setList(Groups);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+
+            }
+        });
     }
 }

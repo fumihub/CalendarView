@@ -45,13 +45,13 @@ public class colorCreateActivity extends AppCompatActivity {
 
     //コンストラクタ
     public colorCreateActivity(){
-        repository = Injection.provideScheduleRepository(getApplicationContext());
+
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        repository = Injection.provideScheduleRepository(getApplicationContext());
         setContentView(R.layout.color_create);
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.colorCreateToolbar);
         setSupportActionBar(myToolbar);
@@ -145,6 +145,7 @@ public class colorCreateActivity extends AppCompatActivity {
                     new ScheduleDataSource.SaveScheduleGroupCallback() {
                         @Override
                         public void onScheduleGroupSaved() {
+                            setResult(RESULT_OK, intentOut);
                             finish();
                         }
 

@@ -37,6 +37,6 @@ public interface SchedulesDao {
     @Query("SELECT color_number, group_name, character_color, background_color FROM schedule_group WHERE color_number = :colorNumber")
     List<ScheduleGroup> getScheduleGroupByColorNumber(int colorNumber);
 
-    @Query("SELECT * FROM schedule_group")
+    @Query("SELECT * FROM schedule_group ORDER BY color_number DESC")
     List<ScheduleGroup> getAllScheduleGroup();
 }

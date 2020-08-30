@@ -9,6 +9,7 @@ import androidx.room.InvalidationTracker;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
 import com.non_name_hero.calenderview.data.ScheduleGroup;
@@ -32,6 +33,16 @@ public abstract class PigLeadDatabase extends RoomDatabase {
             if (INSTANCE == null) {
                 INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                         PigLeadDatabase.class, "PigLead.db")
+                        .addCallback(new RoomDatabase.Callback(){
+                            @Override
+                            public void onCreate(@NonNull SupportSQLiteDatabase db) {
+                                super.onCreate(db);
+                                String sql = "INSERT INTO schedule_group VALUES"
+                                        + "(42, '未分類', '白', 0)";
+                                db.execSQL(sql);
+                            }
+                        })
+
                         .build();
             }
             return INSTANCE;

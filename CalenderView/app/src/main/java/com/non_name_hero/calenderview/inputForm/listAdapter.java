@@ -10,6 +10,10 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 
 import com.non_name_hero.calenderview.R;
+import com.non_name_hero.calenderview.data.Schedule;
+import com.non_name_hero.calenderview.data.ScheduleGroup;
+import com.non_name_hero.calenderview.data.source.ScheduleRepository;
+import com.non_name_hero.calenderview.utils.Injection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +25,7 @@ public class listAdapter extends BaseAdapter {
     private List<ScheduleGroup> list;
     private Context mContext;
     private LayoutInflater mLayoutInflater;
+    private ScheduleRepository repository;
 
     private Intent intentOut;
 
@@ -37,22 +42,13 @@ public class listAdapter extends BaseAdapter {
         mContext = context;
         mLayoutInflater = LayoutInflater.from(mContext);
         list = new ArrayList<>();
-        list.add(new ScheduleGroup(1, "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm", "黒", 256));
-        list.add(new ScheduleGroup(2, "iro", "白", 50));
-        list.add(new ScheduleGroup(3, "赤", "白", 50));
-        list.add(new ScheduleGroup(3, "赤", "白", 50));
-        list.add(new ScheduleGroup(3, "赤", "白", 50));
-        list.add(new ScheduleGroup(3, "赤", "白", 50));
-        list.add(new ScheduleGroup(3, "赤", "白", 50));
-        list.add(new ScheduleGroup(3, "赤", "白", 50));
-        list.add(new ScheduleGroup(3, "赤", "白", 50));
-        list.add(new ScheduleGroup(3, "赤", "白", 50));
-        list.add(new ScheduleGroup(3, "赤", "白", 50));
-        list.add(new ScheduleGroup(3, "赤", "白", 50));
-        list.add(new ScheduleGroup(3, "赤", "白", 50));
-        list.add(new ScheduleGroup(3, "赤", "白", 50));
-        list.add(new ScheduleGroup(3, "赤", "白", 50));
         mActivity = activity;
+        repository = Injection.provideScheduleRepository(mContext);
+    }
+
+    public void setList(List<ScheduleGroup> input) {
+        list = input;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -72,8 +68,8 @@ public class listAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
-        listAdapter.ViewHolder holder;
+    public View getView(final int position, View convertView, final ViewGroup parent) {
+        final listAdapter.ViewHolder holder;
         //初回時の処理 convertViewがnullの場合にはinflateしたViewを代入する。
         if (convertView == null) {
             //convertViewに
@@ -92,7 +88,7 @@ public class listAdapter extends BaseAdapter {
             holder = (listAdapter.ViewHolder) convertView.getTag();
         }
 
-        holder.categoryButton.setText(list.get(position).Title);
+        holder.categoryButton.setText(list.get(position).getGroupName());
 
         holder.categoryButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,27 +97,28 @@ public class listAdapter extends BaseAdapter {
                 //色選択遷移用intent
                 intentOut = new Intent();
                 //ボタンの色番号を遷移先へreturn
-                intentOut.putExtra("ColorNumber", list.get(position).colorNumber);
+                intentOut.putExtra("ColorNumber", list.get(position).getColorNumber());
                 mActivity.setResult(RESULT_OK, intentOut);
                 mActivity.finish();
             }
         });
 
+        holder.destroyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ScheduleGroup group = list.get(position);
+                int colorNumber = group.getColorNumber();
+                repository.deleteScheduleGroup(colorNumber);
+                //TODO 成功したら削除
+                //TODO 削除するか確認もしたい？
+                list.remove(position);
+                notifyDataSetChanged();
+            }
+        });
+
+
         return convertView;
     }
 
-    private class ScheduleGroup {
-        int colorNumber;
-        String Title;
-        String textColor;
-        int color;
-
-        public ScheduleGroup(int a, String b, String c, int d){
-            colorNumber = a;
-            Title = b;
-            textColor = c;
-            color = d;
-        }
-    }
 
 }
