@@ -19,6 +19,7 @@ public interface CalendarContract {
         //TODO カレンダー取得インターフェース
         void setCurrentMonth(String currentMouth);
         void getSchedules();
+        void createdCalendar();
     }
 
 

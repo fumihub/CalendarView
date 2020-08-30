@@ -11,13 +11,14 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
+import com.non_name_hero.calenderview.data.ScheduleGroup;
 import com.non_name_hero.calenderview.data.Schedule;
 
 
 /**
  * The Room Database that contains the Task table.
  */
-@Database(entities = {Schedule.class}, version = 1, exportSchema = false)
+@Database(entities = {Schedule.class, ScheduleGroup.class}, version = 2, exportSchema = false)
 @TypeConverters({Converter.class})
 public abstract class PigLeadDatabase extends RoomDatabase {
     private static PigLeadDatabase INSTANCE;

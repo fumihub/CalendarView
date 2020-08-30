@@ -6,6 +6,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+import com.non_name_hero.calenderview.data.ScheduleGroup;
 import com.non_name_hero.calenderview.data.Schedule;
 
 import java.util.List;
@@ -26,4 +27,16 @@ public interface SchedulesDao {
 
     @Delete
     void delete(Schedule schedule);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertScheduleGroup(ScheduleGroup scheduleGroup);
+
+    @Query("DELETE FROM schedule_group WHERE color_number = :colorNumber")
+    void deleteScheduleGroupByColorNumber(int colorNumber);
+
+    @Query("SELECT color_number, group_name, character_color, background_color FROM schedule_group WHERE color_number = :colorNumber")
+    List<ScheduleGroup> getScheduleGroupByColorNumber(int colorNumber);
+
+    @Query("SELECT * FROM schedule_group")
+    List<ScheduleGroup> getAllScheduleGroup();
 }
