@@ -32,6 +32,7 @@ public class colorSelectActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE = 1;
 
+    private Button editButton;
     private Button noCategoryButton;
     private Button colorCreateButton;
 
@@ -43,6 +44,7 @@ public class colorSelectActivity extends AppCompatActivity {
 
         setContentView(R.layout.color_select);
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.colorSelectToolbar);
+        editButton = findViewById(R.id.editButton);
         setSupportActionBar(myToolbar);
 
         //ListViewのIDを取得
@@ -57,22 +59,28 @@ public class colorSelectActivity extends AppCompatActivity {
 
         noCategoryButton = findViewById(R.id.noCategoryButton);
         colorCreateButton = findViewById(R.id.colorCreateButton);
-/*
 
-        */
-/*categoryListのボタンが押されたとき******************//*
+        /*編集ボタンが押されたとき*************************/
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //ボタンの文字が「編集」ならば
+                if (editButton.getText().toString().equals("編集")) {
+                    //リストビューに削除ボタン表示
 
-        for (Button b :categoryList) {
-            b.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //input画面に遷移
-                        returnInputActivity(v);
-                    }
-                });
-        }
-        */
-/************************************************//*
+                    //編集ボタンを完了ボタンに
+                    editButton.setText("完了");
+                }
+                //ボタンの文字が「完了ならば」
+                else {
+                    //リストビューから削除ボタンを非表示に
+
+                    //完了ボタンを編集ボタンに
+                    editButton.setText("編集");
+                }
+            }
+        });
+        /************************************************/
 
         /*未分類ボタンが押されたとき************************/
         noCategoryButton.setOnClickListener(new View.OnClickListener() {

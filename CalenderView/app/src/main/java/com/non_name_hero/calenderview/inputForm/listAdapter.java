@@ -8,14 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.non_name_hero.calenderview.R;
-import com.non_name_hero.calenderview.calendar.CalendarAdapter;
-import com.non_name_hero.calenderview.utils.DateManager;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
@@ -33,7 +29,6 @@ public class listAdapter extends BaseAdapter {
     //カスタムセルを拡張したらここでWigetを定義
     private static class ViewHolder {
         public Button categoryButton;
-        public Button editButton;
         public Button destroyButton;
     }
 
@@ -42,8 +37,20 @@ public class listAdapter extends BaseAdapter {
         mContext = context;
         mLayoutInflater = LayoutInflater.from(mContext);
         list = new ArrayList<>();
-        list.add(new ScheduleGroup(1, "maru", "黒", 256));
+        list.add(new ScheduleGroup(1, "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm", "黒", 256));
         list.add(new ScheduleGroup(2, "iro", "白", 50));
+        list.add(new ScheduleGroup(3, "赤", "白", 50));
+        list.add(new ScheduleGroup(3, "赤", "白", 50));
+        list.add(new ScheduleGroup(3, "赤", "白", 50));
+        list.add(new ScheduleGroup(3, "赤", "白", 50));
+        list.add(new ScheduleGroup(3, "赤", "白", 50));
+        list.add(new ScheduleGroup(3, "赤", "白", 50));
+        list.add(new ScheduleGroup(3, "赤", "白", 50));
+        list.add(new ScheduleGroup(3, "赤", "白", 50));
+        list.add(new ScheduleGroup(3, "赤", "白", 50));
+        list.add(new ScheduleGroup(3, "赤", "白", 50));
+        list.add(new ScheduleGroup(3, "赤", "白", 50));
+        list.add(new ScheduleGroup(3, "赤", "白", 50));
         list.add(new ScheduleGroup(3, "赤", "白", 50));
         mActivity = activity;
     }
@@ -76,8 +83,6 @@ public class listAdapter extends BaseAdapter {
 
             //色ボタン
             holder.categoryButton = convertView.findViewById(R.id.categoryButton);
-            //編集ボタン
-            holder.editButton = convertView.findViewById(R.id.colorEditButton);
             //削除ボタン
             holder.destroyButton = convertView.findViewById(R.id.colorDestroyButton);
 
