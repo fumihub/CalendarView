@@ -3,6 +3,7 @@ package com.non_name_hero.calenderview.inputForm;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ public class listAdapter extends BaseAdapter {
     private Intent intentOut;
 
     private Activity mActivity;
+    private colorSelectActivity mColorSelectActivity;
 
     //カスタムセルを拡張したらここでWigetを定義
     private static class ViewHolder {
@@ -44,6 +46,7 @@ public class listAdapter extends BaseAdapter {
         list = new ArrayList<>();
         mActivity = activity;
         repository = Injection.provideScheduleRepository(mContext);
+        mColorSelectActivity = new colorSelectActivity();
     }
 
     public void setList(List<ScheduleGroup> input) {
@@ -88,7 +91,26 @@ public class listAdapter extends BaseAdapter {
             holder = (listAdapter.ViewHolder) convertView.getTag();
         }
 
+        //リストの色ボタンにテキストをセット
         holder.categoryButton.setText(list.get(position).getGroupName());
+        //リストの色ボタンに色をセット
+        holder.categoryButton.setBackgroundColor(list.get(position).getBackgroundColor());
+        //リストの色ボタンに文字色をセット
+        if (list.get(position).getCharacterColor().equals("黒")) {//黒ならば
+            holder.categoryButton.setTextColor(Color.BLACK);
+        }
+        else {//白ならば
+            holder.categoryButton.setTextColor(Color.WHITE);
+        }
+
+        //TODO　削除ボタン表示
+        if (mColorSelectActivity.editFlag) {//ほかのActivityからとってきてる変数は常に初期化されている
+            holder.destroyButton.setVisibility(View.VISIBLE);
+        }
+        //TODO　削除ボタン非表示
+        else {
+            holder.destroyButton.setVisibility(View.GONE);
+        }
 
         holder.categoryButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,6 +133,7 @@ public class listAdapter extends BaseAdapter {
                 repository.deleteScheduleGroup(colorNumber);
                 //TODO 成功したら削除
                 //TODO 削除するか確認もしたい？
+                //TODO 確認する→現在この色が使われているスケジュールはすべて未分類になる
                 list.remove(position);
                 notifyDataSetChanged();
             }

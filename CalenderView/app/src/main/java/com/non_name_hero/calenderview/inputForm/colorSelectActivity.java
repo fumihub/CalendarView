@@ -29,7 +29,13 @@ import com.non_name_hero.calenderview.utils.Injection;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
+
 public class colorSelectActivity extends AppCompatActivity {
+
+    //リストアダプターでも使用
+    public boolean editFlag = FALSE;
 
     private listAdapter mListAdapter;
     private ListView listView;
@@ -75,15 +81,17 @@ public class colorSelectActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //ボタンの文字が「編集」ならば
                 if (editButton.getText().toString().equals("編集")) {
-                    //リストビューに削除ボタン表示
-
+                    //TODO　リストビューに削除ボタン表示
+                    editFlag = TRUE;
+                    listView.setAdapter(mListAdapter);
                     //編集ボタンを完了ボタンに
                     editButton.setText("完了");
                 }
                 //ボタンの文字が「完了ならば」
                 else {
-                    //リストビューから削除ボタンを非表示に
-
+                    //TODO　リストビューから削除ボタンを非表示に
+                    editFlag = FALSE;
+                    listView.setAdapter(mListAdapter);
                     //完了ボタンを編集ボタンに
                     editButton.setText("編集");
                 }

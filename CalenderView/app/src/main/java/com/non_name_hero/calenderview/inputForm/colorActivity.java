@@ -12,6 +12,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.non_name_hero.calenderview.R;
+import com.non_name_hero.calenderview.data.ScheduleGroup;
+import com.non_name_hero.calenderview.data.source.ScheduleRepository;
+import com.non_name_hero.calenderview.utils.Injection;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class colorActivity  extends AppCompatActivity {
 
@@ -20,7 +26,10 @@ public class colorActivity  extends AppCompatActivity {
     private Intent intentIn;
     private Intent intentOut;
 
-    private SharedPreferences prefs;
+//    private SharedPreferences prefs;
+    private ScheduleRepository repository;
+
+    private List<ScheduleGroup> list;
 
     private Button[] colorButton = new Button[49];
     private TextView[] checkText = new TextView[49];
@@ -42,6 +51,9 @@ public class colorActivity  extends AppCompatActivity {
 
     //コンストラクタ
     public colorActivity() {
+//        list = new ArrayList<>();
+//        repository = Injection.provideScheduleRepository(getApplicationContext());
+        //TODO colorNumberを取得したい
         //↓ここでエラーが起きる
         //prefs = getSharedPreferences("SaveData", Context.MODE_PRIVATE);
         /*フラグ初期化*/
@@ -56,6 +68,7 @@ public class colorActivity  extends AppCompatActivity {
             else {
                 checkFlag[cnt] = Boolean.FALSE;
             }*/
+
             checkFlag[cnt] = Boolean.FALSE;
         }
         checkFlag[42] = Boolean.TRUE;
