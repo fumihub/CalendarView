@@ -13,6 +13,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.non_name_hero.calenderview.R;
 import com.non_name_hero.calenderview.data.ScheduleGroup;
+import com.non_name_hero.calenderview.data.source.ScheduleDataSource;
 import com.non_name_hero.calenderview.data.source.ScheduleRepository;
 import com.non_name_hero.calenderview.utils.Injection;
 
@@ -51,8 +52,7 @@ public class colorActivity  extends AppCompatActivity {
 
     //コンストラクタ
     public colorActivity() {
-//        list = new ArrayList<>();
-//        repository = Injection.provideScheduleRepository(getApplicationContext());
+        list = new ArrayList<>();
         //TODO colorNumberを取得したい
         //↓ここでエラーが起きる
         //prefs = getSharedPreferences("SaveData", Context.MODE_PRIVATE);
@@ -81,6 +81,20 @@ public class colorActivity  extends AppCompatActivity {
         setContentView(R.layout.color);
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.colorToolbar);
         setSupportActionBar(myToolbar);
+
+        repository = Injection.provideScheduleRepository(getApplicationContext());
+
+        repository.getListScheduleGroup(new ScheduleDataSource.GetScheduleGroupsCallback() {
+            @Override
+            public void onScheduleGroupsLoaded(List<ScheduleGroup> Groups) {
+                list = Groups;
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+
+            }
+        });
 
         /* 変数宣言 */
         for (int cnt = 0; cnt < ARRAYLENGTH; cnt++) {
