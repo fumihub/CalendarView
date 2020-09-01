@@ -59,7 +59,7 @@
             android:gravity="left|center_vertical"
             android:text="色"
             android:textColor="@color/grayColor"
-            android:textSize="24sp" />
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/colorButton2"
@@ -75,7 +75,7 @@
             android:gravity="right|center_vertical"
             android:text=">"
             android:textColor="@color/grayColor"
-            android:textSize="24sp" />
+            android:textSize="18sp" />
     </LinearLayout>
     <!--**********************************************-->
 

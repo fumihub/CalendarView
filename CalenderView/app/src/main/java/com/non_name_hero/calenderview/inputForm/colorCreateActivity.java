@@ -155,32 +155,11 @@ public class colorCreateActivity extends AppCompatActivity {
                         }
                     }
             );
-
-
-//            //色選択遷移用intent
-//            intentOut = getIntent();
-//            //ボタンの色を遷移先へreturn
-//            intentOut.putExtra("Color", color);
-//            //色タイトルを遷移先へreturn
-//            intentOut.putExtra("ColorTitle", colorCreateTitle.getText().toString());
-//            //文字色を遷移先へreturn
-//            intentOut.putExtra("textColor", textColor);
-//            //ボタンの色番号を遷移先へreturn
-//            intentOut.putExtra("ColorNumber", colorNumber);
-//            setResult(RESULT_OK, intentOut);
-//            //colorNumberをString型に変換
-//            String strColorNumber = String.valueOf(colorNumber);
-//            //SharedPreferenceに「colorNumber(数字)」の形で保存
-//            //↓ここでエラーが起きる
-//            /*prefs = getSharedPreferences("SaveData", Context.MODE_PRIVATE);
-//            SharedPreferences.Editor editor = prefs.edit();
-//            editor.putBoolean(strColorNumber,Boolean.TRUE);*/
-//            finish();
         }
 
     }
 
-    //Activityから戻り値(色番号)を受け取る処理
+    //Activityから戻り値(色番号、文字色、背景色)を受け取る処理
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

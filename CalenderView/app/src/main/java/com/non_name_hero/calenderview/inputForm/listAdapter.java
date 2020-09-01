@@ -11,7 +11,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 
 import com.non_name_hero.calenderview.R;
-import com.non_name_hero.calenderview.data.Schedule;
 import com.non_name_hero.calenderview.data.ScheduleGroup;
 import com.non_name_hero.calenderview.data.source.ScheduleRepository;
 import com.non_name_hero.calenderview.utils.Injection;
