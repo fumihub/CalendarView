@@ -3,6 +3,7 @@ package com.non_name_hero.calenderview.inputForm;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.MODE_PRIVATE;
+import static java.lang.Boolean.FALSE;
 
 public class listAdapter extends BaseAdapter {
 
@@ -26,11 +29,11 @@ public class listAdapter extends BaseAdapter {
     private Context mContext;
     private LayoutInflater mLayoutInflater;
     private ScheduleRepository repository;
+    private SharedPreferences prefs;
 
     private Intent intentOut;
 
     private Activity mActivity;
-    private colorSelectActivity mColorSelectActivity;
 
     //カスタムセルを拡張したらここでWigetを定義
     private static class ViewHolder {
@@ -45,7 +48,6 @@ public class listAdapter extends BaseAdapter {
         list = new ArrayList<>();
         mActivity = activity;
         repository = Injection.provideScheduleRepository(mContext);
-        mColorSelectActivity = new colorSelectActivity();
     }
 
     public void setList(List<ScheduleGroup> input) {
@@ -103,7 +105,9 @@ public class listAdapter extends BaseAdapter {
         }
 
         //TODO　削除ボタン表示
-        if (mColorSelectActivity.editFlag) {//ほかのActivityからとってきてる変数は常に初期化されている
+        //SharedPreferenceからeditFlagの値を取得
+        prefs = mContext.getSharedPreferences("input_data", MODE_PRIVATE);
+        if (prefs.getBoolean("editFlag", FALSE)) {
             holder.destroyButton.setVisibility(View.VISIBLE);
         }
         //TODO　削除ボタン非表示

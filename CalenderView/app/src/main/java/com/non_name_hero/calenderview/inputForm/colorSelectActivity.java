@@ -1,6 +1,7 @@
 package com.non_name_hero.calenderview.inputForm;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -24,9 +25,6 @@ public class colorSelectActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE = 1;
 
-    //リストアダプターでも使用
-    public boolean editFlag = FALSE;
-
     private listAdapter mListAdapter;
     private ListView listView;
 
@@ -35,6 +33,13 @@ public class colorSelectActivity extends AppCompatActivity {
 
     private Intent intentOut;
     private ScheduleRepository repository;
+    private SharedPreferences prefs;
+    private SharedPreferences.Editor editor;
+
+    //コンストラクタ
+    public colorSelectActivity() {
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,18 +73,12 @@ public class colorSelectActivity extends AppCompatActivity {
                 //ボタンの文字が「編集」ならば
                 if (editButton.getText().toString().equals("編集")) {
                     //TODO　リストビューに削除ボタン表示
-                    editFlag = TRUE;
-                    listView.setAdapter(mListAdapter);
-                    //編集ボタンを完了ボタンに
-                    editButton.setText("完了");
+                    jdgEditMode(TRUE, "完了");
                 }
                 //ボタンの文字が「完了ならば」
                 else {
                     //TODO　リストビューから削除ボタンを非表示に
-                    editFlag = FALSE;
-                    listView.setAdapter(mListAdapter);
-                    //完了ボタンを編集ボタンに
-                    editButton.setText("編集");
+                    jdgEditMode(FALSE, "編集");
                 }
             }
         });
@@ -95,6 +94,18 @@ public class colorSelectActivity extends AppCompatActivity {
         });
         /************************************************/
 
+    }
+
+    private void jdgEditMode(boolean value, String str){
+        prefs = getSharedPreferences("input_data", MODE_PRIVATE);
+        editor = prefs.edit();
+        //SharedPreferenceにeditFlagの値を保存
+        editor.putBoolean("editFlag",value);
+        //非同期処理ならapply()、同期処理ならcommit()
+        editor.commit();
+        listView.setAdapter(mListAdapter);
+        //ボタン文字の切り替え(編集/完了)
+        editButton.setText(str);
     }
 
     public void goColorCreateActivity() {
