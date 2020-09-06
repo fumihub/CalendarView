@@ -3,6 +3,7 @@ package com.non_name_hero.calenderview.data.source.local;
 import androidx.annotation.NonNull;
 
 import com.non_name_hero.calenderview.data.Schedule;
+import com.non_name_hero.calenderview.data.ScheduleGroup;
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource;
 import com.non_name_hero.calenderview.utils.AppExecutors;
 
@@ -100,5 +101,67 @@ public class ScheduleDataLocalSource implements ScheduleDataSource {
     @Override
     public void getHoliday(GetScheduleCallback callback) {
         //ローカルデータソースは使用しない
+    }
+
+    @Override
+    public void insertScheduleGroup(@NonNull final ScheduleGroup group, @NonNull final SaveScheduleGroupCallback callback) {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                mSchedulesDao.insertScheduleGroup(group);
+                mAppExecutors.mainThread().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onScheduleGroupSaved();
+                    }
+                });
+            }
+        };
+        mAppExecutors.diskIO().execute(runnable);
+    }
+
+    @Override
+    public void deleteScheduleGroup(@NonNull final int colorNumber) {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                mSchedulesDao.deleteScheduleGroupByColorNumber(colorNumber);
+            }
+        };
+        mAppExecutors.diskIO().execute(runnable);
+    }
+
+    @Override
+    public void getScheduleGroup(@NonNull final int colorNumber, @NonNull final GetScheduleGroupCallback callback) {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                final ScheduleGroup group = mSchedulesDao.getScheduleGroupByColorNumber(colorNumber).get(0);
+                mAppExecutors.mainThread().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onScheduleGroupLoaded(group);
+                    }
+                });
+            }
+        };
+        mAppExecutors.diskIO().execute(runnable);
+    }
+
+    @Override
+    public void getListScheduleGroup(@NonNull final GetScheduleGroupsCallback callback) {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                final List<ScheduleGroup> groups = mSchedulesDao.getAllScheduleGroup();
+                mAppExecutors.mainThread().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onScheduleGroupsLoaded(groups);
+                    }
+                });
+            }
+        };
+        mAppExecutors.diskIO().execute(runnable);
     }
 }

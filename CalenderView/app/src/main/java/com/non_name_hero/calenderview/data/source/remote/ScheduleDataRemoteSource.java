@@ -11,6 +11,7 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.non_name_hero.calenderview.data.Schedule;
+import com.non_name_hero.calenderview.data.ScheduleGroup;
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource;
 import com.non_name_hero.calenderview.utils.AppExecutors;
 
@@ -97,6 +98,26 @@ public class ScheduleDataRemoteSource implements ScheduleDataSource {
                         Log.d(ContentValues.TAG, "get failed with ", task.getException());
                     }
                 });
+    }
+
+    @Override
+    public void insertScheduleGroup(@NonNull ScheduleGroup group, @NonNull SaveScheduleGroupCallback callback) {
+
+    }
+
+    @Override
+    public void deleteScheduleGroup(@NonNull int colorNumber) {
+
+    }
+
+    @Override
+    public void getScheduleGroup(@NonNull int colorNumber, @NonNull GetScheduleGroupCallback callback) {
+
+    }
+
+    @Override
+    public void getListScheduleGroup(@NonNull GetScheduleGroupsCallback callback) {
+
     }
 
     @SuppressWarnings("unchecked")

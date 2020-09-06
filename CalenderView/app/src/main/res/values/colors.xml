@@ -9,13 +9,13 @@
     <color name="blueColor">#0000FF</color>
     <color name="blackColor">#000</color>
     <!--赤色7種類-->
-    <color name="redColor1">#DC143C</color>
-    <color name="redColor2">#FF4081</color>
-    <color name="redColor3">#FF4500</color>
-    <color name="redColor4">#FF6347</color>
-    <color name="redColor5">#FFA07A</color>
-    <color name="redColor6">#FFB6C1</color>
-    <color name="redColor7">#FFC0CB</color>
+    <color name="redColor1">#DD2034</color>
+    <color name="redColor2">#D83473</color>
+    <color name="redColor3">#F16682</color>
+    <color name="redColor4">#DC6B9A</color>
+    <color name="redColor5">#F5949F</color>
+    <color name="redColor6">#F05187</color>
+    <color name="redColor7">#F4506D</color>
     <!--紫色7種類-->
     <color name="purpleColor1">#FF00FF</color>
     <color name="purpleColor2">#DA70D6</color>
@@ -41,29 +41,29 @@
     <color name="greenColor6">#7FFF00</color>
     <color name="greenColor7">#ADFF2F</color>
     <!--黄色7種類-->
-    <color name="yellowColor1">#FF8C00</color>
-    <color name="yellowColor2">#FFA500</color>
-    <color name="yellowColor3">#FFD700</color>
-    <color name="yellowColor4">#FFFF00</color>
-    <color name="yellowColor5">#FFDEAD</color>
-    <color name="yellowColor6">#F0E68C</color>
-    <color name="yellowColor7">#FFFACD</color>
+    <color name="yellowColor1">#FFF808</color>
+    <color name="yellowColor2">#EEE618</color>
+    <color name="yellowColor3">#FDBA2B</color>
+    <color name="yellowColor4">#FFC40C</color>
+    <color name="yellowColor5">#FFD167</color>
+    <color name="yellowColor6">#F79428</color>
+    <color name="yellowColor7">#FF914F</color>
     <!--茶色7種類-->
-    <color name="brownColor1">#B8860B</color>
-    <color name="brownColor2">#DAA520</color>
-    <color name="brownColor3">#DEB887</color>
-    <color name="brownColor4">#D2691E</color>
-    <color name="brownColor5">#E9967A</color>
-    <color name="brownColor6">#CD5C5C</color>
-    <color name="brownColor7">#A52A2A</color>
+    <color name="brownColor1">#FF7321</color>
+    <color name="brownColor2">#FE6D0D</color>
+    <color name="brownColor3">#FE6D0D</color>
+    <color name="brownColor4">#AD6820</color>
+    <color name="brownColor5">#A55325</color>
+    <color name="brownColor6">#BC611E</color>
+    <color name="brownColor7">#7D4A31</color>
     <!--黒色7種類-->
     <color name="blackColor1">#000</color>
     <color name="blackColor2">#708090</color>
-    <color name="blackColor3">#808080</color>
-    <color name="blackColor4">#A9A9A9</color>
-    <color name="blackColor5">#C0C0C0</color>
-    <color name="blackColor6">#DCDCDC</color>
-    <color name="blackColor7">#F5F5F5</color>
+    <color name="blackColor3">#FFBBDD</color>
+    <color name="blackColor4">#FFFFBB</color>
+    <color name="blackColor5">#DDEEAA</color>
+    <color name="blackColor6">#AADDAA</color>
+    <color name="blackColor7">#99DDFF</color>
     <!--透明-->
     <color name="clearButtonPressed">#33000000</color>
 </resources>
