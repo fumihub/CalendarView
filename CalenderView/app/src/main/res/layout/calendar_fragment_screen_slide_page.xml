@@ -1,33 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-<LinearLayout android:layout_width="match_parent"
-android:layout_height="wrap_content"
-xmlns:tools="http://schemas.android.com/tools"
-android:background="@color/grayColor"
-android:orientation="vertical"
-tools:context=".calendar.MainActivity"
-xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.non_name_hero.calenderview.calendar.CalendarViewModel" />
+    </data>
 
-<GridView
-    android:id="@+id/calendarGridView"
-    android:layout_width="match_parent"
-    android:layout_height="731dp"
-    android:layout_marginLeft="1dp"
-    android:layout_weight="1"
-    android:horizontalSpacing="1dp"
-    android:numColumns="7"
-    android:stretchMode="columnWidth"
-    android:verticalSpacing="1dp" />
+    <LinearLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/grayColor"
+    android:orientation="vertical"
+    tools:context=".calendar.MainActivity"
+    >
 
-<TextView
-    android:id="@+id/accounting"
-    android:layout_width="match_parent"
-    android:layout_height="35dp"
-    android:layout_weight="0"
-    android:text="支出：xxxxx円　収入：xxxxx円"
-    android:textAlignment="center"
-    android:textColor="@color/blueColor"
-    android:textSize="18sp" />
+        <GridView
+            android:id="@+id/calendarGridView"
+            android:layout_width="match_parent"
+            android:layout_height="731dp"
+            android:layout_marginLeft="1dp"
+            android:layout_weight="1"
+            android:horizontalSpacing="1dp"
+            android:numColumns="7"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="1dp"
+            app:schedules="@{viewmodel.schedules}"
+            app:holidays="@{viewmodel.holidaySchedules}"
+            />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/accounting"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_weight="0"
+            android:text="支出：xxxxx円　収入：xxxxx円"
+            android:textAlignment="center"
+            android:textColor="@color/blueColor"
+            android:textSize="18sp" />
 
+    </LinearLayout>
+</layout>

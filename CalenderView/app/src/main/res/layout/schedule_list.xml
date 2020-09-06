@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.graphics.Color"/>
+        <variable
+            name="schedule"
+            type="com.non_name_hero.calenderview.data.Schedule" />
+    </data>
+    <TextView
+        android:name="@+id/scheduleText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/scheduleTextSize"
+        android:text="@{schedule.title}"
+        android:textColor="@{schedule.isHoliday ? Color.WHITE : Color.BLACK}"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:paddingBottom="@dimen/schedule_padding"
+        android:layout_margin="@dimen/schedule_margin"
+        android:gravity="center_horizontal"/>
+</layout>
