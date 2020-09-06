@@ -66,4 +66,6 @@
     <color name="blackColor7">#99DDFF</color>
     <!--透明-->
     <color name="clearButtonPressed">#33000000</color>
+    <!--祝日-->
+    <color name="holidayColor">#99DC143C</color>
 </resources>

@@ -2,38 +2,53 @@ package com.non_name_hero.calenderview.calendar;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
-import android.widget.TextView;
+
+import androidx.databinding.DataBindingUtil;
 
 import com.non_name_hero.calenderview.R;
+import com.non_name_hero.calenderview.data.Schedule;
+import com.non_name_hero.calenderview.databinding.CalendarCellBinding;
+import com.non_name_hero.calenderview.databinding.ScheduleListBinding;
 import com.non_name_hero.calenderview.utils.DateManager;
+import com.non_name_hero.calenderview.utils.PigLeadUtils;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class CalendarAdapter extends BaseAdapter {
     private List<Date> dateArray;
     private Context mContext;
     private DateManager mDateManager;
     private LayoutInflater mLayoutInflater;
+    private Map<String, List<Schedule>> mCalendarMap;
+    private Map<String, List<Schedule>> mHolidayMap;
 
-    //カスタムセルを拡張したらここでWigetを定義
-    private static class ViewHolder {
-        public TextView dateText;
-        public TextView holidayText;
-    }
-
-    public CalendarAdapter(Context context) {
+    public CalendarAdapter(Context context, int month) {
         mContext = context;
         mLayoutInflater = LayoutInflater.from(mContext);
         mDateManager = new DateManager();
+        mDateManager.jumpMonth(month);
         dateArray = mDateManager.getDays();
+        mCalendarMap = new HashMap<>();
+        mHolidayMap = new HashMap<>();
+    }
+
+    /**
+     * @return dateArray
+     */
+    public List<Date> getDateArray() {
+        return dateArray;
     }
 
     /**
@@ -55,86 +70,119 @@ public class CalendarAdapter extends BaseAdapter {
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-        //初回時の処理 convertViewがnullの場合にはinflateしたViewを代入する。
+        CalendarCellBinding calendarCellBinding;
+        Date cellDate = dateArray.get(position);
+
         if (convertView == null) {
-            //convertViewに
-            convertView = mLayoutInflater.inflate(R.layout.calendar_cell, null);
-            /*------カレンダーセルの作成-----*/
-            holder = new ViewHolder();
-
-            //日付
-            holder.dateText = convertView.findViewById(R.id.dateText);
-            //祝日名
-            holder.holidayText = convertView.findViewById(R.id.holidayText);
-
-            convertView.setTag(holder);
+            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+            calendarCellBinding = DataBindingUtil.inflate(inflater, R.layout.calendar_cell, parent, false);
         } else {
-            //convertViewがnullでなければconvertViewを再利用する。
-            holder = (ViewHolder) convertView.getTag();
+            calendarCellBinding = DataBindingUtil.getBinding(convertView);
         }
 
         //セルのサイズを指定
         float dp = mContext.getResources().getDisplayMetrics().density;
         AbsListView.LayoutParams params = new AbsListView.LayoutParams(parent.getWidth() / 7 - (int) dp, (parent.getHeight() - (int) dp * mDateManager.getWeeks()) / mDateManager.getWeeks());
-        convertView.setLayoutParams(params);
+        calendarCellBinding.calendarCell.setLayoutParams(params);
 
         //日付のみ表示させる
-        SimpleDateFormat dateFormat = new SimpleDateFormat("d", Locale.US);
-        //holder.dateTextに日付をセットする。
-        holder.dateText.setText(dateFormat.format(dateArray.get(position)));
-        //mSelectedDate =
+        calendarCellBinding.setDate(PigLeadUtils.formatD.format(cellDate));
 
         //当月以外のセルをグレーアウト
-        if (mDateManager.isCurrentMonth(dateArray.get(position))) {
+        if (mDateManager.isCurrentMonth(cellDate)) {
             //当日の背景を黄色に
-            if (mDateManager.getCurrentDate().equals(dateArray.get(position))) {
-                convertView.setBackgroundColor(Color.YELLOW);
+            if (mDateManager.getCurrentDate().equals(cellDate)) {
+                calendarCellBinding.calendarCell.setBackgroundColor(Color.YELLOW);
             } else {
-                convertView.setBackgroundColor(Color.WHITE);
+                calendarCellBinding.calendarCell.setBackgroundColor(Color.WHITE);
             }
         } else {
-            convertView.setBackgroundColor(Color.LTGRAY);
+            calendarCellBinding.calendarCell.setBackgroundColor(Color.LTGRAY);
         }
 
         //祝日、日曜日を赤、土曜日を青に
-        judgeHoliday(holder, position, mDateManager.getDayOfWeek(dateArray.get(position)));
+        setCalendarCellBase(
+                calendarCellBinding,
+                PigLeadUtils.formatYYYYMMDD.format(cellDate),
+                mDateManager.getDayOfWeek(cellDate)
+        );
 
-
-        return convertView;
-    }
-
-    //祝日を判定
-    private void judgeHoliday(ViewHolder holder, int position, int day) {
-        //祝日の場合
-        if (mDateManager.getHoliday(dateArray.get(position)) != "") {
-            holder.holidayText.setVisibility(View.VISIBLE);
-            holder.holidayText.setTextColor(Color.WHITE);
-            holder.holidayText.setText(mDateManager.getHoliday(dateArray.get(position)));
-            holder.holidayText.setBackgroundColor(Color.RED);
-            holder.dateText.setTextColor(Color.RED);
-        } else {
-            //日曜日の場合
-            if (day == 1) {
-                holder.dateText.setTextColor(Color.RED);
-                refreshHoliday(holder);
-            }
-            //土曜日の場合
-            else if (day == 7) {
-                holder.dateText.setTextColor(Color.BLUE);
-                refreshHoliday(holder);
-            }
-            //平日の場合
-            else {
-                holder.dateText.setTextColor(Color.BLACK);
-                refreshHoliday(holder);
+        //スケジュールをセルに追記
+        if (mCalendarMap != null) {
+            List<Schedule> scheduleList = mCalendarMap.get(PigLeadUtils.formatYYYYMMDD.format(cellDate));
+            //スケジュールを追加
+            for (int i = 0; i < 4; i++) {
+                if (mCalendarMap.containsKey(PigLeadUtils.formatYYYYMMDD.format(cellDate)) && i < scheduleList.size()) {
+                    setScheduleText(scheduleList.get(i), calendarCellBinding.scheduleList);
+                } else {
+                    break;
+                }
             }
         }
+
+        //ビューを即時更新
+        calendarCellBinding.executePendingBindings();
+        return calendarCellBinding.getRoot();
+    }
+
+    /**
+     * カレンダーセルベースを作成
+     */
+    private void setCalendarCellBase(CalendarCellBinding view, String date, int dayOfWeek) {
+        view.scheduleList.removeAllViews();
+        List<Schedule> schedules = new ArrayList<>();
+        Boolean isHoliday = Boolean.FALSE;
+        if (mHolidayMap != null && mHolidayMap.containsKey(date)) {
+            schedules = mHolidayMap.get(date);
+            for (Schedule schedule : schedules) {
+                //祝日の場合
+                setScheduleText(schedule, view.scheduleList);
+            }
+            isHoliday = Boolean.TRUE;
+        }
+
+        //日曜日の場合
+        if (dayOfWeek == 1 || Boolean.TRUE == isHoliday) {
+            view.dateText.setTextColor(Color.RED);
+        }
+        //土曜日の場合
+        else if (dayOfWeek == 7) {
+            view.dateText.setTextColor(Color.BLUE);
+        }
+        //平日の場合
+        else {
+            view.dateText.setTextColor(Color.BLACK);
+        }
+
+    }
+
+    /**
+     * スケジュールをセットする
+     *
+     * @param schedule
+     * @param root
+     * @return textView
+     */
+    private void setScheduleText(Schedule schedule, ViewGroup root) {
+        ScheduleListBinding binding = ScheduleListBinding.inflate(mLayoutInflater, root, true);
+        binding.setSchedule(schedule);
+        binding.executePendingBindings();
+        //Drawableで背景を指定
+        GradientDrawable drawable = new GradientDrawable();
+        drawable.setCornerRadius(10);
+        if (schedule.getIsHoliday()) {
+            drawable.setColor(mContext.getResources().getColor(R.color.holidayColor));
+        } else {
+            //TODO スケジュールの色を取得
+            drawable.setColor(Color.parseColor("#600000FF"));
+        }
+        binding.getRoot().setBackground(drawable);
+
     }
 
     //holidayTextのリフレッシュ
-    private void refreshHoliday(ViewHolder holder) {
-        holder.holidayText.setVisibility(View.GONE);
+    private void refreshHoliday(CalendarCellBinding binding) {
+        binding.dateText.setVisibility(View.GONE);
     }
 
     /*拡張機能*/
@@ -148,33 +196,28 @@ public class CalendarAdapter extends BaseAdapter {
         return null;
     }
 
-    /**********/
-
     //表示月を取得
     public String getTitle() {
         SimpleDateFormat format = new SimpleDateFormat("yyyy.MM", Locale.US);
         return format.format(mDateManager.getCalendar().getTime());
     }
 
-
-    /*次月前月はスライド式で表示したいため保留*/
-    //翌月表示
-    public void nextMonth() {
-        mDateManager.nextMonth();
-        dateArray = mDateManager.getDays();
-        this.notifyDataSetChanged();
+    public void replaceData(Map<String, List<Schedule>> schedules) {
+        setCalendarMap(schedules);
     }
 
-    //前月表示
-    public void prevMonth() {
-        mDateManager.prevMonth();
-        dateArray = mDateManager.getDays();
-        this.notifyDataSetChanged();
+    public void replaceHoliday(Map<String, List<Schedule>> holidayMap) {
+        setHolidayMap(holidayMap);
     }
 
-    public void setJumpMonth(int jump) {
-        mDateManager.jumpMonth(jump);
-        dateArray = mDateManager.getDays();
-        this.notifyDataSetChanged();
+    private void setHolidayMap(Map<String, List<Schedule>> holidayMap) {
+        this.mHolidayMap = holidayMap;
+        notifyDataSetChanged();
+    }
+
+    private void setCalendarMap(Map<String, List<Schedule>> calendarMap) {
+        this.mCalendarMap = calendarMap;
+        notifyDataSetChanged();
     }
 }
+

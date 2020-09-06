@@ -6,12 +6,17 @@ import com.non_name_hero.calenderview.data.Schedule;
 import com.non_name_hero.calenderview.data.ScheduleGroup;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ScheduleDataSource {
 
     interface GetScheduleCallback{
         void onScheduleLoaded(List<Schedule> schedules);
         void onDataNotAvailable();
+    }
+
+    interface GetScheduleMapCallback{
+        void onScheduleMapLoaded(Map<String, List<Schedule>> scheduleStringMap);
     }
 
     interface SaveScheduleCallback{
@@ -23,6 +28,8 @@ public interface ScheduleDataSource {
     void setSchedule(Schedule schedule, @NonNull SaveScheduleCallback callback);
     void getAllSchedules(@NonNull GetScheduleCallback callback);
     void getHoliday(@NonNull GetScheduleCallback callback);
+    void getSchedulesMap(GetScheduleMapCallback callback);
+
 
     /**
      * ScheduleGroupのコールバック

@@ -13,31 +13,38 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.non_name_hero.calenderview.R;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Calendar;
 
-public class CalendarFragment extends Fragment implements CalendarContract.View {
+public class CalendarFragment extends Fragment {
 
     public static CalendarFragment newInstance() {
         return new CalendarFragment();
     }
 
-    public CalendarContract.Presenter mPresenter;
-
     private static final int NUM_PAGES = 100;
+    private static final int DEFAULT_PAGE = NUM_PAGES / 2;
+    private static final int MAX_MONTH = 12;
     private ViewPager2 mPager;
     private CalendarPagerAdapter mPagerAdapter;
+    private CalendarViewModel mViewModel;
+    private Calendar mCalendar;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        mCalendar = Calendar.getInstance();
         View rootView = inflater.inflate(R.layout.calendar_fragment, container, false);
+        //CalendarViewModelを取得
+        mViewModel = MainActivity.obtainViewModel(getActivity());
+        //データを更新
+        loadData();
+
         mPager = (ViewPager2) rootView.findViewById(R.id.pager);
         mPagerAdapter = new CalendarPagerAdapter(this);
-        // Instantiate a ViewPager and a PagerAdapter.
+
+        mPager.setOffscreenPageLimit(5);
         mPager.setAdapter(mPagerAdapter);
-        mPager.setOffscreenPageLimit(ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT);
-        mPager.setCurrentItem(50, false);
+        mPager.setCurrentItem(DEFAULT_PAGE, false);
 
         return rootView;
     }
@@ -45,27 +52,38 @@ public class CalendarFragment extends Fragment implements CalendarContract.View 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+                //現在の月をviewModelにセット矢印DataBindingでtoolbarに表示
+                mViewModel.setCurrentMonth(getCurrentMonth(position));
+            }
+        });
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
     }
 
     @Override
-    public void setPresenter(CalendarContract.Presenter presenter) {
-        mPresenter = presenter;
-
+    public void onResume() {
+        super.onResume();
+        mViewModel.reloadSchedules(true);
     }
-/*
-    @Override
-    public void onBackPressed() {
-        //TODO 要調整
-        if (mPager.getCurrentItem() == 0) {
-            // If the user is currently looking at the first step, allow the system to handle the
-            // Back button. This calls finish() on this activity and pops the back stack.
-            super.onBackPressed();
-        } else {
-            // Otherwise, select the previous step.
-            mPager.setCurrentItem(mPager.getCurrentItem() - 1);
-        }
-    }*/
+
+    private void loadData() {
+        mViewModel.start();
+    }
+
+    private int getCurrentMonth(int position) {
+        //offset -> 現在月からの差分
+        int nowMonth = mCalendar.get(Calendar.MONTH);// 0~11
+        int offset = (position - DEFAULT_PAGE) % MAX_MONTH; // 初期ページからの差分 / 12 = -11~11
+        return (nowMonth + offset) % MAX_MONTH + 1;
+    }
 
     /**
      * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
@@ -80,8 +98,7 @@ public class CalendarFragment extends Fragment implements CalendarContract.View 
         @NonNull
         @Override
         public Fragment createFragment(int position) {
-            Fragment view = new CalendarPageFragment(position - 50);
-            ((CalendarPageFragment) view).setPresenter(mPresenter);
+            Fragment view = new CalendarPageFragment(position - DEFAULT_PAGE);
             return view;
         }
 

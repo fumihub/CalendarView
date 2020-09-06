@@ -16,7 +16,7 @@ import com.non_name_hero.calenderview.data.source.ScheduleDataSource;
 import com.non_name_hero.calenderview.utils.AppExecutors;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -75,16 +75,13 @@ public class ScheduleDataRemoteSource implements ScheduleDataSource {
                                 Map<String, Object> holiday = document.getData();//documentからholidayNameのバリューを取得
                                 //受け取ったデータを整形
                                 final List<Schedule> holidaySchedules = new ArrayList<Schedule>();
-                                Calendar c = Calendar.getInstance();
                                 for(Object obj :holiday.values()){
-
                                     Map<String,Object> holidayData = autoCast(obj);
                                     Long date = ((Timestamp)holidayData.get("date")).getSeconds()*1000;
-                                    c.setTimeInMillis(date);
 
-                                    holidaySchedules.add(new Schedule((String)holidayData.get("nameInJapan"),c));
-
-
+                                    Schedule schedule = new Schedule((String)holidayData.get("nameInJapan"),new Date(date));
+                                    schedule.setIsHoliday(true);
+                                    holidaySchedules.add(schedule);
                                 }
                                 //callbackに引数を渡す(データ配列)
                                 callback.onScheduleLoaded(holidaySchedules);
@@ -101,6 +98,10 @@ public class ScheduleDataRemoteSource implements ScheduleDataSource {
     }
 
     @Override
+    public void getSchedulesMap(GetScheduleMapCallback callback) {
+
+    }
+
     public void insertScheduleGroup(@NonNull ScheduleGroup group, @NonNull SaveScheduleGroupCallback callback) {
 
     }

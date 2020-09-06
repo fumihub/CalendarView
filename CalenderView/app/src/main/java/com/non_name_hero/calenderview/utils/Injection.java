@@ -18,7 +18,9 @@ public class Injection {
         AppExecutors appExecutors = new AppExecutors();
 
         ScheduleRepository scheduleRepository = ScheduleRepository.getInstance(
-                ScheduleDataLocalSource.getInstance(appExecutors, pigLeadDatabase.scheduleDao()),
+                ScheduleDataLocalSource.getInstance(
+                        appExecutors,
+                        pigLeadDatabase.scheduleDao()),
                 ScheduleDataRemoteSource.getInstance(appExecutors));
         return scheduleRepository;
     }

@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -12,48 +14,29 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.non_name_hero.calenderview.R;
-import com.non_name_hero.calenderview.data.source.ScheduleRepository;
-import com.non_name_hero.calenderview.utils.Injection;
-
-import java.util.Date;
+import com.non_name_hero.calenderview.databinding.ActivityMainBinding;
+import com.non_name_hero.calenderview.utils.ViewModelFactory;
 
 import static com.non_name_hero.calenderview.utils.ActivityUtils.addFragmentToActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-
-
-    private CalendarPresenter mPresenter;
-    private Date mCurrentDate;
-    private TextView titleText;
     private TextView accountingText;
     private AdView mAdView;
+    private CalendarViewModel mViewModel;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // ここで1秒間スリープし、スプラッシュを表示させたままにする。
-//        try {
-//            Thread.sleep(1000);
-//        } catch (InterruptedException e) {
-//        }
-        // スプラッシュthemeを通常themeに変更する
         setTheme(R.style.AppTheme);
-        setContentView(R.layout.activity_main);
-
-
-        final Toolbar myToolbar = (Toolbar) findViewById(R.id.mainToolbar);
-        setSupportActionBar(myToolbar);
-          /*
-       TODO タイトル表示
-        titleText.setText(mCalendarAdapter.getTitle());
-        myToolbar.setTitle(mCalendarAdapter.getTitle());
-        */
+        //DataBinding
+        ActivityMainBinding binding;
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         //収入支出ブロックの背景色変更
         accountingText = findViewById(R.id.accounting);
-       //accountingText.setBackgroundColor(Color.YELLOW);
+        //accountingText.setBackgroundColor(Color.YELLOW);
 
         //広告の読み込み
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
@@ -70,21 +53,38 @@ public class MainActivity extends AppCompatActivity {
         mAdView.loadAd(adRequest);
 
         //アクティビティのfragmentを取得（初回時はnull）
-
         CalendarFragment calendarFragment = (CalendarFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-        if(calendarFragment == null) {
+        if (calendarFragment == null) {
             calendarFragment = CalendarFragment.newInstance();
             addFragmentToActivity(getSupportFragmentManager(), calendarFragment, R.id.fragment_container);
         }
 
-        ScheduleRepository scheduleRepository = Injection.provideScheduleRepository(getApplicationContext());
-
-        new CalendarPresenter(calendarFragment ,scheduleRepository);
-
-
+        //ViewModelの参照を取得
+        mViewModel = obtainViewModel(this);
+        //ViewModelをbinding
+        binding.setViewmodel(mViewModel);
+        //LifecycleOwnerを指定
+        binding.setLifecycleOwner(this);
+        //Toolbarをセット
+        setSupportActionBar(binding.mainToolbar);
+        //bindingを即時反映
+        binding.executePendingBindings();
     }
 
+    /**
+     * ViewModelを取得する
+     *
+     * @param activity ViewModelライフサイクルオーナーとしてのアクティビティ
+     * @return viewModel {CalendarViewModel} カレンダー関連の情報を保持するViewModel
+     */
+    public static CalendarViewModel obtainViewModel(FragmentActivity activity) {
+        ViewModelFactory factory = ViewModelFactory.getInstance(activity.getApplication());
+        return new ViewModelProvider(activity, factory).get(CalendarViewModel.class);
+    }
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
 }

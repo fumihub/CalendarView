@@ -104,6 +104,9 @@ public class ScheduleDataLocalSource implements ScheduleDataSource {
     }
 
     @Override
+
+    public void getSchedulesMap(GetScheduleMapCallback callback) {
+
     public void insertScheduleGroup(@NonNull final ScheduleGroup group, @NonNull final SaveScheduleGroupCallback callback) {
         Runnable runnable = new Runnable() {
             @Override

@@ -7,7 +7,7 @@ import com.non_name_hero.calenderview.data.Schedule;
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource;
 import com.non_name_hero.calenderview.data.source.ScheduleRepository;
 
-import java.util.Calendar;
+import java.util.Date;
 
 public class InputPresenter implements InputContract.Presenter {
 
@@ -26,7 +26,7 @@ public class InputPresenter implements InputContract.Presenter {
     }
 
     @Override
-    public void saveSchedule(String title, String description, Calendar startAtSchedule, Calendar endAtSchedule, int groupId, int paymentId) {
+    public void saveSchedule(String title, String description, Date startAtSchedule, Date endAtSchedule, int groupId, int paymentId) {
         mScheduleRepository.setSchedule(new Schedule(title, description, startAtSchedule, endAtSchedule, groupId, paymentId), new ScheduleDataSource.SaveScheduleCallback() {
             @Override
             public void onScheduleSaved() {

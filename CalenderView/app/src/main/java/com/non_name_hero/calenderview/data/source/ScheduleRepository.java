@@ -5,10 +5,11 @@ import android.annotation.SuppressLint;
 import androidx.annotation.NonNull;
 
 import com.non_name_hero.calenderview.data.Schedule;
+import com.non_name_hero.calenderview.utils.PigLeadUtils;
 import com.non_name_hero.calenderview.data.ScheduleGroup;
 
+import java.util.HashMap;
 import java.util.List;
-
 import java.util.Map;
 
 import static androidx.core.util.Preconditions.checkNotNull;
@@ -20,8 +21,8 @@ public class ScheduleRepository implements ScheduleDataSource {
     private final ScheduleDataSource mScheduleDataLocalSource;
     private final ScheduleDataSource mScheduleDataRemoteSource;
 
-    Map<String, Schedule> mCachedSchedules;
     List<Schedule> mCachedHolidaySchedules;
+    Map<String, List<Schedule>> mCachedScheduleMap;
 
     boolean mCacheIsDirty = false;
     //コンストラクタ
@@ -107,10 +108,37 @@ public class ScheduleRepository implements ScheduleDataSource {
                 @Override
                 public void onDataNotAvailable() {
 
+                    callback.onDataNotAvailable();
                 }
             });
         }else{
             callback.onScheduleLoaded(mCachedHolidaySchedules);
+        }
+    }
+
+    public void cacheClear(){
+        mCacheIsDirty = false;
+        mCachedScheduleMap = null;
+    }
+
+    public void getSchedulesMap(@NonNull final GetScheduleMapCallback callback) {
+        if (mCachedScheduleMap == null && mCacheIsDirty == false) {
+            mCachedScheduleMap = new HashMap<>();
+            mScheduleDataLocalSource.getAllSchedules(new GetScheduleCallback() {
+                @Override
+                public void onScheduleLoaded(List<Schedule> schedules) {
+                    mCachedScheduleMap = PigLeadUtils.getScheduleMapBySchedules(schedules);
+                    mCacheIsDirty = true;
+                    callback.onScheduleMapLoaded(mCachedScheduleMap);
+                }
+
+                @Override
+                public void onDataNotAvailable() {
+
+                }
+            });
+        } else {
+            callback.onScheduleMapLoaded(mCachedScheduleMap);
         }
     }
 

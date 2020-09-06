@@ -18,6 +18,7 @@ public class DateManager {
     //コンストラクタ
     public DateManager(){
         mCalendar = Calendar.getInstance();
+        currentDate = mCalendar.getTime();
     }
 
     //当月の要素を取得
@@ -26,7 +27,6 @@ public class DateManager {
         startDate = mCalendar.getTime();
         if (currentDayFlg == Boolean.FALSE) {
             //当月の日付を取得し、変更しない
-            currentDate = mCalendar.getTime();
             currentDayFlg = Boolean.TRUE;
         }
 
@@ -109,116 +109,6 @@ public class DateManager {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         return calendar.get(Calendar.DAY_OF_WEEK);
-    }
-
-    //祝日を取得
-    public String getHoliday (Date date) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd", Locale.US);
-        //元日の場合
-        if (format.format(date).equals("2020.01.01")
-        || format.format(date).equals("2021.01.01")
-        || format.format(date).equals("2022.01.01")) {
-            return "元日";
-        }
-        //成人の日の場合
-        else if (format.format(date).equals("2020.01.13")
-        || format.format(date).equals("2021.01.11")
-        || format.format(date).equals("2022.01.10")) {
-            return "成人の日";
-        }
-        //建国記念の日の場合
-        else if (format.format(date).equals("2020.02.11")
-        || format.format(date).equals("2021.02.11")
-        || format.format(date).equals("2022.02.11")) {
-            return "建国記念の日";
-        }
-        //天皇誕生日の場合
-        else if (format.format(date).equals("2020.02.23")
-        || format.format(date).equals("2021.02.23")
-        || format.format(date).equals("2022.02.23")) {
-            return "天皇誕生日";
-        }
-        //春分の日の場合
-        else if (format.format(date).equals("2020.03.20")
-        || format.format(date).equals("2021.03.20")
-        || format.format(date).equals("2022.03.21")) {
-            return "春分の日";
-        }
-        //昭和の日の場合
-        else if (format.format(date).equals("2020.04.29")
-        || format.format(date).equals("2021.04.29")
-        || format.format(date).equals("2022.04.29")) {
-            return "昭和の日";
-        }
-        //憲法記念日の場合
-        else if (format.format(date).equals("2020.05.03")
-        || format.format(date).equals("2021.05.03")
-        || format.format(date).equals("2022.05.03")) {
-            return "憲法記念日";
-        }
-        //みどりの日の場合
-        else if (format.format(date).equals("2020.05.04")
-        || format.format(date).equals("2021.05.04")
-        || format.format(date).equals("2022.05.04")) {
-            return "みどりの日";
-        }
-        //こどもの日の場合
-        else if (format.format(date).equals("2020.05.05")
-        || format.format(date).equals("2021.05.05")
-        || format.format(date).equals("2022.05.05")) {
-            return "こどもの日";
-        }
-        //海の日の場合
-        else if (format.format(date).equals("2020.07.23")
-        || format.format(date).equals("2021.07.19")
-        || format.format(date).equals("2022.07.18")) {
-            return "海の日";
-        }
-        //スポーツの日の場合
-        else if (format.format(date).equals("2020.07.24")
-        || format.format(date).equals("2021.10.11")
-        || format.format(date).equals("2022.10.10")) {
-            return "スポーツの日";
-        }
-        //山の日の場合
-        else if (format.format(date).equals("2020.08.10")
-        || format.format(date).equals("2021.08.11")
-        || format.format(date).equals("2022.08.11")) {
-            return "山の日";
-        }
-        //敬老の日の場合
-        else if (format.format(date).equals("2020.09.21")
-        || format.format(date).equals("2021.09.20")
-        || format.format(date).equals("2022.09.19")) {
-            return "敬老の日";
-        }
-        //秋分の日の場合
-        else if (format.format(date).equals("2020.09.22")
-        || format.format(date).equals("2021.09.23")
-        || format.format(date).equals("2022.09.23")) {
-            return "秋分の日";
-        }
-        //文化の日の場合
-        else if (format.format(date).equals("2020.11.03")
-        || format.format(date).equals("2021.11.03")
-        || format.format(date).equals("2022.11.03")) {
-            return "文化の日";
-        }
-        //勤労感謝の日の場合
-        else if (format.format(date).equals("2020.11.23")
-        || format.format(date).equals("2021.11.23")
-        || format.format(date).equals("2022.11.23")) {
-            return "勤労感謝の日";
-        }
-        //振替休日の場合
-        else if (format.format(date).equals("2020.02.24")
-        || format.format(date).equals("2020.05.06")) {
-            return "振替休日";
-        }
-        //祝日じゃない時
-        else {
-            return "";
-        }
     }
 
     public Date getCurrentDate(){
