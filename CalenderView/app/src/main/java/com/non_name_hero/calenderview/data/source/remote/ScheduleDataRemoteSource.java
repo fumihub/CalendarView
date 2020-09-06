@@ -75,13 +75,12 @@ public class ScheduleDataRemoteSource implements ScheduleDataSource {
                                 //受け取ったデータを整形
                                 final List<Schedule> holidaySchedules = new ArrayList<Schedule>();
                                 for(Object obj :holiday.values()){
-
                                     Map<String,Object> holidayData = autoCast(obj);
                                     Long date = ((Timestamp)holidayData.get("date")).getSeconds()*1000;
 
-                                    holidaySchedules.add(new Schedule((String)holidayData.get("nameInJapan"),new Date(date)));
-
-
+                                    Schedule schedule = new Schedule((String)holidayData.get("nameInJapan"),new Date(date));
+                                    schedule.setIsHoliday(true);
+                                    holidaySchedules.add(schedule);
                                 }
                                 //callbackに引数を渡す(データ配列)
                                 callback.onScheduleLoaded(holidaySchedules);
@@ -96,6 +95,12 @@ public class ScheduleDataRemoteSource implements ScheduleDataSource {
                     }
                 });
     }
+
+    @Override
+    public void getSchedulesMap(GetScheduleMapCallback callback) {
+
+    }
+
 
     @SuppressWarnings("unchecked")
     public <T> T autoCast(Object obj) {

@@ -101,4 +101,9 @@ public class ScheduleDataLocalSource implements ScheduleDataSource {
     public void getHoliday(GetScheduleCallback callback) {
         //ローカルデータソースは使用しない
     }
+
+    @Override
+    public void getSchedulesMap(GetScheduleMapCallback callback) {
+
+    }
 }

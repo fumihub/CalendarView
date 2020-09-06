@@ -5,11 +5,10 @@ import android.annotation.SuppressLint;
 import androidx.annotation.NonNull;
 
 import com.non_name_hero.calenderview.data.Schedule;
+import com.non_name_hero.calenderview.utils.PigLeadUtils;
 
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import static androidx.core.util.Preconditions.checkNotNull;
@@ -21,8 +20,8 @@ public class ScheduleRepository implements ScheduleDataSource {
     private final ScheduleDataSource mScheduleDataLocalSource;
     private final ScheduleDataSource mScheduleDataRemoteSource;
 
-    Map<String, Schedule> mCachedSchedules;
     List<Schedule> mCachedHolidaySchedules;
+    Map<String, List<Schedule>> mCachedScheduleMap;
 
     boolean mCacheIsDirty = false;
     //コンストラクタ
@@ -93,6 +92,7 @@ public class ScheduleRepository implements ScheduleDataSource {
 
                 @Override
                 public void onDataNotAvailable() {
+
                     callback.onDataNotAvailable();
                 }
             });
@@ -101,14 +101,20 @@ public class ScheduleRepository implements ScheduleDataSource {
         }
     }
 
-    public void getSchedulesMap(@NonNull final GetScheduleMapCallback callback){
-        if (mCachedHolidaySchedules == null){
-            mScheduleDataRemoteSource.getHoliday(new GetScheduleCallback() {
+    public void cacheClear(){
+        mCacheIsDirty = false;
+        mCachedScheduleMap = null;
+    }
+
+    public void getSchedulesMap(@NonNull final GetScheduleMapCallback callback) {
+        if (mCachedScheduleMap == null && mCacheIsDirty == false) {
+            mCachedScheduleMap = new HashMap<>();
+            mScheduleDataLocalSource.getAllSchedules(new GetScheduleCallback() {
                 @Override
                 public void onScheduleLoaded(List<Schedule> schedules) {
-                    //キャッシュを保持
-                    mCachedHolidaySchedules = schedules;
-                    callback.onScheduleMapLoaded(ScheduleToStringMap(mCachedHolidaySchedules));
+                    mCachedScheduleMap = PigLeadUtils.getScheduleMapBySchedules(schedules);
+                    mCacheIsDirty = true;
+                    callback.onScheduleMapLoaded(mCachedScheduleMap);
                 }
 
                 @Override
@@ -116,22 +122,9 @@ public class ScheduleRepository implements ScheduleDataSource {
 
                 }
             });
-        }else{
-            callback.onScheduleMapLoaded(ScheduleToStringMap(mCachedHolidaySchedules));
+        } else {
+            callback.onScheduleMapLoaded(mCachedScheduleMap);
         }
-    }
-
-    public Map<String, String> ScheduleToStringMap(List<Schedule> schedules){
-        SimpleDateFormat formatYYYYMMDD = new SimpleDateFormat("yyyy.MM.dd", Locale.US);
-        Map<String, String> stringMap = new HashMap<String, String>();
-        String date;
-        String title;
-        for (Schedule schedule : schedules){
-            date = formatYYYYMMDD.format(schedule.getStartAtDatetime().getTime());
-            title = schedule.getTitle();
-            stringMap.put(date,title);
-        }
-        return stringMap;
     }
 
 }

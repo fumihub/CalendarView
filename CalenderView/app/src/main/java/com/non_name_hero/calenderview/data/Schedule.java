@@ -50,6 +50,8 @@ public class Schedule {
     //DBでは管理されないフィールド
     @Ignore
     private boolean mEditable;
+    @Ignore
+    private boolean mIsHoliday;
 
     public Schedule(@NonNull long scheduleId,
                     @NonNull String title,
@@ -177,4 +179,10 @@ public class Schedule {
     public void setUneditable() {
         mEditable = false;
     }
+
+    public void setIsHoliday(boolean isHoliday){
+        mIsHoliday = isHoliday;
+    }
+
+    public boolean getIsHoliday() { return mIsHoliday;}
 }
