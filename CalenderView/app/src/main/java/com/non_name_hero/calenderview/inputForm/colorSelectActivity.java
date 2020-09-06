@@ -74,11 +74,15 @@ public class colorSelectActivity extends AppCompatActivity {
                 if (editButton.getText().toString().equals("編集")) {
                     //TODO　リストビューに削除ボタン表示
                     jdgEditMode(TRUE, "完了");
+                    //色作成ボタン非表示
+                    colorCreateButton.setVisibility(View.GONE);
                 }
                 //ボタンの文字が「完了ならば」
                 else {
                     //TODO　リストビューから削除ボタンを非表示に
                     jdgEditMode(FALSE, "編集");
+                    //色作成ボタン表示
+                    colorCreateButton.setVisibility(View.VISIBLE);
                 }
             }
         });

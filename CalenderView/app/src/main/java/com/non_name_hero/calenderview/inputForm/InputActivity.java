@@ -5,6 +5,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -16,9 +17,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.non_name_hero.calenderview.R;
+import com.non_name_hero.calenderview.data.ScheduleGroup;
+import com.non_name_hero.calenderview.data.source.ScheduleDataSource;
+import com.non_name_hero.calenderview.data.source.ScheduleRepository;
 import com.non_name_hero.calenderview.utils.Injection;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class InputActivity extends AppCompatActivity implements InputContract.View {
 
@@ -26,6 +32,7 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
 
     private InputContract.Presenter mInputPresenter;
     private InputContract.View mView;
+    private ScheduleRepository repository;
 
     private Calendar mStartAtDatetime;
     private Calendar mEndAtDatetime;
@@ -56,9 +63,15 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
     private String day;
     private int colorNumber;
 
+    //コンストラクタ
+    public InputActivity () {
+        
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        repository = Injection.provideScheduleRepository(getApplicationContext());
 
         setContentView(R.layout.input_main);
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.inputToolbar);
@@ -353,6 +366,30 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
                 if (resultCode == RESULT_OK) {
                     //色番号受け取り
                     colorNumber = data.getIntExtra("ColorNumber", 0);//defaultValue:ColorNumberキーに値が入っていなかった時に返す値
+                    //DBからcolorNumberをキーにその要素を取得
+                    repository.getScheduleGroup(
+                            colorNumber,
+                            new ScheduleDataSource.GetScheduleGroupCallback() {
+
+                                @Override
+                                public void onScheduleGroupLoaded(ScheduleGroup group) {
+                                    //色ボタン2に色名をセット
+                                    color2.setText(group.getGroupName());
+                                    //色ボタン2に色をセット
+                                    color2.setBackgroundColor(group.getBackgroundColor());
+                                    //色ボタン2にに文字色をセット
+                                    if (group.getCharacterColor().equals("黒")) {//黒ならば
+                                        color2.setTextColor(Color.BLACK);
+                                    }
+                                    else {//白ならば
+                                        color2.setTextColor(Color.WHITE);
+                                    }
+                                    //色ボタン2のテキストを左寄せに
+                                    color2.setGravity(Gravity.CENTER);
+                                }
+                            }
+                    );
+
                 }
                 else if (resultCode == RESULT_CANCELED) {
                     //キャンセルボタンを押して戻ってきたときの処理

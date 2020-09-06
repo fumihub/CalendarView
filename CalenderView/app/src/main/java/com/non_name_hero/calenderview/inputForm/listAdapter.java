@@ -25,6 +25,8 @@ import static java.lang.Boolean.FALSE;
 
 public class listAdapter extends BaseAdapter {
 
+    private static final int REQUEST_CODE = 1;
+
     private List<ScheduleGroup> list;
     private Context mContext;
     private LayoutInflater mLayoutInflater;
@@ -107,7 +109,8 @@ public class listAdapter extends BaseAdapter {
         //TODO　削除ボタン表示
         //SharedPreferenceからeditFlagの値を取得
         prefs = mContext.getSharedPreferences("input_data", MODE_PRIVATE);
-        if (prefs.getBoolean("editFlag", FALSE)) {
+        if (prefs.getBoolean("editFlag", FALSE)
+        && (list.get(position).getColorNumber() != 43)) {
             holder.destroyButton.setVisibility(View.VISIBLE);
         }
         //TODO　削除ボタン非表示
@@ -118,13 +121,17 @@ public class listAdapter extends BaseAdapter {
         holder.categoryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //input画面に遷移
-                //色選択遷移用intent
-                intentOut = new Intent();
-                //ボタンの色番号を遷移先へreturn
-                intentOut.putExtra("ColorNumber", list.get(position).getColorNumber());
-                mActivity.setResult(RESULT_OK, intentOut);
-                mActivity.finish();
+                if (prefs.getBoolean("editFlag", FALSE)){
+                    if (list.get(position).getColorNumber() == 43){
+                        /* 何もしない */
+                    }
+                    else {
+                        goColorCreateActivity(position);
+                    }
+                }
+                else {
+                    returnInputActivity(position);
+                }
             }
         });
 
@@ -142,8 +149,27 @@ public class listAdapter extends BaseAdapter {
             }
         });
 
-
         return convertView;
+    }
+
+    //色作成画面に遷移
+    private void goColorCreateActivity(int position) {
+        //色作成遷移用intent
+        Intent intentOut = new Intent(mContext, colorCreateActivity.class);
+        //ボタンの色番号を遷移先へgo
+        intentOut.putExtra("ColorNumberPre", list.get(position).getColorNumber());
+        //戻り値を設定して色画面に遷移
+        mActivity.startActivityForResult(intentOut, REQUEST_CODE);
+    }
+
+    //input画面に遷移
+    private void returnInputActivity(int position) {
+        //色選択遷移用intent
+        intentOut = new Intent();
+        //ボタンの色番号を遷移先へreturn
+        intentOut.putExtra("ColorNumber", list.get(position).getColorNumber());
+        mActivity.setResult(RESULT_OK, intentOut);
+        mActivity.finish();
     }
 
 

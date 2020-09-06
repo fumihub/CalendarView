@@ -170,6 +170,7 @@
                 android:background="#00000000"
                 android:gravity="right|center_vertical"
                 android:text=">"
+                android:textStyle="bold"
                 android:textColor="@color/grayColor"
                 style="?android:attr/borderlessButtonStyle"
                 android:textSize="18sp" />
