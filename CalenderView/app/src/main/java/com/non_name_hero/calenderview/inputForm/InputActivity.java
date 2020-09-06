@@ -4,8 +4,10 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MotionEvent;
+import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -18,14 +20,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.non_name_hero.calenderview.R;
+import com.non_name_hero.calenderview.data.ScheduleGroup;
+import com.non_name_hero.calenderview.data.source.ScheduleDataSource;
+import com.non_name_hero.calenderview.data.source.ScheduleRepository;
 import com.non_name_hero.calenderview.utils.Injection;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class InputActivity extends AppCompatActivity implements InputContract.View {
 
+    private static final int REQUEST_CODE = 1;
+
     private InputContract.Presenter mInputPresenter;
     private InputContract.View mView;
+    private ScheduleRepository repository;
 
     private Calendar mStartAtDatetime;
     private Calendar mEndAtDatetime;
@@ -51,13 +61,21 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
 
     private Intent intentIn;
     private Intent intentOut;
+  
     private String year;
     private String month;
     private String day;
+    private int colorNumber;
+
+    //コンストラクタ
+    public InputActivity () {
+        
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        repository = Injection.provideScheduleRepository(getApplicationContext());
 
         setContentView(R.layout.input_main);
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.inputToolbar);
@@ -285,14 +303,14 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
             @Override
             public void onClick(View v) {
                 //色選択画面へ遷移
-                startActivity(intentOut);
+                goColorSelectActivity();
             }
         });
         color2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //色選択画面へ遷移
-                startActivity(intentOut);
+                goColorSelectActivity();
             }
         });
         /************************************************/
@@ -335,6 +353,59 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
 
         /*********************************************************************************/
 
+    }
+
+    public void goColorSelectActivity() {
+        //戻り値を設定して色選択画面に遷移
+        startActivityForResult(intentOut, REQUEST_CODE);
+    }
+
+    //Activityから戻り値(色番号)を受け取る処理
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            //colorSelectActivityから戻ってきた場合
+            case (REQUEST_CODE):
+                if (resultCode == RESULT_OK) {
+                    //色番号受け取り
+                    colorNumber = data.getIntExtra("ColorNumber", 0);//defaultValue:ColorNumberキーに値が入っていなかった時に返す値
+                    //DBからcolorNumberをキーにその要素を取得
+                    repository.getScheduleGroup(
+                            colorNumber,
+                            new ScheduleDataSource.GetScheduleGroupCallback() {
+
+                                @Override
+                                public void onScheduleGroupLoaded(ScheduleGroup group) {
+                                    //色ボタン2に色名をセット
+                                    color2.setText(group.getGroupName());
+                                    //色ボタン2に色をセット
+                                    color2.setBackgroundColor(group.getBackgroundColor());
+                                    //色ボタン2にに文字色をセット
+                                    if (group.getCharacterColor().equals("黒")) {//黒ならば
+                                        color2.setTextColor(Color.BLACK);
+                                    }
+                                    else {//白ならば
+                                        color2.setTextColor(Color.WHITE);
+                                    }
+                                    //色ボタン2のテキストを左寄せに
+                                    color2.setGravity(Gravity.CENTER);
+                                }
+                            }
+                    );
+
+                }
+                else if (resultCode == RESULT_CANCELED) {
+                    //キャンセルボタンを押して戻ってきたときの処理
+                }
+                else {
+                    //その他
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     @Override

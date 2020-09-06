@@ -10,16 +10,29 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.non_name_hero.calenderview.R;
+import com.non_name_hero.calenderview.data.ScheduleGroup;
+import com.non_name_hero.calenderview.data.source.ScheduleDataSource;
+import com.non_name_hero.calenderview.data.source.ScheduleRepository;
+import com.non_name_hero.calenderview.utils.Injection;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class colorActivity  extends AppCompatActivity {
 
     private final int ARRAYLENGTH = 49;
 
+    private Intent intentIn;
     private Intent intentOut;
 
-    private Boolean[] checkFlag = new Boolean[49];
+//    private SharedPreferences prefs;
+    private ScheduleRepository repository;
+
+    private List<ScheduleGroup> list;
+
     private Button[] colorButton = new Button[49];
     private TextView[] checkText = new TextView[49];
+    private boolean[] checkFlag = new boolean[49];
     private int[] colorButtonId = {R.id.redButton1, R.id.redButton2, R.id.redButton3, R.id.redButton4, R.id.redButton5, R.id.redButton6, R.id.redButton7,
                                     R.id.purpleButton1, R.id.purpleButton2, R.id.purpleButton3, R.id.purpleButton4, R.id.purpleButton5, R.id.purpleButton6, R.id.purpleButton7,
                                     R.id.blueButton1, R.id.blueButton2, R.id.blueButton3, R.id.blueButton4, R.id.blueButton5, R.id.blueButton6, R.id.blueButton7,
@@ -35,6 +48,10 @@ public class colorActivity  extends AppCompatActivity {
                                     R.id.brownCheckText1, R.id.brownCheckText2, R.id.brownCheckText3, R.id.brownCheckText4, R.id.brownCheckText5, R.id.brownCheckText6, R.id.brownCheckText7,
                                     R.id.blackCheckText1, R.id.blackCheckText2, R.id.blackCheckText3, R.id.blackCheckText4, R.id.blackCheckText5, R.id.blackCheckText6, R.id.blackCheckText7};
 
+    //コンストラクタ
+    public colorActivity() {
+        list = new ArrayList<>();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +61,40 @@ public class colorActivity  extends AppCompatActivity {
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.colorToolbar);
         setSupportActionBar(myToolbar);
 
-        /* フラグ初期化 */
-        for (int cnt = 0; cnt < ARRAYLENGTH; cnt++) {
-            checkFlag[cnt] = Boolean.FALSE;
-        }
+        //DBにアクセス
+        repository = Injection.provideScheduleRepository(getApplicationContext());
+        repository.getListScheduleGroup(new ScheduleDataSource.GetScheduleGroupsCallback() {
+            @Override
+            public void onScheduleGroupsLoaded(List<ScheduleGroup> Groups) {
+                //DBの情報全件取得
+                list = Groups;
+                //DBにColorNumberがあるものはcheckFlagをTRUEに
+                for (int cnt = 0; cnt < list.size(); cnt++) {
+                    checkFlag[list.get(cnt).getColorNumber()] = Boolean.TRUE;
+                }
+                /* 最初表示判定 */
+                for (int cnt = 0; cnt < ARRAYLENGTH; cnt++) {
+                    if (checkFlag[cnt]) {
+                        checkText[cnt].setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        checkText[cnt].setVisibility(View.INVISIBLE);
+                    }
+                    colorButton[cnt].setTag(cnt);
+                    colorButton[cnt].setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            returnColorCreateActivity((int)(v.getTag()));
+                        }
+                    });
+                }
+            }
 
-        checkFlag[42] = Boolean.TRUE;
+            @Override
+            public void onDataNotAvailable() {
+
+            }
+        });
 
         /* 変数宣言 */
         for (int cnt = 0; cnt < ARRAYLENGTH; cnt++) {
@@ -57,33 +102,32 @@ public class colorActivity  extends AppCompatActivity {
             checkText[cnt] = findViewById(checkTextId[cnt]);
         }
 
-        /* 最初表示判定 */
-        for (int cnt = 0; cnt < ARRAYLENGTH; cnt++) {
-            if (checkFlag[cnt]) {
-                checkText[cnt].setVisibility(View.VISIBLE);
-            }
-            else {
-                checkText[cnt].setVisibility(View.INVISIBLE);
-            }
+        //色番号前回値を取得
+        intentIn = getIntent();
+        int colorNumberPre = intentIn.getIntExtra("colorNumberPre", 255);
+        //前回押された色ボタンのテキストを「〇」に
+        //初回
+        if (colorNumberPre == 255) {//255：colorNumberPreの初期値
+            /* 何もしない */
+        }
+        //初回以外
+        else {
+            colorButton[colorNumberPre].setText("○");
         }
 
-        /*色ボタンが押されたとき***************************/
-        for (int cnt = 0; cnt < ARRAYLENGTH; cnt++) {
-            colorButton[cnt].setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Button color = (Button)v;
-                    //ボタンの色を遷移先へreturn
-                    intentOut = getIntent();
-                    intentOut.putExtra("ColorNumber", color.getCurrentTextColor());
-                    setResult(RESULT_OK, intentOut);
-                    //色作成画面に遷移
-                    finish();
-                }
-            });
-        }
-        /************************************************/
+    }
 
+    public void returnColorCreateActivity(int colorNumber) {
+
+        intentOut = getIntent();
+        //ボタンの色番号を遷移先へreturn
+        intentOut.putExtra("ColorNumber", colorNumber);
+        //ボタンのテキストの色を遷移先へreturn
+        intentOut.putExtra("Color", colorButton[colorNumber].getCurrentTextColor());
+        setResult(RESULT_OK, intentOut);
+
+        //色作成画面に遷移
+        finish();
     }
 }
 
