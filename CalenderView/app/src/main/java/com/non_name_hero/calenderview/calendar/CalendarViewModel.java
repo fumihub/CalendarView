@@ -17,12 +17,12 @@ public class CalendarViewModel extends ViewModel implements ScheduleDataSource.G
 
     private final MutableLiveData<Map<String, List<Schedule>>> Schedules = new MutableLiveData<>();
     private final MutableLiveData<Map<String, List<Schedule>>> mHolidaySchedules = new MutableLiveData<>();
-    private final MutableLiveData<Integer> mCurrentMonth = new MutableLiveData<>();
+    private final MutableLiveData<String> mCurrentMonth = new MutableLiveData<>();
     private ScheduleRepository mSchedulesRepository;
 
     public CalendarViewModel(ScheduleRepository SchedulesRepository) {
         this.mSchedulesRepository = SchedulesRepository;
-        mCurrentMonth.setValue(Calendar.getInstance().get(Calendar.MONTH) + 1);
+        mCurrentMonth.setValue(String.valueOf(Calendar.getInstance().get(Calendar.MONTH) + 1));
     }
 
     public void start() {
@@ -40,7 +40,7 @@ public class CalendarViewModel extends ViewModel implements ScheduleDataSource.G
     }
 
     public void setCurrentMonth(Integer month) {
-        mCurrentMonth.setValue(month);
+        mCurrentMonth.setValue(String.valueOf(month) + "月");
     }
 
     public void setHolidaySchedules(Map<String, List<Schedule>> holidaySchedulesMap) {
@@ -67,7 +67,7 @@ public class CalendarViewModel extends ViewModel implements ScheduleDataSource.G
         return mHolidaySchedules;
     }
 
-    public LiveData<Integer> getCurrentMonth() {
+    public LiveData<String> getCurrentMonth() {
         return mCurrentMonth;
     }
 

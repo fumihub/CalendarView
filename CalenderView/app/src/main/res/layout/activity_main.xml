@@ -38,7 +38,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="left|center_vertical"
-                    android:text="@{viewmodel.currentMonth + `月`}"
+                    android:text="@{viewmodel.currentMonth}"
                     android:textSize="25sp"
                     android:textStyle="bold"
                     android:textColor="@color/blackColor"
