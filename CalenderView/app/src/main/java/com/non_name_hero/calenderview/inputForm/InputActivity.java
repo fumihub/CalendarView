@@ -2,9 +2,12 @@ package com.non_name_hero.calenderview.inputForm;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -48,6 +51,7 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
 
     private Intent intentIn;
     private Intent intentOut;
+    private String year;
     private String month;
     private String day;
 
@@ -60,11 +64,11 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
         setSupportActionBar(myToolbar);
 
 
-
         new InputPresenter(this, Injection.provideScheduleRepository(getApplicationContext()));
 
         //カレンダー初期値用
         intentIn = getIntent();
+        year = intentIn.getStringExtra("year");
         month = intentIn.getStringExtra("month");
         day = intentIn.getStringExtra("day");
 
@@ -113,7 +117,9 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
         picture.setVisibility(View.GONE);
         //
         mStartAtDatetime = Calendar.getInstance();
+        mStartAtDatetime.set(Integer.valueOf(year), Integer.valueOf(month) - 1, Integer.valueOf(day));
         mEndAtDatetime = Calendar.getInstance();
+        mEndAtDatetime.set(Integer.valueOf(year), Integer.valueOf(month) - 1, Integer.valueOf(day));
 //        /*タイトルEditTextが押されたとき********************/
 //        title.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -126,7 +132,7 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
 //        /**************************************************/
 
         //初期値を設定
-        startDate.setText( month + "/" + day);
+        startDate.setText(month + "/" + day);
         endDate.setText(month + "/" + day);
 
         /*開始日時EditTextが押されたとき********************/
@@ -134,7 +140,7 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
 
             @Override
             public void onClick(View v) {
-                          //Calendarインスタンスを取得
+                //Calendarインスタンスを取得
                 final Calendar startCalendar = Calendar.getInstance();
                 Intent intentIn = getIntent();
                 int year = Integer.valueOf(intentIn.getStringExtra("year"));
@@ -147,9 +153,9 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
                             @Override
                             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                                 //setした日付を取得して表示
-                                startDate.setText(String.format("%02d / %02d", month+1, dayOfMonth));
+                                startDate.setText(String.format("%02d / %02d", month + 1, dayOfMonth));
                                 //Calendarオブジェクトを作成
-                                mStartAtDatetime.set(year, month ,dayOfMonth);
+                                mStartAtDatetime.set(year, month, dayOfMonth);
                             }
                         },
                         year,
@@ -182,8 +188,8 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
                             @Override
                             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                                 //setした日付を取得して表示
-                                endDate.setText(String.format("%02d / %02d", month+1, dayOfMonth));
-                                mEndAtDatetime.set(year, month ,dayOfMonth);
+                                endDate.setText(String.format("%02d / %02d", month + 1, dayOfMonth));
+                                mEndAtDatetime.set(year, month, dayOfMonth);
                             }
                         },
                         year,
@@ -309,9 +315,9 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
         /*完了ボタンが押されたとき************************/
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 //保存処理を実行
-                mInputPresenter.saveSchedule(title.getText().toString(),memo.getText().toString(),mStartAtDatetime.getTime(), mEndAtDatetime.getTime(), 0,0);
+                mInputPresenter.saveSchedule(title.getText().toString(), memo.getText().toString(), mStartAtDatetime.getTime(), mEndAtDatetime.getTime(), 0, 0);
                 //カレンダー表示画面に遷移
             }
         });
@@ -332,12 +338,29 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
     }
 
     @Override
-    public void finishInput(){
+    public void finishInput() {
         finish();
     }
 
     @Override
     public void setPresenter(InputContract.Presenter presenter) {
         mInputPresenter = presenter;
+    }
+
+    /**
+     * タッチイベントを取得し、フォーカスエリア外をタッチするとキーボードを閉じる
+     */
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        View view = getCurrentFocus();
+        if (view != null && (ev.getAction() == MotionEvent.ACTION_UP || ev.getAction() == MotionEvent.ACTION_MOVE) && view instanceof EditText && !view.getClass().getName().startsWith("android.webkit.")) {
+            int scrcoords[] = new int[2];
+            view.getLocationOnScreen(scrcoords);
+            float x = ev.getRawX() + view.getLeft() - scrcoords[0];
+            float y = ev.getRawY() + view.getTop() - scrcoords[1];
+            if (x < view.getLeft() || x > view.getRight() || y < view.getTop() || y > view.getBottom())
+                ((InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow((this.getWindow().getDecorView().getApplicationWindowToken()), 0);
+        }
+        return super.dispatchTouchEvent(ev);
     }
 }
