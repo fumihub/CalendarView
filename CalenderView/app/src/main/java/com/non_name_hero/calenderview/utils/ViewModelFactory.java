@@ -14,7 +14,7 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     @SuppressLint("StaticFieldLeak")
     private static volatile ViewModelFactory INSTANCE;
 
-    private final ScheduleRepository mTasksRepository;
+    private final ScheduleRepository mScheduleRepository;
 
     public static ViewModelFactory getInstance(Application application) {
 
@@ -29,8 +29,8 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
         return INSTANCE;
     }
 
-    public ScheduleRepository getTasksRepository() {
-        return mTasksRepository;
+    public ScheduleRepository getScheduleRepository() {
+        return mScheduleRepository;
     }
 
     @VisibleForTesting
@@ -39,7 +39,7 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     }
 
     private ViewModelFactory(ScheduleRepository repository) {
-        mTasksRepository = repository;
+        mScheduleRepository = repository;
     }
 
     @SuppressWarnings("unchecked")
@@ -47,7 +47,7 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     public <T extends ViewModel> T create(Class<T> modelClass) {
         if (modelClass.isAssignableFrom(CalendarViewModel.class)) {
             //noinspection unchecked
-            return (T) new CalendarViewModel(mTasksRepository);
+            return (T) new CalendarViewModel(mScheduleRepository);
         }
         throw new IllegalArgumentException("Unknown ViewModel class: " + modelClass.getName());
     }
