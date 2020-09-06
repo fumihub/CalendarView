@@ -7,65 +7,62 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 
 import com.non_name_hero.calenderview.R;
+import com.non_name_hero.calenderview.databinding.CalendarFragmentScreenSlidePageBinding;
 import com.non_name_hero.calenderview.inputForm.InputActivity;
+import com.non_name_hero.calenderview.utils.PigLeadUtils;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
-//フラグメントにカレンダーのビューを表示させる
-public class CalendarPageFragment extends Fragment{
+/**
+ * フラグメントにカレンダーを表示させるクラス
+ */
+public class CalendarPageFragment extends Fragment {
 
     private Intent intent;
     private CalendarAdapter mCalendarAdapter;
     private GridView calendarGridView;
     private int mProgressMonth;
-    private List<Date> dateArray;
     private CalendarViewModel mCalendarViewModel;
-    private Map<String, String> mCalendarMap = new HashMap<String, String>();
-    private Boolean hasBeenHandled = Boolean.FALSE;
 
     //コンストラクタ
-    public CalendarPageFragment(int progressMonth){
+    public CalendarPageFragment(int progressMonth) {
         mProgressMonth = progressMonth;
     }
 
-    //onCreateViewは戻り値のビューを表示させる
+    /**
+     * onCreateViewは戻り値のビューを表示させる
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return 表示されるView
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //表示させるViewを指定
-        ViewGroup rootView = (ViewGroup) inflater.inflate(
-                R.layout.calendar_fragment_screen_slide_page, container, false);
+        CalendarFragmentScreenSlidePageBinding binding;
+        //DataBinding
+        binding = DataBindingUtil.inflate(
+                inflater,
+                R.layout.calendar_fragment_screen_slide_page,
+                container,
+                false);
+        //CalendarViewModelを作成
         mCalendarViewModel = MainActivity.obtainViewModel(requireActivity());
-        //カレンダのIDを取得
-        calendarGridView = rootView.findViewById(R.id.calendarGridView);
+        binding.setViewmodel(mCalendarViewModel);
+        binding.setLifecycleOwner(getActivity());
+        //カレンダーを作成(GridView)
+        calendarGridView = binding.calendarGridView;
         mCalendarAdapter = new CalendarAdapter(getContext(), mProgressMonth);
-        mCalendarViewModel.getSchedules().observe(getViewLifecycleOwner(), new Observer<Map<String, String>>() {
-            @Override
-            public void onChanged(Map<String, String> stringStringMap) {
-                if (hasBeenHandled == Boolean.FALSE) {
-                    hasBeenHandled = Boolean.TRUE;
-                    mCalendarMap = stringStringMap;
-                    mCalendarAdapter.setCalendarMap(mCalendarMap);
-                    calendarGridView.setAdapter(mCalendarAdapter);
-                }
-            }
-        });
-
-        //カレンダーのアダプターを使用してViewを作成-
+        calendarGridView.setAdapter(mCalendarAdapter);
 
         //クリックリスナー
         calendarGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -78,35 +75,27 @@ public class CalendarPageFragment extends Fragment{
              */
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //年月日のフォーマット
-                SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy", Locale.US);
-                SimpleDateFormat monthFormat = new SimpleDateFormat("MM", Locale.US);
-                SimpleDateFormat dayFormat = new SimpleDateFormat("dd", Locale.US);
-                //選択されたセルのViewIdを取得
-                TextView selectedDateText =(TextView) view.findViewById(R.id.dateText);
-                //トーストメッセージ作成
-                String message = selectedDateText.getText().toString();
-                //トーストを表示
-                Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
                 //入力画面に遷移
                 intent = new Intent(getContext(), InputActivity.class);
                 final List<Date> dateArray = mCalendarAdapter.getDateArray();
                 //入力画面に引数で年月日を渡す
-                intent.putExtra("year", yearFormat.format(dateArray.get(position)));
-                intent.putExtra("month", monthFormat.format(dateArray.get(position)));
-                intent.putExtra("day", message);
+                intent.putExtra("year", PigLeadUtils.yearFormat.format(dateArray.get(position)));
+                intent.putExtra("month", PigLeadUtils.monthFormat.format(dateArray.get(position)));
+                intent.putExtra("day", PigLeadUtils.dayFormat.format(dateArray.get(position)));
                 startActivity(intent);
             }
         });
 
-        calendarGridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
+        calendarGridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 //TODO スケジュール詳細画面に遷移
                 return true;
             }
         });
-        return rootView;
+        binding.executePendingBindings();
+
+        return binding.getRoot();
     }
 
     @Override
