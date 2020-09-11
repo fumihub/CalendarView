@@ -1,5 +1,6 @@
 package com.non_name_hero.calenderview.utils;
 
+import com.non_name_hero.calenderview.data.CalendarData;
 import com.non_name_hero.calenderview.data.Schedule;
 
 import java.text.SimpleDateFormat;
@@ -40,6 +41,29 @@ public class PigLeadUtils {
             scheduleMap.put(date, scheduleLists);
         }
         return scheduleMap;
+    }
+
+    /**
+     * List<CalendarData> から Map<String, List<CalendarData>>へ変換する
+     * @param calendarDataList
+     * @return scheduleMap -　Map<String, List<Calendardata>>
+     */
+    public static Map<String, List<CalendarData>> getCalendarDataMapByCalendarDataList(List<CalendarData> calendarDataList){
+        Map<String, List<CalendarData>> calendarDataMap= new HashMap<>();
+        List<CalendarData> calendarDataLists;
+        for (CalendarData data : calendarDataList) {
+            String date = formatYYYYMMDD.format(data.scheduleStartAtDatetime);
+            if (calendarDataMap.containsKey(date)) {
+                calendarDataLists = calendarDataMap.get(date);
+                calendarDataLists.add(data);
+                calendarDataLists = new ArrayList<>(new LinkedHashSet<>(calendarDataLists));
+            } else {
+                calendarDataLists = new ArrayList<CalendarData>();
+                calendarDataLists.add(data);
+            }
+            calendarDataMap.put(date, calendarDataLists);
+        }
+        return calendarDataMap;
     }
 
 }

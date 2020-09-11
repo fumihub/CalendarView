@@ -2,6 +2,7 @@ package com.non_name_hero.calenderview.data.source;
 
 import androidx.annotation.NonNull;
 
+import com.non_name_hero.calenderview.data.CalendarData;
 import com.non_name_hero.calenderview.data.Schedule;
 import com.non_name_hero.calenderview.data.ScheduleGroup;
 
@@ -27,8 +28,6 @@ public interface ScheduleDataSource {
     void getSchedule(@NonNull long[]  ScheduleIds, @NonNull GetScheduleCallback callback);
     void setSchedule(Schedule schedule, @NonNull SaveScheduleCallback callback);
     void getAllSchedules(@NonNull GetScheduleCallback callback);
-    void getHoliday(@NonNull GetScheduleCallback callback);
-    void getSchedulesMap(GetScheduleMapCallback callback);
 
 
     /**
@@ -54,4 +53,23 @@ public interface ScheduleDataSource {
     void deleteScheduleGroup(@NonNull int colorNumber);
     void getScheduleGroup(@NonNull int colorNumber, @NonNull GetScheduleGroupCallback callback);
     void getListScheduleGroup(@NonNull GetScheduleGroupsCallback callback);
+    void updateScheduleGroup(@NonNull ScheduleGroup group, @NonNull SaveScheduleGroupCallback callback);
+
+    interface LoadHolidayCalendarDataCallback {
+        void onHolidayCalendarDataLoaded(List<CalendarData> calendarDataList);
+        void onDataNotAvailable();
+    }
+
+    interface LoadCalendarDataCallback {
+        void onCalendarDataLoaded(List<CalendarData> calendarDataList);
+        void onDataNotAvailable();
+    }
+
+    interface GetCalendarDataMapCallback {
+        void onCalendarDataMapLoaded(Map<String, List<CalendarData>> calendarDataMap);
+        void onDataNotAvailable();
+    }
+
+    void getHoliday(@NonNull LoadHolidayCalendarDataCallback callback);
+    void getCalendarDataList(@NonNull LoadCalendarDataCallback callback);
 }

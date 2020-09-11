@@ -11,7 +11,7 @@
     <LinearLayout android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/grayColor"
+    android:background="@color/calendarBackGround"
     android:orientation="vertical"
     tools:context=".calendar.MainActivity"
     >
@@ -19,15 +19,13 @@
         <GridView
             android:id="@+id/calendarGridView"
             android:layout_width="match_parent"
-            android:layout_height="731dp"
-            android:layout_marginLeft="1dp"
+            android:layout_height="1000dp"
             android:layout_weight="1"
-            android:horizontalSpacing="1dp"
             android:numColumns="7"
             android:stretchMode="columnWidth"
             android:verticalSpacing="1dp"
-            app:schedules="@{viewmodel.schedules}"
-            app:holidays="@{viewmodel.holidaySchedules}"
+            app:schedules="@{viewmodel.calendarDataMap}"
+            app:holidays="@{viewmodel.holidayCalendarDataMap}"
             />
 
         <TextView
