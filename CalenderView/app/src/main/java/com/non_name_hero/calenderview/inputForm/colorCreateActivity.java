@@ -89,6 +89,7 @@ public class colorCreateActivity extends AppCompatActivity {
                             //色タイトルに色名をセット
                             colorCreateTitle.setText(group.getGroupName());
                             //色ボタン2に色をセット
+                            color = group.getBackgroundColor();
                             color2.setBackgroundColor(group.getBackgroundColor());
                             //色ボタン2にに文字色をセット
                             if (group.getCharacterColor().equals("黒")) {//黒ならば
