@@ -66,6 +66,9 @@
     <color name="blackColor7">#99DDFF</color>
     <!--透明-->
     <color name="clearButtonPressed">#33000000</color>
-    <!--祝日-->
+    <!--カレンダー関連-->
     <color name="holidayColor">#99DC143C</color>
+    <color name="calendarBackGround">#ffefefef</color>
+    <color name="notCurrentMonth">#facfcfcf</color>
+    <color name="currentDayColor">#faffff5e</color>
 </resources>

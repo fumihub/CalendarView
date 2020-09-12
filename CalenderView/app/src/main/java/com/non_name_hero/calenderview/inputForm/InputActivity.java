@@ -6,8 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -25,9 +25,7 @@ import com.non_name_hero.calenderview.data.source.ScheduleDataSource;
 import com.non_name_hero.calenderview.data.source.ScheduleRepository;
 import com.non_name_hero.calenderview.utils.Injection;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 public class InputActivity extends AppCompatActivity implements InputContract.View {
 
@@ -66,6 +64,7 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
     private String month;
     private String day;
     private int colorNumber;
+    private int mGroupId;
 
     //コンストラクタ
     public InputActivity () {
@@ -89,6 +88,8 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
         year = intentIn.getStringExtra("year");
         month = intentIn.getStringExtra("month");
         day = intentIn.getStringExtra("day");
+        //グループIDの初期値設定
+        mGroupId = 1;
 
         //色選択画面遷移用intent
         intentOut = new Intent(this, colorSelectActivity.class);
@@ -335,7 +336,7 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
             @Override
             public void onClick(View v) {
                 //保存処理を実行
-                mInputPresenter.saveSchedule(title.getText().toString(), memo.getText().toString(), mStartAtDatetime.getTime(), mEndAtDatetime.getTime(), 0, 0);
+                mInputPresenter.saveSchedule(title.getText().toString(), memo.getText().toString(), mStartAtDatetime.getTime(), mEndAtDatetime.getTime(), mGroupId, 0);
                 //カレンダー表示画面に遷移
             }
         });
@@ -391,6 +392,7 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
                                     }
                                     //色ボタン2のテキストを左寄せに
                                     color2.setGravity(Gravity.CENTER);
+                                    mGroupId = group.getGroupId();
                                 }
                             }
                     );
