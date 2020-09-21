@@ -28,6 +28,7 @@ public interface ScheduleDataSource {
     void getSchedule(@NonNull long[]  ScheduleIds, @NonNull GetScheduleCallback callback);
     void setSchedule(Schedule schedule, @NonNull SaveScheduleCallback callback);
     void getAllSchedules(@NonNull GetScheduleCallback callback);
+    void removeScheduleByScheduleId(@NonNull long scheduleId);
 
 
     /**
@@ -62,11 +63,6 @@ public interface ScheduleDataSource {
 
     interface LoadCalendarDataCallback {
         void onCalendarDataLoaded(List<CalendarData> calendarDataList);
-        void onDataNotAvailable();
-    }
-
-    interface GetCalendarDataMapCallback {
-        void onCalendarDataMapLoaded(Map<String, List<CalendarData>> calendarDataMap);
         void onDataNotAvailable();
     }
 

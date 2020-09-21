@@ -15,6 +15,9 @@ import java.util.List;
 
 @Dao
 public interface SchedulesDao {
+    /*
+    * Schedule
+    * */
     @Query("SELECT * FROM schedule ORDER BY start_at_datetime, schedule_id")
     List<Schedule> getAll();
 
@@ -29,6 +32,16 @@ public interface SchedulesDao {
 
     @Delete
     void delete(Schedule schedule);
+
+    @Query("DELETE FROM schedule WHERE schedule_id = :scheduleId")
+    void deleteByScheduleId(long scheduleId);
+
+    @Query("UPDATE schedule SET group_id = 1 WHERE group_id = :groupId")
+    void setDefaultGroupId(int groupId);
+
+    /*
+    ScheduleGroup
+     */
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertScheduleGroup(ScheduleGroup scheduleGroup);
@@ -49,8 +62,9 @@ public interface SchedulesDao {
     List<ScheduleGroup> getAllScheduleGroup();
 
     /*ScheduleAndGroup*/
-    @Query("SELECT s.schedule_id AS scheduleId, s.title AS scheduleTitle, s.start_at_datetime AS scheduleStartAtDatetime, s.end_at_datetime AS scheduleEndAtDatetime, " +
-            "g.group_id AS groupId, g.background_color AS groupTextColor, g.color_number AS groupColorNumber, g.background_color As groupBackgroundColor FROM schedule s " +
+    @Query("SELECT s.schedule_id AS scheduleId, s.title AS scheduleTitle, s.start_at_datetime AS scheduleStartAtDatetime, s.end_at_datetime AS scheduleEndAtDatetime, CASE WHEN g.group_id IS NOT NULL THEN g.group_id ELSE 1 END AS groupId, " +
+            "g.background_color AS groupTextColor, g.color_number AS groupColorNumber, g.background_color AS groupBackgroundColor " +
+            "FROM schedule s " +
             "LEFT JOIN schedule_group g ON g.group_id = s.group_id " +
             "ORDER BY s.schedule_id DESC")
     List<CalendarData> getAllCalendarDataList();
