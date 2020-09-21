@@ -98,6 +98,11 @@ public class ScheduleRepository implements ScheduleDataSource {
         mScheduleDataLocalSource.getAllSchedules(callback);
     }
 
+    @Override
+    public void removeScheduleByScheduleId(@NonNull long scheduleId) {
+        mScheduleDataLocalSource.removeScheduleByScheduleId(scheduleId);
+    }
+
     public void holidayCacheClear() {
         mHolidayCacheIsDirty = false;
         mCachedHolidayCalenderData = null;
