@@ -71,7 +71,7 @@ public class CalendarFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        mViewModel.reloadSchedules(true);
+        mViewModel.reloadCalendarData(true);
     }
 
     private void loadData() {

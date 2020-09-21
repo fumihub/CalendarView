@@ -75,6 +75,13 @@ public class CalendarPageFragment extends Fragment {
              */
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //TODO スケジュール詳細画面に遷移
+            }
+        });
+
+        calendarGridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 //入力画面に遷移
                 intent = new Intent(getContext(), InputActivity.class);
                 final List<Date> dateArray = mCalendarAdapter.getDateArray();
@@ -83,13 +90,6 @@ public class CalendarPageFragment extends Fragment {
                 intent.putExtra("month", PigLeadUtils.monthFormat.format(dateArray.get(position)));
                 intent.putExtra("day", PigLeadUtils.dayFormat.format(dateArray.get(position)));
                 startActivity(intent);
-            }
-        });
-
-        calendarGridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                //TODO スケジュール詳細画面に遷移
                 return true;
             }
         });

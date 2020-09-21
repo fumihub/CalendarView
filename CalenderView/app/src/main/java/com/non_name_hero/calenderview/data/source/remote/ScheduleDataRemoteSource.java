@@ -10,6 +10,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.non_name_hero.calenderview.data.CalendarData;
 import com.non_name_hero.calenderview.data.Schedule;
 import com.non_name_hero.calenderview.data.ScheduleGroup;
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource;
@@ -60,7 +61,7 @@ public class ScheduleDataRemoteSource implements ScheduleDataSource {
     }
 
     @Override
-    public void getHoliday(@NonNull final GetScheduleCallback callback) {
+    public void getHoliday(@NonNull final LoadHolidayCalendarDataCallback callback) {
         //以下は別スレッドにて実行
         db.collection(PIGLEAD_SCHEDULES)
                 .document(HOLIDAY_DOCUMENT)
@@ -74,17 +75,18 @@ public class ScheduleDataRemoteSource implements ScheduleDataSource {
                             if (document.exists()) {
                                 Map<String, Object> holiday = document.getData();//documentからholidayNameのバリューを取得
                                 //受け取ったデータを整形
-                                final List<Schedule> holidaySchedules = new ArrayList<Schedule>();
+                                final List<CalendarData> holidaySchedules = new ArrayList<CalendarData>();
                                 for(Object obj :holiday.values()){
                                     Map<String,Object> holidayData = autoCast(obj);
                                     Long date = ((Timestamp)holidayData.get("date")).getSeconds()*1000;
-
-                                    Schedule schedule = new Schedule((String)holidayData.get("nameInJapan"),new Date(date));
-                                    schedule.setIsHoliday(true);
-                                    holidaySchedules.add(schedule);
+                                    CalendarData data = new CalendarData();
+                                    data.scheduleTitle = (String)holidayData.get("nameInJapan");
+                                    data.scheduleStartAtDatetime = new Date(date);
+                                    data.isHoliday = true;
+                                    holidaySchedules.add(data);
                                 }
                                 //callbackに引数を渡す(データ配列)
-                                callback.onScheduleLoaded(holidaySchedules);
+                                callback.onHolidayCalendarDataLoaded(holidaySchedules);
                                 Log.d(ContentValues.TAG, holiday.toString());
                             } else {
                                 Log.d(ContentValues.TAG, "No such document");
@@ -95,11 +97,6 @@ public class ScheduleDataRemoteSource implements ScheduleDataSource {
                         Log.d(ContentValues.TAG, "get failed with ", task.getException());
                     }
                 });
-    }
-
-    @Override
-    public void getSchedulesMap(GetScheduleMapCallback callback) {
-
     }
 
     public void insertScheduleGroup(@NonNull ScheduleGroup group, @NonNull SaveScheduleGroupCallback callback) {
@@ -121,13 +118,20 @@ public class ScheduleDataRemoteSource implements ScheduleDataSource {
 
     }
 
+    @Override
+    public void updateScheduleGroup(@NonNull ScheduleGroup group, @NonNull SaveScheduleGroupCallback callback) {
+
+    }
+
+    @Override
+    public void getCalendarDataList(@NonNull LoadCalendarDataCallback callback) {
+
+    }
+
+
     @SuppressWarnings("unchecked")
     public <T> T autoCast(Object obj) {
         T castObj = (T) obj;
         return castObj;
     }
 }
-
-//    private List<Schedule> createSchedules(){
-//
-//    }

@@ -38,7 +38,7 @@ public class Schedule {
     private int mPaymentId;
 
     @Nullable
-    @ColumnInfo(name = "group_id")
+    @ColumnInfo(name = "group_id", defaultValue = "1")
     private int mGroupId;
 
     @ColumnInfo(name = "start_timestamp")
@@ -79,23 +79,7 @@ public class Schedule {
                     @Nullable int paymentId) {
         this(0, title, description, startAtDatetime, endAtDatetime, groupId, paymentId);
     }
-    @Ignore
-    public Schedule(@NonNull String title,
-                    @Nullable Date datetime) {
-        this(0, title, "", datetime, datetime, 0, 0);
-    }
 
-
-//    /**
-//     * Use this constructor to create a new active schedule.
-//     *
-//     * @param title       title of the task
-//     * @param description description of the task
-//     */
-//    @Ignore
-//    public Schedule(@Nullable String title, @Nullable String description) {
-//        this(title, description, UUID.randomUUID().toString(), false);
-//    }
 
     @NonNull
     public long getScheduleId() {

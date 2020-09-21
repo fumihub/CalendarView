@@ -12,27 +12,26 @@ import android.widget.BaseAdapter;
 import androidx.databinding.DataBindingUtil;
 
 import com.non_name_hero.calenderview.R;
-import com.non_name_hero.calenderview.data.Schedule;
+import com.non_name_hero.calenderview.data.CalendarData;
 import com.non_name_hero.calenderview.databinding.CalendarCellBinding;
 import com.non_name_hero.calenderview.databinding.ScheduleListBinding;
 import com.non_name_hero.calenderview.utils.DateManager;
 import com.non_name_hero.calenderview.utils.PigLeadUtils;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 public class CalendarAdapter extends BaseAdapter {
+
     private List<Date> dateArray;
     private Context mContext;
     private DateManager mDateManager;
     private LayoutInflater mLayoutInflater;
-    private Map<String, List<Schedule>> mCalendarMap;
-    private Map<String, List<Schedule>> mHolidayMap;
+    private Map<String, List<CalendarData>> mCalendarMap;
+    private Map<String, List<CalendarData>> mHolidayMap;
 
     public CalendarAdapter(Context context, int month) {
         mContext = context;
@@ -92,12 +91,12 @@ public class CalendarAdapter extends BaseAdapter {
         if (mDateManager.isCurrentMonth(cellDate)) {
             //当日の背景を黄色に
             if (mDateManager.getCurrentDate().equals(cellDate)) {
-                calendarCellBinding.calendarCell.setBackgroundColor(Color.YELLOW);
+                calendarCellBinding.calendarCell.setBackgroundColor(mContext.getResources().getColor(R.color.currentDayColor));
             } else {
                 calendarCellBinding.calendarCell.setBackgroundColor(Color.WHITE);
             }
         } else {
-            calendarCellBinding.calendarCell.setBackgroundColor(Color.LTGRAY);
+            calendarCellBinding.calendarCell.setBackgroundColor(mContext.getResources().getColor(R.color.notCurrentMonth));
         }
 
         //祝日、日曜日を赤、土曜日を青に
@@ -109,7 +108,7 @@ public class CalendarAdapter extends BaseAdapter {
 
         //スケジュールをセルに追記
         if (mCalendarMap != null) {
-            List<Schedule> scheduleList = mCalendarMap.get(PigLeadUtils.formatYYYYMMDD.format(cellDate));
+            List<CalendarData> scheduleList = mCalendarMap.get(PigLeadUtils.formatYYYYMMDD.format(cellDate));
             //スケジュールを追加
             for (int i = 0; i < 4; i++) {
                 if (mCalendarMap.containsKey(PigLeadUtils.formatYYYYMMDD.format(cellDate)) && i < scheduleList.size()) {
@@ -130,11 +129,11 @@ public class CalendarAdapter extends BaseAdapter {
      */
     private void setCalendarCellBase(CalendarCellBinding view, String date, int dayOfWeek) {
         view.scheduleList.removeAllViews();
-        List<Schedule> schedules = new ArrayList<>();
+        List<CalendarData> schedules = new ArrayList<>();
         Boolean isHoliday = Boolean.FALSE;
         if (mHolidayMap != null && mHolidayMap.containsKey(date)) {
             schedules = mHolidayMap.get(date);
-            for (Schedule schedule : schedules) {
+            for (CalendarData schedule : schedules) {
                 //祝日の場合
                 setScheduleText(schedule, view.scheduleList);
             }
@@ -163,26 +162,19 @@ public class CalendarAdapter extends BaseAdapter {
      * @param root
      * @return textView
      */
-    private void setScheduleText(Schedule schedule, ViewGroup root) {
+    private void setScheduleText(CalendarData schedule, ViewGroup root) {
         ScheduleListBinding binding = ScheduleListBinding.inflate(mLayoutInflater, root, true);
         binding.setSchedule(schedule);
         binding.executePendingBindings();
         //Drawableで背景を指定
         GradientDrawable drawable = new GradientDrawable();
         drawable.setCornerRadius(10);
-        if (schedule.getIsHoliday()) {
+        if (schedule.isHoliday) {
             drawable.setColor(mContext.getResources().getColor(R.color.holidayColor));
         } else {
-            //TODO スケジュールの色を取得
-            drawable.setColor(Color.parseColor("#600000FF"));
+            drawable.setColor(schedule.groupBackgroundColor);
         }
         binding.getRoot().setBackground(drawable);
-
-    }
-
-    //holidayTextのリフレッシュ
-    private void refreshHoliday(CalendarCellBinding binding) {
-        binding.dateText.setVisibility(View.GONE);
     }
 
     /*拡張機能*/
@@ -196,26 +188,20 @@ public class CalendarAdapter extends BaseAdapter {
         return null;
     }
 
-    //表示月を取得
-    public String getTitle() {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy.MM", Locale.US);
-        return format.format(mDateManager.getCalendar().getTime());
-    }
-
-    public void replaceData(Map<String, List<Schedule>> schedules) {
+    public void replaceData(Map<String, List<CalendarData>> schedules) {
         setCalendarMap(schedules);
     }
 
-    public void replaceHoliday(Map<String, List<Schedule>> holidayMap) {
+    public void replaceHoliday(Map<String, List<CalendarData>> holidayMap) {
         setHolidayMap(holidayMap);
     }
 
-    private void setHolidayMap(Map<String, List<Schedule>> holidayMap) {
+    private void setHolidayMap(Map<String, List<CalendarData>> holidayMap) {
         this.mHolidayMap = holidayMap;
         notifyDataSetChanged();
     }
 
-    private void setCalendarMap(Map<String, List<Schedule>> calendarMap) {
+    private void setCalendarMap(Map<String, List<CalendarData>> calendarMap) {
         this.mCalendarMap = calendarMap;
         notifyDataSetChanged();
     }
