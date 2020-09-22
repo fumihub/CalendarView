@@ -25,7 +25,7 @@ android {
 
 dependencies {
 
-    def roomVersion = '2.0.0';
+    def roomVersion = '2.2.0'
     def lifecycle_version = "2.2.0"
     def arch_version = "2.1.0"
     def archLifecycleVersion = '2.0.0'

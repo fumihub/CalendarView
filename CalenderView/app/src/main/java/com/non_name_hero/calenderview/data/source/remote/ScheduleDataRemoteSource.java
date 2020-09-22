@@ -61,6 +61,11 @@ public class ScheduleDataRemoteSource implements ScheduleDataSource {
     }
 
     @Override
+    public void removeScheduleByScheduleId(@NonNull long scheduleId) {
+
+    }
+
+    @Override
     public void getHoliday(@NonNull final LoadHolidayCalendarDataCallback callback) {
         //以下は別スレッドにて実行
         db.collection(PIGLEAD_SCHEDULES)
