@@ -51,7 +51,7 @@ public interface ScheduleDataSource {
     }
 
     void insertScheduleGroup(@NonNull ScheduleGroup group, @NonNull SaveScheduleGroupCallback callback);
-    void deleteScheduleGroup(@NonNull int colorNumber);
+    void deleteScheduleGroup(@NonNull int groupId);
     void getScheduleGroup(@NonNull int colorNumber, @NonNull GetScheduleGroupCallback callback);
     void getListScheduleGroup(@NonNull GetScheduleGroupsCallback callback);
     void updateScheduleGroup(@NonNull ScheduleGroup group, @NonNull SaveScheduleGroupCallback callback);

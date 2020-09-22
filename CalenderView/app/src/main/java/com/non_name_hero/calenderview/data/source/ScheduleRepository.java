@@ -152,13 +152,13 @@ public class ScheduleRepository implements ScheduleDataSource {
     }
 
     /**
-     * colorNumberを指定してグループ情報を削除
+     * groupIdを指定してグループ情報を削除
      *
-     * @param colorNumber カラー番号
+     * @param groupId カラー番号
      */
     @Override
-    public void deleteScheduleGroup(@NonNull int colorNumber) {
-        mScheduleDataLocalSource.deleteScheduleGroup(colorNumber);
+    public void deleteScheduleGroup(@NonNull int groupId) {
+        mScheduleDataLocalSource.deleteScheduleGroup(groupId);
     }
 
     /**

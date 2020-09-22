@@ -109,7 +109,7 @@ public class ScheduleDataRemoteSource implements ScheduleDataSource {
     }
 
     @Override
-    public void deleteScheduleGroup(@NonNull int colorNumber) {
+    public void deleteScheduleGroup(@NonNull int groupId) {
 
     }
 
