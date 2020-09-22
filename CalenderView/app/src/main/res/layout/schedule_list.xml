@@ -6,15 +6,15 @@
         <import type="android.graphics.Color"/>
         <variable
             name="schedule"
-            type="com.non_name_hero.calenderview.data.Schedule" />
+            type="com.non_name_hero.calenderview.data.CalendarData" />
     </data>
     <TextView
-        android:name="@+id/scheduleText"
+        android:id="@+id/scheduleText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="@dimen/scheduleTextSize"
-        android:text="@{schedule.title}"
-        android:textColor="@{schedule.isHoliday ? Color.WHITE : Color.BLACK}"
+        android:text="@{schedule.scheduleTitle}"
+        android:textColor="@{schedule.isHoliday ? Color.WHITE : schedule.groupTextColor.equals(@string/black) ? Color.BLACK : Color.WHITE}"
         android:ellipsize="end"
         android:singleLine="true"
         android:paddingBottom="@dimen/schedule_padding"

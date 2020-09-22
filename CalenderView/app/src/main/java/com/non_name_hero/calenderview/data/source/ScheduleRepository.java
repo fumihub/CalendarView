@@ -4,11 +4,11 @@ import android.annotation.SuppressLint;
 
 import androidx.annotation.NonNull;
 
+import com.non_name_hero.calenderview.data.CalendarData;
 import com.non_name_hero.calenderview.data.Schedule;
-import com.non_name_hero.calenderview.utils.PigLeadUtils;
 import com.non_name_hero.calenderview.data.ScheduleGroup;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -21,14 +21,19 @@ public class ScheduleRepository implements ScheduleDataSource {
     private final ScheduleDataSource mScheduleDataLocalSource;
     private final ScheduleDataSource mScheduleDataRemoteSource;
 
-    List<Schedule> mCachedHolidaySchedules;
+    List<CalendarData> mCachedHolidayCalenderData;
+    List<CalendarData> mCachedCalendarData;
     Map<String, List<Schedule>> mCachedScheduleMap;
+    Map<String, List<CalendarData>> mCachedCalendarDataMap;
 
     boolean mCacheIsDirty = false;
+    boolean mCalendarCacheIsDirty = false;
+    boolean mHolidayCacheIsDirty = false;
+
     //コンストラクタ
     @SuppressLint("RestrictedApi")
     private ScheduleRepository(@NonNull ScheduleDataSource ScheduleLocalDataSource,
-                               @NonNull ScheduleDataSource ScheduleRemoteDataSource){
+                               @NonNull ScheduleDataSource ScheduleRemoteDataSource) {
         mScheduleDataLocalSource = checkNotNull(ScheduleLocalDataSource);
         mScheduleDataRemoteSource = checkNotNull(ScheduleRemoteDataSource);
     }
@@ -41,7 +46,7 @@ public class ScheduleRepository implements ScheduleDataSource {
      * @return the {@link ScheduleRepository} リポジトリのインスタンス
      */
     public static ScheduleRepository getInstance(ScheduleDataSource scheduleDataLocalSource,
-                                              ScheduleDataSource scheduleDataRemoteSource) {
+                                                 ScheduleDataSource scheduleDataRemoteSource) {
         if (INSTANCE == null) {
             INSTANCE = new ScheduleRepository(scheduleDataLocalSource, scheduleDataRemoteSource);
         }
@@ -58,8 +63,9 @@ public class ScheduleRepository implements ScheduleDataSource {
 
     /**
      * スケジュールIDを指定して情報を取得
+     *
      * @param scheduleId 情報を取得したいスケジュールID
-     * @param callback 情報取得後の処理
+     * @param callback   情報取得後の処理
      */
     @SuppressLint("RestrictedApi")
     @Override
@@ -71,6 +77,7 @@ public class ScheduleRepository implements ScheduleDataSource {
 
     /**
      * スケジュール情報をDBに格納する
+     *
      * @param schedule 格納するスケジュールオブジェクト
      * @param callback 格納後の処理
      */
@@ -83,6 +90,7 @@ public class ScheduleRepository implements ScheduleDataSource {
 
     /**
      * 全てのスケジュールデータを取得
+     *
      * @param callback
      */
     @Override
@@ -90,62 +98,53 @@ public class ScheduleRepository implements ScheduleDataSource {
         mScheduleDataLocalSource.getAllSchedules(callback);
     }
 
+    @Override
+    public void removeScheduleByScheduleId(@NonNull long scheduleId) {
+        mScheduleDataLocalSource.removeScheduleByScheduleId(scheduleId);
+    }
+
+    public void holidayCacheClear() {
+        mHolidayCacheIsDirty = false;
+        mCachedHolidayCalenderData = null;
+    }
+
     /**
      * 祝日データを取得
+     *
      * @param callback 取得後の処理
      */
     @Override
-    public void getHoliday(@NonNull final GetScheduleCallback callback) {
-        if (mCachedHolidaySchedules == null){
-            mScheduleDataRemoteSource.getHoliday(new GetScheduleCallback() {
+    public void getHoliday(@NonNull final LoadHolidayCalendarDataCallback callback) {
+        if (mCachedHolidayCalenderData == null && mHolidayCacheIsDirty == false) {
+            mCachedHolidayCalenderData = new ArrayList<>();
+            mScheduleDataRemoteSource.getHoliday(new LoadHolidayCalendarDataCallback() {
                 @Override
-                public void onScheduleLoaded(List<Schedule> schedules) {
+                public void onHolidayCalendarDataLoaded(List<CalendarData> calendarDataList) {
                     //キャッシュを保持
-                    mCachedHolidaySchedules = schedules;
-                    callback.onScheduleLoaded(mCachedHolidaySchedules);
+                    mCachedHolidayCalenderData = calendarDataList;
+                    callback.onHolidayCalendarDataLoaded(calendarDataList);
                 }
 
                 @Override
                 public void onDataNotAvailable() {
-
                     callback.onDataNotAvailable();
                 }
             });
-        }else{
-            callback.onScheduleLoaded(mCachedHolidaySchedules);
+        } else {
+            callback.onHolidayCalendarDataLoaded(mCachedHolidayCalenderData);
         }
     }
 
-    public void cacheClear(){
+    public void scheduleCacheClear() {
         mCacheIsDirty = false;
         mCachedScheduleMap = null;
     }
 
-    public void getSchedulesMap(@NonNull final GetScheduleMapCallback callback) {
-        if (mCachedScheduleMap == null && mCacheIsDirty == false) {
-            mCachedScheduleMap = new HashMap<>();
-            mScheduleDataLocalSource.getAllSchedules(new GetScheduleCallback() {
-                @Override
-                public void onScheduleLoaded(List<Schedule> schedules) {
-                    mCachedScheduleMap = PigLeadUtils.getScheduleMapBySchedules(schedules);
-                    mCacheIsDirty = true;
-                    callback.onScheduleMapLoaded(mCachedScheduleMap);
-                }
-
-                @Override
-                public void onDataNotAvailable() {
-
-                }
-            });
-        } else {
-            callback.onScheduleMapLoaded(mCachedScheduleMap);
-        }
-    }
-
     /**
      * グループ情報DBに追加する
-     * @param group グループオブジェクト
-     * @param callback　保存完了後の処理、保存失敗時の処理
+     *
+     * @param group    グループオブジェクト
+     * @param callback 　保存完了後の処理、保存失敗時の処理
      */
     @Override
     public void insertScheduleGroup(@NonNull ScheduleGroup group, @NonNull SaveScheduleGroupCallback callback) {
@@ -154,6 +153,7 @@ public class ScheduleRepository implements ScheduleDataSource {
 
     /**
      * colorNumberを指定してグループ情報を削除
+     *
      * @param colorNumber カラー番号
      */
     @Override
@@ -163,8 +163,9 @@ public class ScheduleRepository implements ScheduleDataSource {
 
     /**
      * colorNumberを指定してグループ情報を取得
-     * @param colorNumber　カラー番号
-     * @param callback 取得後の処理。引数に取得した情報をとる
+     *
+     * @param colorNumber 　カラー番号
+     * @param callback    取得後の処理。引数に取得した情報をとる
      */
     @Override
     public void getScheduleGroup(@NonNull int colorNumber, @NonNull GetScheduleGroupCallback callback) {
@@ -173,10 +174,52 @@ public class ScheduleRepository implements ScheduleDataSource {
 
     /**
      * グループ情報を全権取得
+     *
      * @param callback - onScheduleGroupsLoaded(List<ScheduleGroup> scheduleGroups) 情報取得後の処理。引数に全件グループ情報を保持
      */
     @Override
     public void getListScheduleGroup(@NonNull GetScheduleGroupsCallback callback) {
         mScheduleDataLocalSource.getListScheduleGroup(callback);
     }
+
+    /**
+     * スケジュールグループを更新
+     * primaryを合わせる
+     * @param group 更新対象のスケジュールグループ
+     * @param callback コールバック
+     */
+    @Override
+    public void updateScheduleGroup(@NonNull ScheduleGroup group, @NonNull SaveScheduleGroupCallback callback) {
+        mScheduleDataLocalSource.updateScheduleGroup(group, callback);
+    }
+
+    public void calendarCacheClear() {
+        mCachedCalendarData= null;
+        mCalendarCacheIsDirty = false;
+    }
+    /**
+     * カレンダー表示データを取得
+     * @param callback コールバック
+     */
+    @Override
+    public void getCalendarDataList(@NonNull final LoadCalendarDataCallback callback) {
+        if (mCachedCalendarData == null && mCalendarCacheIsDirty == false) {
+            mCachedCalendarData = new ArrayList<>();
+            mScheduleDataLocalSource.getCalendarDataList(new LoadCalendarDataCallback() {
+                @Override
+                public void onCalendarDataLoaded(List<CalendarData> calendarDataList) {
+                    mCacheIsDirty = true;
+                    callback.onCalendarDataLoaded(calendarDataList);
+                }
+
+                @Override
+                public void onDataNotAvailable() {
+                    callback.onDataNotAvailable();
+                }
+            });
+        } else {
+            mScheduleDataRemoteSource.getCalendarDataList(callback);
+        }
+    }
+
 }

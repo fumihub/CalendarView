@@ -38,11 +38,10 @@ public abstract class PigLeadDatabase extends RoomDatabase {
                             public void onCreate(@NonNull SupportSQLiteDatabase db) {
                                 super.onCreate(db);
                                 String sql = "INSERT INTO schedule_group VALUES"
-                                        + "(43, '未分類', '白', -9404272)";
+                                        + "(1, 43, '未分類', '白', -9404272)";
                                 db.execSQL(sql);
                             }
                         })
-
                         .build();
             }
             return INSTANCE;

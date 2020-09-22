@@ -3,11 +3,18 @@ package com.non_name_hero.calenderview.data;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "schedule_group")
+@Entity(tableName = "schedule_group", indices = {@Index(value = {"group_id", "color_number"},
+        unique = true)})
 public class ScheduleGroup {
-    @PrimaryKey
+
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "group_id")
+    @NonNull
+    private int mGroupId;
+
     @NonNull
     @ColumnInfo(name = "color_number")
     private int mColorNumber;
@@ -34,6 +41,10 @@ public class ScheduleGroup {
         mBackgroundColor = backgroundColor;
     }
 
+    public void setGroupId(int groupId) {
+        this.mGroupId = groupId;
+    }
+    public int getGroupId() {return mGroupId;}
     public int getColorNumber() {return mColorNumber;}
     public String getGroupName() {return mGroupName;}
     public String getCharacterColor() {return mCharacterColor;}

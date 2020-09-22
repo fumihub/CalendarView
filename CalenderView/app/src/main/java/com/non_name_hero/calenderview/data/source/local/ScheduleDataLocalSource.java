@@ -2,6 +2,7 @@ package com.non_name_hero.calenderview.data.source.local;
 
 import androidx.annotation.NonNull;
 
+import com.non_name_hero.calenderview.data.CalendarData;
 import com.non_name_hero.calenderview.data.Schedule;
 import com.non_name_hero.calenderview.data.ScheduleGroup;
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource;
@@ -99,13 +100,14 @@ public class ScheduleDataLocalSource implements ScheduleDataSource {
     }
 
     @Override
-    public void getHoliday(GetScheduleCallback callback) {
-        //ローカルデータソースは使用しない
-    }
-
-    @Override
-    public void getSchedulesMap(GetScheduleMapCallback callback) {
-        //ローカルデータソースは使用しない
+    public void removeScheduleByScheduleId(@NonNull final long scheduleId) {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                mSchedulesDao.deleteByScheduleId(scheduleId);
+            }
+        };
+        mAppExecutors.diskIO().execute(runnable);
     }
 
     public void insertScheduleGroup(@NonNull final ScheduleGroup group, @NonNull final SaveScheduleGroupCallback callback) {
@@ -130,6 +132,7 @@ public class ScheduleDataLocalSource implements ScheduleDataSource {
             @Override
             public void run() {
                 mSchedulesDao.deleteScheduleGroupByColorNumber(colorNumber);
+                mSchedulesDao.setDefaultGroupId(colorNumber);
             }
         };
         mAppExecutors.diskIO().execute(runnable);
@@ -168,4 +171,44 @@ public class ScheduleDataLocalSource implements ScheduleDataSource {
         };
         mAppExecutors.diskIO().execute(runnable);
     }
+
+    @Override
+    public void updateScheduleGroup(@NonNull final ScheduleGroup group, @NonNull final SaveScheduleGroupCallback callback) {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                mSchedulesDao.updateScheduleGroup(group);
+                mAppExecutors.mainThread().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onScheduleGroupSaved();
+                    }
+                });
+            }
+        };
+        mAppExecutors.diskIO().execute(runnable);
+    }
+
+    @Override
+    public void getHoliday(@NonNull LoadHolidayCalendarDataCallback callback) {
+
+    }
+
+    @Override
+    public void getCalendarDataList(@NonNull final LoadCalendarDataCallback callback) {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                final List<CalendarData> calendarDataList = mSchedulesDao.getAllCalendarDataList();
+                mAppExecutors.mainThread().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onCalendarDataLoaded(calendarDataList);
+                    }
+                });
+            }
+        };
+        mAppExecutors.diskIO().execute(runnable);
+    }
+
 }

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.non_name_hero.calenderview.data.CalendarData;
 import com.non_name_hero.calenderview.data.Schedule;
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource;
 import com.non_name_hero.calenderview.data.source.ScheduleRepository;
@@ -13,10 +14,11 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-public class CalendarViewModel extends ViewModel implements ScheduleDataSource.GetScheduleMapCallback, ScheduleDataSource.GetScheduleCallback {
+public class CalendarViewModel extends ViewModel implements ScheduleDataSource.GetScheduleCallback, ScheduleDataSource.LoadCalendarDataCallback, ScheduleDataSource.LoadHolidayCalendarDataCallback {
 
     private final MutableLiveData<Map<String, List<Schedule>>> Schedules = new MutableLiveData<>();
-    private final MutableLiveData<Map<String, List<Schedule>>> mHolidaySchedules = new MutableLiveData<>();
+    private final MutableLiveData<Map<String, List<CalendarData>>> mHolidayCalendarDataMap = new MutableLiveData<>();
+    private final MutableLiveData<Map<String, List<CalendarData>>> mCalendarDataMap = new MutableLiveData<>();
     private final MutableLiveData<String> mCurrentMonth = new MutableLiveData<>();
     private ScheduleRepository mSchedulesRepository;
 
@@ -27,7 +29,14 @@ public class CalendarViewModel extends ViewModel implements ScheduleDataSource.G
 
     public void start() {
         loadHolidaySchedules();
-        reloadSchedules(true);
+        reloadCalendarData(true);
+    }
+
+    public void reloadCalendarData(boolean forceUpdate) {
+        if (forceUpdate) {
+            mSchedulesRepository.calendarCacheClear();
+        }
+        mSchedulesRepository.getCalendarDataList(this);
     }
 
     private void loadHolidaySchedules() {
@@ -35,36 +44,32 @@ public class CalendarViewModel extends ViewModel implements ScheduleDataSource.G
         mSchedulesRepository.getHoliday(this);
     }
 
+    public void setCalendarDataMap(Map<String, List<CalendarData>> calendarDataMap) {
+        mCalendarDataMap.setValue(calendarDataMap);
+    }
+
     public void loadSchedules(Map<String, List<Schedule>> result) {
         Schedules.setValue(result);
     }
 
     public void setCurrentMonth(Integer month) {
-        mCurrentMonth.setValue(String.valueOf(month) + "月");
+        mCurrentMonth.setValue((month).toString() + "月");
     }
 
-    public void setHolidaySchedules(Map<String, List<Schedule>> holidaySchedulesMap) {
-        mHolidaySchedules.setValue(holidaySchedulesMap);
-    }
-
-    public void reloadSchedules(boolean forceUpdate) {
-        if (forceUpdate) {
-            mSchedulesRepository.cacheClear();
-        }
-        mSchedulesRepository.getSchedulesMap(this);
-    }
-
-    @Override
-    public void onScheduleMapLoaded(Map<String, List<Schedule>> scheduleStringMap) {
-        loadSchedules(scheduleStringMap);
+    public void setHolidayCalendarDataMap(Map<String, List<CalendarData>> holidaySchedulesMap) {
+        mHolidayCalendarDataMap.setValue(holidaySchedulesMap);
     }
 
     public LiveData<Map<String, List<Schedule>>> getSchedules() {
         return Schedules;
     }
 
-    public LiveData<Map<String, List<Schedule>>> getHolidaySchedules() {
-        return mHolidaySchedules;
+    public LiveData<Map<String, List<CalendarData>>> getCalendarDataMap() {
+        return mCalendarDataMap;
+    }
+
+    public LiveData<Map<String, List<CalendarData>>> getHolidayCalendarDataMap() {
+        return mHolidayCalendarDataMap;
     }
 
     public LiveData<String> getCurrentMonth() {
@@ -73,7 +78,17 @@ public class CalendarViewModel extends ViewModel implements ScheduleDataSource.G
 
     @Override
     public void onScheduleLoaded(List<Schedule> schedules) {
-        setHolidaySchedules(PigLeadUtils.getScheduleMapBySchedules(schedules));
+
+    }
+
+    @Override
+    public void onCalendarDataLoaded(List<CalendarData> calendarDataList) {
+        setCalendarDataMap(PigLeadUtils.getCalendarDataMapByCalendarDataList(calendarDataList));
+    }
+
+    @Override
+    public void onHolidayCalendarDataLoaded(List<CalendarData> calendarDataList) {
+        setHolidayCalendarDataMap(PigLeadUtils.getCalendarDataMapByCalendarDataList(calendarDataList));
     }
 
     @Override

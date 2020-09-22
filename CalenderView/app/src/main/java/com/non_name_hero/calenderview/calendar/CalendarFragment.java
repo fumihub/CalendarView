@@ -71,7 +71,7 @@ public class CalendarFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        mViewModel.reloadSchedules(true);
+        mViewModel.reloadCalendarData(true);
     }
 
     private void loadData() {
@@ -79,10 +79,16 @@ public class CalendarFragment extends Fragment {
     }
 
     private int getCurrentMonth(int position) {
-        //offset -> 現在月からの差分
         int nowMonth = mCalendar.get(Calendar.MONTH);// 0~11
-        int offset = (position - DEFAULT_PAGE) % MAX_MONTH; // 初期ページからの差分 / 12 = -11~11
-        return (nowMonth + offset) % MAX_MONTH + 1;
+        int offset = position - DEFAULT_PAGE;
+        //offset -> 現在ページからの差分
+        //monthOffset -> 現在月からの差分
+        int monthOffset;
+        monthOffset = Math.abs(offset) % MAX_MONTH;
+        //マイナスの場合は12から差をとる
+        if (offset < 0) monthOffset = MAX_MONTH - monthOffset;
+        // n月からの差分[-n 〜 n] + n % 12 + 1 → 1~12
+        return (monthOffset + nowMonth) % MAX_MONTH + 1;
     }
 
     /**
