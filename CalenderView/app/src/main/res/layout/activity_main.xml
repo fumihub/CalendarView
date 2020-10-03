@@ -1,71 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewmodel"
             type="com.non_name_hero.calenderview.calendar.CalendarViewModel" />
     </data>
 
-    <androidx.drawerlayout.widget.DrawerLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/drawer_layout"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/whiteColor"
+        android:orientation="vertical"
         tools:context=".calendar.MainActivity">
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/mainToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/grayColor"
-            android:orientation="vertical"
-            tools:context=".calendar.MainActivity">
+            android:background="#FFEB3B"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:layout_constraintBottom_toTopOf="@id/calendar_fragment_container"
+            app:layout_constraintDimensionRatio=""
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="16dp">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/mainToolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#FFEB3B"
-                android:minHeight="?attr/actionBarSize"
-                android:theme="?attr/actionBarTheme">
-
-                <TextView
-                    android:id="@+id/mainToolbar_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="left|center_vertical"
-                    android:text="@{viewmodel.currentMonth}"
-                    android:textSize="25sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/blackColor"
-                    tools:ignore="HardcodedText" />
-
-            </androidx.appcompat.widget.Toolbar>
-
-            <!--月表示-->
-            <FrameLayout
-                android:id="@+id/fragment_container"
+            <TextView
+                android:id="@+id/mainToolbar_title"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:gravity="left|center_vertical"
+                android:text="@{viewmodel.currentMonth}"
+                android:textColor="@color/whiteColor"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
 
-            </FrameLayout>
-            <!--広告のデザイン-->
-            <com.google.android.gms.ads.AdView
-                android:id="@+id/adView"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_weight="0"
-                app:adSize="BANNER"
-                app:adUnitId="ca-app-pub-3940256099942544/6300978111"></com.google.android.gms.ads.AdView>
+        </androidx.appcompat.widget.Toolbar>
 
-        </LinearLayout>
+        <FrameLayout
+            android:id="@+id/calendar_fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/adView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/mainToolbar">
 
-    </androidx.drawerlayout.widget.DrawerLayout>
+        </FrameLayout>
+
+        <!--広告のデザイン-->
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            app:adSize="BANNER"
+            app:adUnitId="ca-app-pub-3940256099942544/6300978111"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/calendar_fragment_container"></com.google.android.gms.ads.AdView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

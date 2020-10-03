@@ -3,6 +3,9 @@ package com.non_name_hero.calenderview.calendar;
 import android.widget.GridView;
 
 import androidx.databinding.BindingAdapter;
+import androidx.databinding.InverseBindingAdapter;
+import androidx.databinding.InverseBindingListener;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.non_name_hero.calenderview.data.CalendarData;
 
@@ -32,5 +35,27 @@ public class ScheduleListBindings {
         if (adapter != null) {
             adapter.replaceHoliday(calendarData);
         }
+    }
+
+    @BindingAdapter("scheduleItems")
+    public static void setScheduleListItems(RecyclerView view, List<CalendarData> calendarDataList) {
+        ScheduleListAdapter adapter = (ScheduleListAdapter) view.getAdapter();
+        if (adapter != null) {
+            if (adapter.calendarDataList != calendarDataList) {
+                adapter.setCalendarDataForScheduleList(calendarDataList);
+            }
+        }
+    }
+
+    @InverseBindingAdapter(attribute = "scheduleItems", event = "scheduleItemsAttrChanged")
+    public static List<CalendarData> getScheduleListItems(RecyclerView view) {
+        ScheduleListAdapter adapter = (ScheduleListAdapter) view.getAdapter();
+        return adapter.calendarDataList;
+    }
+
+    @BindingAdapter("app:scheduleItemsAttrChanged")
+    public static void setListeners(RecyclerView view, final InverseBindingListener listener) {
+        ScheduleListAdapter adapter = (ScheduleListAdapter) view.getAdapter();
+        listener.onChange();
     }
 }

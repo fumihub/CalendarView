@@ -15,6 +15,8 @@ import com.non_name_hero.calenderview.R;
 
 import java.util.Calendar;
 
+import static com.non_name_hero.calenderview.utils.ActivityUtils.addFragmentToActivity;
+
 public class CalendarFragment extends Fragment {
 
     public static CalendarFragment newInstance() {
@@ -60,12 +62,12 @@ public class CalendarFragment extends Fragment {
                 mViewModel.setCurrentMonth(getCurrentMonth(position));
             }
         });
+        initScheduleList();
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
     }
 
     @Override
@@ -89,6 +91,15 @@ public class CalendarFragment extends Fragment {
         if (offset < 0) monthOffset = MAX_MONTH - monthOffset;
         // n月からの差分[-n 〜 n] + n % 12 + 1 → 1~12
         return (monthOffset + nowMonth) % MAX_MONTH + 1;
+    }
+
+    private void initScheduleList() {
+        //ScheduleListを表示
+        ScheduleListFragment scheduleListFragment = (ScheduleListFragment) getChildFragmentManager().findFragmentById(R.id.schedule_list_fragment_container);
+        if (scheduleListFragment == null) {
+            scheduleListFragment = ScheduleListFragment.newInstance();
+            addFragmentToActivity(getChildFragmentManager(), scheduleListFragment, R.id.schedule_list_fragment_container);
+        }
     }
 
     /**
