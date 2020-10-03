@@ -12,7 +12,7 @@
             type="String"/>
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/calendarCell"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -22,6 +22,8 @@
             android:id="@+id/dateText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/scheduleList"
             android:gravity="left"
             android:textAlignment="gravity"
             android:textSize="@dimen/textSize"
@@ -31,9 +33,11 @@
         <LinearLayout
             android:id="@+id/scheduleList"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/dateText"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:orientation="vertical">
         </LinearLayout>
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

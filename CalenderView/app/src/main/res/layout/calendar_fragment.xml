@@ -1,102 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:layoutDescription="@xml/calendar_fragment_scene"
+    android:id="@+id/motionLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/grayColor"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <!--罫線の設定-->
-    <!--ヘッダー情報の登録(曜日)-->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginVertical="1dp"
-        android:layout_weight="0"
-        android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="0dp"
-            android:layout_weight="1"
-            android:background="@color/whiteColor"
-            android:text="月"
-            android:textAlignment="center"
-            android:textColor="@color/blackColor"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="0dp"
-            android:layout_weight="1"
-            android:background="@color/whiteColor"
-            android:text="火"
-            android:textAlignment="center"
-            android:textColor="@color/blackColor"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="0dp"
-            android:layout_weight="1"
-            android:background="@color/whiteColor"
-            android:text="水"
-            android:textAlignment="center"
-            android:textColor="@color/blackColor"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="0dp"
+        <!--罫線の設定-->
+        <!--ヘッダー情報の登録(曜日)-->
+        <LinearLayout
+            android:id="@+id/header"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="0dp"
-            android:layout_weight="1"
-            android:background="@color/whiteColor"
-            android:text="木"
-            android:textAlignment="center"
-            android:textColor="@color/blackColor"
-            android:textStyle="bold" />
+            android:layout_marginVertical="1dp"
+            android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="0dp"
-            android:layout_weight="1"
-            android:background="@color/whiteColor"
-            android:text="金"
-            android:textAlignment="center"
-            android:textColor="@color/blackColor"
-            android:textStyle="bold" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="0dp"
+                android:layout_weight="1"
+                android:background="@color/whiteColor"
+                android:text="月"
+                android:textAlignment="center"
+                android:textColor="@color/blackColor"
+                android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="0dp"
-            android:layout_weight="1"
-            android:background="@color/whiteColor"
-            android:text="土"
-            android:textAlignment="center"
-            android:textColor="@color/blueColor"
-            android:textStyle="bold" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="0dp"
+                android:layout_weight="1"
+                android:background="@color/whiteColor"
+                android:text="火"
+                android:textAlignment="center"
+                android:textColor="@color/blackColor"
+                android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="0dp"
-            android:layout_weight="1"
-            android:background="@color/whiteColor"
-            android:text="日"
-            android:textAlignment="center"
-            android:textColor="@color/redColor"
-            android:textStyle="bold" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="0dp"
+                android:layout_weight="1"
+                android:background="@color/whiteColor"
+                android:text="水"
+                android:textAlignment="center"
+                android:textColor="@color/blackColor"
+                android:textStyle="bold" />
 
-    </LinearLayout>
-    <!--ViewPager-->
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/pager"
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="0dp"
+                android:layout_weight="1"
+                android:background="@color/whiteColor"
+                android:text="木"
+                android:textAlignment="center"
+                android:textColor="@color/blackColor"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="0dp"
+                android:layout_weight="1"
+                android:background="@color/whiteColor"
+                android:text="金"
+                android:textAlignment="center"
+                android:textColor="@color/blackColor"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="0dp"
+                android:layout_weight="1"
+                android:background="@color/whiteColor"
+                android:text="土"
+                android:textAlignment="center"
+                android:textColor="@color/blueColor"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="0dp"
+                android:layout_weight="1"
+                android:background="@color/whiteColor"
+                android:text="日"
+                android:textAlignment="center"
+                android:textColor="@color/redColor"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+        <!--ViewPager-->
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            ></androidx.viewpager2.widget.ViewPager2>
+
+    <FrameLayout
+        android:id="@+id/schedule_list_fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        ></androidx.viewpager2.widget.ViewPager2>
-</LinearLayout>
+        android:layout_height="wrap_content"></FrameLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>
