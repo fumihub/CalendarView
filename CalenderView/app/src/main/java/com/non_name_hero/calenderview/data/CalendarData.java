@@ -15,4 +15,8 @@ public class CalendarData {
     public int groupBackgroundColor;
     @Ignore
     public boolean isHoliday = false;
+
+    public boolean getTextColor() {
+        return groupTextColor.equals('黒');
+    }
 }
