@@ -75,7 +75,9 @@ public class CalendarPageFragment extends Fragment {
              */
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //TODO スケジュール詳細画面に遷移
+
+                final List<Date> dateArray = mCalendarAdapter.getDateArray();
+                mCalendarViewModel.setScheduleItem(dateArray.get(position));
             }
         });
 

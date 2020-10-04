@@ -53,10 +53,10 @@ public class MainActivity extends AppCompatActivity {
         mAdView.loadAd(adRequest);
 
         //アクティビティのfragmentを取得（初回時はnull）
-        CalendarFragment calendarFragment = (CalendarFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        CalendarFragment calendarFragment = (CalendarFragment) getSupportFragmentManager().findFragmentById(R.id.calendar_fragment_container);
         if (calendarFragment == null) {
             calendarFragment = CalendarFragment.newInstance();
-            addFragmentToActivity(getSupportFragmentManager(), calendarFragment, R.id.fragment_container);
+            addFragmentToActivity(getSupportFragmentManager(), calendarFragment, R.id.calendar_fragment_container);
         }
 
         //ViewModelの参照を取得
@@ -67,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
         binding.setLifecycleOwner(this);
         //Toolbarをセット
         setSupportActionBar(binding.mainToolbar);
+        binding.mainToolbar.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.toolbar));
+
         //bindingを即時反映
         binding.executePendingBindings();
     }

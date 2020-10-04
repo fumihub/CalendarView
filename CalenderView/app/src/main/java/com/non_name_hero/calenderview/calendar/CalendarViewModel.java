@@ -11,20 +11,26 @@ import com.non_name_hero.calenderview.data.source.ScheduleRepository;
 import com.non_name_hero.calenderview.utils.PigLeadUtils;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 public class CalendarViewModel extends ViewModel implements ScheduleDataSource.GetScheduleCallback, ScheduleDataSource.LoadCalendarDataCallback, ScheduleDataSource.LoadHolidayCalendarDataCallback {
-
+    // for calendar
     private final MutableLiveData<Map<String, List<Schedule>>> Schedules = new MutableLiveData<>();
     private final MutableLiveData<Map<String, List<CalendarData>>> mHolidayCalendarDataMap = new MutableLiveData<>();
     private final MutableLiveData<Map<String, List<CalendarData>>> mCalendarDataMap = new MutableLiveData<>();
     private final MutableLiveData<String> mCurrentMonth = new MutableLiveData<>();
+    // for scheduleList
+    private final MutableLiveData<Date> selectedDate = new MutableLiveData<>();
+    public final MutableLiveData<List<CalendarData>> scheduleListData = new MutableLiveData<>();
+
     private ScheduleRepository mSchedulesRepository;
 
     public CalendarViewModel(ScheduleRepository SchedulesRepository) {
         this.mSchedulesRepository = SchedulesRepository;
         mCurrentMonth.setValue(String.valueOf(Calendar.getInstance().get(Calendar.MONTH) + 1));
+        selectedDate.setValue(new Date());
     }
 
     public void start() {
@@ -44,12 +50,9 @@ public class CalendarViewModel extends ViewModel implements ScheduleDataSource.G
         mSchedulesRepository.getHoliday(this);
     }
 
+    // setters
     public void setCalendarDataMap(Map<String, List<CalendarData>> calendarDataMap) {
         mCalendarDataMap.setValue(calendarDataMap);
-    }
-
-    public void loadSchedules(Map<String, List<Schedule>> result) {
-        Schedules.setValue(result);
     }
 
     public void setCurrentMonth(Integer month) {
@@ -76,6 +79,7 @@ public class CalendarViewModel extends ViewModel implements ScheduleDataSource.G
         return mCurrentMonth;
     }
 
+    //callback
     @Override
     public void onScheduleLoaded(List<Schedule> schedules) {
 
@@ -84,6 +88,7 @@ public class CalendarViewModel extends ViewModel implements ScheduleDataSource.G
     @Override
     public void onCalendarDataLoaded(List<CalendarData> calendarDataList) {
         setCalendarDataMap(PigLeadUtils.getCalendarDataMapByCalendarDataList(calendarDataList));
+        setScheduleItem(selectedDate.getValue());
     }
 
     @Override
@@ -94,5 +99,23 @@ public class CalendarViewModel extends ViewModel implements ScheduleDataSource.G
     @Override
     public void onDataNotAvailable() {
 
+    }
+
+    // etc
+    public void setScheduleItem(Date date) {
+        if (mCalendarDataMap != null) {
+            String dateKey = PigLeadUtils.formatYYYYMMDD.format(date);
+            scheduleListData.setValue(mCalendarDataMap.getValue().get(dateKey));
+            selectedDate.setValue(date);
+        }
+    }
+
+    public void saveScheduleItem() {
+
+    }
+
+    public void removeSchedule(long scheduleId) {
+        mSchedulesRepository.removeScheduleByScheduleId(scheduleId);
+        this.reloadCalendarData(true);
     }
 }

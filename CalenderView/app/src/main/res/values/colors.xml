@@ -64,6 +64,8 @@
     <color name="blackColor5">#DDEEAA</color>
     <color name="blackColor6">#AADDAA</color>
     <color name="blackColor7">#99DDFF</color>
+    <!--ツールバー-->
+    <color name="toolbar">#424242</color>
     <!--透明-->
     <color name="clearButtonPressed">#33000000</color>
     <!--カレンダー関連-->
@@ -71,4 +73,5 @@
     <color name="calendarBackGround">#ffefefef</color>
     <color name="notCurrentMonth">#facfcfcf</color>
     <color name="currentDayColor">#faffff5e</color>
+
 </resources>

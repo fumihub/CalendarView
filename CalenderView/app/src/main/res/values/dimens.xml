@@ -4,4 +4,6 @@
     <dimen name="scheduleTextSize">8dp</dimen>
     <dimen name="schedule_margin">0.5dp</dimen>
     <dimen name="schedule_padding">0.5dp</dimen>
+    <dimen name="schedule_list_margin">2dp</dimen>
+    <dimen name="schedule_list_fragment_item_padding">3dp</dimen>
 </resources>
