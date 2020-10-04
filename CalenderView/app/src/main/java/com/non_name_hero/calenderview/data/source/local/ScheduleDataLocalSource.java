@@ -127,12 +127,18 @@ public class ScheduleDataLocalSource implements ScheduleDataSource {
     }
 
     @Override
-    public void deleteScheduleGroup(@NonNull final int groupId) {
+    public void deleteScheduleGroup(@NonNull final int groupId, @NonNull final DeleteCallback callback) {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 mSchedulesDao.deleteScheduleGroupByColorNumber(groupId);
                 mSchedulesDao.setDefaultGroupId(groupId);
+                mAppExecutors.mainThread().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onDeleted();
+                    }
+                });
             }
         };
         mAppExecutors.diskIO().execute(runnable);

@@ -40,18 +40,23 @@ public interface ScheduleDataSource {
         void onScheduleGroupSaved();
         void onDataNotSaved();
     }
-
+    //複数件取得時のコールバック
     interface GetScheduleGroupsCallback{
         void onScheduleGroupsLoaded(List<ScheduleGroup> Groups);
         void onDataNotAvailable();
     }
-
+    //1件取得時コールバック
     interface GetScheduleGroupCallback {
         void onScheduleGroupLoaded(ScheduleGroup group);
     }
+    // 削除字のコールバック
+    interface DeleteCallback {
+        void onDeleted();
+        void onDataNotDeleted();
+    }
 
     void insertScheduleGroup(@NonNull ScheduleGroup group, @NonNull SaveScheduleGroupCallback callback);
-    void deleteScheduleGroup(@NonNull int groupId);
+    void deleteScheduleGroup(@NonNull int groupId, @NonNull DeleteCallback callback);
     void getScheduleGroup(@NonNull int colorNumber, @NonNull GetScheduleGroupCallback callback);
     void getListScheduleGroup(@NonNull GetScheduleGroupsCallback callback);
     void updateScheduleGroup(@NonNull ScheduleGroup group, @NonNull SaveScheduleGroupCallback callback);

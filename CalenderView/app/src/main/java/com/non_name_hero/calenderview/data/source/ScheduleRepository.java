@@ -157,8 +157,8 @@ public class ScheduleRepository implements ScheduleDataSource {
      * @param groupId カラー番号
      */
     @Override
-    public void deleteScheduleGroup(@NonNull int groupId) {
-        mScheduleDataLocalSource.deleteScheduleGroup(groupId);
+    public void deleteScheduleGroup(@NonNull int groupId, @NonNull DeleteCallback callback) {
+        mScheduleDataLocalSource.deleteScheduleGroup(groupId, callback);
     }
 
     /**

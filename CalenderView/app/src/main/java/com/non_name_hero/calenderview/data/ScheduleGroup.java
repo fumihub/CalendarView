@@ -3,6 +3,7 @@ package com.non_name_hero.calenderview.data;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
@@ -35,6 +36,19 @@ public class ScheduleGroup {
                          @NonNull String groupName,
                          @NonNull String characterColor,
                          @NonNull int backgroundColor){
+        mColorNumber = colorNumber;
+        mGroupName = groupName;
+        mCharacterColor = characterColor;
+        mBackgroundColor = backgroundColor;
+    }
+
+    @Ignore
+    public ScheduleGroup(@NonNull int groupId,
+                         @NonNull int colorNumber,
+                         @NonNull String groupName,
+                         @NonNull String characterColor,
+                         @NonNull int backgroundColor){
+        mGroupId = groupId;
         mColorNumber = colorNumber;
         mGroupName = groupName;
         mCharacterColor = characterColor;
