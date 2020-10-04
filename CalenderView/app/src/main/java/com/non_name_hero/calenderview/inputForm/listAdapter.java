@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.Button;
 
 import com.non_name_hero.calenderview.R;
 import com.non_name_hero.calenderview.data.ScheduleGroup;
+import com.non_name_hero.calenderview.data.source.ScheduleDataSource;
 import com.non_name_hero.calenderview.data.source.ScheduleRepository;
 import com.non_name_hero.calenderview.utils.Injection;
 
@@ -139,13 +141,21 @@ public class listAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 ScheduleGroup group = list.get(position);
-                int colorNumber = group.getColorNumber();
-                repository.deleteScheduleGroup(colorNumber);
+                repository.deleteScheduleGroup(group.getGroupId(), new ScheduleDataSource.DeleteCallback() {
+                    @Override
+                    public void onDeleted() {
+                        list.remove(position);
+                        notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onDataNotDeleted() {
+                        Log.d("ERROR", "削除に失敗しました。");
+                    }
+                });
                 //TODO 成功したら削除
                 //TODO 削除するか確認もしたい？
                 //TODO 確認する→現在この色が使われているスケジュールはすべて未分類になる
-                list.remove(position);
-                notifyDataSetChanged();
             }
         });
 

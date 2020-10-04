@@ -52,8 +52,8 @@ public interface SchedulesDao {
     @Delete
     void deleteScheduleGroup(ScheduleGroup group);
 
-    @Query("DELETE FROM schedule_group WHERE color_number = :colorNumber")
-    void deleteScheduleGroupByColorNumber(int colorNumber);
+    @Query("DELETE FROM schedule_group WHERE group_id = :groupId")
+    void deleteScheduleGroupByColorNumber(int groupId);
 
     @Query("SELECT group_id, color_number, group_name, character_color, background_color FROM schedule_group WHERE color_number = :colorNumber")
     List<ScheduleGroup> getScheduleGroupByColorNumber(int colorNumber);

@@ -109,8 +109,8 @@ public class ScheduleDataRemoteSource implements ScheduleDataSource {
     }
 
     @Override
-    public void deleteScheduleGroup(@NonNull int colorNumber) {
-
+    public void deleteScheduleGroup(@NonNull int groupId, @NonNull DeleteCallback callback) {
+    //リモートでは処理しない
     }
 
     @Override
