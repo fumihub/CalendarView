@@ -49,7 +49,7 @@ public interface ScheduleDataSource {
     interface GetScheduleGroupCallback {
         void onScheduleGroupLoaded(ScheduleGroup group);
     }
-    // 削除字のコールバック
+    // 削除時のコールバック
     interface DeleteCallback {
         void onDeleted();
         void onDataNotDeleted();

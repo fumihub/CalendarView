@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/scheduleTextSize"
         android:text="@{schedule.scheduleTitle}"
-        android:textColor="@{schedule.isHoliday ? Color.WHITE : schedule.groupTextColor.equals('黒') ? Color.BLACK : Color.WHITE}"
+        android:textColor="@{schedule.isHoliday ? Color.WHITE : schedule.getTextColor() ? Color.BLACK : Color.WHITE}"
         android:ellipsize="end"
         android:singleLine="true"
         android:paddingBottom="@dimen/schedule_padding"
