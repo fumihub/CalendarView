@@ -79,6 +79,7 @@ public class colorCreateActivity extends AppCompatActivity {
             //表示する色番号を取得
             intentIn = getIntent();
             colorNumberPre = intentIn.getIntExtra("ColorNumberPre", 43);
+            colorNumber = colorNumberPre;
             //DBからcolorNumberをキーにその要素を取得
             repository.getScheduleGroup(
                     colorNumberPre,
@@ -90,7 +91,7 @@ public class colorCreateActivity extends AppCompatActivity {
                             colorCreateTitle.setText(group.getGroupName());
                             //色ボタン2に色をセット
                             color = group.getBackgroundColor();
-                            color2.setBackgroundColor(group.getBackgroundColor());
+                            color2.setBackgroundColor(color);
                             //色ボタン2にに文字色をセット
                             if (group.getCharacterColor().equals("黒")) {//黒ならば
                                 blackRadioButton.setChecked(true);
