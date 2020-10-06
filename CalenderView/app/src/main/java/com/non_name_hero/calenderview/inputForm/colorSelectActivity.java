@@ -100,6 +100,15 @@ public class colorSelectActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        //アプリ再開時にeditFlagを0にする
+        //TODO　リストビューから削除ボタンを非表示に
+        jdgEditMode(FALSE, "編集");
+    }
+
     private void jdgEditMode(boolean value, String str){
         prefs = getSharedPreferences("input_data", MODE_PRIVATE);
         editor = prefs.edit();
