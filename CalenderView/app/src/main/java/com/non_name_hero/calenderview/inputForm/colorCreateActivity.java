@@ -46,6 +46,7 @@ public class colorCreateActivity extends AppCompatActivity {
 
     private String textColor;
 
+    private int groupId;
     private int colorNumberPre = 255;
     private int colorNumber = 255;
     private int color = 0;
@@ -87,6 +88,8 @@ public class colorCreateActivity extends AppCompatActivity {
 
                         @Override
                         public void onScheduleGroupLoaded(ScheduleGroup group) {
+                            //グループIDの取得
+                            groupId = group.getGroupId();
                             //色タイトルに色名をセット
                             colorCreateTitle.setText(group.getGroupName());
                             //色ボタン2に色をセット
@@ -175,27 +178,53 @@ public class colorCreateActivity extends AppCompatActivity {
             errorToast.show();
         }
         else {
+            //編集画面の場合
+            if (prefs.getBoolean("editFlag", FALSE)) {
+                repository.updateScheduleGroup(
+                        new ScheduleGroup(
+                                groupId,
+                                colorNumber,
+                                colorCreateTitle.getText().toString(),
+                                textColor,
+                                color
+                        ),
+                        new ScheduleDataSource.SaveScheduleGroupCallback() {
+                            @Override
+                            public void onScheduleGroupSaved() {
+                                setResult(RESULT_OK, intentOut);
+                                finish();
+                            }
 
-            repository.insertScheduleGroup(
-                    new ScheduleGroup(
-                            colorNumber,
-                            colorCreateTitle.getText().toString(),
-                            textColor,
-                            color
-                    ),
-                    new ScheduleDataSource.SaveScheduleGroupCallback() {
-                        @Override
-                        public void onScheduleGroupSaved() {
-                            setResult(RESULT_OK, intentOut);
-                            finish();
+                            @Override
+                            public void onDataNotSaved() {
+
+                            }
+                        });
+            }
+            //新規作成の場合
+            else {
+                repository.insertScheduleGroup(
+                        new ScheduleGroup(
+                                colorNumber,
+                                colorCreateTitle.getText().toString(),
+                                textColor,
+                                color
+                        ),
+                        new ScheduleDataSource.SaveScheduleGroupCallback() {
+                            @Override
+                            public void onScheduleGroupSaved() {
+                                setResult(RESULT_OK, intentOut);
+                                finish();
+                            }
+
+                            @Override
+                            public void onDataNotSaved() {
+
+                            }
                         }
+                );
+            }
 
-                        @Override
-                        public void onDataNotSaved() {
-
-                        }
-                    }
-            );
         }
 
     }
