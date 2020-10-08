@@ -168,7 +168,7 @@ public class colorCreateActivity extends AppCompatActivity {
         }
 
         //エラー処理
-        if (color == 0 || textColor.isEmpty() || colorCreateTitle.getText().toString().isEmpty()) {
+        if (color == 0 || textColor == null || colorCreateTitle.getText().toString().isEmpty()) {
             //トースト表示
             Toast errorToast = Toast.makeText(
                     getApplicationContext(),
