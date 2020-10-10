@@ -1,8 +1,11 @@
 package com.non_name_hero.calenderview.inputForm;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -15,17 +18,24 @@ import com.non_name_hero.calenderview.data.ScheduleGroup;
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource;
 import com.non_name_hero.calenderview.data.source.ScheduleRepository;
 import com.non_name_hero.calenderview.utils.Injection;
+import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDialog;
+import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDialogFragment;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
-public class colorSelectActivity extends AppCompatActivity {
+public class colorSelectActivity extends AppCompatActivity implements PigLeadDialog.DeleteDialog {
 
     private static final int REQUEST_CODE = 1;
+    private static final String DELETE_DIALOG_TAG = "DELETE_DIALOG";
 
-    private listAdapter mListAdapter;
+    private Context context;
+
+    private listAdapter listAdapter;
     private ListView listView;
 
     private Button editButton;
@@ -44,7 +54,8 @@ public class colorSelectActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        repository = Injection.provideScheduleRepository(getApplicationContext());
+        this.context = this;
+        repository = Injection.provideScheduleRepository(context);
 
         setContentView(R.layout.color_select);
         final Toolbar myToolbar = (Toolbar) findViewById(R.id.colorSelectToolbar);
@@ -55,8 +66,10 @@ public class colorSelectActivity extends AppCompatActivity {
         listView = findViewById(R.id.listView);
 
         //リストのアダプターを使用してViewを作成
-        mListAdapter = new listAdapter(getApplicationContext(), this);
-        listView.setAdapter(mListAdapter);
+        listAdapter = new listAdapter(context, this);
+        //削除ダイアログを
+        listAdapter.deleteDialog = this;
+        listView.setAdapter(listAdapter);
 
         //DBから情報を取得
         loadColorList();
@@ -101,7 +114,7 @@ public class colorSelectActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
 
         //アプリ再開時にeditFlagを0にする
@@ -109,14 +122,14 @@ public class colorSelectActivity extends AppCompatActivity {
         jdgEditMode(FALSE, "編集");
     }
 
-    private void jdgEditMode(boolean value, String str){
+    private void jdgEditMode(boolean value, String str) {
         prefs = getSharedPreferences("input_data", MODE_PRIVATE);
         editor = prefs.edit();
         //SharedPreferenceにeditFlagの値を保存
-        editor.putBoolean("editFlag",value);
+        editor.putBoolean("editFlag", value);
         //非同期処理ならapply()、同期処理ならcommit()
         editor.commit();
-        listView.setAdapter(mListAdapter);
+        listView.setAdapter(listAdapter);
         //ボタン文字の切り替え(編集/完了)
         editButton.setText(str);
     }
@@ -137,11 +150,9 @@ public class colorSelectActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
                     //DB問い合わせて更新
                     loadColorList();
-                }
-                else if (resultCode == RESULT_CANCELED) {
+                } else if (resultCode == RESULT_CANCELED) {
                     //キャンセルボタンを押して戻ってきたときの処理
-                }
-                else {
+                } else {
                     //その他
                 }
                 break;
@@ -149,13 +160,13 @@ public class colorSelectActivity extends AppCompatActivity {
                 break;
         }
     }
-    
-    private void loadColorList(){
+
+    private void loadColorList() {
         repository.getListScheduleGroup(new ScheduleDataSource.GetScheduleGroupsCallback() {
             @Override
             public void onScheduleGroupsLoaded(List<ScheduleGroup> Groups) {
                 //取得後の処理
-                mListAdapter.setList(Groups);
+                listAdapter.setList(Groups);
             }
 
             @Override
@@ -163,5 +174,55 @@ public class colorSelectActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    /**
+     * 削除用ダイアログを設定
+     *
+     * @param position
+     * @return
+     */
+    @Override
+    public PigLeadDialogFragment getDeleteDialog(final int position) {
+        final ScheduleGroup group = listAdapter.list.get(position);
+        // 表示させるメッセージの定義
+        final ArrayList<String> dialogMessages = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.delete_schedule_group_dialog_massage)));
+        dialogMessages.set(0, String.format(dialogMessages.get(0), group.getGroupName()));
+        final String positiveBtnMessage = getString(R.string.delete_schedule_group_positive);
+        final String negativeBtnMessage = getString(R.string.delete_schedule_group_negative);
+        // AlertDialogを設定
+        PigLeadDialogFragment dialog = new PigLeadDialogFragment(context);
+        dialog.setDialogMessage(dialogMessages)
+                .setPositiveBtnMessage(positiveBtnMessage)
+                .setNegativeBtnMessage(negativeBtnMessage)
+                .setPositiveClickListener(new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        repository.deleteScheduleGroup(group.getGroupId(), new ScheduleDataSource.DeleteCallback() {
+                            @Override
+                            public void onDeleted() {
+                                listAdapter.list.remove(position);
+                                listAdapter.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onDataNotDeleted() {
+                                Log.d("ERROR", "削除に失敗しました。");
+                            }
+                        });
+                    }
+                })
+                .setNegativeClickListener(new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+        return dialog;
+    }
+
+    @Override
+    public void showPigLeadDiaLog(PigLeadDialogFragment dialog) {
+        // AlertDialogを表示
+        dialog.show(getSupportFragmentManager(), DELETE_DIALOG_TAG);
     }
 }

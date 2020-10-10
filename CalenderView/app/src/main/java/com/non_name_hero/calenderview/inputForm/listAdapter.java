@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +13,10 @@ import android.widget.Button;
 
 import com.non_name_hero.calenderview.R;
 import com.non_name_hero.calenderview.data.ScheduleGroup;
-import com.non_name_hero.calenderview.data.source.ScheduleDataSource;
 import com.non_name_hero.calenderview.data.source.ScheduleRepository;
 import com.non_name_hero.calenderview.utils.Injection;
+import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDialog;
+import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDialogFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ public class listAdapter extends BaseAdapter {
 
     private static final int REQUEST_CODE = 1;
 
-    private List<ScheduleGroup> list;
+    public List<ScheduleGroup> list;
     private Context mContext;
     private LayoutInflater mLayoutInflater;
     private ScheduleRepository repository;
@@ -38,6 +38,7 @@ public class listAdapter extends BaseAdapter {
     private Intent intentOut;
 
     private Activity mActivity;
+    public PigLeadDialog.DeleteDialog deleteDialog;
 
     //カスタムセルを拡張したらここでWigetを定義
     private static class ViewHolder {
@@ -140,22 +141,9 @@ public class listAdapter extends BaseAdapter {
         holder.destroyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ScheduleGroup group = list.get(position);
-                repository.deleteScheduleGroup(group.getGroupId(), new ScheduleDataSource.DeleteCallback() {
-                    @Override
-                    public void onDeleted() {
-                        list.remove(position);
-                        notifyDataSetChanged();
-                    }
-
-                    @Override
-                    public void onDataNotDeleted() {
-                        Log.d("ERROR", "削除に失敗しました。");
-                    }
-                });
-                //TODO 成功したら削除
-                //TODO 削除するか確認もしたい？
-                //TODO 確認する→現在この色が使われているスケジュールはすべて未分類になる
+                // 指定したpositionを削除するダイアログを作成
+                PigLeadDialogFragment dialog = deleteDialog.getDeleteDialog(position);
+                deleteDialog.showPigLeadDiaLog(dialog);
             }
         });
 
