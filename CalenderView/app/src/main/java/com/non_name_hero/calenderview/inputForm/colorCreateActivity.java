@@ -47,8 +47,8 @@ public class colorCreateActivity extends AppCompatActivity {
     private String textColor;
 
     private int groupId;
-    private int colorNumberPre = 255;
-    private int colorNumber = 255;
+    private int colorNumberPre = 43;
+    private int colorNumber = 43;
     private int color = 0;
 
     //コンストラクタ

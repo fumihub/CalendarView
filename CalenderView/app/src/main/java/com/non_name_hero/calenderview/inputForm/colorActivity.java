@@ -104,10 +104,10 @@ public class colorActivity  extends AppCompatActivity {
 
         //色番号前回値を取得
         intentIn = getIntent();
-        int colorNumberPre = intentIn.getIntExtra("colorNumberPre", 255);
+        int colorNumberPre = intentIn.getIntExtra("colorNumberPre", 43);
         //前回押された色ボタンのテキストを「〇」に
         //初回
-        if (colorNumberPre == 255) {//255：colorNumberPreの初期値
+        if (colorNumberPre == 43) {//43：colorNumberPreの初期値
             /* 何もしない */
         }
         //初回以外
