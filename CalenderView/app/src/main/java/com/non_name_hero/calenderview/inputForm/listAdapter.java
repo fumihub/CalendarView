@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +14,10 @@ import android.widget.Button;
 
 import com.non_name_hero.calenderview.R;
 import com.non_name_hero.calenderview.data.ScheduleGroup;
+import com.non_name_hero.calenderview.data.source.ScheduleDataSource;
 import com.non_name_hero.calenderview.data.source.ScheduleRepository;
 import com.non_name_hero.calenderview.utils.Injection;
-import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDialog;
+import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDeleteDialog;
 import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDialogFragment;
 
 import java.util.ArrayList;
@@ -38,7 +40,7 @@ public class listAdapter extends BaseAdapter {
     private Intent intentOut;
 
     private Activity mActivity;
-    public PigLeadDialog.DeleteDialog deleteDialog;
+    public PigLeadDeleteDialog deleteDialog;
 
     //カスタムセルを拡張したらここでWigetを定義
     private static class ViewHolder {
@@ -141,8 +143,32 @@ public class listAdapter extends BaseAdapter {
         holder.destroyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final ScheduleGroup scheduleGroup = list.get(position);
                 // 指定したpositionを削除するダイアログを作成
-                PigLeadDialogFragment dialog = deleteDialog.getDeleteDialog(position);
+                PigLeadDialogFragment dialog = deleteDialog.getDeleteDialog(scheduleGroup, new PigLeadDeleteDialog.DialogCallback() {
+                    @Override
+                    public void onClickPositiveBtn() {
+                        int groupId = scheduleGroup.getGroupId();
+                        //DBから削除
+                        repository.deleteScheduleGroup(groupId, new ScheduleDataSource.DeleteCallback() {
+                            @Override
+                            public void onDeleted() {
+                                list.remove(position);
+                                notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onDataNotDeleted() {
+                                Log.d("ERROR", "削除に失敗しました。");
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onClickNegativeBtn() {
+                        //何もしない
+                    }
+                });
                 deleteDialog.showPigLeadDiaLog(dialog);
             }
         });

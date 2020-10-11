@@ -5,11 +5,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -18,7 +18,7 @@ import com.non_name_hero.calenderview.data.ScheduleGroup;
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource;
 import com.non_name_hero.calenderview.data.source.ScheduleRepository;
 import com.non_name_hero.calenderview.utils.Injection;
-import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDialog;
+import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDeleteDialog;
 import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDialogFragment;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ import java.util.List;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
-public class colorSelectActivity extends AppCompatActivity implements PigLeadDialog.DeleteDialog {
+public class colorSelectActivity extends AppCompatActivity implements PigLeadDeleteDialog {
 
     private static final int REQUEST_CODE = 1;
     private static final String DELETE_DIALOG_TAG = "DELETE_DIALOG";
@@ -179,15 +179,15 @@ public class colorSelectActivity extends AppCompatActivity implements PigLeadDia
     /**
      * 削除用ダイアログを設定
      *
-     * @param position
-     * @return
+     * @param callback ダイアログのボタン押下時の処理
+     * @return dialog DialogFragmentのオブジェクト
      */
     @Override
-    public PigLeadDialogFragment getDeleteDialog(final int position) {
-        final ScheduleGroup group = listAdapter.list.get(position);
+    public PigLeadDialogFragment getDeleteDialog(final ScheduleGroup scheduleGroup, @NonNull final DialogCallback callback) {
         // 表示させるメッセージの定義
         final ArrayList<String> dialogMessages = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.delete_schedule_group_dialog_massage)));
-        dialogMessages.set(0, String.format(dialogMessages.get(0), group.getGroupName()));
+        // 表示メッセージに削除対象の名前を挿入
+        dialogMessages.set(0, String.format(dialogMessages.get(0), scheduleGroup.getGroupName()));
         final String positiveBtnMessage = getString(R.string.delete_schedule_group_positive);
         final String negativeBtnMessage = getString(R.string.delete_schedule_group_negative);
         // AlertDialogを設定
@@ -198,23 +198,13 @@ public class colorSelectActivity extends AppCompatActivity implements PigLeadDia
                 .setPositiveClickListener(new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        repository.deleteScheduleGroup(group.getGroupId(), new ScheduleDataSource.DeleteCallback() {
-                            @Override
-                            public void onDeleted() {
-                                listAdapter.list.remove(position);
-                                listAdapter.notifyDataSetChanged();
-                            }
-
-                            @Override
-                            public void onDataNotDeleted() {
-                                Log.d("ERROR", "削除に失敗しました。");
-                            }
-                        });
+                       callback.onClickPositiveBtn();
                     }
                 })
                 .setNegativeClickListener(new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        callback.onClickNegativeBtn();
                     }
                 });
         return dialog;
