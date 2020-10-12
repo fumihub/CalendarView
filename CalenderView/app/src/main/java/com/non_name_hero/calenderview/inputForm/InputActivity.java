@@ -5,6 +5,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -32,7 +33,6 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
     private static final int REQUEST_CODE = 1;
 
     private InputContract.Presenter mInputPresenter;
-    private InputContract.View mView;
     private ScheduleRepository repository;
 
     private Calendar mStartAtDatetime;
@@ -44,15 +44,16 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
     private EditText startTime;
     private EditText endTime;
     private TextView timeArrow;
-    private EditText myBudget;
-    private EditText price;
     private TextView place;
     private EditText memo;
-    private TextView picture;
 
     private Button timeButton;
     private Button color1;
     private Button color2;
+    private Button mapCheckButton1;
+    private Button mapCheckButton2;
+    private Button mapCheckButton3;
+    private Button mapCheckButton4;
     private Button detailButton;
     private Button cancelButton;
     private Button doneButton;
@@ -107,11 +108,14 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
         color1 = findViewById(R.id.colorButton1);
         color2 = findViewById(R.id.colorButton2);
         detailButton = findViewById(R.id.detailButton);
-        myBudget = findViewById(R.id.myBudget);
-        price = findViewById(R.id.price);
+        mapCheckButton1 = findViewById(R.id.mapCheckButton1);
+        mapCheckButton2 = findViewById(R.id.mapCheckButton2);
+        mapCheckButton3 = findViewById(R.id.mapCheckButton3);
+        mapCheckButton4 = findViewById(R.id.mapCheckButton4);
+        detailButton = findViewById(R.id.detailButton);
+        detailButton = findViewById(R.id.detailButton);
         place = findViewById(R.id.place);
         memo = findViewById(R.id.memo);
-        picture = findViewById(R.id.picture);
         cancelButton = findViewById(R.id.cancelButton);
         doneButton = findViewById(R.id.doneButton);
 
@@ -129,12 +133,13 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
         startTime.setVisibility(View.GONE);
         endTime.setVisibility(View.GONE);
         timeArrow.setVisibility(View.GONE);
-        myBudget.setVisibility(View.GONE);
-        price.setVisibility(View.GONE);
+        mapCheckButton1.setVisibility(View.GONE);
+        mapCheckButton2.setVisibility(View.GONE);
+        mapCheckButton3.setVisibility(View.GONE);
+        mapCheckButton4.setVisibility(View.GONE);
         place.setVisibility(View.GONE);
         memo.setVisibility(View.GONE);
-        picture.setVisibility(View.GONE);
-        //
+        //初期表示日付取得
         mStartAtDatetime = Calendar.getInstance();
         mStartAtDatetime.set(Integer.valueOf(year), Integer.valueOf(month) - 1, Integer.valueOf(day));
         mEndAtDatetime = Calendar.getInstance();
@@ -322,11 +327,43 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
             public void onClick(View v) {
                 //詳細入力表示に
                 detailButton.setVisibility(View.GONE);
-                myBudget.setVisibility(View.VISIBLE);
-                price.setVisibility(View.VISIBLE);
+                mapCheckButton1.setVisibility(View.VISIBLE);
+                mapCheckButton2.setVisibility(View.VISIBLE);
+                mapCheckButton3.setVisibility(View.VISIBLE);
+                mapCheckButton4.setVisibility(View.VISIBLE);
                 place.setVisibility(View.VISIBLE);
                 memo.setVisibility(View.VISIBLE);
-                picture.setVisibility(View.VISIBLE);
+            }
+        });
+        /************************************************/
+
+        /*マップチェックボタンが押されたとき*********************/
+        mapCheckButton1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //GoogleMapへ遷移
+                goGoogleMap();
+            }
+        });
+        mapCheckButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //GoogleMapへ遷移
+                goGoogleMap();
+            }
+        });
+        mapCheckButton3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //GoogleMapへ遷移
+                goGoogleMap();
+            }
+        });
+        mapCheckButton4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //GoogleMapへ遷移
+                goGoogleMap();
             }
         });
         /************************************************/
@@ -359,6 +396,28 @@ public class InputActivity extends AppCompatActivity implements InputContract.Vi
     public void goColorSelectActivity() {
         //戻り値を設定して色選択画面に遷移
         startActivityForResult(intentOut, REQUEST_CODE);
+    }
+
+    public void goGoogleMap() {
+        //場所が入力されていない時(GoogleMapへ遷移)
+        Uri gmmIntentUri;
+        if (place.getText().toString().isEmpty()) {
+            //geo:緯度,経度?q=検索文字列(緯度経度が"0,0"の場合、現在地表示)
+            gmmIntentUri = Uri.parse("geo:0,0");
+        }
+        //場所が入力されている時(GoogleMapへ遷移して、入力されている文字列を検索)
+        else {
+            String str = "geo:0,0?q=" + place.getText().toString();
+            gmmIntentUri = Uri.parse(str);
+        }
+        //GoogleMap用intent作成
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        //GoogleMapがコール受信可能かをチェック
+        if (mapIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(mapIntent);
+        }
+
     }
 
     //Activityから戻り値(色番号)を受け取る処理
