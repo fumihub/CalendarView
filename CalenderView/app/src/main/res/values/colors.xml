@@ -66,6 +66,19 @@
     <color name="blackColor7">#99DDFF</color>
     <!--ツールバー-->
     <color name="toolbar">#424242</color>
+    <color name="toolbar_string">#292929</color>
+    <color name="toolbar_jan">#fa4d4d</color>
+    <color name="toolbar_feb">#e3e3e3</color>
+    <color name="toolbar_mar">#87d964</color>
+    <color name="toolbar_apr">#ffbfd3</color>
+    <color name="toolbar_may">#d9fff7</color>
+    <color name="toolbar_jun">#cd8df0</color>
+    <color name="toolbar_jul">#92cdf7</color>
+    <color name="toolbar_aug">#49ad6b</color>
+    <color name="toolbar_sep">#4173d1</color>
+    <color name="toolbar_oct">#fcb558</color>
+    <color name="toolbar_nov">#f0794a</color>
+    <color name="toolbar_dec">#e6eded</color>
     <!--透明-->
     <color name="clearButtonPressed">#33000000</color>
     <!--カレンダー関連-->

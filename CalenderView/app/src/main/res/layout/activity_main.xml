@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="viewmodel"
             type="com.non_name_hero.calenderview.calendar.CalendarViewModel" />
@@ -22,7 +21,6 @@
             android:id="@+id/mainToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#FFEB3B"
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme"
             app:layout_constraintBottom_toTopOf="@id/calendar_fragment_container"
@@ -35,8 +33,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="left|center_vertical"
-                android:text="@{viewmodel.currentMonth}"
-                android:textColor="@color/whiteColor"
+                android:text="@{viewmodel.currentMonth.toString()}"
+                android:textColor="@color/blackColor2"
                 android:textSize="25sp"
                 android:textStyle="bold"
                 tools:ignore="HardcodedText" />

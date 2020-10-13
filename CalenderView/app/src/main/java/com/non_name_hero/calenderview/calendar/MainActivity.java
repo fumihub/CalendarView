@@ -1,11 +1,13 @@
 package com.non_name_hero.calenderview.calendar;
 
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.ads.AdRequest;
@@ -31,8 +33,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setTheme(R.style.AppTheme);
         //DataBinding
-        ActivityMainBinding binding;
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        final ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         //収入支出ブロックの背景色変更
         accountingText = findViewById(R.id.accounting);
@@ -65,9 +66,16 @@ public class MainActivity extends AppCompatActivity {
         binding.setViewmodel(mViewModel);
         //LifecycleOwnerを指定
         binding.setLifecycleOwner(this);
+        // ViewModelを監視して変更があればToolbarの色を更新する
+        mViewModel.getCurrentMonth().observe(this,new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                TypedArray colors = getResources().obtainTypedArray(R.array.toolbar_color_array);
+                binding.mainToolbar.setBackgroundColor(colors.getColor(integer - 1, getResources().getColor(R.color.toolbar_string)));
+            }
+        });
         //Toolbarをセット
         setSupportActionBar(binding.mainToolbar);
-        binding.mainToolbar.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.toolbar));
 
         //bindingを即時反映
         binding.executePendingBindings();

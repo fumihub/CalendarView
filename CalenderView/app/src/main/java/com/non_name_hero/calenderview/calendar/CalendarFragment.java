@@ -30,49 +30,37 @@ public class CalendarFragment extends Fragment {
     private CalendarPagerAdapter mPagerAdapter;
     private CalendarViewModel mViewModel;
     private Calendar mCalendar;
+    private Boolean pagerIdleFlag = Boolean.FALSE;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mCalendar = Calendar.getInstance();
         View rootView = inflater.inflate(R.layout.calendar_fragment, container, false);
-        //CalendarViewModelを取得
-        mViewModel = MainActivity.obtainViewModel(getActivity());
-        //データを更新
-        loadData();
-
-        mPager = (ViewPager2) rootView.findViewById(R.id.pager);
-        mPagerAdapter = new CalendarPagerAdapter(this);
-
-        mPager.setOffscreenPageLimit(5);
-        mPager.setAdapter(mPagerAdapter);
-        mPager.setCurrentItem(DEFAULT_PAGE, false);
-
+        // ViewPagerをセットアップ
+        initPager(rootView);
         return rootView;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
-                //現在の月をviewModelにセット矢印DataBindingでtoolbarに表示
-                mViewModel.setCurrentMonth(getCurrentMonth(position));
-            }
-        });
         initScheduleList();
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        //CalendarViewModelを取得
+        mViewModel = MainActivity.obtainViewModel(getActivity());
+        //データを更新
+        loadData();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        // カレンダーのスケジュールを更新
         mViewModel.reloadCalendarData(true);
     }
 
@@ -102,6 +90,35 @@ public class CalendarFragment extends Fragment {
         }
     }
 
+    // ViewPager2を初期設定
+    private void initPager(View rootView) {
+        // pagerを設定
+        mPager = (ViewPager2) rootView.findViewById(R.id.pager);
+        mPagerAdapter = new CalendarPagerAdapter(this);
+        mPager.setOffscreenPageLimit(5);
+        mPager.setAdapter(mPagerAdapter);
+        mPager.setCurrentItem(DEFAULT_PAGE, false);
+        mPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                if (state == ViewPager2.SCROLL_STATE_IDLE) {
+                    //IDLEフラグをTRUEにする
+                    pagerIdleFlag = Boolean.TRUE;
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                //pagerがIDLE状態の場合、現在の月をviewModelにセット矢印DataBindingでtoolbarに表示
+                if (pagerIdleFlag) mViewModel.setCurrentMonth(getCurrentMonth(position));
+            }
+        });
+    }
     /**
      * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
      * sequence.
