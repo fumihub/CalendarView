@@ -31,7 +31,7 @@ public class listAdapter extends BaseAdapter {
 
     private static final int REQUEST_CODE = 1;
 
-    public List<ScheduleGroup> list;
+    private List<ScheduleGroup> list;
     private Context mContext;
     private LayoutInflater mLayoutInflater;
     private ScheduleRepository repository;

@@ -67,7 +67,7 @@ public class colorSelectActivity extends AppCompatActivity implements PigLeadDel
 
         //リストのアダプターを使用してViewを作成
         listAdapter = new listAdapter(context, this);
-        //削除ダイアログを
+        //削除ダイアログを設定
         listAdapter.deleteDialog = this;
         listView.setAdapter(listAdapter);
 
