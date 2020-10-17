@@ -46,6 +46,8 @@ public class colorSelectActivity extends AppCompatActivity implements PigLeadDel
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
 
+    private boolean createFlag = FALSE;
+
     //コンストラクタ
     public colorSelectActivity() {
 
@@ -111,15 +113,26 @@ public class colorSelectActivity extends AppCompatActivity implements PigLeadDel
         });
         /************************************************/
 
+        //editFlag判定用Flag
+        createFlag = TRUE;
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        //アプリ再開時にeditFlagを0にする
-        //TODO　リストビューから削除ボタンを非表示に
-        jdgEditMode(FALSE, "編集");
+        //createFlagがTRUEならば
+        if (createFlag) {
+            //アプリ再開時にeditFlagを0にする
+            //TODO　リストビューから削除ボタンを非表示に
+            jdgEditMode(FALSE, "編集");
+        }
+        //それ以外
+        else {
+            /* 何もしない */
+        }
+
     }
 
     private void jdgEditMode(boolean value, String str) {
