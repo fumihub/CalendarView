@@ -25,7 +25,6 @@ public class colorActivity  extends AppCompatActivity {
     private Intent intentIn;
     private Intent intentOut;
 
-//    private SharedPreferences prefs;
     private ScheduleRepository repository;
 
     private List<ScheduleGroup> list;
