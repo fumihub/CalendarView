@@ -1,3 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">CalenderView</string>
+    <string name="black">黒</string>
+    <string name="dialog_massage_default"></string>
+    <string name="dialog_positive_default">はい</string>
+    <string name="dialog_negative_default">いいえ</string>
+    <string-array name="delete_schedule_group_dialog_massage">
+        <item>「<b>%1$s</b>」</item>
+        <item>このグループを削除します</item>
+        <item>設定されていた予定は「未分類」に変更されます。</item>
+    </string-array>
+    <string name="delete_schedule_group_positive">削除</string>
+    <string name="delete_schedule_group_negative">キャンセル</string>
 </resources>
