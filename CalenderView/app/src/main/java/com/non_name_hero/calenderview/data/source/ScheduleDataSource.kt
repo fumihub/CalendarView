@@ -6,12 +6,12 @@ import com.non_name_hero.calenderview.data.ScheduleGroup
 
 interface ScheduleDataSource {
     interface GetScheduleCallback {
-        fun onScheduleLoaded(schedules: List<Schedule?>?)
+        fun onScheduleLoaded(schedules: List<Schedule>)
         fun onDataNotAvailable()
     }
 
     interface GetScheduleMapCallback {
-        fun onScheduleMapLoaded(scheduleStringMap: Map<String?, List<Schedule?>?>?)
+        fun onScheduleMapLoaded(scheduleStringMap: Map<String, List<Schedule>>)
     }
 
     interface SaveScheduleCallback {
@@ -20,7 +20,7 @@ interface ScheduleDataSource {
     }
 
     fun getSchedule(ScheduleIds: LongArray, callback: GetScheduleCallback)
-    fun setSchedule(schedule: Schedule?, callback: SaveScheduleCallback)
+    fun setSchedule(schedule: Schedule, callback: SaveScheduleCallback)
     fun getAllSchedules(callback: GetScheduleCallback)
     fun removeScheduleByScheduleId(scheduleId: Long)
 
@@ -36,13 +36,13 @@ interface ScheduleDataSource {
 
     //複数件取得時のコールバック
     interface GetScheduleGroupsCallback {
-        fun onScheduleGroupsLoaded(Groups: List<ScheduleGroup?>?)
+        fun onScheduleGroupsLoaded(Groups: List<ScheduleGroup>)
         fun onDataNotAvailable()
     }
 
     //1件取得時コールバック
     interface GetScheduleGroupCallback {
-        fun onScheduleGroupLoaded(group: ScheduleGroup?)
+        fun onScheduleGroupLoaded(group: ScheduleGroup)
     }
 
     // 削除時のコールバック
@@ -62,7 +62,7 @@ interface ScheduleDataSource {
     }
 
     interface LoadCalendarDataCallback {
-        fun onCalendarDataLoaded(calendarDataList: List<CalendarData?>?)
+        fun onCalendarDataLoaded(calendarDataList: List<CalendarData>)
         fun onDataNotAvailable()
     }
 
