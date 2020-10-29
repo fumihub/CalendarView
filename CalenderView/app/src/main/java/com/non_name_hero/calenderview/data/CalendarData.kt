@@ -25,5 +25,5 @@ class CalendarData {
     @Ignore
     var isHoliday = false
     val textColor: Boolean
-        get() = groupTextColor == '黒'
+        get() = groupTextColor == "黒";
 }
