@@ -22,12 +22,19 @@ import java.lang.Boolean
 import java.util.*
 
 class listAdapter(private val mContext: Context, activity: Activity) : BaseAdapter() {
+
     private var list: List<ScheduleGroup>
+
     private val mLayoutInflater: LayoutInflater
+
     private val repository: ScheduleRepository?
+
     private var prefs: SharedPreferences? = null
+
     private var intentOut: Intent? = null
+
     private val mActivity: Activity
+
     var deleteDialog: PigLeadDeleteDialog? = null
 
     //カスタムセルを拡張したらここでWigetを定義
@@ -87,14 +94,14 @@ class listAdapter(private val mContext: Context, activity: Activity) : BaseAdapt
         //TODO　削除ボタン表示
         //SharedPreferenceからeditFlagの値を取得
         prefs = mContext.getSharedPreferences("input_data", Context.MODE_PRIVATE)
-        if (prefs.getBoolean("editFlag", Boolean.FALSE)
+        if (prefs?.getBoolean("editFlag", Boolean.FALSE)
                 && list[position].colorNumber != 43) {
             holder.destroyButton!!.visibility = View.VISIBLE
         } else {
             holder.destroyButton!!.visibility = View.GONE
         }
         holder.categoryButton!!.setOnClickListener {
-            if (prefs.getBoolean("editFlag", Boolean.FALSE)) {
+            if (prefs?.getBoolean("editFlag", Boolean.FALSE)) {
                 if (list[position].colorNumber == 43) {
                     /* 何もしない */
                 } else {
