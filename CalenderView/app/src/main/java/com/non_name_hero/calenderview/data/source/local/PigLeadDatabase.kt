@@ -14,14 +14,6 @@ import com.non_name_hero.calenderview.data.ScheduleGroup
 @TypeConverters(Converter::class)
 abstract class PigLeadDatabase : RoomDatabase() {
     abstract fun scheduleDao(): SchedulesDao?
-    override fun createOpenHelper(config: DatabaseConfiguration): SupportSQLiteOpenHelper {
-        return null
-    }
-
-    override fun createInvalidationTracker(): InvalidationTracker {
-        return null
-    }
-
     override fun clearAllTables() {}
 
     companion object {

@@ -41,12 +41,13 @@ object PigLeadUtils {
      * @param calendarDataList
      * @return scheduleMap -　Map<String></String>, List<Calendardata>>
     </Calendardata></CalendarData></CalendarData> */
-    fun getCalendarDataMapByCalendarDataList(calendarDataList: List<CalendarData?>?): Map<String, MutableList<CalendarData?>> {
-        val calendarDataMap: MutableMap<String, MutableList<CalendarData?>> = HashMap()
-        var calendarDataLists: MutableList<CalendarData?>
-        for (data in calendarDataList!!) {
-            val date = formatYYYYMMDD.format(data!!.scheduleStartAtDatetime)
+    fun getCalendarDataMapByCalendarDataList(calendarDataList: List<CalendarData>): Map<String, MutableList<CalendarData>> {
+        val calendarDataMap: MutableMap<String, MutableList<CalendarData>> = HashMap()
+        var calendarDataLists: MutableList<CalendarData>
+        for (data in calendarDataList) {
+            val date = formatYYYYMMDD.format(data.scheduleStartAtDatetime)
             if (calendarDataMap.containsKey(date)) {
+                //calendarDataMap[date]が非nullであることは保証される
                 calendarDataLists = calendarDataMap[date]!!
                 calendarDataLists.add(data)
                 calendarDataLists = ArrayList(LinkedHashSet(calendarDataLists))

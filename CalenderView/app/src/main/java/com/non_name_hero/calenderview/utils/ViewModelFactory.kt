@@ -24,21 +24,17 @@ class ViewModelFactory private constructor(private val mScheduleRepository: Sche
         @SuppressLint("StaticFieldLeak")
         @Volatile
         private var INSTANCE: ViewModelFactory? = null
-        fun getInstance(application: Application): ViewModelFactory? {
-            if (INSTANCE == null) {
-                synchronized(ViewModelFactory::class.java) {
-                    if (INSTANCE == null) {
-                        INSTANCE = ViewModelFactory(
-                                Injection.provideScheduleRepository(application.applicationContext))
-                    }
+        fun getInstance(application: Application) =
+                INSTANCE ?: synchronized(ViewModelFactory::class.java) {
+                    INSTANCE ?: ViewModelFactory(
+                            Injection.provideScheduleRepository(application.applicationContext))
+                            .also { INSTANCE = it }
                 }
-            }
-            return INSTANCE
-        }
 
-        @VisibleForTesting
-        fun destroyInstance() {
-            INSTANCE = null
-        }
+    }
+
+    @VisibleForTesting
+    fun destroyInstance() {
+        INSTANCE = null
     }
 }
