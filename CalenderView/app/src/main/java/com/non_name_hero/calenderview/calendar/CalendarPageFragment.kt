@@ -13,17 +13,17 @@ import androidx.fragment.app.Fragment
 import com.non_name_hero.calenderview.R
 import com.non_name_hero.calenderview.databinding.CalendarFragmentScreenSlidePageBinding
 import com.non_name_hero.calenderview.inputForm.InputActivity
+
 import com.non_name_hero.calenderview.utils.PigLeadUtils
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * フラグメントにカレンダーを表示させるクラス
  */
 class CalendarPageFragment     //コンストラクタ
 (private val mProgressMonth: Int) : Fragment() {
-    private var intent: Intent? = null
-    private var mCalendarAdapter: CalendarAdapter? = null
-    private var calendarGridView: GridView? = null
-    private var mCalendarViewModel: CalendarViewModel? = null
+    private lateinit var mCalendarAdapter: CalendarAdapter
 
     /**
      * onCreateViewは戻り値のビューを表示させる
@@ -37,22 +37,18 @@ class CalendarPageFragment     //コンストラクタ
                               savedInstanceState: Bundle?): View? {
         val binding: CalendarFragmentScreenSlidePageBinding
         //DataBinding
-        binding = DataBindingUtil.inflate(
+        binding = CalendarFragmentScreenSlidePageBinding.inflate(
                 inflater,
-                R.layout.calendar_fragment_screen_slide_page,
                 container,
-                false)
-        //CalendarViewModelを作成
-        mCalendarViewModel = MainActivity.Companion.obtainViewModel(requireActivity())
-        binding.viewmodel = mCalendarViewModel
-        binding.lifecycleOwner = activity
+                false).apply() {
+            this.lifecycleOwner = viewLifecycleOwner
+            this.viewmodel = (activity as MainActivity).obtainViewModel()
+        }
         //カレンダーを作成(GridView)
-        calendarGridView = binding.calendarGridView
-        mCalendarAdapter = CalendarAdapter(context, mProgressMonth)
-        calendarGridView!!.adapter = mCalendarAdapter
+        binding.calendarGridView.adapter = CalendarAdapter(context, mProgressMonth)
 
         //クリックリスナー
-        calendarGridView!!.onItemClickListener = OnItemClickListener { parent, view, position, id ->
+        binding.calendarGridView.onItemClickListener = OnItemClickListener { parent, view, position, id ->
 
             /**
              * GridViewのクリックリスナー
@@ -61,23 +57,16 @@ class CalendarPageFragment     //コンストラクタ
              * @param position GridView内でのポジション
              * @param id Adapter内メソッドgetItemIdで設定した値　ここではpositionをそのまま返してる
              */
-            /**
-             * GridViewのクリックリスナー
-             * @param parent 表示されているAdapterViewのインスタンス参照
-             * @param view 選択されたItemのViewインスタンス参照
-             * @param position GridView内でのポジション
-             * @param id Adapter内メソッドgetItemIdで設定した値　ここではpositionをそのまま返してる
-             */
-            val dateArray = mCalendarAdapter.getDateArray()
-            mCalendarViewModel!!.setScheduleItem(dateArray!![position])
+            val dateArray = (binding.calendarGridView.adapter as CalendarAdapter).dateArray
+            binding.viewmodel?.setScheduleItem(dateArray[position])
         }
-        calendarGridView!!.onItemLongClickListener = OnItemLongClickListener { parent, view, position, id -> //入力画面に遷移
-            intent = Intent(context, InputActivity::class.java)
-            val dateArray = mCalendarAdapter.getDateArray()
+       binding.calendarGridView.onItemLongClickListener = OnItemLongClickListener { parent, view, position, id -> //入力画面に遷移
+            val intent = Intent(context, InputActivity::class.java)
+            val dateArray = mCalendarAdapter?.dateArray ?: ArrayList<Date>()
             //入力画面に引数で年月日を渡す
-            intent!!.putExtra("year", PigLeadUtils.yearFormat.format(dateArray!![position]))
-            intent!!.putExtra("month", PigLeadUtils.monthFormat.format(dateArray!![position]))
-            intent!!.putExtra("day", PigLeadUtils.dayFormat.format(dateArray!![position]))
+            intent.putExtra("year", PigLeadUtils.yearFormat.format(dateArray[position] ?: Date()))
+            intent.putExtra("month", PigLeadUtils.monthFormat.format(dateArray[position] ?: Date()))
+            intent.putExtra("day", PigLeadUtils.dayFormat.format(dateArray[position] ?: Date()))
             startActivity(intent)
             true
         }
@@ -85,7 +74,4 @@ class CalendarPageFragment     //コンストラクタ
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
 }
