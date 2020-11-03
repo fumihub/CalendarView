@@ -27,7 +27,7 @@
             android:stretchMode="columnWidth"
             android:verticalSpacing="1dp"
             app:schedules="@{viewmodel.calendarDataMap}"
-            app:holidays="@{viewmodel.holidayCalendarDataMap}"
+            app:holidays="@{viewmodel.holidaySchedulesMap}"
             />
 
         <TextView
