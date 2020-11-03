@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-<androidx.constraintlayout.motion.widget.MotionLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    app:layoutDescription="@xml/calendar_fragment_scene"
-    android:id="@+id/motionLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.non_name_hero.calenderview.calendar.CalendarViewModel" />
+    </data>
+
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/motionLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutDescription="@xml/calendar_fragment_scene">
 
 
         <!--罫線の設定-->
@@ -101,11 +106,12 @@
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/pager"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            ></androidx.viewpager2.widget.ViewPager2>
+            android:layout_height="0dp"></androidx.viewpager2.widget.ViewPager2>
 
-    <FrameLayout
-        android:id="@+id/schedule_list_fragment_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"></FrameLayout>
-</androidx.constraintlayout.motion.widget.MotionLayout>
+        <FrameLayout
+            android:id="@+id/schedule_list_fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></FrameLayout>
+    </androidx.constraintlayout.motion.widget.MotionLayout>
+
+</layout>

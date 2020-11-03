@@ -11,16 +11,16 @@ interface SchedulesDao {
     * Schedule
     * */
     @get:Query("SELECT * FROM schedule ORDER BY start_at_datetime, schedule_id")
-    val all: List<Schedule?>?
+    val all: List<Schedule>
 
     @Query("SELECT * FROM schedule WHERE schedule_id IN (:scheduleIds)")
-    fun loadSchedulesByIds(scheduleIds: LongArray?): List<Schedule?>?
+    fun loadSchedulesByIds(scheduleIds: LongArray): List<Schedule>
 
     @Query("SELECT * FROM schedule WHERE start_at_datetime >= :targetYearMonth AND end_at_datetime <= :targetYearMonth")
-    fun findByYearMonth(targetYearMonth: String?): List<Schedule?>?
+    fun findByYearMonth(targetYearMonth: String): List<Schedule>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertSchedule(schedule: Schedule?)
+    fun insertSchedule(schedule: Schedule)
 
     @Delete
     fun delete(schedule: Schedule?)
@@ -35,22 +35,22 @@ interface SchedulesDao {
     ScheduleGroup
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertScheduleGroup(scheduleGroup: ScheduleGroup?)
+    fun insertScheduleGroup(scheduleGroup: ScheduleGroup)
 
     @Update
-    fun updateScheduleGroup(groups: ScheduleGroup?)
+    fun updateScheduleGroup(groups: ScheduleGroup)
 
     @Delete
-    fun deleteScheduleGroup(group: ScheduleGroup?)
+    fun deleteScheduleGroup(group: ScheduleGroup)
 
     @Query("DELETE FROM schedule_group WHERE group_id = :groupId")
     fun deleteScheduleGroupByColorNumber(groupId: Int)
 
     @Query("SELECT group_id, color_number, group_name, character_color, background_color FROM schedule_group WHERE color_number = :colorNumber")
-    fun getScheduleGroupByColorNumber(colorNumber: Int): List<ScheduleGroup?>
+    fun getScheduleGroupByColorNumber(colorNumber: Int): List<ScheduleGroup>
 
     @get:Query("SELECT * FROM schedule_group ORDER BY group_id DESC")
-    val allScheduleGroup: List<ScheduleGroup?>?
+    val allScheduleGroup: List<ScheduleGroup>
 
     /*ScheduleAndGroup*/
     @get:Query("SELECT s.schedule_id AS scheduleId, s.title AS scheduleTitle, s.start_at_datetime AS scheduleStartAtDatetime, s.end_at_datetime AS scheduleEndAtDatetime, CASE WHEN g.group_id IS NOT NULL THEN g.group_id ELSE 1 END AS groupId, " +
@@ -58,5 +58,5 @@ interface SchedulesDao {
             "FROM schedule s " +
             "LEFT JOIN schedule_group g ON g.group_id = s.group_id " +
             "ORDER BY s.schedule_id DESC")
-    val allCalendarDataList: List<CalendarData?>?
+    val allCalendarDataList: List<CalendarData>
 }

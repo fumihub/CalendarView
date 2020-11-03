@@ -18,15 +18,15 @@ import com.non_name_hero.calenderview.utils.PigLeadUtils
 import java.lang.Boolean
 import java.util.*
 
-class CalendarAdapter(private val mContext: Context?, month: Int) : BaseAdapter() {
+class CalendarAdapter(private val context: Context?, month: Int) : BaseAdapter() {
     /**
      * @return dateArray
      */
-    val dateArray: List<Date?>?
+    val dateArray: List<Date>
     private val mDateManager: DateManager
     private val mLayoutInflater: LayoutInflater
-    private var mCalendarMap: Map<String, List<CalendarData>>?
-    private var mHolidayMap: Map<String, List<CalendarData>>?
+    private var mCalendarMap: Map<String, List<CalendarData>>
+    private var mHolidayMap: Map<String, List<CalendarData>>
 
     /**
      * カレンダー表示する際に使用する日数
@@ -34,7 +34,7 @@ class CalendarAdapter(private val mContext: Context?, month: Int) : BaseAdapter(
      * @return dateManagerから取得した日数が返却される
      */
     override fun getCount(): Int {
-        return dateArray!!.size
+        return dateArray.size
     }
 
     /**
@@ -44,18 +44,18 @@ class CalendarAdapter(private val mContext: Context?, month: Int) : BaseAdapter(
      * @param convertView {View}
      * @param parent
      */
-    override fun getView(position: Int, convertView: View, parent: ViewGroup): View {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val calendarCellBinding: CalendarCellBinding
         val cellDate = dateArray!![position]
         calendarCellBinding = if (convertView == null) {
             val inflater = LayoutInflater.from(parent.context)
             DataBindingUtil.inflate(inflater, R.layout.calendar_cell, parent, false)
         } else {
-            DataBindingUtil.getBinding(convertView)
+            DataBindingUtil.getBinding(convertView) ?: throw IllegalStateException()
         }
 
         //セルのサイズを指定
-        val dp = mContext!!.resources.displayMetrics.density
+        val dp = context!!.resources.displayMetrics.density
         val params = AbsListView.LayoutParams(parent.width / 7 - dp.toInt(), (parent.height - dp.toInt() * mDateManager.weeks) / mDateManager.weeks)
         calendarCellBinding.calendarCell.layoutParams = params
 
@@ -66,12 +66,12 @@ class CalendarAdapter(private val mContext: Context?, month: Int) : BaseAdapter(
         if (mDateManager.isCurrentMonth(cellDate)) {
             //当日の背景を黄色に
             if (mDateManager.currentDate == cellDate) {
-                calendarCellBinding.calendarCell.setBackgroundColor(mContext.resources.getColor(R.color.currentDayColor))
+                calendarCellBinding.calendarCell.setBackgroundColor(context.resources.getColor(R.color.currentDayColor))
             } else {
                 calendarCellBinding.calendarCell.setBackgroundColor(Color.WHITE)
             }
         } else {
-            calendarCellBinding.calendarCell.setBackgroundColor(mContext.resources.getColor(R.color.notCurrentMonth))
+            calendarCellBinding.calendarCell.setBackgroundColor(context.resources.getColor(R.color.notCurrentMonth))
         }
 
         //祝日、日曜日を赤、土曜日を青に
@@ -83,10 +83,10 @@ class CalendarAdapter(private val mContext: Context?, month: Int) : BaseAdapter(
 
         //スケジュールをセルに追記
         if (mCalendarMap != null) {
-            val scheduleList = mCalendarMap!![PigLeadUtils.formatYYYYMMDD.format(cellDate)]!!
+            val scheduleList = mCalendarMap?.get(PigLeadUtils.formatYYYYMMDD.format(cellDate))?: emptyList()
             //スケジュールを追加
             for (i in 0..3) {
-                if (mCalendarMap!!.containsKey(PigLeadUtils.formatYYYYMMDD.format(cellDate)) && i < scheduleList.size) {
+                if (mCalendarMap.containsKey(PigLeadUtils.formatYYYYMMDD.format(cellDate)) && i < scheduleList.size) {
                     setScheduleText(scheduleList[i], calendarCellBinding.scheduleList)
                 } else {
                     break
@@ -106,8 +106,8 @@ class CalendarAdapter(private val mContext: Context?, month: Int) : BaseAdapter(
         view!!.scheduleList.removeAllViews()
         var schedules: List<CalendarData> = ArrayList()
         var isHoliday = Boolean.FALSE
-        if (mHolidayMap != null && mHolidayMap!!.containsKey(date)) {
-            schedules = mHolidayMap!![date]!!
+        if (mHolidayMap != null && mHolidayMap.containsKey(date)) {
+            schedules = mHolidayMap.get(date)?: emptyList()
             for (schedule in schedules) {
                 //祝日の場合
                 setScheduleText(schedule, view.scheduleList)
@@ -140,7 +140,7 @@ class CalendarAdapter(private val mContext: Context?, month: Int) : BaseAdapter(
         val drawable = GradientDrawable()
         drawable.cornerRadius = 10f
         if (schedule.isHoliday) {
-            drawable.setColor(mContext!!.resources.getColor(R.color.holidayColor))
+            drawable.setColor(context!!.resources.getColor(R.color.holidayColor))
         } else {
             drawable.setColor(schedule.groupBackgroundColor)
         }
@@ -152,7 +152,7 @@ class CalendarAdapter(private val mContext: Context?, month: Int) : BaseAdapter(
         return position.toLong()
     }
 
-    override fun getItem(position: Int): Any {
+    override fun getItem(position: Int): Any? {
         return null
     }
 
@@ -175,7 +175,7 @@ class CalendarAdapter(private val mContext: Context?, month: Int) : BaseAdapter(
     }
 
     init {
-        mLayoutInflater = LayoutInflater.from(mContext)
+        mLayoutInflater = LayoutInflater.from(context)
         mDateManager = DateManager()
         mDateManager.jumpMonth(month)
         dateArray = mDateManager.days

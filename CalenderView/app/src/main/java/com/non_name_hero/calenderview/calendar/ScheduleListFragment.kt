@@ -13,23 +13,21 @@ import com.non_name_hero.calenderview.R
 import com.non_name_hero.calenderview.databinding.ScheduleFragmentBinding
 
 class ScheduleListFragment : Fragment() {
-    private var recyclerView: RecyclerView? = null
     private var layoutManager: RecyclerView.LayoutManager? = null
-    private var viewModel: CalendarViewModel? = null
-    private var adapter: ScheduleListAdapter? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         //viewの生成
-        val binding: ScheduleFragmentBinding
-        binding = DataBindingUtil.inflate(inflater, R.layout.schedule_fragment, container, false)
-        //CalendarViewModelを取得
-        viewModel = MainActivity.Companion.obtainViewModel(activity)
-        recyclerView = binding.scheduleRecyclerView
+        val binding: ScheduleFragmentBinding = DataBindingUtil.inflate<ScheduleFragmentBinding>(inflater, R.layout.schedule_fragment, container, false)
+                .apply {
+                    //CalendarViewModelを取得
+                    viewmodel = (activity as MainActivity).obtainViewModel()
+                    lifecycleOwner = viewLifecycleOwner
+                }
+        val recyclerView = binding.scheduleRecyclerView
         // RecyclerViewの設定
-        recyclerView!!.setHasFixedSize(true) // アイテムの大きさが固定ならtrue
-        adapter = ScheduleListAdapter(context, viewModel)
-        recyclerView!!.adapter = adapter
-        layoutManager = LinearLayoutManager(context)
-        recyclerView!!.layoutManager = layoutManager
+        recyclerView.setHasFixedSize(true) // アイテムの大きさが固定ならtrue
+        val adapter = ScheduleListAdapter(requireContext(), binding.viewmodel!!)
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(context)
         // setItemTouchHelperの設定
         val itemDecor = ItemTouchHelper(
                 object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN,
@@ -37,18 +35,16 @@ class ScheduleListFragment : Fragment() {
                     override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
                         val fromPos = viewHolder.adapterPosition
                         val toPos = target.adapterPosition
-                        adapter!!.notifyItemMoved(fromPos, toPos)
+                        adapter.notifyItemMoved(fromPos, toPos)
                         return true
                     }
 
                     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                         val fromPos = viewHolder.adapterPosition
-                        adapter!!.removeScheduleItem(fromPos)
+                        adapter.removeScheduleItem(fromPos)
                     }
                 })
         itemDecor.attachToRecyclerView(binding.scheduleRecyclerView)
-        binding.viewmodel = viewModel
-        binding.lifecycleOwner = activity
         return binding.root
     }
 

@@ -5,6 +5,7 @@ import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.non_name_hero.calenderview.R
@@ -13,17 +14,13 @@ import com.non_name_hero.calenderview.data.CalendarData
 import com.non_name_hero.calenderview.databinding.ScheduleFragmentItemBinding
 import java.util.*
 
-class ScheduleListAdapter(private val context: Context?, calendarViewModel: CalendarViewModel?) : RecyclerView.Adapter<ItemViewHolder>() {
-    var calendarDataList: List<CalendarData>?
-    private val viewModel: CalendarViewModel?
+class ScheduleListAdapter(private val context: Context, calendarViewModel: CalendarViewModel) : RecyclerView.Adapter<ItemViewHolder>() {
+    var calendarDataList: List<CalendarData>
+    private val viewModel: CalendarViewModel
 
     class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val binding: ScheduleFragmentItemBinding?
-
-        init {
-            // Bind処理
-            binding = DataBindingUtil.bind(itemView)
-        }
+        //Bind処理
+        val binding: ScheduleFragmentItemBinding = DataBindingUtil.bind(itemView) ?: throw IllegalStateException()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
@@ -33,41 +30,37 @@ class ScheduleListAdapter(private val context: Context?, calendarViewModel: Cale
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         setDrawable(holder.binding, position)
-        holder.binding!!.calendarData = calendarDataList!![position]
+        holder.binding.calendarData = calendarDataList[position]
         holder.binding.executePendingBindings()
     }
 
     override fun getItemCount(): Int {
-        var length = 0
-        if (calendarDataList != null) {
-            length = calendarDataList!!.size
-        }
-        return length
+        return calendarDataList.size
     }
 
-    fun setCalendarDataForScheduleList(calendarData: List<CalendarData>?) {
+    fun setCalendarDataForScheduleList(calendarData: List<CalendarData>) {
         calendarDataList = calendarData
         notifyDataSetChanged()
     }
 
-    private fun setDrawable(binding: ScheduleFragmentItemBinding?, position: Int) {
-        val calendarData = calendarDataList!![position]
+    private fun setDrawable(binding: ScheduleFragmentItemBinding, position: Int) {
+        val calendarData = calendarDataList[position]
         //Drawableで背景を指定
         val drawable = GradientDrawable()
         drawable.cornerRadius = 10f
         if (calendarData.isHoliday) {
-            drawable.setColor(context!!.resources.getColor(R.color.holidayColor))
+            drawable.setColor(ContextCompat.getColor(context, R.color.holidayColor))
         } else {
             drawable.setColor(calendarData.groupBackgroundColor)
         }
-        binding!!.root.background = drawable
+        binding.root.background = drawable
     }
 
     fun removeScheduleItem(position: Int) {
         //TODO 削除処理
-        val calendarData = calendarDataList!![position]
-        calendarDataList.removeAt(position)
-        viewModel!!.removeSchedule(calendarData.scheduleId)
+        val calendarData = calendarDataList[position]
+        calendarDataList.toMutableList().removeAt(position)
+        viewModel.removeSchedule(calendarData.scheduleId)
         notifyItemRangeRemoved(position, itemCount)
     }
 

@@ -9,6 +9,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.non_name_hero.calenderview.R
+import com.non_name_hero.calenderview.databinding.CalendarFragmentBinding
 import com.non_name_hero.calenderview.utils.ActivityUtils
 import java.lang.Boolean
 import java.util.*
@@ -16,42 +17,45 @@ import java.util.*
 class CalendarFragment : Fragment() {
     private var mPager: ViewPager2? = null
     private var mPagerAdapter: CalendarPagerAdapter? = null
-    private var mViewModel: CalendarViewModel? = null
-    private var mCalendar: Calendar? = null
+    private lateinit var binding: CalendarFragmentBinding
     private var pagerIdleFlag = Boolean.FALSE
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mCalendar = Calendar.getInstance()
-        val rootView = inflater.inflate(R.layout.calendar_fragment, container, false)
+
+        this.binding = CalendarFragmentBinding.inflate(inflater, container, false).apply {
+            viewmodel = (activity as MainActivity).obtainViewModel()
+            lifecycleOwner = viewLifecycleOwner
+        }
         // ViewPagerをセットアップ
-        initPager(rootView)
-        return rootView
+        initPager(binding.root)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //データを更新
+        loadData()
+        //予定一覧を更新
         initScheduleList()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        //CalendarViewModelを取得
-        mViewModel = MainActivity.Companion.obtainViewModel(activity)
-        //データを更新
-        loadData()
+
     }
 
     override fun onResume() {
         super.onResume()
         // カレンダーのスケジュールを更新
-        mViewModel!!.reloadCalendarData(true)
+        binding.viewmodel?.reloadCalendarData(true)
     }
 
     private fun loadData() {
-        mViewModel!!.start()
+        binding.viewmodel?.start()
     }
 
     private fun getCurrentMonth(position: Int): Int {
-        val nowMonth = mCalendar!![Calendar.MONTH] // 0~11
+        val calendar = Calendar.getInstance()
+        val nowMonth = calendar[Calendar.MONTH] // 0~11
         val offset = position - DEFAULT_PAGE
         //offset -> 現在ページからの差分
         //monthOffset -> 現在月からの差分
@@ -94,7 +98,7 @@ class CalendarFragment : Fragment() {
 
             override fun onPageSelected(position: Int) {
                 //pagerがIDLE状態の場合、現在の月をviewModelにセット矢印DataBindingでtoolbarに表示
-                if (pagerIdleFlag) mViewModel!!.setCurrentMonth(getCurrentMonth(position))
+                if (pagerIdleFlag) binding.viewmodel?.setCurrentMonth(getCurrentMonth(position))
             }
         })
     }
