@@ -17,7 +17,7 @@ import java.lang.Boolean.FALSE
 class colorCreateActivity  /*コンストラクタ*/
     : AppCompatActivity() {
 
-    private var repository: ScheduleRepository? = null
+    private lateinit var repository: ScheduleRepository
 
     private lateinit var colorCreateTitle: EditText
     private lateinit var color1: Button
@@ -64,7 +64,7 @@ class colorCreateActivity  /*コンストラクタ*/
             colorNumberPre = intentIn.getIntExtra("ColorNumberPre", 43)
             colorNumber = colorNumberPre
             /*DBからcolorNumberをキーにその要素を取得*/
-            repository!!.getScheduleGroup(
+            repository.getScheduleGroup(
                     colorNumberPre,
                     object : GetScheduleGroupCallback {
                         override fun onScheduleGroupLoaded(group: ScheduleGroup) {
@@ -153,7 +153,7 @@ class colorCreateActivity  /*コンストラクタ*/
             /*SharedPreferenceからeditFlagの値を取得*/
             val prefs = getSharedPreferences("input_data", MODE_PRIVATE)
             if (!prefs.getBoolean("editFlag", FALSE)) {
-                repository!!.insertScheduleGroup(
+                repository.insertScheduleGroup(
                         ScheduleGroup(
                                 colorNumber,
                                 colorCreateTitle.text.toString(),
@@ -173,7 +173,7 @@ class colorCreateActivity  /*コンストラクタ*/
             /*******************************************/
             /*編集画面の場合***************************/
             } else {
-                repository!!.updateScheduleGroup(
+                repository.updateScheduleGroup(
                         ScheduleGroup(
                                 groupId,
                                 colorNumber,

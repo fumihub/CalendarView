@@ -26,9 +26,9 @@ import java.util.*
 class InputActivity  /*コンストラクタ*/
     : AppCompatActivity(), InputContract.View {
 
-    private var mInputPresenter: Presenter? = null
+    private lateinit var mInputPresenter: Presenter
 
-    private var repository: ScheduleRepository? = null
+    private lateinit var repository: ScheduleRepository
 
     private lateinit var mStartAtDatetime: Calendar
     private lateinit var mEndAtDatetime: Calendar
@@ -61,7 +61,7 @@ class InputActivity  /*コンストラクタ*/
         setContentView(R.layout.input_main)
         val myToolbar = findViewById<View>(R.id.inputToolbar) as Toolbar
         setSupportActionBar(myToolbar)
-        InputPresenter(this, Injection.provideScheduleRepository(applicationContext)!!)
+        InputPresenter(this, Injection.provideScheduleRepository(applicationContext))
 
         /*カレンダー初期値用*/
         val intentIn = intent
@@ -304,7 +304,7 @@ class InputActivity  /*コンストラクタ*/
         /*完了ボタンが押されたとき*******************/
         doneButton.setOnClickListener {
             /*保存処理を実行*/
-            mInputPresenter!!.saveSchedule(title.text.toString(), memo.text.toString(), mStartAtDatetime.time, mEndAtDatetime.time, mGroupId, 0)
+            mInputPresenter.saveSchedule(title.text.toString(), memo.text.toString(), mStartAtDatetime.time, mEndAtDatetime.time, mGroupId, 0)
             /*カレンダー表示画面に遷移*/
         }
         /*********************************************/
@@ -356,7 +356,7 @@ class InputActivity  /*コンストラクタ*/
                     /*色番号受け取り*/
                     colorNumber = data!!.getIntExtra("ColorNumber", 0) /*defaultValue:ColorNumberキーに値が入っていなかった時に返す値*/
                     /*DBからcolorNumberをキーにその要素を取得*/
-                    repository!!.getScheduleGroup(
+                    repository.getScheduleGroup(
                             colorNumber,
                             object : GetScheduleGroupCallback {
                                 override fun onScheduleGroupLoaded(group: ScheduleGroup) {
@@ -398,7 +398,7 @@ class InputActivity  /*コンストラクタ*/
 
     /*Presenterをsetする関数*************************/
     override fun setPresenter(presenter: Presenter?) {
-        mInputPresenter = presenter
+        mInputPresenter = presenter!!
     }
     /************************************************/
 

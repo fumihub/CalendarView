@@ -17,14 +17,12 @@ import java.util.*
 
 class colorActivity : AppCompatActivity() {
 
-    private var repository: ScheduleRepository? = null
+    private lateinit var repository: ScheduleRepository
 
     private var list: List<ScheduleGroup>
 
-    private lateinit var colorButton: List<Button>
-//    private val colorButton = arrayOfNulls<Button>(49)
-    private lateinit var checkText: List<TextView>
-//    private val checkText = arrayOfNulls<TextView>(49)
+    private lateinit var colorButton: MutableList<Button>
+    private lateinit var checkText: MutableList<TextView>
 
     private val checkFlag = BooleanArray(49)
 
@@ -53,7 +51,7 @@ class colorActivity : AppCompatActivity() {
 
         /*DBにアクセス*/
         repository = Injection.provideScheduleRepository(applicationContext)
-        repository!!.getListScheduleGroup(object : GetScheduleGroupsCallback {
+        repository.getListScheduleGroup(object : GetScheduleGroupsCallback {
             override fun onScheduleGroupsLoaded(Groups: List<ScheduleGroup>) {
                 /*DBの情報全件取得*/
                 list = Groups
@@ -75,6 +73,7 @@ class colorActivity : AppCompatActivity() {
 
             override fun onDataNotAvailable() {}
         })
+
 
         /*変数宣言*/
         for (cnt in 0 until ARRAY_LENGTH) {
@@ -98,7 +97,7 @@ class colorActivity : AppCompatActivity() {
 
     /*色作成画面遷移関数****************************/
     private fun returnColorCreateActivity(colorNumber: Int) {
-        val intentOut = intent
+        val intentOut = Intent(this, colorCreateActivity::class.java)
         /*ボタンの色番号を遷移先へreturn*/
         intentOut.putExtra("ColorNumber", colorNumber)
         /*ボタンのテキストの色を遷移先へreturn*/

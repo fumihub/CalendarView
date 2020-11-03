@@ -22,11 +22,11 @@ import java.util.*
 
 class listAdapter(private val mContext: Context, activity: Activity) : BaseAdapter() {
 
-    private var list: List<ScheduleGroup>
+    private var list: MutableList<ScheduleGroup>
 
-    private val mLayoutInflater: LayoutInflater
+    private var mLayoutInflater: LayoutInflater = LayoutInflater.from(mContext)
 
-    private var repository: ScheduleRepository? = null
+    private var repository: ScheduleRepository
 
     private val mActivity: Activity
 
@@ -39,7 +39,7 @@ class listAdapter(private val mContext: Context, activity: Activity) : BaseAdapt
     }
 
     fun setList(input: List<ScheduleGroup>) {
-        list = input
+        list = input as MutableList<ScheduleGroup>
         notifyDataSetChanged()
     }
 
@@ -115,9 +115,9 @@ class listAdapter(private val mContext: Context, activity: Activity) : BaseAdapt
                 override fun onClickPositiveBtn() {
                     val groupId = scheduleGroup.groupId
                     /*DBから削除*/
-                    repository!!.deleteScheduleGroup(groupId, object : DeleteCallback {
+                    repository.deleteScheduleGroup(groupId, object : DeleteCallback {
                         override fun onDeleted() {
-                            list.remove(position)
+                            list.removeAt(position)
                             notifyDataSetChanged()
                         }
 
@@ -167,7 +167,6 @@ class listAdapter(private val mContext: Context, activity: Activity) : BaseAdapt
 
     /*コンストラクタ*********************************/
     init {
-        mLayoutInflater = LayoutInflater.from(mContext)
         list = ArrayList()
         mActivity = activity
         repository = Injection.provideScheduleRepository(mContext)

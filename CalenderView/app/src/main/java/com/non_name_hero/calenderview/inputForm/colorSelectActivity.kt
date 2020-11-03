@@ -30,7 +30,7 @@ class colorSelectActivity  /*コンストラクタ*/
     private lateinit var editButton: Button
     private lateinit var colorCreateButton: Button
 
-    private var repository: ScheduleRepository? = null
+    private lateinit var repository: ScheduleRepository
 
     private var createFlag = java.lang.Boolean.FALSE
 
@@ -150,8 +150,8 @@ class colorSelectActivity  /*コンストラクタ*/
 
     /*List内容を更新する関数************************/
     private fun loadColorList() {
-        repository!!.getListScheduleGroup(object : GetScheduleGroupsCallback {
-            override fun onScheduleGroupsLoaded(Groups: List<ScheduleGroup?>?) {
+        repository.getListScheduleGroup(object : GetScheduleGroupsCallback {
+            override fun onScheduleGroupsLoaded(Groups: List<ScheduleGroup>) {
                 //取得後の処理
                 listAdapter.setList(Groups as List<ScheduleGroup>)
             }
