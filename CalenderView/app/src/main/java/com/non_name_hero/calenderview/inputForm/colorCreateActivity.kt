@@ -67,9 +67,9 @@ class colorCreateActivity  /*コンストラクタ*/
             repository!!.getScheduleGroup(
                     colorNumberPre,
                     object : GetScheduleGroupCallback {
-                        override fun onScheduleGroupLoaded(group: ScheduleGroup?) {
+                        override fun onScheduleGroupLoaded(group: ScheduleGroup) {
                             /*グループIDの取得*/
-                            groupId = group!!.groupId
+                            groupId = group.groupId
                             /*色タイトルに色名をセット*/
                             colorCreateTitle.setText(group.groupName)
                             /*色ボタン2に色をセット*/

@@ -19,11 +19,12 @@ class colorActivity : AppCompatActivity() {
 
     private var repository: ScheduleRepository? = null
 
-    private var list: List<ScheduleGroup?>?
+    private var list: List<ScheduleGroup>
 
-    private val colorButton = arrayOfNulls<Button>(49)
-
-    private val checkText = arrayOfNulls<TextView>(49)
+    private lateinit var colorButton: List<Button>
+//    private val colorButton = arrayOfNulls<Button>(49)
+    private lateinit var checkText: List<TextView>
+//    private val checkText = arrayOfNulls<TextView>(49)
 
     private val checkFlag = BooleanArray(49)
 
@@ -53,22 +54,22 @@ class colorActivity : AppCompatActivity() {
         /*DBにアクセス*/
         repository = Injection.provideScheduleRepository(applicationContext)
         repository!!.getListScheduleGroup(object : GetScheduleGroupsCallback {
-            override fun onScheduleGroupsLoaded(Groups: List<ScheduleGroup?>?) {
+            override fun onScheduleGroupsLoaded(Groups: List<ScheduleGroup>) {
                 /*DBの情報全件取得*/
                 list = Groups
                 /*DBにColorNumberがあるものはcheckFlagをTRUEに*/
-                for (cnt in list!!.indices) {
-                    checkFlag[list!![cnt]!!.colorNumber] = TRUE
+                for (cnt in list.indices) {
+                    checkFlag[list[cnt].colorNumber] = TRUE
                 }
                 /*最初表示判定*/
                 for (cnt in 0 until ARRAY_LENGTH) {
                     if (checkFlag[cnt]) {
-                        checkText[cnt]!!.visibility = View.VISIBLE
+                        checkText[cnt].visibility = View.VISIBLE
                     } else {
-                        checkText[cnt]!!.visibility = View.INVISIBLE
+                        checkText[cnt].visibility = View.INVISIBLE
                     }
-                    colorButton[cnt]!!.tag = cnt
-                    colorButton[cnt]!!.setOnClickListener { v -> returnColorCreateActivity(v.tag as Int) }
+                    colorButton[cnt].tag = cnt
+                    colorButton[cnt].setOnClickListener { v -> returnColorCreateActivity(v.tag as Int) }
                 }
             }
 
@@ -77,8 +78,8 @@ class colorActivity : AppCompatActivity() {
 
         /*変数宣言*/
         for (cnt in 0 until ARRAY_LENGTH) {
-            colorButton[cnt] = findViewById(colorButtonId[cnt])
-            checkText[cnt] = findViewById(checkTextId[cnt])
+            colorButton.add(findViewById(colorButtonId[cnt]))
+            checkText.add(findViewById(checkTextId[cnt]))
         }
         /************************************************/
 
@@ -90,7 +91,7 @@ class colorActivity : AppCompatActivity() {
         if (colorNumberPre == 43) { /*43：colorNumberPreの初期値*/
             /* 何もしない */
         } else {
-            colorButton[colorNumberPre]!!.text = "○"
+            colorButton[colorNumberPre].text = "○"
         }
     }
     /************************************************/
@@ -101,7 +102,7 @@ class colorActivity : AppCompatActivity() {
         /*ボタンの色番号を遷移先へreturn*/
         intentOut.putExtra("ColorNumber", colorNumber)
         /*ボタンのテキストの色を遷移先へreturn*/
-        intentOut.putExtra("Color", colorButton[colorNumber]!!.currentTextColor)
+        intentOut.putExtra("Color", colorButton[colorNumber].currentTextColor)
         setResult(RESULT_OK, intentOut)
 
         /*色作成画面に遷移*/

@@ -359,9 +359,9 @@ class InputActivity  /*コンストラクタ*/
                     repository!!.getScheduleGroup(
                             colorNumber,
                             object : GetScheduleGroupCallback {
-                                override fun onScheduleGroupLoaded(group: ScheduleGroup?) {
+                                override fun onScheduleGroupLoaded(group: ScheduleGroup) {
                                     /*色ボタン2に色名をセット*/
-                                    color2.text = group!!.groupName
+                                    color2.text = group.groupName
                                     /*色ボタン2に色をセット*/
                                     color2.setBackgroundColor(group.backgroundColor)
                                     /*色ボタン2にに文字色をセット*/
