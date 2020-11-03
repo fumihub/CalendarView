@@ -13,14 +13,14 @@ import com.non_name_hero.calenderview.data.ScheduleGroup
 @Database(entities = [Schedule::class, ScheduleGroup::class], version = 2, exportSchema = false)
 @TypeConverters(Converter::class)
 abstract class PigLeadDatabase : RoomDatabase() {
-    abstract fun scheduleDao(): SchedulesDao?
+    abstract fun scheduleDao(): SchedulesDao
     override fun clearAllTables() {}
 
     companion object {
         private var INSTANCE: PigLeadDatabase? = null
         private val sLock = Any()
         @JvmStatic
-        fun getInstance(context: Context): PigLeadDatabase? {
+        fun getInstance(context: Context): PigLeadDatabase {
             synchronized(sLock) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.applicationContext,
@@ -35,7 +35,7 @@ abstract class PigLeadDatabase : RoomDatabase() {
                             })
                             .build()
                 }
-                return INSTANCE
+                return INSTANCE!!
             }
         }
     }

@@ -8,10 +8,10 @@ import com.non_name_hero.calenderview.data.ScheduleGroup
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource.*
 import java.util.*
 
-class ScheduleRepository @SuppressLint("RestrictedApi") private constructor(ScheduleLocalDataSource: ScheduleDataSource,
-                                                                            ScheduleRemoteDataSource: ScheduleDataSource) : ScheduleDataSource {
-    private val mScheduleDataLocalSource: ScheduleDataSource
-    private val mScheduleDataRemoteSource: ScheduleDataSource
+class ScheduleRepository (
+        val scheduleDataLocalSource: ScheduleDataSource,
+        val mScheduleDataRemoteSource: ScheduleDataSource
+) : ScheduleDataSource {
     var mCachedHolidayCalenderData: List<CalendarData>? = null
     var mCachedCalendarData: List<CalendarData>? = null
     var mCachedScheduleMap: Map<String, List<Schedule>>? = null
@@ -26,11 +26,8 @@ class ScheduleRepository @SuppressLint("RestrictedApi") private constructor(Sche
      * @param scheduleId 情報を取得したいスケジュールID
      * @param callback   情報取得後の処理
      */
-    @SuppressLint("RestrictedApi")
     override fun getSchedule(scheduleId: LongArray, callback: GetScheduleCallback) {
-        Preconditions.checkNotNull(scheduleId)
-        Preconditions.checkNotNull(callback)
-        mScheduleDataLocalSource.getSchedule(scheduleId, callback)
+        scheduleDataLocalSource.getSchedule(scheduleId, callback)
     }
 
     /**
@@ -39,11 +36,11 @@ class ScheduleRepository @SuppressLint("RestrictedApi") private constructor(Sche
      * @param schedule 格納するスケジュールオブジェクト
      * @param callback 格納後の処理
      */
-    @SuppressLint("RestrictedApi")
-    override fun setSchedule(schedule: Schedule?, callback: SaveScheduleCallback) {
-        Preconditions.checkNotNull(schedule)
-        mScheduleDataLocalSource.setSchedule(schedule, callback)
+    override fun setSchedule(schedule: Schedule, callback: SaveScheduleCallback) {
+        TODO("Not yet implemented")
+        scheduleDataLocalSource.setSchedule(schedule, callback)
     }
+
 
     /**
      * 全てのスケジュールデータを取得
@@ -51,11 +48,11 @@ class ScheduleRepository @SuppressLint("RestrictedApi") private constructor(Sche
      * @param callback
      */
     override fun getAllSchedules(callback: GetScheduleCallback) {
-        mScheduleDataLocalSource.getAllSchedules(callback)
+        scheduleDataLocalSource.getAllSchedules(callback)
     }
 
     override fun removeScheduleByScheduleId(scheduleId: Long) {
-        mScheduleDataLocalSource.removeScheduleByScheduleId(scheduleId)
+        scheduleDataLocalSource.removeScheduleByScheduleId(scheduleId)
     }
 
     fun holidayCacheClear() {
@@ -99,7 +96,7 @@ class ScheduleRepository @SuppressLint("RestrictedApi") private constructor(Sche
      * @param callback 　保存完了後の処理、保存失敗時の処理
      */
     override fun insertScheduleGroup(group: ScheduleGroup, callback: SaveScheduleGroupCallback) {
-        mScheduleDataLocalSource.insertScheduleGroup(group, callback)
+        scheduleDataLocalSource.insertScheduleGroup(group, callback)
     }
 
     /**
@@ -108,7 +105,7 @@ class ScheduleRepository @SuppressLint("RestrictedApi") private constructor(Sche
      * @param groupId カラー番号
      */
     override fun deleteScheduleGroup(groupId: Int, callback: DeleteCallback) {
-        mScheduleDataLocalSource.deleteScheduleGroup(groupId, callback)
+        scheduleDataLocalSource.deleteScheduleGroup(groupId, callback)
     }
 
     /**
@@ -118,7 +115,7 @@ class ScheduleRepository @SuppressLint("RestrictedApi") private constructor(Sche
      * @param callback    取得後の処理。引数に取得した情報をとる
      */
     override fun getScheduleGroup(colorNumber: Int, callback: GetScheduleGroupCallback) {
-        mScheduleDataLocalSource.getScheduleGroup(colorNumber, callback)
+        scheduleDataLocalSource.getScheduleGroup(colorNumber, callback)
     }
 
     /**
@@ -127,7 +124,7 @@ class ScheduleRepository @SuppressLint("RestrictedApi") private constructor(Sche
      * @param callback - onScheduleGroupsLoaded(List<ScheduleGroup> scheduleGroups) 情報取得後の処理。引数に全件グループ情報を保持
     </ScheduleGroup> */
     override fun getListScheduleGroup(callback: GetScheduleGroupsCallback) {
-        mScheduleDataLocalSource.getListScheduleGroup(callback)
+        scheduleDataLocalSource.getListScheduleGroup(callback)
     }
 
     /**
@@ -137,7 +134,7 @@ class ScheduleRepository @SuppressLint("RestrictedApi") private constructor(Sche
      * @param callback コールバック
      */
     override fun updateScheduleGroup(group: ScheduleGroup, callback: SaveScheduleGroupCallback) {
-        mScheduleDataLocalSource.updateScheduleGroup(group, callback)
+        scheduleDataLocalSource.updateScheduleGroup(group, callback)
     }
 
     fun calendarCacheClear() {
@@ -152,8 +149,8 @@ class ScheduleRepository @SuppressLint("RestrictedApi") private constructor(Sche
     override fun getCalendarDataList(callback: LoadCalendarDataCallback) {
         if (mCachedCalendarData == null && mCalendarCacheIsDirty == false) {
             mCachedCalendarData = ArrayList()
-            mScheduleDataLocalSource.getCalendarDataList(object : LoadCalendarDataCallback {
-                override fun onCalendarDataLoaded(calendarDataList: List<CalendarData?>?) {
+            scheduleDataLocalSource.getCalendarDataList(object : LoadCalendarDataCallback {
+                override fun onCalendarDataLoaded(calendarDataList: List<CalendarData>) {
                     mCacheIsDirty = true
                     callback.onCalendarDataLoaded(calendarDataList)
                 }
@@ -179,11 +176,11 @@ class ScheduleRepository @SuppressLint("RestrictedApi") private constructor(Sche
          */
         @JvmStatic
         fun getInstance(scheduleDataLocalSource: ScheduleDataSource,
-                        scheduleDataRemoteSource: ScheduleDataSource): ScheduleRepository? {
+                        scheduleDataRemoteSource: ScheduleDataSource): ScheduleRepository {
             if (INSTANCE == null) {
                 INSTANCE = ScheduleRepository(scheduleDataLocalSource, scheduleDataRemoteSource)
             }
-            return INSTANCE
+            return INSTANCE!!
         }
 
         /**
@@ -193,11 +190,5 @@ class ScheduleRepository @SuppressLint("RestrictedApi") private constructor(Sche
         fun destroyInstance() {
             INSTANCE = null
         }
-    }
-
-    //コンストラクタ
-    init {
-        mScheduleDataLocalSource = Preconditions.checkNotNull(ScheduleLocalDataSource)
-        mScheduleDataRemoteSource = Preconditions.checkNotNull(ScheduleRemoteDataSource)
     }
 }

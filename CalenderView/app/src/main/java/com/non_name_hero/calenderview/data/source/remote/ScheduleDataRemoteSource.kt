@@ -12,7 +12,7 @@ import com.non_name_hero.calenderview.data.source.ScheduleDataSource.*
 import com.non_name_hero.calenderview.utils.AppExecutors
 import java.util.*
 
-class ScheduleDataRemoteSource(private val mAppExecutors: AppExecutors) : ScheduleDataSource {
+class ScheduleDataRemoteSource() : ScheduleDataSource {
     private val PIGLEAD_SCHEDULES = "PigLeadSchedules"
     private val HOLIDAY_DOCUMENT = "holiday"
 
@@ -22,7 +22,7 @@ class ScheduleDataRemoteSource(private val mAppExecutors: AppExecutors) : Schedu
         //リモートデータソースは使用しない
     }
 
-    override fun setSchedule(schedule: Schedule?, callback: SaveScheduleCallback) {
+    override fun setSchedule(schedule: Schedule, callback: SaveScheduleCallback) {
         //リモートデータソースは使用しない
     }
 
@@ -85,7 +85,7 @@ class ScheduleDataRemoteSource(private val mAppExecutors: AppExecutors) : Schedu
         @JvmStatic
         fun getInstance(appExecutors: AppExecutors): ScheduleDataRemoteSource? {
             if (INSTANCE == null) {
-                synchronized(ScheduleDataRemoteSource::class.java) { INSTANCE = ScheduleDataRemoteSource(appExecutors) }
+                synchronized(ScheduleDataRemoteSource::class.java) { INSTANCE = ScheduleDataRemoteSource() }
             }
             return INSTANCE
         }
