@@ -12,18 +12,20 @@ import com.non_name_hero.calenderview.data.ScheduleGroup
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource.GetScheduleGroupsCallback
 import com.non_name_hero.calenderview.data.source.ScheduleRepository
 import com.non_name_hero.calenderview.utils.Injection
-import java.lang.Boolean
+import java.lang.Boolean.TRUE
 import java.util.*
 
 class colorActivity : AppCompatActivity() {
-    private val ARRAYLENGTH = 49
-    private var intentIn: Intent? = null
-    private var intentOut: Intent? = null
-    private var repository: ScheduleRepository? = null
-    private var list: List<ScheduleGroup?>?
-    private val colorButton = arrayOfNulls<Button>(49)
-    private val checkText = arrayOfNulls<TextView>(49)
+
+    private lateinit var repository: ScheduleRepository
+
+    private var list: List<ScheduleGroup>
+
+    private lateinit var colorButton: MutableList<Button>
+    private lateinit var checkText: MutableList<TextView>
+
     private val checkFlag = BooleanArray(49)
+
     private val colorButtonId = intArrayOf(R.id.redButton1, R.id.redButton2, R.id.redButton3, R.id.redButton4, R.id.redButton5, R.id.redButton6, R.id.redButton7,
             R.id.purpleButton1, R.id.purpleButton2, R.id.purpleButton3, R.id.purpleButton4, R.id.purpleButton5, R.id.purpleButton6, R.id.purpleButton7,
             R.id.blueButton1, R.id.blueButton2, R.id.blueButton3, R.id.blueButton4, R.id.blueButton5, R.id.blueButton6, R.id.blueButton7,
@@ -41,65 +43,81 @@ class colorActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        /*初期設定***************************************/
         setContentView(R.layout.color)
         val myToolbar = findViewById<View>(R.id.colorToolbar) as Toolbar
         setSupportActionBar(myToolbar)
 
-        //DBにアクセス
+        /*DBにアクセス*/
         repository = Injection.provideScheduleRepository(applicationContext)
-        repository!!.getListScheduleGroup(object : GetScheduleGroupsCallback {
-            override fun onScheduleGroupsLoaded(Groups: List<ScheduleGroup?>?) {
-                //DBの情報全件取得
+        repository.getListScheduleGroup(object : GetScheduleGroupsCallback {
+            override fun onScheduleGroupsLoaded(Groups: List<ScheduleGroup>) {
+                /*DBの情報全件取得*/
                 list = Groups
-                //DBにColorNumberがあるものはcheckFlagをTRUEに
-                for (cnt in list!!.indices) {
-                    checkFlag[list!![cnt]!!.colorNumber] = Boolean.TRUE
+                /*DBにColorNumberがあるものはcheckFlagをTRUEに*/
+                for (cnt in list.indices) {
+                    checkFlag[list[cnt].colorNumber] = TRUE
                 }
-                /* 最初表示判定 */for (cnt in 0 until ARRAYLENGTH) {
+                /*最初表示判定*/
+                for (cnt in 0 until ARRAY_LENGTH) {
                     if (checkFlag[cnt]) {
-                        checkText[cnt]!!.visibility = View.VISIBLE
+                        checkText[cnt].visibility = View.VISIBLE
                     } else {
-                        checkText[cnt]!!.visibility = View.INVISIBLE
+                        checkText[cnt].visibility = View.INVISIBLE
                     }
-                    colorButton[cnt]!!.tag = cnt
-                    colorButton[cnt]!!.setOnClickListener { v -> returnColorCreateActivity(v.tag as Int) }
+                    colorButton[cnt].tag = cnt
+                    colorButton[cnt].setOnClickListener { v -> returnColorCreateActivity(v.tag as Int) }
                 }
             }
 
             override fun onDataNotAvailable() {}
         })
 
-        /* 変数宣言 */for (cnt in 0 until ARRAYLENGTH) {
-            colorButton[cnt] = findViewById(colorButtonId[cnt])
-            checkText[cnt] = findViewById(checkTextId[cnt])
-        }
 
-        //色番号前回値を取得
-        intentIn = intent
-        val colorNumberPre = intentIn.getIntExtra("colorNumberPre", 43)
-        //前回押された色ボタンのテキストを「〇」に
-        //初回
-        if (colorNumberPre == 43) { //43：colorNumberPreの初期値
+        /*変数宣言*/
+        for (cnt in 0 until ARRAY_LENGTH) {
+            colorButton.add(findViewById(colorButtonId[cnt]))
+            checkText.add(findViewById(checkTextId[cnt]))
+        }
+        /************************************************/
+
+        /*色番号前回値を取得*/
+        val intentIn = intent
+        val colorNumberPre :Int = intentIn.getIntExtra("colorNumberPre", 43)
+        /*前回押された色ボタンのテキストを「〇」に*/
+        /*初回*/
+        if (colorNumberPre == 43) { /*43：colorNumberPreの初期値*/
             /* 何もしない */
         } else {
-            colorButton[colorNumberPre]!!.text = "○"
+            colorButton[colorNumberPre].text = "○"
         }
     }
+    /************************************************/
 
-    fun returnColorCreateActivity(colorNumber: Int) {
-        intentOut = intent
-        //ボタンの色番号を遷移先へreturn
+    /*色作成画面遷移関数****************************/
+    private fun returnColorCreateActivity(colorNumber: Int) {
+        val intentOut = Intent(this, colorCreateActivity::class.java)
+        /*ボタンの色番号を遷移先へreturn*/
         intentOut.putExtra("ColorNumber", colorNumber)
-        //ボタンのテキストの色を遷移先へreturn
-        intentOut.putExtra("Color", colorButton[colorNumber]!!.currentTextColor)
+        /*ボタンのテキストの色を遷移先へreturn*/
+        intentOut.putExtra("Color", colorButton[colorNumber].currentTextColor)
         setResult(RESULT_OK, intentOut)
 
-        //色作成画面に遷移
+        /*色作成画面に遷移*/
         finish()
     }
+    /************************************************/
 
-    //コンストラクタ
+    /*コンストラクタ*********************************/
     init {
         list = ArrayList()
     }
+    /************************************************/
+
+    /*定数定義***************************************/
+    companion object {
+        private const val ARRAY_LENGTH = 49
+    }
+    /************************************************/
 }
