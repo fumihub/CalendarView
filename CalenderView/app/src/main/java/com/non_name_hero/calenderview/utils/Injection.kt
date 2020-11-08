@@ -11,11 +11,10 @@ object Injection {
     fun provideScheduleRepository(context: Context): ScheduleRepository {
         Preconditions.checkNotNull(context)
         val pigLeadDatabase = getInstance(context)
-        val appExecutors = AppExecutors()
         return ScheduleRepository.getInstance(
-                ScheduleDataRemoteSource(),
                 ScheduleDataLocalSource(
                         AppExecutors(),
-                        pigLeadDatabase.scheduleDao()))
+                        pigLeadDatabase.scheduleDao()),
+                ScheduleDataRemoteSource())
     }
 }
