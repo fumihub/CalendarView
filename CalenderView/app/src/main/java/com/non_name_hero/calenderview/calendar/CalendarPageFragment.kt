@@ -62,7 +62,8 @@ class CalendarPageFragment     //コンストラクタ
         }
        binding.calendarGridView.onItemLongClickListener = OnItemLongClickListener { parent, view, position, id -> //入力画面に遷移
             val intent = Intent(context, InputActivity::class.java)
-            val dateArray = mCalendarAdapter?.dateArray ?: ArrayList<Date>()
+            val dateArray = (binding.calendarGridView.adapter as CalendarAdapter).dateArray
+//            val dateArray = mCalendarAdapter.dateArray ?: ArrayList<Date>()
             //入力画面に引数で年月日を渡す
             intent.putExtra("year", PigLeadUtils.yearFormat.format(dateArray[position] ?: Date()))
             intent.putExtra("month", PigLeadUtils.monthFormat.format(dateArray[position] ?: Date()))

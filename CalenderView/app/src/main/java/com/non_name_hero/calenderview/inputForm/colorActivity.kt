@@ -12,8 +12,9 @@ import com.non_name_hero.calenderview.data.ScheduleGroup
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource.GetScheduleGroupsCallback
 import com.non_name_hero.calenderview.data.source.ScheduleRepository
 import com.non_name_hero.calenderview.utils.Injection
+import java.lang.Boolean.FALSE
 import java.lang.Boolean.TRUE
-import java.util.*
+import kotlin.collections.ArrayList
 
 class colorActivity : AppCompatActivity() {
 
@@ -21,8 +22,8 @@ class colorActivity : AppCompatActivity() {
 
     private var list: List<ScheduleGroup>
 
-    private lateinit var colorButton: MutableList<Button>
-    private lateinit var checkText: MutableList<TextView>
+    private val colorButtonList: MutableList<Button>
+    private val checkTextList: MutableList<TextView>
 
     private val checkFlag = BooleanArray(49)
 
@@ -49,6 +50,13 @@ class colorActivity : AppCompatActivity() {
         val myToolbar = findViewById<View>(R.id.colorToolbar) as Toolbar
         setSupportActionBar(myToolbar)
 
+        /*変数宣言*/
+        for (cnt in 0 until ARRAY_LENGTH) {
+            checkFlag[cnt] = FALSE
+            colorButtonList.add(cnt, findViewById(colorButtonId[cnt]))
+            checkTextList.add(cnt, findViewById(checkTextId[cnt]))
+        }
+
         /*DBにアクセス*/
         repository = Injection.provideScheduleRepository(applicationContext)
         repository.getListScheduleGroup(object : GetScheduleGroupsCallback {
@@ -62,24 +70,17 @@ class colorActivity : AppCompatActivity() {
                 /*最初表示判定*/
                 for (cnt in 0 until ARRAY_LENGTH) {
                     if (checkFlag[cnt]) {
-                        checkText[cnt].visibility = View.VISIBLE
+                        checkTextList[cnt].visibility = View.VISIBLE
                     } else {
-                        checkText[cnt].visibility = View.INVISIBLE
+                        checkTextList[cnt].visibility = View.INVISIBLE
                     }
-                    colorButton[cnt].tag = cnt
-                    colorButton[cnt].setOnClickListener { v -> returnColorCreateActivity(v.tag as Int) }
+                    colorButtonList[cnt].tag = cnt
+                    colorButtonList[cnt].setOnClickListener { v -> returnColorCreateActivity(v.tag as Int) }
                 }
             }
 
             override fun onDataNotAvailable() {}
         })
-
-
-        /*変数宣言*/
-        for (cnt in 0 until ARRAY_LENGTH) {
-            colorButton.add(findViewById(colorButtonId[cnt]))
-            checkText.add(findViewById(checkTextId[cnt]))
-        }
         /************************************************/
 
         /*色番号前回値を取得*/
@@ -90,7 +91,7 @@ class colorActivity : AppCompatActivity() {
         if (colorNumberPre == 43) { /*43：colorNumberPreの初期値*/
             /* 何もしない */
         } else {
-            colorButton[colorNumberPre].text = "○"
+            colorButtonList[colorNumberPre].text = "○"
         }
     }
     /************************************************/
@@ -101,7 +102,7 @@ class colorActivity : AppCompatActivity() {
         /*ボタンの色番号を遷移先へreturn*/
         intentOut.putExtra("ColorNumber", colorNumber)
         /*ボタンのテキストの色を遷移先へreturn*/
-        intentOut.putExtra("Color", colorButton[colorNumber].currentTextColor)
+        intentOut.putExtra("Color", colorButtonList[colorNumber].currentTextColor)
         setResult(RESULT_OK, intentOut)
 
         /*色作成画面に遷移*/
@@ -112,6 +113,8 @@ class colorActivity : AppCompatActivity() {
     /*コンストラクタ*********************************/
     init {
         list = ArrayList()
+        colorButtonList = ArrayList()
+        checkTextList = ArrayList()
     }
     /************************************************/
 
