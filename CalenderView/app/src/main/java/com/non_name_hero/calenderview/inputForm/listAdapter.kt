@@ -57,25 +57,23 @@ class listAdapter(private val mContext: Context, activity: Activity) : BaseAdapt
     }
 
     /*リストビュー定義*******************************/
-    override fun getView(position: Int, convertView: View, parent: ViewGroup): View {
-        var convertView = convertView
-        val holder: ViewHolder
-        /*初回時の処理 convertViewがnullの場合にはinflateしたViewを代入する。*/
-        if (convertView == null) {
-            /*convertViewに*/
-            convertView = mLayoutInflater.inflate(R.layout.list_cell, null)
-            /*リストセルの作成*/
-            holder = ViewHolder()
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
 
-            /*色ボタン*/
-            holder.categoryButton = convertView.findViewById(R.id.categoryButton)
-            /*削除ボタン*/
-            holder.destroyButton = convertView.findViewById(R.id.colorDestroyButton)
-            convertView.tag = holder
-        } else {
-            /*convertViewがnullでなければconvertViewを再利用する。*/
-            holder = convertView.tag as ViewHolder
+        /*
+        getViewでは引数convertViewに画面外に移動してリサイクルされたViewが入る(初めの数回は画面外に移動するViewなどはもちろんない)
+        リサイクルされるViewがない場合 -> Viewを生成する。Viewのタグにviewオブジェクト(textやボタン)への参照を格納しておく
+        リサイクルされるVIewがあるとき -> Viewを生成しない。
+        その後holerに格納されている参照を利用してリストのitemを更新する
+         */
+        val view = convertView ?: mLayoutInflater.inflate(R.layout.list_cell, null).apply {
+            //convertViewがnullだった場合、タグにviewHolderを設定するため、新たにviewholderを作成する
+            this.tag = ViewHolder()
+            (this.tag as ViewHolder).categoryButton = this.findViewById(R.id.categoryButton)
+            (this.tag as ViewHolder).destroyButton = this.findViewById(R.id.colorDestroyButton)
         }
+
+        /*リストのセルを取得(viewHolder)*/
+        val holder: ViewHolder = view.tag as ViewHolder
 
         /*リストの色ボタンにテキストをセット*/
         holder.categoryButton.text = list[position].groupName
@@ -133,8 +131,9 @@ class listAdapter(private val mContext: Context, activity: Activity) : BaseAdapt
             })
             deleteDialog!!.showPigLeadDiaLog(dialog)
         }
-        return convertView
+        return view
     }
+
     /************************************************/
 
     /*色作成画面に遷移*******************************/
@@ -146,6 +145,7 @@ class listAdapter(private val mContext: Context, activity: Activity) : BaseAdapt
         /*戻り値を設定して色画面に遷移*/
         mActivity.startActivityForResult(intentOut, REQUEST_CODE)
     }
+
     /************************************************/
 
     /*input画面に遷移********************************/
@@ -157,12 +157,14 @@ class listAdapter(private val mContext: Context, activity: Activity) : BaseAdapt
         mActivity.setResult(Activity.RESULT_OK, intentOut)
         mActivity.finish()
     }
+
     /************************************************/
 
     /*定数定義****************************************/
     companion object {
         private const val REQUEST_CODE = 1
     }
+
     /************************************************/
 
     /*コンストラクタ*********************************/
