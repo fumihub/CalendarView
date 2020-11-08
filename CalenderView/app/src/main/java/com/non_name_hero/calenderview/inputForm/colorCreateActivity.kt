@@ -28,7 +28,7 @@ class colorCreateActivity  /*コンストラクタ*/
     private lateinit var blackRadioButton: RadioButton
     private lateinit var whiteRadioButton: RadioButton
 
-    private val intentOut = Intent(this, colorSelectActivity::class.java)
+    private lateinit var intentOut: Intent
 
     private var textColor: String = ""
 
@@ -53,6 +53,7 @@ class colorCreateActivity  /*コンストラクタ*/
         radioGroup = findViewById(R.id.RadioGroup)
         blackRadioButton = findViewById(R.id.RadioButton1)
         whiteRadioButton = findViewById(R.id.RadioButton2)
+        intentOut = Intent(this, colorSelectActivity::class.java)
         /************************************************/
 
         /*色ボタン情報表示*******************************/
