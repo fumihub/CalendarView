@@ -26,34 +26,34 @@ import java.util.*
 class InputActivity  /*コンストラクタ*/
     : AppCompatActivity(), InputContract.View {
 
-    private lateinit var mInputPresenter: Presenter
+    private lateinit var mInputPresenter: Presenter         /**/
 
-    private lateinit var repository: ScheduleRepository
+    private lateinit var repository: ScheduleRepository     /**/
 
-    private lateinit var mStartAtDatetime: Calendar
-    private lateinit var mEndAtDatetime: Calendar
+    private lateinit var mStartAtDatetime: Calendar         /*初期表示開始日付*/
+    private lateinit var mEndAtDatetime: Calendar           /*初期表示終了日付*/
 
-    private lateinit var title: EditText
-    private lateinit var startDate: EditText
-    private lateinit var endDate: EditText
-    private lateinit var startTime: EditText
-    private lateinit var endTime: EditText
-    private lateinit var timeArrow: TextView
-    private lateinit var place: TextView
-    private lateinit var memo: EditText
-    private lateinit var timeButton: Button
-    private lateinit var color1: Button
-    private lateinit var color2: Button
-    private lateinit var mapCheckButton1: Button
-    private lateinit var mapCheckButton2: Button
-    private lateinit var mapCheckButton3: Button
-    private lateinit var mapCheckButton4: Button
-    private lateinit var detailButton: Button
-    private lateinit var cancelButton: Button
-    private lateinit var doneButton: Button
+    private lateinit var title: EditText                    /*スケジュールタイトル*/
+    private lateinit var startDate: EditText                /*スケジュール開始日付*/
+    private lateinit var endDate: EditText                  /*スケジュール終了日付*/
+    private lateinit var startTime: EditText                /*スケジュール開始時間*/
+    private lateinit var endTime: EditText                  /*スケジュール終了時間*/
+    private lateinit var timeArrow: TextView                /*時間用矢印*/
+    private lateinit var place: TextView                    /*スケジュール場所*/
+    private lateinit var memo: EditText                     /*スケジュールメモ*/
+    private lateinit var timeButton: Button                 /*時間入力表示ボタン*/
+    private lateinit var color1: Button                     /*ColorSelectActivity遷移ボタン1*/
+    private lateinit var color2: Button                     /*ColorSelectActivity遷移ボタン1*/
+    private lateinit var mapCheckButton1: Button            /*GoogleMap遷移ボタン1*/
+    private lateinit var mapCheckButton2: Button            /*GoogleMap遷移ボタン2*/
+    private lateinit var mapCheckButton3: Button            /*GoogleMap遷移ボタン3*/
+    private lateinit var mapCheckButton4: Button            /*GoogleMap遷移ボタン4*/
+    private lateinit var detailButton: Button               /*詳細入力表示ボタン*/
+    private lateinit var cancelButton: Button               /*キャンセルボタン*/
+    private lateinit var doneButton: Button                 /*保存ボタン*/
 
-    private var colorNumber = 0
-    private var mGroupId = 0
+    private var colorNumber = 0                             /*色番号(0~48)*/
+    private var mGroupId = 0                                /*色グループID(0~)*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
