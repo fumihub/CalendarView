@@ -22,20 +22,20 @@ import java.util.*
 
 class ListAdapter(private val mContext: Context, activity: Activity) : BaseAdapter() {
 
-    private var list: MutableList<ScheduleGroup>
+    private var list: MutableList<ScheduleGroup>                                /*色グループのリスト*/
 
-    private var mLayoutInflater: LayoutInflater = LayoutInflater.from(mContext)
+    private var mLayoutInflater: LayoutInflater = LayoutInflater.from(mContext) /**/
 
-    private var repository: ScheduleRepository
+    private var repository: ScheduleRepository                                  /**/
 
-    private val mActivity: Activity
+    private val mActivity: Activity                                             /*InputActivityのActivity*/
 
-    var deleteDialog: PigLeadDeleteDialog? = null
+    var deleteDialog: PigLeadDeleteDialog? = null                               /**/
 
     /*カスタムセルを拡張したらここでWigetを定義*/
     private class ViewHolder {
-        lateinit var categoryButton: Button
-        lateinit var destroyButton: Button
+        lateinit var categoryButton: Button                                     /*ListViewのカテゴリーボタン*/
+        lateinit var destroyButton: Button                                      /*ListViewの削除ボタン*/
     }
 
     fun setList(input: List<ScheduleGroup>) {

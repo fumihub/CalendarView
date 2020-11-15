@@ -17,25 +17,25 @@ import java.lang.Boolean.FALSE
 class ColorCreateActivity  /*コンストラクタ*/
     : AppCompatActivity() {
 
-    private lateinit var repository: ScheduleRepository
+    private lateinit var repository: ScheduleRepository     /**/
 
-    private lateinit var colorCreateTitle: EditText
-    private lateinit var color1: Button
-    private lateinit var color2: Button
-    private lateinit var cancelButton: Button
-    private lateinit var doneButton: Button
-    private lateinit var radioGroup: RadioGroup
-    private lateinit var blackRadioButton: RadioButton
-    private lateinit var whiteRadioButton: RadioButton
+    private lateinit var colorCreateTitle: EditText         /*色グループタイトル*/
+    private lateinit var color1: Button                     /*ColorActivity遷移ボタン1*/
+    private lateinit var color2: Button                     /*ColorActivity遷移ボタン2*/
+    private lateinit var cancelButton: Button               /*キャンセル*/
+    private lateinit var doneButton: Button                 /*保存ボタン*/
+    private lateinit var radioGroup: RadioGroup             /*ラジオグループ*/
+    private lateinit var blackRadioButton: RadioButton      /*ラジオボタン(黒)*/
+    private lateinit var whiteRadioButton: RadioButton      /*ラジオボタン(白)*/
 
-    private lateinit var intentOut: Intent
+    private lateinit var intentOut: Intent                  /*ColorActivity遷移用intent*/
 
-    private var textColor: String = ""
+    private var textColor: String = ""                      /*色グループ名文字色*/
 
-    private var groupId = 0
-    private var colorNumberPre = 43
-    private var colorNumber = 43
-    private var color = 0
+    private var groupId = 0                                 /*色グループID*/
+    private var colorNumberPre = 43                         /*色番号前回値(0~48)(デフォルトで未分類(43)に設定)*/
+    private var colorNumber = 43                            /*色番号(0~48)(デフォルトで未分類(43)に設定)*/
+    private var color = 0                                   /*色グループの色*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

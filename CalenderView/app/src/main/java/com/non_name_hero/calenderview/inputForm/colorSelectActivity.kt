@@ -21,18 +21,19 @@ import java.util.*
 class ColorSelectActivity  /*コンストラクタ*/
     : AppCompatActivity(), PigLeadDeleteDialog {
 
-    private lateinit var context: Context
+    private lateinit var context: Context                           /*ColorSelectActivityのcontext*/
 
-    private lateinit var ListAdapter: ListAdapter
 
-    private lateinit var listView: ListView
+    private lateinit var ListAdapter: ListAdapter                   /*色グループリストアダプタ*/
 
-    private lateinit var editButton: Button
-    private lateinit var colorCreateButton: Button
+    private lateinit var listView: ListView                         /*色グループリストビュー*/
 
-    private lateinit var repository: ScheduleRepository
+    private lateinit var editButton: Button                         /*色グループ編集ボタン*/
+    private lateinit var colorCreateButton: Button                  /*色グループ作成ボタン*/
 
-    private var createFlag = java.lang.Boolean.FALSE
+    private lateinit var repository: ScheduleRepository             /**/
+
+    private var createFlag = java.lang.Boolean.FALSE      /*画面作成時フラグ*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

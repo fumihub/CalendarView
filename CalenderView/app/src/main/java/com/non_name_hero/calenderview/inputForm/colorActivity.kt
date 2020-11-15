@@ -18,15 +18,16 @@ import kotlin.collections.ArrayList
 
 class ColorActivity : AppCompatActivity() {
 
-    private lateinit var repository: ScheduleRepository
+    private lateinit var repository: ScheduleRepository     /**/
 
-    private var list: List<ScheduleGroup>
+    private var list: List<ScheduleGroup>                   /*色グループのリスト*/
 
-    private val colorButtonList: MutableList<Button>
-    private val checkTextList: MutableList<TextView>
+    private val colorButtonList: MutableList<Button>        /*色選択ボタン(49色)*/
+    private val checkTextList: MutableList<TextView>        /*色選択済みテキスト*/
 
-    private val checkFlag = BooleanArray(49)
+    private val checkFlag = BooleanArray(49)          /*色選択済みフラグ*/
 
+    /*色選択ボタンID*/
     private val colorButtonId = intArrayOf(R.id.redButton1, R.id.redButton2, R.id.redButton3, R.id.redButton4, R.id.redButton5, R.id.redButton6, R.id.redButton7,
             R.id.purpleButton1, R.id.purpleButton2, R.id.purpleButton3, R.id.purpleButton4, R.id.purpleButton5, R.id.purpleButton6, R.id.purpleButton7,
             R.id.blueButton1, R.id.blueButton2, R.id.blueButton3, R.id.blueButton4, R.id.blueButton5, R.id.blueButton6, R.id.blueButton7,
@@ -34,6 +35,7 @@ class ColorActivity : AppCompatActivity() {
             R.id.yellowButton1, R.id.yellowButton2, R.id.yellowButton3, R.id.yellowButton4, R.id.yellowButton5, R.id.yellowButton6, R.id.yellowButton7,
             R.id.brownButton1, R.id.brownButton2, R.id.brownButton3, R.id.brownButton4, R.id.brownButton5, R.id.brownButton6, R.id.brownButton7,
             R.id.blackButton1, R.id.blackButton2, R.id.blackButton3, R.id.blackButton4, R.id.blackButton5, R.id.blackButton6, R.id.blackButton7)
+    /*色選択済みテキストID*/
     private val checkTextId = intArrayOf(R.id.redCheckText1, R.id.redCheckText2, R.id.redCheckText3, R.id.redCheckText4, R.id.redCheckText5, R.id.redCheckText6, R.id.redCheckText7,
             R.id.purpleCheckText1, R.id.purpleCheckText2, R.id.purpleCheckText3, R.id.purpleCheckText4, R.id.purpleCheckText5, R.id.purpleCheckText6, R.id.purpleCheckText7,
             R.id.blueCheckText1, R.id.blueCheckText2, R.id.blueCheckText3, R.id.blueCheckText4, R.id.blueCheckText5, R.id.blueCheckText6, R.id.blueCheckText7,
