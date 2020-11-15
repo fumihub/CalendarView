@@ -16,7 +16,7 @@ import java.lang.Boolean.FALSE
 import java.lang.Boolean.TRUE
 import kotlin.collections.ArrayList
 
-class colorActivity : AppCompatActivity() {
+class ColorActivity : AppCompatActivity() {
 
     private lateinit var repository: ScheduleRepository     /**/
 
@@ -100,7 +100,7 @@ class colorActivity : AppCompatActivity() {
 
     /*色作成画面遷移関数****************************/
     private fun returnColorCreateActivity(colorNumber: Int) {
-        val intentOut = Intent(this, colorCreateActivity::class.java)
+        val intentOut = Intent(this, ColorCreateActivity::class.java)
         /*ボタンの色番号を遷移先へreturn*/
         intentOut.putExtra("ColorNumber", colorNumber)
         /*ボタンのテキストの色を遷移先へreturn*/

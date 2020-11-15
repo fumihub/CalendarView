@@ -14,7 +14,7 @@ import com.non_name_hero.calenderview.data.source.ScheduleRepository
 import com.non_name_hero.calenderview.utils.Injection
 import java.lang.Boolean.FALSE
 
-class colorCreateActivity  /*コンストラクタ*/
+class ColorCreateActivity  /*コンストラクタ*/
     : AppCompatActivity() {
 
     private lateinit var repository: ScheduleRepository     /**/
@@ -53,7 +53,7 @@ class colorCreateActivity  /*コンストラクタ*/
         radioGroup = findViewById(R.id.RadioGroup)
         blackRadioButton = findViewById(R.id.RadioButton1)
         whiteRadioButton = findViewById(R.id.RadioButton2)
-        intentOut = Intent(this, colorSelectActivity::class.java)
+        intentOut = Intent(this, ColorSelectActivity::class.java)
         /************************************************/
 
         /*色ボタン情報表示*******************************/
@@ -117,7 +117,7 @@ class colorCreateActivity  /*コンストラクタ*/
     /*色画面遷移関数************************************/
     private fun goColorActivity() {
         /*色画面遷移用intent*/
-        val intentColorActivity = Intent(this, colorActivity::class.java)
+        val intentColorActivity = Intent(this, ColorActivity::class.java)
         /*色番号前回値を引数で色画面に渡す*/
         intentColorActivity.putExtra("colorNumberPre", colorNumberPre)
         /*戻り値を設定して色画面に遷移*/

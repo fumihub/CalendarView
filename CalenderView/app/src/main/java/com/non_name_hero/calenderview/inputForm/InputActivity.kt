@@ -320,7 +320,7 @@ class InputActivity  /*コンストラクタ*/
     /*色画面遷移関数*********************************/
     private fun goColorSelectActivity() {
         /*色選択画面遷移用intent*/
-        val intentOut = Intent(this, colorSelectActivity::class.java)
+        val intentOut = Intent(this, ColorSelectActivity::class.java)
         /*戻り値を設定して色選択画面に遷移*/
         startActivityForResult(intentOut, REQUEST_CODE)
     }

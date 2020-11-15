@@ -18,12 +18,13 @@ import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDialogBase.Dialog
 import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDialogFragment
 import java.util.*
 
-class colorSelectActivity  /*コンストラクタ*/
+class ColorSelectActivity  /*コンストラクタ*/
     : AppCompatActivity(), PigLeadDeleteDialog {
 
     private lateinit var context: Context                           /*ColorSelectActivityのcontext*/
 
-    private lateinit var listAdapter: listAdapter                   /*色グループリストアダプタ*/
+
+    private lateinit var ListAdapter: ListAdapter                   /*色グループリストアダプタ*/
 
     private lateinit var listView: ListView                         /*色グループリストビュー*/
 
@@ -50,10 +51,10 @@ class colorSelectActivity  /*コンストラクタ*/
         listView = findViewById(R.id.listView)
 
         /*リストのアダプターを使用してViewを作成*/
-        listAdapter = listAdapter(context, this)
+        ListAdapter = ListAdapter(context, this)
         //削除ダイアログを設定
-        listAdapter.deleteDialog = this
-        listView.adapter = listAdapter
+        ListAdapter.deleteDialog = this
+        listView.adapter = ListAdapter
 
         /*DBから情報を取得*/
         loadColorList()
@@ -111,7 +112,7 @@ class colorSelectActivity  /*コンストラクタ*/
         editor.putBoolean("editFlag", value)
         /*非同期処理ならapply()、同期処理ならcommit()*/
         editor.apply()
-        listView.adapter = listAdapter
+        listView.adapter = ListAdapter
         /*ボタン文字の切り替え(編集/完了)*/
         editButton.text = str
     }
@@ -120,7 +121,7 @@ class colorSelectActivity  /*コンストラクタ*/
     /*色作成画面遷移関数*****************************/
     private fun goColorCreateActivity() {
         /*色作成画面用intent*/
-        val intentOut = Intent(this, colorCreateActivity::class.java)
+        val intentOut = Intent(this, ColorCreateActivity::class.java)
         /*戻り値を設定して色画面に遷移*/
         startActivityForResult(intentOut, REQUEST_CODE)
     }
@@ -153,7 +154,7 @@ class colorSelectActivity  /*コンストラクタ*/
         repository.getListScheduleGroup(object : GetScheduleGroupsCallback {
             override fun onScheduleGroupsLoaded(Groups: List<ScheduleGroup>) {
                 //取得後の処理
-                listAdapter.setList(Groups as List<ScheduleGroup>)
+                ListAdapter.setList(Groups as List<ScheduleGroup>)
             }
 
             override fun onDataNotAvailable() {}

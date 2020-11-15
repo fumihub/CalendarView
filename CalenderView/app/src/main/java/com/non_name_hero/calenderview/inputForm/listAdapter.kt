@@ -20,7 +20,7 @@ import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDialogBase.Dialog
 import java.lang.Boolean
 import java.util.*
 
-class listAdapter(private val mContext: Context, activity: Activity) : BaseAdapter() {
+class ListAdapter(private val mContext: Context, activity: Activity) : BaseAdapter() {
 
     private var list: MutableList<ScheduleGroup>                                /*色グループのリスト*/
 
@@ -139,7 +139,7 @@ class listAdapter(private val mContext: Context, activity: Activity) : BaseAdapt
     /*色作成画面に遷移*******************************/
     private fun goColorCreateActivity(position: Int) {
         /*色作成遷移用intent*/
-        val intentOut = Intent(mContext, colorCreateActivity::class.java)
+        val intentOut = Intent(mContext, ColorCreateActivity::class.java)
         /*ボタンの色番号を遷移先へgo*/
         intentOut.putExtra("ColorNumberPre", list[position].colorNumber)
         /*戻り値を設定して色画面に遷移*/

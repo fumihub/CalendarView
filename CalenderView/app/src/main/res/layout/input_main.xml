@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -17,7 +17,10 @@
             android:layout_height="wrap_content"
             android:background="#FFEB3B"
             android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme">
+            android:theme="?attr/actionBarTheme"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/inputToolbar_title"
@@ -28,38 +31,57 @@
                 android:textSize="25sp"
                 android:textStyle="bold"
                 android:textColor="@color/blackColor"
-                tools:ignore="HardcodedText" />
+                tools:ignore="HardcodedText"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
         </androidx.appcompat.widget.Toolbar>
 
         <!--タイトル入力**********************************-->
+        <!--**********************************************-->
+
+        <!--日付入力**************************************-->
         <EditText
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
+            android:layout_marginTop="12dp"
+            android:hint="タイトル"
             android:inputType="text"
-            android:hint="タイトル" />
-        <!--**********************************************-->
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/inputToolbar" />
 
-        <!--日付入力**************************************-->
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/dateLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title">
 
             <EditText
                 android:id="@+id/startDate"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:focusable="false"
                 android:hint="開始日付"
-                android:inputType="date" />
+                android:inputType="date"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/dateArrow"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintHorizontal_weight="3"/>
 
             <TextView
                 android:id="@+id/dateArrow"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="50dp"
                 android:layout_marginTop="10dp"
@@ -67,18 +89,28 @@
                 android:layout_marginBottom="10dp"
                 android:text=">"
                 android:textSize="30dp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/startDate"
+                app:layout_constraintEnd_toStartOf="@+id/endDate"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_weight="1"/>
 
             <EditText
                 android:id="@+id/endDate"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:focusable="false"
                 android:hint="終了日付"
-                android:inputType="date" />
+                android:inputType="date"
+                app:layout_constraintStart_toEndOf="@+id/dateArrow"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_weight="3"/>
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
         <!--**********************************************-->
 
         <!--background="#00000000"　=　透明色-->
@@ -94,26 +126,39 @@
             android:layout_marginBottom="10dp"
             android:background="#00000000"
             android:text="時間入力"
-            android:textColor="@color/colorPrimary" />
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dateLayout"/>
 
         <!--時間入力**************************************-->
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/timeLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/timeButton">
 
             <EditText
                 android:id="@+id/startTime"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:focusable="false"
                 android:hint="開始時間"
-                android:inputType="time" />
+                android:inputType="time"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/timeArrow"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintHorizontal_weight="3"/>
 
             <TextView
                 android:id="@+id/timeArrow"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="50dp"
                 android:layout_marginTop="10dp"
@@ -121,60 +166,83 @@
                 android:layout_marginBottom="10dp"
                 android:text=">"
                 android:textSize="30dp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/startTime"
+                app:layout_constraintEnd_toStartOf="@+id/endTime"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_weight="1"/>
 
             <EditText
                 android:id="@+id/endTime"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:focusable="false"
                 android:hint="終了時間"
-                android:inputType="time" />
+                android:inputType="time"
+                app:layout_constraintStart_toEndOf="@+id/timeArrow"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_weight="3"/>
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>>
         <!--**********************************************-->
 
         <!--表示色ボタン***********************************-->
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/colorLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:weightSum="4">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/timeLayout">
 
             <Button
                 android:id="@+id/colorButton1"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="0dp"
                 android:layout_marginBottom="10dp"
-                android:layout_weight="3"
                 android:background="#00000000"
                 android:gravity="left|center_vertical"
                 android:text="表示色"
                 android:textColor="@color/grayColor"
                 style="?android:attr/borderlessButtonStyle"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/colorButton2"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_weight="1"/>
 
             <Button
                 android:id="@+id/colorButton2"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="0dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="10dp"
-                android:layout_weight="1"
                 android:background="#00000000"
                 android:gravity="right|center_vertical"
                 android:text=">"
                 android:textStyle="bold"
                 android:textColor="@color/grayColor"
                 style="?android:attr/borderlessButtonStyle"
-                android:textSize="18sp" />
-        </LinearLayout>
+                android:textSize="18sp"
+                app:layout_constraintStart_toEndOf="@+id/colorButton1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintHorizontal_weight="3"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
         <!--**********************************************-->
 
         <!--詳細入力ボタン*********************************-->
@@ -191,104 +259,115 @@
             android:layout_marginBottom="10dp"
             android:background="#00000000"
             android:text="詳細表示"
-            android:textColor="@color/colorPrimary" />
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/colorLayout"/>
         <!--**********************************************-->
 
         <!--場所入力**************************************-->
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/placeLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:weightSum="5">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detailButton">
 
             <EditText
                 android:id="@+id/place"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_margin="10dp"
                 android:inputType="text"
-                android:hint="場所" />
+                android:hint="場所"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/mapLayout"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_weight="4"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/mapLayout"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:layout_margin="10dp"
-                android:layout_weight="4"
-                android:weightSum="4">
+                app:layout_constraintStart_toEndOf="@+id/place"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintHorizontal_weight="1">
 
                 <Button
                     android:id="@+id/mapCheckButton1"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="0dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginRight="0dp"
-                    android:layout_marginBottom="0dp"
-                    android:layout_weight="1"
                     android:background="@color/redColor"
                     android:gravity="center"
                     android:text="ア\nチ"
                     android:textColor="@color/whiteColor"
                     style="?android:attr/borderlessButtonStyle"
                     android:textStyle="bold"
-                    android:textSize="10dp" />
+                    android:textSize="10dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/mapCheckButton2"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
 
                 <Button
                     android:id="@+id/mapCheckButton2"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="0dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginRight="0dp"
-                    android:layout_marginBottom="0dp"
-                    android:layout_weight="1"
                     android:background="@color/yellowColor2"
                     android:gravity="center"
                     android:text="プ\nェ"
                     android:textColor="@color/whiteColor"
                     style="?android:attr/borderlessButtonStyle"
                     android:textStyle="bold"
-                    android:textSize="10dp" />
+                    android:textSize="10dp"
+                    app:layout_constraintStart_toEndOf="@+id/mapCheckButton1"
+                    app:layout_constraintEnd_toStartOf="@+id/mapCheckButton3"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
 
                 <Button
                     android:id="@+id/mapCheckButton3"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="0dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginRight="0dp"
-                    android:layout_marginBottom="0dp"
-                    android:layout_weight="1"
                     android:background="@color/greenColor4"
                     android:gravity="center"
                     android:text="リ\nッ"
                     android:textColor="@color/whiteColor"
                     style="?android:attr/borderlessButtonStyle"
                     android:textStyle="bold"
-                    android:textSize="10dp" />
+                    android:textSize="10dp"
+                    app:layout_constraintStart_toEndOf="@+id/mapCheckButton2"
+                    app:layout_constraintEnd_toStartOf="@+id/mapCheckButton4"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
 
                 <Button
                     android:id="@+id/mapCheckButton4"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="0dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginRight="0dp"
-                    android:layout_marginBottom="0dp"
-                    android:layout_weight="1"
                     android:background="@color/colorPrimary"
                     android:gravity="center"
                     android:text="で\nク"
                     android:textColor="@color/whiteColor"
                     style="?android:attr/borderlessButtonStyle"
                     android:textStyle="bold"
-                    android:textSize="10dp" />
+                    android:textSize="10dp"
+                    app:layout_constraintStart_toEndOf="@+id/mapCheckButton3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>>
         <!--**********************************************-->
 
         <!--メモ******************************************-->
@@ -298,39 +377,55 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:inputType="textMultiLine"
-            android:hint="メモ" />
+            android:hint="メモ"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/placeLayout"/>
         <!--**********************************************-->
 
         <!--完了/キャンセルボタン*********************************-->
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/finishLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/memo">
 
             <Button
                 android:id="@+id/cancelButton"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="30dp"
                 android:layout_marginBottom="10dp"
-                android:layout_weight="1"
-                android:text="キャンセル" />
+                android:text="キャンセル"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/doneButton"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_chainStyle="spread"/>
 
             <Button
                 android:id="@+id/doneButton"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="30dp"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
-                android:text="完了" />
-        </LinearLayout>
+                android:text="完了"
+                app:layout_constraintStart_toEndOf="@+id/cancelButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
         <!--**********************************************-->
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>
