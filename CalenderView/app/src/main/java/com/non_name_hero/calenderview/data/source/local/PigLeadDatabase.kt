@@ -32,7 +32,7 @@ abstract class PigLeadDatabase : RoomDatabase() {
                                             + "(1, 43, '未分類', '白', -9404272)")
                                     db.execSQL(sql)
                                 }
-                            })
+                            }).fallbackToDestructiveMigration()
                             .build()
                 }
                 return INSTANCE!!
