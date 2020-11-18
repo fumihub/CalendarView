@@ -23,7 +23,6 @@ import kotlin.collections.ArrayList
  */
 class CalendarPageFragment     //コンストラクタ
 (private val mProgressMonth: Int) : Fragment() {
-    private lateinit var mCalendarAdapter: CalendarAdapter
 
     /**
      * onCreateViewは戻り値のビューを表示させる
@@ -44,11 +43,14 @@ class CalendarPageFragment     //コンストラクタ
             this.lifecycleOwner = viewLifecycleOwner
             this.viewmodel = (activity as MainActivity).obtainViewModel()
         }
+
         //カレンダーを作成(GridView)
-        binding.calendarGridView.adapter = CalendarAdapter(context, mProgressMonth)
+        binding.calendarGridView.adapter = CalendarAdapter(requireContext(), mProgressMonth)
 
         //クリックリスナー
-        binding.calendarGridView.onItemClickListener = OnItemClickListener { parent, view, position, id ->
+        @Suppress("UNUSED_PARAMETER")
+        binding.calendarGridView.onItemClickListener = OnItemClickListener { _, _, position, _ ->
+
 
             /**
              * GridViewのクリックリスナー
@@ -60,14 +62,14 @@ class CalendarPageFragment     //コンストラクタ
             val dateArray = (binding.calendarGridView.adapter as CalendarAdapter).dateArray
             binding.viewmodel?.setScheduleItem(dateArray[position])
         }
-       binding.calendarGridView.onItemLongClickListener = OnItemLongClickListener { parent, view, position, id -> //入力画面に遷移
+        binding.calendarGridView.onItemLongClickListener = OnItemLongClickListener { _, _, position, _ -> //入力画面に遷移
             val intent = Intent(context, InputActivity::class.java)
             val dateArray = (binding.calendarGridView.adapter as CalendarAdapter).dateArray
 //            val dateArray = mCalendarAdapter.dateArray ?: ArrayList<Date>()
             //入力画面に引数で年月日を渡す
-            intent.putExtra("year", PigLeadUtils.yearFormat.format(dateArray[position] ?: Date()))
-            intent.putExtra("month", PigLeadUtils.monthFormat.format(dateArray[position] ?: Date()))
-            intent.putExtra("day", PigLeadUtils.dayFormat.format(dateArray[position] ?: Date()))
+            intent.putExtra("year", PigLeadUtils.yearFormat.format(dateArray[position]))
+            intent.putExtra("month", PigLeadUtils.monthFormat.format(dateArray[position]))
+            intent.putExtra("day", PigLeadUtils.dayFormat.format(dateArray[position]))
             startActivity(intent)
             true
         }

@@ -13,7 +13,6 @@ import com.non_name_hero.calenderview.R
 import com.non_name_hero.calenderview.databinding.ScheduleFragmentBinding
 
 class ScheduleListFragment : Fragment() {
-    private var layoutManager: RecyclerView.LayoutManager? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         //viewの生成
         val binding: ScheduleFragmentBinding = DataBindingUtil.inflate<ScheduleFragmentBinding>(inflater, R.layout.schedule_fragment, container, false)
