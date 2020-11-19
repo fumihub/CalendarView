@@ -154,7 +154,7 @@ class ColorSelectActivity  /*コンストラクタ*/
         repository.getListScheduleGroup(object : GetScheduleGroupsCallback {
             override fun onScheduleGroupsLoaded(Groups: List<ScheduleGroup>) {
                 //取得後の処理
-                ListAdapter.setList(Groups as List<ScheduleGroup>)
+                ListAdapter.setList(Groups)
             }
 
             override fun onDataNotAvailable() {}

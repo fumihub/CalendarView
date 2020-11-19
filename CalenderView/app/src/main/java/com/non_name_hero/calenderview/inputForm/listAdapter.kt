@@ -17,7 +17,6 @@ import com.non_name_hero.calenderview.data.source.ScheduleRepository
 import com.non_name_hero.calenderview.utils.Injection
 import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDeleteDialog
 import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDialogBase.DialogCallback
-import java.lang.Boolean
 import java.util.*
 
 class ListAdapter(private val mContext: Context, activity: Activity) : BaseAdapter() {
@@ -89,14 +88,14 @@ class ListAdapter(private val mContext: Context, activity: Activity) : BaseAdapt
         //TODO　削除ボタン表示
         /*SharedPreferenceからeditFlagの値を取得*/
         val prefs = mContext.getSharedPreferences("input_data", Context.MODE_PRIVATE)
-        if (prefs.getBoolean("editFlag", Boolean.FALSE)
+        if (prefs.getBoolean("editFlag", false)
                 && list[position].colorNumber != 43) {
             holder.destroyButton.visibility = View.VISIBLE
         } else {
             holder.destroyButton.visibility = View.GONE
         }
         holder.categoryButton.setOnClickListener {
-            if (prefs.getBoolean("editFlag", Boolean.FALSE)) {
+            if (prefs.getBoolean("editFlag", false)) {
                 if (list[position].colorNumber == 43) {
                     /* 何もしない */
                 } else {

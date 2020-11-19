@@ -12,7 +12,6 @@ import com.non_name_hero.calenderview.data.source.ScheduleDataSource.GetSchedule
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource.SaveScheduleGroupCallback
 import com.non_name_hero.calenderview.data.source.ScheduleRepository
 import com.non_name_hero.calenderview.utils.Injection
-import java.lang.Boolean.FALSE
 
 class ColorCreateActivity  /*コンストラクタ*/
     : AppCompatActivity() {
@@ -59,7 +58,7 @@ class ColorCreateActivity  /*コンストラクタ*/
         /*色ボタン情報表示*******************************/
         /*SharedPreferenceからeditFlagの値を取得*/
         val prefs = getSharedPreferences("input_data", MODE_PRIVATE)
-        if (prefs.getBoolean("editFlag", FALSE)) {
+        if (prefs.getBoolean("editFlag", false)) {
             /*表示する色番号を取得*/
             val intentIn = intent
             colorNumberPre = intentIn.getIntExtra("ColorNumberPre", 43)
@@ -153,7 +152,7 @@ class ColorCreateActivity  /*コンストラクタ*/
             /*編集画面でない場合***********************/
             /*SharedPreferenceからeditFlagの値を取得*/
             val prefs = getSharedPreferences("input_data", MODE_PRIVATE)
-            if (!prefs.getBoolean("editFlag", FALSE)) {
+            if (!prefs.getBoolean("editFlag", false)) {
                 repository.insertScheduleGroup(
                         ScheduleGroup(
                                 colorNumber,
