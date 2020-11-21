@@ -67,9 +67,12 @@ class CalendarPageFragment     //コンストラクタ
             val dateArray = (binding.calendarGridView.adapter as CalendarAdapter).dateArray
 //            val dateArray = mCalendarAdapter.dateArray ?: ArrayList<Date>()
             //入力画面に引数で年月日を渡す
-            intent.putExtra("year", PigLeadUtils.yearFormat.format(dateArray[position]))
-            intent.putExtra("month", PigLeadUtils.monthFormat.format(dateArray[position]))
-            intent.putExtra("day", PigLeadUtils.dayFormat.format(dateArray[position]))
+            val year:String = PigLeadUtils.yearFormat.format(dateArray[position])
+            val month:String = PigLeadUtils.monthFormat.format(dateArray[position])
+            val day:String = PigLeadUtils.dayFormat.format(dateArray[position])
+            intent.putExtra("year", year)
+            intent.putExtra("month", month)
+            intent.putExtra("day", day)
             startActivity(intent)
             true
         }

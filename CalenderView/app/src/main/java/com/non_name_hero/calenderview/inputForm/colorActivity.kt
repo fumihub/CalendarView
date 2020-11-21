@@ -12,8 +12,6 @@ import com.non_name_hero.calenderview.data.ScheduleGroup
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource.GetScheduleGroupsCallback
 import com.non_name_hero.calenderview.data.source.ScheduleRepository
 import com.non_name_hero.calenderview.utils.Injection
-import java.lang.Boolean.FALSE
-import java.lang.Boolean.TRUE
 import kotlin.collections.ArrayList
 
 class ColorActivity : AppCompatActivity() {
@@ -54,7 +52,7 @@ class ColorActivity : AppCompatActivity() {
 
         /*変数宣言*/
         for (cnt in 0 until ARRAY_LENGTH) {
-            checkFlag[cnt] = FALSE
+            checkFlag[cnt] = false
             colorButtonList.add(cnt, findViewById(colorButtonId[cnt]))
             checkTextList.add(cnt, findViewById(checkTextId[cnt]))
         }
@@ -67,7 +65,7 @@ class ColorActivity : AppCompatActivity() {
                 list = Groups
                 /*DBにColorNumberがあるものはcheckFlagをTRUEに*/
                 for (cnt in list.indices) {
-                    checkFlag[list[cnt].colorNumber] = TRUE
+                    checkFlag[list[cnt].colorNumber] = true
                 }
                 /*最初表示判定*/
                 for (cnt in 0 until ARRAY_LENGTH) {

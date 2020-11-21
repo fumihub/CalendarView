@@ -144,9 +144,6 @@ class InputActivity  /*コンストラクタ*/
 
         /*開始日時EditTextが押されたとき*************/
         startDate.setOnClickListener {
-            //TODO このインスタンス取得必要？
-            /*Calendarインスタンスを取得*/
-            val startCalendar = Calendar.getInstance()
             val intentIn = intent
             val year = Integer.valueOf(intentIn.getStringExtra("year"))
             val month = Integer.valueOf(intentIn.getStringExtra("month"))
@@ -154,7 +151,7 @@ class InputActivity  /*コンストラクタ*/
             /*DatePickerDialogインスタンスを取得*/
             val startDatePickerDialog = DatePickerDialog(
                     this@InputActivity,
-                    { view, year, month, dayOfMonth ->
+                    { _, year, month, dayOfMonth ->
                         /*setした日付を取得して表示*/
                         startDate.setText(String.format("%02d / %02d", month + 1, dayOfMonth))
                         /*Calendarオブジェクトを作成*/
@@ -173,9 +170,6 @@ class InputActivity  /*コンストラクタ*/
 
         /*終了日時EditTextが押されたとき*************/
         endDate.setOnClickListener {
-            //TODO このインスタンス取得必要？
-            /*Calendarインスタンスを取得*/
-            val endCalendar = Calendar.getInstance()
             val intentIn = intent
             val year = Integer.valueOf(intentIn.getStringExtra("year"))
             val month = Integer.valueOf(intentIn.getStringExtra("month"))
@@ -183,7 +177,7 @@ class InputActivity  /*コンストラクタ*/
             /*DatePickerDialogインスタンスを取得*/
             val endDatePickerDialog = DatePickerDialog(
                     this@InputActivity,
-                    { view, year, month, dayOfMonth ->
+                    { _, year, month, dayOfMonth ->
                         /*setした日付を取得して表示*/
                         endDate.setText(String.format("%02d / %02d", month + 1, dayOfMonth))
                         mEndAtDatetime.set(year, month, dayOfMonth)
@@ -217,7 +211,7 @@ class InputActivity  /*コンストラクタ*/
             /*TimePickerDialogインスタンスを取得*/
             val startTimePickerDialog = TimePickerDialog(
                     this@InputActivity,
-                    { view, hourOfDay, minute ->
+                    { _, hourOfDay, minute ->
                         /*setした時間を取得して表示*/
                         startTime.setText(String.format("%02d : %02d", hourOfDay, minute))
                         mStartAtDatetime.set(Calendar.HOUR_OF_DAY, hourOfDay)
@@ -241,7 +235,7 @@ class InputActivity  /*コンストラクタ*/
             /*TimePickerDialogインスタンスを取得*/
             val endTimePickerDialog = TimePickerDialog(
                     this@InputActivity,
-                    { view, hourOfDay, minute ->
+                    { _, hourOfDay, minute ->
                         /*setした時間を取得して表示*/
                         endTime.setText(String.format("%02d : %02d", hourOfDay, minute))
                         /*Calendarオブジェクトを作成*/
