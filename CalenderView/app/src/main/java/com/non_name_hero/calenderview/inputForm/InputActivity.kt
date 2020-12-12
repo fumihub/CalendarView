@@ -65,14 +65,14 @@ class InputActivity  /*コンストラクタ*/
 
         /*カレンダー初期値用*/
         val intentIn = intent
-        val year:String = intentIn.getStringExtra("year")
-        val month:String = intentIn.getStringExtra("month")
-        val day:String = intentIn.getStringExtra("day")
+        val year:Int = intentIn.getIntExtra("year", 0)
+        val month:Int = intentIn.getIntExtra("month",0)
+        val day:Int = intentIn.getIntExtra("day",0)
         /*グループIDの初期値設定*/
         mGroupId = 1
 
 
-        /*入力画面表示*********************************************************************/
+        /*入力画面表示***********************************/
         /*カレンダーセルのボタンが押された場合*/
         title = findViewById(R.id.title)
         startDate = findViewById(R.id.startDate)
@@ -121,9 +121,9 @@ class InputActivity  /*コンストラクタ*/
 
         /*初期表示日付取得****************************/
         mStartAtDatetime = Calendar.getInstance()
-        mStartAtDatetime.set(Integer.valueOf(year), Integer.valueOf(month) - 1, Integer.valueOf(day))
+        mStartAtDatetime.set(year, month - 1, day)
         mEndAtDatetime = Calendar.getInstance()
-        mEndAtDatetime.set(Integer.valueOf(year), Integer.valueOf(month) - 1, Integer.valueOf(day))
+        mEndAtDatetime.set(year, month - 1, day)
         /*********************************************/
 
         /*タイトルEditTextが押されたとき*************/
@@ -145,9 +145,9 @@ class InputActivity  /*コンストラクタ*/
         /*開始日時EditTextが押されたとき*************/
         startDate.setOnClickListener {
             val intentIn = intent
-            val year = Integer.valueOf(intentIn.getStringExtra("year"))
-            val month = Integer.valueOf(intentIn.getStringExtra("month"))
-            val day = Integer.valueOf(intentIn.getStringExtra("day"))
+            val year:Int = intentIn.getIntExtra("year", 0)
+            val month:Int = intentIn.getIntExtra("month", 0)
+            val day:Int = intentIn.getIntExtra("day", 0)
             /*DatePickerDialogインスタンスを取得*/
             val startDatePickerDialog = DatePickerDialog(
                     this@InputActivity,
@@ -171,9 +171,9 @@ class InputActivity  /*コンストラクタ*/
         /*終了日時EditTextが押されたとき*************/
         endDate.setOnClickListener {
             val intentIn = intent
-            val year = Integer.valueOf(intentIn.getStringExtra("year"))
-            val month = Integer.valueOf(intentIn.getStringExtra("month"))
-            val day = Integer.valueOf(intentIn.getStringExtra("day"))
+            val year:Int = intentIn.getIntExtra("year", 0)
+            val month:Int = intentIn.getIntExtra("month", 0)
+            val day:Int = intentIn.getIntExtra("day", 0)
             /*DatePickerDialogインスタンスを取得*/
             val endDatePickerDialog = DatePickerDialog(
                     this@InputActivity,

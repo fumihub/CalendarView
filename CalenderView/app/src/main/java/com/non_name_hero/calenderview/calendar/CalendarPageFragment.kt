@@ -66,10 +66,11 @@ class CalendarPageFragment     //コンストラクタ
             val intent = Intent(context, InputActivity::class.java)
             val dateArray = (binding.calendarGridView.adapter as CalendarAdapter).dateArray
 //            val dateArray = mCalendarAdapter.dateArray ?: ArrayList<Date>()
+            /*TODO スケジュール入力時と家計簿入力時に分ける*/
             //入力画面に引数で年月日を渡す
-            val year:String = PigLeadUtils.yearFormat.format(dateArray[position])
-            val month:String = PigLeadUtils.monthFormat.format(dateArray[position])
-            val day:String = PigLeadUtils.dayFormat.format(dateArray[position])
+            val year:Int = Integer.valueOf(PigLeadUtils.yearFormat.format(dateArray[position]))
+            val month:Int = Integer.valueOf(PigLeadUtils.monthFormat.format(dateArray[position]))
+            val day:Int = Integer.valueOf(PigLeadUtils.dayFormat.format(dateArray[position]))
             intent.putExtra("year", year)
             intent.putExtra("month", month)
             intent.putExtra("day", day)
