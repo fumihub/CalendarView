@@ -17,6 +17,7 @@
         android:orientation="vertical"
         tools:context=".calendar.MainActivity">
 
+        <!--TODO ツールバーにスケジュール入力と家計簿入力を切り替えるボタン作成-->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/mainToolbar"
             android:layout_width="match_parent"

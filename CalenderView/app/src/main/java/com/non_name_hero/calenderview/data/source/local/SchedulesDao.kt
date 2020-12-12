@@ -7,6 +7,10 @@ import com.non_name_hero.calenderview.data.ScheduleGroup
 
 @Dao
 interface SchedulesDao {
+    /*TODO ファイル名変更する
+    *  家計簿用クエリ作成
+    *  家計簿用テーブル作成*/
+
     /*
     * Schedule
     * */

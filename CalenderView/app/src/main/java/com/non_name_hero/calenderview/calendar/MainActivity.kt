@@ -60,6 +60,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        /*TODO ツールバーにスケジュール入力と家計簿入力を切り替えるボタン追加*/
         //Toolbarをセット
         setSupportActionBar(binding.mainToolbar)
 
