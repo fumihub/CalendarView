@@ -16,7 +16,6 @@ import com.non_name_hero.calenderview.utils.Injection
 import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDeleteDialog
 import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDialogBase.DialogCallback
 import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDialogFragment
-import java.util.*
 
 class ColorSelectActivity  /*コンストラクタ*/
     : AppCompatActivity(), PigLeadDeleteDialog {
@@ -33,7 +32,7 @@ class ColorSelectActivity  /*コンストラクタ*/
 
     private lateinit var repository: ScheduleRepository             /**/
 
-    private var createFlag = java.lang.Boolean.FALSE      /*画面作成時フラグ*/
+    private var createFlag = false                                  /*画面作成時フラグ*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,12 +64,12 @@ class ColorSelectActivity  /*コンストラクタ*/
             /*ボタンの文字が「編集」ならば*/
             if (editButton.text.toString() == "編集") {
                 /*リストビューに削除ボタン表示*/
-                jdgEditMode(java.lang.Boolean.TRUE, "完了")
+                jdgEditMode(true, "完了")
                 /*色作成ボタン非表示*/
                 colorCreateButton.visibility = View.GONE
             } else {
                 /*リストビューから削除ボタンを非表示に*/
-                jdgEditMode(java.lang.Boolean.FALSE, "編集")
+                jdgEditMode(false, "編集")
                 /*色作成ボタン表示*/
                 colorCreateButton.visibility = View.VISIBLE
             }
@@ -85,7 +84,7 @@ class ColorSelectActivity  /*コンストラクタ*/
         /************************************************/
 
         /*editFlag判定用Flag*/
-        createFlag = java.lang.Boolean.TRUE
+        createFlag = true
     }
 
     /*画面表示時処理関数*******************************/
@@ -96,7 +95,7 @@ class ColorSelectActivity  /*コンストラクタ*/
         if (createFlag) {
             /*アプリ再開時にeditFlagを0にする*/
             /*リストビューから削除ボタンを非表示に*/
-            jdgEditMode(java.lang.Boolean.FALSE, "編集")
+            jdgEditMode(false, "編集")
         } else {
             /* 何もしない */
         }

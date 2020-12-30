@@ -1,7 +1,8 @@
 package com.non_name_hero.calenderview.calendar
 
-import android.graphics.Color
 import android.os.Bundle
+import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -15,17 +16,22 @@ import com.non_name_hero.calenderview.utils.ActivityUtils
 import com.non_name_hero.calenderview.utils.obtainViewModel
 
 class MainActivity : AppCompatActivity() {
-    private var accountingText: TextView? = null
-    private var mAdView: AdView? = null
+    /*TODO accountingTextをどこに実装したらいいかわからない
+    *  　　家計簿画面の時のみ表示したい*/
+//    private lateinit var accountingText: TextView
+    private lateinit var mAdView: AdView
+    private lateinit var changeButton: Button
+    private var createFlag = false                      /*画面作成時フラグ*/
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(R.style.AppTheme)
         //DataBinding
         val binding: ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        //収入支出ブロックの背景色変更
-        accountingText = findViewById(R.id.accounting)
-        //accountingText.setBackgroundColor(Color.YELLOW);
+//        /*スケジュール画面では表示しない*/
+//        accountingText = findViewById(R.id.accounting)
+//        accountingText.visibility = View.GONE
 
         //広告の読み込み
         MobileAds.initialize(this) { }
@@ -35,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         //インスタンス生成
         val adRequest = AdRequest.Builder().build()
         //広告読み込み
-        mAdView?.loadAd(adRequest)
+        mAdView.loadAd(adRequest)
 
         //アクティビティのfragmentを取得（初回時はnull）
         var calendarFragment = supportFragmentManager.findFragmentById(R.id.calendar_fragment_container) as CalendarFragment?
@@ -61,16 +67,60 @@ class MainActivity : AppCompatActivity() {
         }
 
         /*TODO ツールバーにスケジュール入力と家計簿入力を切り替えるボタン追加*/
+        /*スケジュール→家計簿切り替えボタン設定********/
+        changeButton = findViewById(R.id.changeButton)
+        changeButton.setOnClickListener {
+            /*ボタンの文字が「編集」ならば*/
+            if (changeButton.text.toString() == "編集") {
+                /*カレンダー画面に家計簿内容表示*/
+                changeMode(true, "完了")
+//                accountingText.visibility = View.VISIBLE
+            } else {
+                /*カレンダー画面にスケジュール内容表示*/
+                changeMode(false, "編集")
+            }
+        }
+        /************************************************/
+
         //Toolbarをセット
         setSupportActionBar(binding.mainToolbar)
 
         //bindingを即時反映
         binding.executePendingBindings()
+
+        /*balanceFlag判定用Flag*/
+        createFlag = true
     }
 
+    /*画面表示時処理関数*******************************/
     public override fun onResume() {
         super.onResume()
+
+        /*createFlagがTRUEならば*/
+        if (createFlag) {
+            /*アプリ再開時にbalanceFlagを0にする*/
+            /*カレンダー画面にスケジュール内容表示*/
+            changeMode(false, "編集")
+//            accountingText.visibility = View.GONE
+        } else {
+            /* 何もしない */
+        }
     }
+    /************************************************/
+
+    /*編集モードかを判定する関数********************/
+    private fun changeMode(value: Boolean, str: String) {
+        /*SharedPreferenceでeditFlagの値を変更*/
+        val prefs = getSharedPreferences("input_balance_data", MODE_PRIVATE)
+        val editor = prefs.edit()
+        /*SharedPreferenceにbalanceFlagの値を保存*/
+        editor.putBoolean("balanceFlag", value)
+        /*非同期処理ならapply()、同期処理ならcommit()*/
+        editor.apply()
+        /*ボタン文字の切り替え(編集/完了)*/
+        changeButton.text = str
+    }
+    /************************************************/
 
     /**
      * ViewModelを取得する
