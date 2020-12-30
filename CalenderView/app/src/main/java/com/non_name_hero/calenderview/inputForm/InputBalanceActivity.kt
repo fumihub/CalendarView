@@ -1,11 +1,14 @@
 package com.non_name_hero.calenderview.inputForm
 
 import android.app.DatePickerDialog
-import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.non_name_hero.calenderview.R
@@ -21,13 +24,16 @@ class InputBalanceActivity  /*コンストラクタ*/
     private lateinit var mUsedAtDatetime: Calendar         /*初期表示使用日付*/
 
     private lateinit var price: EditText                    /*金額入力*/
-    private lateinit var categoryButton: EditText           /*カテゴリーボタン(アイコン用)*/
-    private lateinit var categorySelectButton: EditText     /*カテゴリーセレクトボタン(カテゴリー名用)*/
+    private lateinit var priceText: TextView                /*金額入力*/
     private lateinit var usedDate: EditText                 /*使用日付*/
     private lateinit var title: EditText                    /*内容*/
 
+    private lateinit var categoryButton: Button             /*カテゴリーボタン(アイコン用)*/
+    private lateinit var categorySelectButton: Button       /*カテゴリーセレクトボタン(カテゴリー名用)*/
     private lateinit var cancelButton: Button               /*キャンセルボタン*/
     private lateinit var doneButton: Button                 /*保存ボタン*/
+
+    private var topZeroJudgeFlag:Boolean = false            /*先頭0判定フラグ*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +45,7 @@ class InputBalanceActivity  /*コンストラクタ*/
         /*入力画面表示*************************************/
         /*カレンダーセルのボタンが押された場合*/
         price = findViewById(R.id.price)
+        priceText = findViewById(R.id.priceText)
         categoryButton = findViewById(R.id.categoryButton)
         categorySelectButton = findViewById(R.id.categorySelectButton)
         usedDate = findViewById(R.id.usedDate)
@@ -53,22 +60,75 @@ class InputBalanceActivity  /*コンストラクタ*/
         val month:Int = intentIn.getIntExtra("month", 0)
         val day:Int = intentIn.getIntExtra("day", 0)
         usedDate.setText("$month/$day")
+        mUsedAtDatetime = Calendar.getInstance()
+        mUsedAtDatetime.set(year, month - 1, day)
         /*********************************************/
 
-        /*カテゴリーボタンが押されたとき*****************/
-        categoryButton.setOnClickListener {
-            /*カテゴリー選択画面へ遷移*/
-            goCategorySelectActivity()
+        /*金額が入力されたとき************************/
+        /*金額入力テキストから離れた時*/
+        price.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                price.setText("")
+            }
         }
-        categorySelectButton.setOnClickListener {
-            /*カテゴリー選択画面へ遷移*/
-            goCategorySelectActivity()
+        price.setOnClickListener {
+            price.setText("")
         }
+        /*******************************/
+
+        price.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                var priceStr: String = ""
+                topZeroJudgeFlag = true
+
+                s?.asIterable()?.forEach { char ->
+                    run {
+                        if (char.toString() == "0" && topZeroJudgeFlag) {
+
+                        } else {
+                            priceStr += char.toString()
+                            topZeroJudgeFlag = false
+                        }
+                    }
+                }
+                if (priceStr.length <= 10) {
+                    val price: Long =
+                            if (priceStr == "") {
+                                0
+                            } else {
+                                priceStr.toLong()
+                            }
+                    priceText.text = "¥" + String.format("%,d", price)
+                } else {
+                    price.setText(priceStr.substring(0, 10))
+                    price.setSelection(price.text.length)
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+
+
+            }
+        })
         /*********************************************/
+
+//        /*カテゴリーボタンが押されたとき*****************/
+//        categoryButton.setOnClickListener {
+//            /*カテゴリー選択画面へ遷移*/
+//            goCategorySelectActivity()
+//        }
+//        categorySelectButton.setOnClickListener {
+//            /*カテゴリー選択画面へ遷移*/
+//            goCategorySelectActivity()
+//        }
+//        /*********************************************/
 
         /*使用日付日時EditTextが押されたとき*************/
         usedDate.setOnClickListener {
-            /*TODO intent渡す側(CalendarPageFragment)を作成*/
             val intentIn = intent
             val year:Int = intentIn.getIntExtra("year", 0)
             val month:Int = intentIn.getIntExtra("month", 0)
@@ -111,15 +171,15 @@ class InputBalanceActivity  /*コンストラクタ*/
 
     }
 
-    /*カテゴリー選択画面遷移関数*********************/
-    private fun goCategorySelectActivity() {
-        /*カテゴリー選択画面遷移用intent*/
-        /*TODO カテゴリー選択画面作成*/
-        val intentOut = Intent(this, ColorSelectActivity::class.java)
-        /*戻り値を設定して色選択画面に遷移*/
-        startActivityForResult(intentOut, InputBalanceActivity.REQUEST_CODE)
-    }
-    /************************************************/
+//    /*カテゴリー選択画面遷移関数*********************/
+//    private fun goCategorySelectActivity() {
+//        /*カテゴリー選択画面遷移用intent*/
+//        /*TODO カテゴリー選択画面作成*/
+//        val intentOut = Intent(this, ColorSelectActivity::class.java)
+//        /*戻り値を設定して色選択画面に遷移*/
+//        startActivityForResult(intentOut, InputBalanceActivity.REQUEST_CODE)
+//    }
+//    /************************************************/
 
     /*定数定義****************************************/
     companion object {
