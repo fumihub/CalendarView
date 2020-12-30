@@ -23,6 +23,7 @@
         <activity android:name=".inputForm.ColorSelectActivity"/>
         <activity android:name=".inputForm.ColorCreateActivity"/>
         <activity android:name=".inputForm.ColorActivity"/>
+        <activity android:name=".inputForm.InputBalanceActivity"/>
         <!--広告用設定-->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
