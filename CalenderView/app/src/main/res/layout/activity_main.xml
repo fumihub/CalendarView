@@ -47,23 +47,46 @@
                     android:textSize="25sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/changeButton"
+                    app:layout_constraintEnd_toStartOf="@+id/iconLayout"
                     app:layout_constraintHorizontal_weight="8"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="HardcodedText" />
 
-                <Button
-                    android:id="@+id/changeButton"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/iconLayout"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:text="編集"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_weight="2"
                     app:layout_constraintStart_toEndOf="@+id/mainToolbar_title"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageButton
+                        android:id="@+id/pigIconButton"
+                        android:layout_width="0dp"
+                        android:layout_height="35dp"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/pig_icon"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/iconLayout"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                    <ImageButton
+                        android:id="@+id/calendarIconButton"
+                        android:layout_width="0dp"
+                        android:layout_height="35dp"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/calendar_icon"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/iconLayout"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
