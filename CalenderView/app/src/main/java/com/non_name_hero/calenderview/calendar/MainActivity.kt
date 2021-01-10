@@ -2,8 +2,7 @@ package com.non_name_hero.calenderview.calendar
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.TextView
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -20,8 +19,9 @@ class MainActivity : AppCompatActivity() {
     *  　　家計簿画面の時のみ表示したい*/
 //    private lateinit var accountingText: TextView
     private lateinit var mAdView: AdView
-    private lateinit var changeButton: Button
-    private var createFlag = false                      /*画面作成時フラグ*/
+    private lateinit var pigIconButton: ImageButton             /*家計簿画面切り替えボタン*/
+    private lateinit var calendarIconButton: ImageButton        /*スケジュール画面切り替えボタン*/
+    private var createFlag = false                              /*画面作成時フラグ*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,17 +68,20 @@ class MainActivity : AppCompatActivity() {
 
         /*TODO ツールバーにスケジュール入力と家計簿入力を切り替えるボタン追加*/
         /*スケジュール→家計簿切り替えボタン設定********/
-        changeButton = findViewById(R.id.changeButton)
-        changeButton.setOnClickListener {
-            /*ボタンの文字が「編集」ならば*/
-            if (changeButton.text.toString() == "編集") {
-                /*カレンダー画面に家計簿内容表示*/
-                changeMode(true, "完了")
-//                accountingText.visibility = View.VISIBLE
-            } else {
-                /*カレンダー画面にスケジュール内容表示*/
-                changeMode(false, "編集")
-            }
+        pigIconButton = findViewById(R.id.pigIconButton)
+        calendarIconButton = findViewById(R.id.calendarIconButton)
+        calendarIconButton.visibility = View.GONE
+        pigIconButton.setOnClickListener {
+            /*カレンダー画面に家計簿内容表示*/
+            pigIconButton.visibility = View.GONE
+            calendarIconButton.visibility = View.VISIBLE
+            changeMode(true)
+        }
+        calendarIconButton.setOnClickListener {
+            /*カレンダー画面にスケジュール内容表示*/
+            calendarIconButton.visibility = View.GONE
+            pigIconButton.visibility = View.VISIBLE
+            changeMode(false)
         }
         /************************************************/
 
@@ -100,7 +103,9 @@ class MainActivity : AppCompatActivity() {
         if (createFlag) {
             /*アプリ再開時にbalanceFlagを0にする*/
             /*カレンダー画面にスケジュール内容表示*/
-            changeMode(false, "編集")
+            calendarIconButton.visibility = View.GONE
+            pigIconButton.visibility = View.VISIBLE
+            changeMode(false)
 //            accountingText.visibility = View.GONE
         } else {
             /* 何もしない */
@@ -109,7 +114,7 @@ class MainActivity : AppCompatActivity() {
     /************************************************/
 
     /*編集モードかを判定する関数********************/
-    private fun changeMode(value: Boolean, str: String) {
+    private fun changeMode(value: Boolean) {
         /*SharedPreferenceでeditFlagの値を変更*/
         val prefs = getSharedPreferences("input_balance_data", MODE_PRIVATE)
         val editor = prefs.edit()
@@ -117,8 +122,6 @@ class MainActivity : AppCompatActivity() {
         editor.putBoolean("balanceFlag", value)
         /*非同期処理ならapply()、同期処理ならcommit()*/
         editor.apply()
-        /*ボタン文字の切り替え(編集/完了)*/
-        changeButton.text = str
     }
     /************************************************/
 
