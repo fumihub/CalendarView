@@ -1,6 +1,7 @@
 package com.non_name_hero.calenderview.inputForm
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -116,16 +117,16 @@ class InputBalanceActivity  /*コンストラクタ*/
         })
         /*********************************************/
 
-//        /*カテゴリーボタンが押されたとき*****************/
-//        categoryButton.setOnClickListener {
-//            /*カテゴリー選択画面へ遷移*/
-//            goCategorySelectActivity()
-//        }
-//        categorySelectButton.setOnClickListener {
-//            /*カテゴリー選択画面へ遷移*/
-//            goCategorySelectActivity()
-//        }
-//        /*********************************************/
+        /*カテゴリーボタンが押されたとき*****************/
+        categoryButton.setOnClickListener {
+            /*カテゴリー選択画面へ遷移*/
+            goCategorySelectActivity()
+        }
+        categorySelectButton.setOnClickListener {
+            /*カテゴリー選択画面へ遷移*/
+            goCategorySelectActivity()
+        }
+        /*********************************************/
 
         /*使用日付日時EditTextが押されたとき*************/
         usedDate.setOnClickListener {
@@ -171,15 +172,15 @@ class InputBalanceActivity  /*コンストラクタ*/
 
     }
 
-//    /*カテゴリー選択画面遷移関数*********************/
-//    private fun goCategorySelectActivity() {
-//        /*カテゴリー選択画面遷移用intent*/
-//        /*TODO カテゴリー選択画面作成*/
-//        val intentOut = Intent(this, ColorSelectActivity::class.java)
-//        /*戻り値を設定して色選択画面に遷移*/
-//        startActivityForResult(intentOut, InputBalanceActivity.REQUEST_CODE)
-//    }
-//    /************************************************/
+    /*カテゴリー選択画面遷移関数*********************/
+    private fun goCategorySelectActivity() {
+        /*カテゴリー選択画面遷移用intent*/
+        /*TODO カテゴリー選択画面作成*/
+        val intentOut = Intent(this, CategorySelectActivity::class.java)
+        /*戻り値を設定して色選択画面に遷移*/
+        startActivityForResult(intentOut, InputBalanceActivity.REQUEST_CODE)
+    }
+    /************************************************/
 
     /*定数定義****************************************/
     companion object {

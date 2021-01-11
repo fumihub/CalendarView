@@ -147,7 +147,7 @@ class ColorCreateActivity  /*コンストラクタ*/
                     Toast.LENGTH_SHORT
             )
             errorToast.show()
-        /*******************************************/
+            /*******************************************/
         } else {
             /*編集画面でない場合***********************/
             /*SharedPreferenceからeditFlagの値を取得*/
@@ -170,8 +170,8 @@ class ColorCreateActivity  /*コンストラクタ*/
                             override fun onDataNotSaved() {}
                         }
                 )
-            /*******************************************/
-            /*編集画面の場合***************************/
+                /*******************************************/
+                /*編集画面の場合***************************/
             } else {
                 repository.updateScheduleGroup(
                         ScheduleGroup(
