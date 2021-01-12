@@ -63,7 +63,9 @@ class CalendarPageFragment     //コンストラクタ
             /*SharedPreferenceからbalanceFlagの値を取得*/
             val prefs: SharedPreferences = this.activity!!.getSharedPreferences("input_balance_data", AppCompatActivity.MODE_PRIVATE)
             /*スケジュール画面の場合スケジュール入力画面へ、家計簿画面の場合家計簿入力画面へ*/
-            val intent = if (prefs.getBoolean("balanceFlag", false)) Intent(context, InputBalanceActivity::class.java) else Intent(context, InputActivity::class.java)
+//            val intent = if (prefs.getBoolean("balanceFlag", false)) Intent(context, InputBalanceActivity::class.java) else Intent(context, InputActivity::class.java)
+            val currentMode = binding?.viewmodel?.currentMode?.value ?: true
+            val intent = if (!currentMode) Intent(context, InputBalanceActivity::class.java) else Intent(context, InputActivity::class.java)
             val dateArray = (binding.calendarGridView.adapter as CalendarAdapter).dateArray
             /*TODO スケジュール入力時と家計簿入力時に分ける*/
             //入力画面に引数で年月日を渡す

@@ -91,15 +91,12 @@ class ColorSelectActivity  /*コンストラクタ*/
     public override fun onResume() {
         super.onResume()
 
-        /*createFlagがTRUEならば*/
-        if (createFlag) {
-            /*アプリ再開時にeditFlagを0にする*/
-            /*リストビューから削除ボタンを非表示に*/
-            jdgEditMode(false, "編集")
-        } else {
-            /* 何もしない */
-        }
+        /*アプリ再開時にeditFlagを0にする*/
+        /*リストビューから削除ボタンを非表示に*/
+        jdgEditMode(false, "編集")
+
     }
+
     /************************************************/
 
     /*編集モードかを判定する関数********************/
@@ -115,6 +112,7 @@ class ColorSelectActivity  /*コンストラクタ*/
         /*ボタン文字の切り替え(編集/完了)*/
         editButton.text = str
     }
+
     /************************************************/
 
     /*色作成画面遷移関数*****************************/
@@ -124,6 +122,7 @@ class ColorSelectActivity  /*コンストラクタ*/
         /*戻り値を設定して色画面に遷移*/
         startActivityForResult(intentOut, REQUEST_CODE)
     }
+
     /************************************************/
 
     /*Activityから戻ってきてからList内容を更新する関数*/
@@ -146,6 +145,7 @@ class ColorSelectActivity  /*コンストラクタ*/
             }
         }
     }
+
     /************************************************/
 
     /*List内容を更新する関数************************/
@@ -183,6 +183,7 @@ class ColorSelectActivity  /*コンストラクタ*/
                 .setNegativeClickListener { dialog, which -> callback.onClickNegativeBtn() }
         return dialog
     }
+
     /************************************************/
 
     /*削除警告ダイアログ表示関数*********************/
@@ -190,6 +191,7 @@ class ColorSelectActivity  /*コンストラクタ*/
         /*AlertDialogを表示*/
         dialog?.show(supportFragmentManager, DELETE_DIALOG_TAG)
     }
+
     /************************************************/
 
     /*定数定義***************************************/
