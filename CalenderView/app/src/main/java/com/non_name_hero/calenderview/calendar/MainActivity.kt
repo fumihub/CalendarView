@@ -1,8 +1,8 @@
 package com.non_name_hero.calenderview.calendar
 
-import android.graphics.Color
 import android.os.Bundle
-import android.widget.TextView
+import android.view.View
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -15,17 +15,23 @@ import com.non_name_hero.calenderview.utils.ActivityUtils
 import com.non_name_hero.calenderview.utils.obtainViewModel
 
 class MainActivity : AppCompatActivity() {
-    private var accountingText: TextView? = null
-    private var mAdView: AdView? = null
+    /*TODO accountingTextをどこに実装したらいいかわからない
+    *  　　家計簿画面の時のみ表示したい*/
+//    private lateinit var accountingText: TextView
+    private lateinit var mAdView: AdView
+    private lateinit var pigIconButton: ImageButton             /*家計簿画面切り替えボタン*/
+    private lateinit var calendarIconButton: ImageButton        /*スケジュール画面切り替えボタン*/
+    private var createFlag = false                              /*画面作成時フラグ*/
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(R.style.AppTheme)
         //DataBinding
         val binding: ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        //収入支出ブロックの背景色変更
-        accountingText = findViewById(R.id.accounting)
-        //accountingText.setBackgroundColor(Color.YELLOW);
+//        /*スケジュール画面では表示しない*/
+//        accountingText = findViewById(R.id.accounting)
+//        accountingText.visibility = View.GONE
 
         //広告の読み込み
         MobileAds.initialize(this) { }
@@ -35,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         //インスタンス生成
         val adRequest = AdRequest.Builder().build()
         //広告読み込み
-        mAdView?.loadAd(adRequest)
+        mAdView.loadAd(adRequest)
 
         //アクティビティのfragmentを取得（初回時はnull）
         var calendarFragment = supportFragmentManager.findFragmentById(R.id.calendar_fragment_container) as CalendarFragment?
@@ -61,16 +67,63 @@ class MainActivity : AppCompatActivity() {
         }
 
         /*TODO ツールバーにスケジュール入力と家計簿入力を切り替えるボタン追加*/
+        /*スケジュール→家計簿切り替えボタン設定********/
+        pigIconButton = findViewById(R.id.pigIconButton)
+        calendarIconButton = findViewById(R.id.calendarIconButton)
+        calendarIconButton.visibility = View.GONE
+        pigIconButton.setOnClickListener {
+            /*カレンダー画面に家計簿内容表示*/
+            pigIconButton.visibility = View.GONE
+            calendarIconButton.visibility = View.VISIBLE
+            changeMode(true)
+        }
+        calendarIconButton.setOnClickListener {
+            /*カレンダー画面にスケジュール内容表示*/
+            calendarIconButton.visibility = View.GONE
+            pigIconButton.visibility = View.VISIBLE
+            changeMode(false)
+        }
+        /************************************************/
+
         //Toolbarをセット
         setSupportActionBar(binding.mainToolbar)
 
         //bindingを即時反映
         binding.executePendingBindings()
+
+        /*balanceFlag判定用Flag*/
+        createFlag = true
     }
 
+    /*画面表示時処理関数*******************************/
     public override fun onResume() {
         super.onResume()
+
+        /*createFlagがTRUEならば*/
+        if (createFlag) {
+            /*アプリ再開時にbalanceFlagを0にする*/
+            /*カレンダー画面にスケジュール内容表示*/
+            calendarIconButton.visibility = View.GONE
+            pigIconButton.visibility = View.VISIBLE
+            changeMode(false)
+//            accountingText.visibility = View.GONE
+        } else {
+            /* 何もしない */
+        }
     }
+    /************************************************/
+
+    /*編集モードかを判定する関数********************/
+    private fun changeMode(value: Boolean) {
+        /*SharedPreferenceでeditFlagの値を変更*/
+        val prefs = getSharedPreferences("input_balance_data", MODE_PRIVATE)
+        val editor = prefs.edit()
+        /*SharedPreferenceにbalanceFlagの値を保存*/
+        editor.putBoolean("balanceFlag", value)
+        /*非同期処理ならapply()、同期処理ならcommit()*/
+        editor.apply()
+    }
+    /************************************************/
 
     /**
      * ViewModelを取得する
