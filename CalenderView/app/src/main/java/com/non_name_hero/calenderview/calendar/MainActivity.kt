@@ -70,18 +70,24 @@ class MainActivity : AppCompatActivity() {
         /*スケジュール→家計簿切り替えボタン設定********/
         pigIconButton = findViewById(R.id.pigIconButton)
         calendarIconButton = findViewById(R.id.calendarIconButton)
-        calendarIconButton.visibility = View.GONE
+//        calendarIconButton.visibility = View.GONE
         pigIconButton.setOnClickListener {
             /*カレンダー画面に家計簿内容表示*/
-            pigIconButton.visibility = View.GONE
-            calendarIconButton.visibility = View.VISIBLE
-            changeMode(true)
+//            pigIconButton.visibility = View.GONE
+//            calendarIconButton.visibility = View.VISIBLE
+//            changeMode(true)
+            binding.apply{
+                this.viewmodel?.setCurrentMode(false)
+            }
         }
         calendarIconButton.setOnClickListener {
             /*カレンダー画面にスケジュール内容表示*/
-            calendarIconButton.visibility = View.GONE
-            pigIconButton.visibility = View.VISIBLE
-            changeMode(false)
+//            calendarIconButton.visibility = View.GONE
+//            pigIconButton.visibility = View.VISIBLE
+//            changeMode(false)
+            binding.apply{
+                this.viewmodel?.setCurrentMode(true)
+            }
         }
         /************************************************/
 
@@ -99,29 +105,30 @@ class MainActivity : AppCompatActivity() {
     public override fun onResume() {
         super.onResume()
 
-        /*createFlagがTRUEならば*/
-        if (createFlag) {
-            /*アプリ再開時にbalanceFlagを0にする*/
-            /*カレンダー画面にスケジュール内容表示*/
-            calendarIconButton.visibility = View.GONE
-            pigIconButton.visibility = View.VISIBLE
-            changeMode(false)
-//            accountingText.visibility = View.GONE
-        } else {
-            /* 何もしない */
-        }
+//        /*createFlagがTRUEならば*/
+//        if (createFlag) {
+//            /*アプリ再開時にbalanceFlagを0にする*/
+//            /*カレンダー画面にスケジュール内容表示*/
+//            calendarIconButton.visibility = View.GONE
+//            pigIconButton.visibility = View.VISIBLE
+//            changeMode(false)
+////            accountingText.visibility = View.GONE
+//        } else {
+//            /* 何もしない */
+//        }
     }
     /************************************************/
 
     /*編集モードかを判定する関数********************/
     private fun changeMode(value: Boolean) {
-        /*SharedPreferenceでeditFlagの値を変更*/
-        val prefs = getSharedPreferences("input_balance_data", MODE_PRIVATE)
-        val editor = prefs.edit()
-        /*SharedPreferenceにbalanceFlagの値を保存*/
-        editor.putBoolean("balanceFlag", value)
-        /*非同期処理ならapply()、同期処理ならcommit()*/
-        editor.apply()
+//        /*SharedPreferenceでeditFlagの値を変更*/
+//        val prefs = getSharedPreferences("input_balance_data", MODE_PRIVATE)
+//        val editor = prefs.edit()
+//        /*SharedPreferenceにbalanceFlagの値を保存*/
+//        editor.putBoolean("balanceFlag", value)
+//        /*非同期処理ならapply()、同期処理ならcommit()*/
+//        editor.apply()
+
     }
     /************************************************/
 
