@@ -34,6 +34,13 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
         get() = _scheduleListData
     //set(value){ _scheduleListData.value = value.value}
 
+    /**
+     * 現在のカレンダーモード
+     */
+    private val _currentMode = MutableLiveData<Boolean>().apply { this.value = true }
+    val currentMode: LiveData<Boolean>
+        get() = _currentMode
+
     fun start() {
         loadHolidaySchedules()
         reloadCalendarData(true)
@@ -64,6 +71,11 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
         this._holidayCalendarDataMap.value = holidaySchedulesMap
     }
 
+    fun setCurrentMode(mode : Boolean){
+        this._currentMode.value = mode
+    }
+
+
     //callback
     override fun onScheduleLoaded(schedules: List<Schedule>) {}
     override fun onCalendarDataLoaded(calendarDataList: List<CalendarData>) {
@@ -81,7 +93,7 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
     fun setScheduleItem(date: Date) {
         if (this.calendarDataMap != null) {
             val dateKey = PigLeadUtils.formatYYYYMMDD.format(date)
-            if (this.calendarDataMap.value?.containsValue(dateKey)?: false) {
+            if (this.calendarDataMap.value?.containsValue(dateKey) ?: false) {
                 //tureならvalueがnullではない
                 _scheduleListData.value = this.calendarDataMap.value?.get(dateKey)
             }

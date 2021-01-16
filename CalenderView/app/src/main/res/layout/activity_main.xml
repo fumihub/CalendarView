@@ -4,9 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewmodel"
             type="com.non_name_hero.calenderview.calendar.CalendarViewModel" />
+
+        <import type="android.view.View" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -70,10 +73,11 @@
                         android:layout_height="35dp"
                         android:layout_margin="10dp"
                         android:background="@drawable/pig_icon"
+                        android:visibility="@{viewmodel.currentMode ? View.VISIBLE:View.GONE }"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/iconLayout"
-                        app:layout_constraintTop_toTopOf="parent"/>
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageButton
                         android:id="@+id/calendarIconButton"
@@ -81,6 +85,7 @@
                         android:layout_height="35dp"
                         android:layout_margin="10dp"
                         android:background="@drawable/calendar_icon"
+                        android:visibility="@{viewmodel.currentMode  ? View.GONE : View.VISIBLE }"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/iconLayout"
