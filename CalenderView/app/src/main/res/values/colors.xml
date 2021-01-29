@@ -3,88 +3,11 @@
     <color name="colorPrimary">#3A55EB</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="grayColor">#ED777777</color>
-    <color name="whiteColor">#FFF</color>
-    <color name="redColor">#F00</color>
+    <color name="grayColor">#777</color>
     <color name="blueColor">#0000FF</color>
+    <color name="redColor">#F00</color>
+    <color name="whiteColor">#FFF</color>
     <color name="blackColor">#000</color>
-    <!--赤色7種類-->
-    <color name="redColor1">#DD2034</color>
-    <color name="redColor2">#D83473</color>
-    <color name="redColor3">#F16682</color>
-    <color name="redColor4">#DC6B9A</color>
-    <color name="redColor5">#F5949F</color>
-    <color name="redColor6">#F05187</color>
-    <color name="redColor7">#F4506D</color>
-    <!--紫色7種類-->
-    <color name="purpleColor1">#FF00FF</color>
-    <color name="purpleColor2">#DA70D6</color>
-    <color name="purpleColor3">#EE82EE</color>
-    <color name="purpleColor4">#800080</color>
-    <color name="purpleColor5">#8A2BE2</color>
-    <color name="purpleColor6">#9370DB</color>
-    <color name="purpleColor7">#6A5ACD</color>
-    <!--青色7種類-->
-    <color name="blueColor1">#00FFFF</color>
-    <color name="blueColor2">#87CEEB</color>
-    <color name="blueColor3">#00BFFF</color>
-    <color name="blueColor4">#1E90FF</color>
-    <color name="blueColor5">#0000FF</color>
-    <color name="blueColor6">#0000CD</color>
-    <color name="blueColor7">#191970</color>
-    <!--緑色7種類-->
-    <color name="greenColor1">#00FA9A</color>
-    <color name="greenColor2">#00FF00</color>
-    <color name="greenColor3">#3CB371</color>
-    <color name="greenColor4">#008000</color>
-    <color name="greenColor5">#9ACD32</color>
-    <color name="greenColor6">#7FFF00</color>
-    <color name="greenColor7">#ADFF2F</color>
-    <!--黄色7種類-->
-    <color name="yellowColor1">#FFF808</color>
-    <color name="yellowColor2">#EEE618</color>
-    <color name="yellowColor3">#FDBA2B</color>
-    <color name="yellowColor4">#FFC40C</color>
-    <color name="yellowColor5">#FFD167</color>
-    <color name="yellowColor6">#F79428</color>
-    <color name="yellowColor7">#FF914F</color>
-    <!--茶色7種類-->
-    <color name="brownColor1">#FF7321</color>
-    <color name="brownColor2">#FE6D0D</color>
-    <color name="brownColor3">#FE6D0D</color>
-    <color name="brownColor4">#AD6820</color>
-    <color name="brownColor5">#A55325</color>
-    <color name="brownColor6">#BC611E</color>
-    <color name="brownColor7">#7D4A31</color>
-    <!--黒色7種類-->
-    <color name="blackColor1">#000</color>
-    <color name="blackColor2">#708090</color>
-    <color name="blackColor3">#FFBBDD</color>
-    <color name="blackColor4">#FFFFBB</color>
-    <color name="blackColor5">#DDEEAA</color>
-    <color name="blackColor6">#AADDAA</color>
-    <color name="blackColor7">#99DDFF</color>
-    <!--ツールバー-->
-    <color name="toolbar">#424242</color>
-    <color name="toolbar_string">#292929</color>
-    <color name="toolbar_jan">#fa4d4d</color>
-    <color name="toolbar_feb">#e3e3e3</color>
-    <color name="toolbar_mar">#87d964</color>
-    <color name="toolbar_apr">#ffbfd3</color>
-    <color name="toolbar_may">#d9fff7</color>
-    <color name="toolbar_jun">#cd8df0</color>
-    <color name="toolbar_jul">#92cdf7</color>
-    <color name="toolbar_aug">#49ad6b</color>
-    <color name="toolbar_sep">#4173d1</color>
-    <color name="toolbar_oct">#fcb558</color>
-    <color name="toolbar_nov">#f0794a</color>
-    <color name="toolbar_dec">#e6eded</color>
     <!--透明-->
     <color name="clearButtonPressed">#33000000</color>
-    <!--カレンダー関連-->
-    <color name="holidayColor">#99DC143C</color>
-    <color name="calendarBackGround">#ffefefef</color>
-    <color name="notCurrentMonth">#facfcfcf</color>
-    <color name="currentDayColor">#faffff5e</color>
-
 </resources>

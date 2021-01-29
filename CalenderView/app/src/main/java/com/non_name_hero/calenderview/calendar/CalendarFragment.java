@@ -13,132 +13,114 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.non_name_hero.calenderview.R;
 
-import java.util.Calendar;
+import java.util.ArrayList;
+import java.util.List;
 
-import static com.non_name_hero.calenderview.utils.ActivityUtils.addFragmentToActivity;
-
-public class CalendarFragment extends Fragment {
+public class CalendarFragment extends Fragment implements CalendarContract.View {
 
     public static CalendarFragment newInstance() {
         return new CalendarFragment();
     }
 
+    public CalendarContract.Presenter mPresenter;
+
     private static final int NUM_PAGES = 100;
-    private static final int DEFAULT_PAGE = NUM_PAGES / 2;
-    private static final int MAX_MONTH = 12;
     private ViewPager2 mPager;
     private CalendarPagerAdapter mPagerAdapter;
-    private CalendarViewModel mViewModel;
-    private Calendar mCalendar;
-    private Boolean pagerIdleFlag = Boolean.FALSE;
+    private String mCurrentMonth;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mCalendar = Calendar.getInstance();
         View rootView = inflater.inflate(R.layout.calendar_fragment, container, false);
-        // ViewPagerをセットアップ
-        initPager(rootView);
+        mPager = (ViewPager2) rootView.findViewById(R.id.pager);
+        mPagerAdapter = new CalendarPagerAdapter(this);
+        mPagerAdapter.initializeData();
+        // Instantiate a ViewPager and a PagerAdapter.
+        mPager.setAdapter(mPagerAdapter);
+        mPager.setOffscreenPageLimit(2);
+        mPager.setCurrentItem(50, false);
         return rootView;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initScheduleList();
-    }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        //CalendarViewModelを取得
-        mViewModel = MainActivity.obtainViewModel(getActivity());
-        //データを更新
-        loadData();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        // カレンダーのスケジュールを更新
-        mViewModel.reloadCalendarData(true);
-    }
-
-    private void loadData() {
-        mViewModel.start();
-    }
-
-    private int getCurrentMonth(int position) {
-        int nowMonth = mCalendar.get(Calendar.MONTH);// 0~11
-        int offset = position - DEFAULT_PAGE;
-        //offset -> 現在ページからの差分
-        //monthOffset -> 現在月からの差分
-        int monthOffset;
-        monthOffset = Math.abs(offset) % MAX_MONTH;
-        //マイナスの場合は12から差をとる
-        if (offset < 0) monthOffset = MAX_MONTH - monthOffset;
-        // n月からの差分[-n 〜 n] + n % 12 + 1 → 1~12
-        return (monthOffset + nowMonth) % MAX_MONTH + 1;
-    }
-
-    private void initScheduleList() {
-        //ScheduleListを表示
-        ScheduleListFragment scheduleListFragment = (ScheduleListFragment) getChildFragmentManager().findFragmentById(R.id.schedule_list_fragment_container);
-        if (scheduleListFragment == null) {
-            scheduleListFragment = ScheduleListFragment.newInstance();
-            addFragmentToActivity(getChildFragmentManager(), scheduleListFragment, R.id.schedule_list_fragment_container);
-        }
-    }
-
-    // ViewPager2を初期設定
-    private void initPager(View rootView) {
-        // pagerを設定
-        mPager = (ViewPager2) rootView.findViewById(R.id.pager);
-        mPagerAdapter = new CalendarPagerAdapter(this);
-        mPager.setOffscreenPageLimit(5);
-        mPager.setAdapter(mPagerAdapter);
-        mPager.setCurrentItem(DEFAULT_PAGE, false);
         mPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+//                Log.d(
+//                        "$tag: onPageScrolled",
+//                        "position => $position, positionOffset => $positionOffset, positionOffsetPixels => $positionOffsetPixels"
+//                );
+
             }
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                if (state == ViewPager2.SCROLL_STATE_IDLE) {
-                    //IDLEフラグをTRUEにする
-                    pagerIdleFlag = Boolean.TRUE;
-                }
-            }
-
-            @Override
             public void onPageSelected(int position) {
-                //pagerがIDLE状態の場合、現在の月をviewModelにセット矢印DataBindingでtoolbarに表示
-                if (pagerIdleFlag) mViewModel.setCurrentMonth(getCurrentMonth(position));
+                mPresenter.setCurrentMonth(mCurrentMonth);
+            }
+
+            public void onPageScrollStateChanged(int state) {
+                //アニメーションが終わるのを待ってから飛ぶ。
+                // onPageSelected(int position) でやると、スクロールアニメーションがキャンセルされてしまう。
+//                if (state == ViewPager.SCROLL_STATE_IDLE && jumpPosition >= 0) {
+//                    mPager.setCurrentItem(jumpPosition, false);
+//                    jumpPosition = -1;
+//                }
             }
         });
     }
+
+    @Override
+    public void setPresenter(CalendarContract.Presenter presenter) {
+        mPresenter = presenter;
+    }
+/*
+    @Override
+    public void onBackPressed() {
+        //TODO 要調整
+        if (mPager.getCurrentItem() == 0) {
+            // If the user is currently looking at the first step, allow the system to handle the
+            // Back button. This calls finish() on this activity and pops the back stack.
+            super.onBackPressed();
+        } else {
+            // Otherwise, select the previous step.
+            mPager.setCurrentItem(mPager.getCurrentItem() - 1);
+        }
+    }*/
+
     /**
      * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
      * sequence.
      */
     private class CalendarPagerAdapter extends FragmentStateAdapter {
+        private int currentMonthGap;
+        private List<Integer> dateList;
 
-        public CalendarPagerAdapter(Fragment f) {
-            super(f);
+
+        public CalendarPagerAdapter(Fragment fm) {
+            super(fm);
+            dateList = new ArrayList<Integer>();
         }
 
         @NonNull
         @Override
         public Fragment createFragment(int position) {
-            Fragment view = new CalendarPageFragment(position - DEFAULT_PAGE);
+            Fragment view = new CalendarPageFragment(position - 50);
             return view;
         }
 
         @Override
         public int getItemCount() {
             return NUM_PAGES;
+        }
+
+        public void initializeData() {
+            dateList.clear();
+            for (int i = 0; i < 100; i++) {
+                dateList.add(i); // 初期データの設定
+            }
         }
 
     }

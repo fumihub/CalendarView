@@ -20,9 +20,6 @@
         </activity>
         <!--入力画面アクティビティ-->
         <activity android:name=".inputForm.InputActivity"/>
-        <activity android:name=".inputForm.colorSelectActivity"/>
-        <activity android:name=".inputForm.colorCreateActivity"/>
-        <activity android:name=".inputForm.colorActivity"/>
         <!--広告用設定-->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
