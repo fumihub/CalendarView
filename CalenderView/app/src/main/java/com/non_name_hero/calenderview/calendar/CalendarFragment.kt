@@ -53,19 +53,6 @@ class CalendarFragment : Fragment() {
         binding.viewmodel?.start()
     }
 
-    private fun getCurrentMonth(position: Int): Int {
-        val calendar = Calendar.getInstance()
-        val nowMonth = calendar[Calendar.MONTH] // 0~11
-        val offset = position - DEFAULT_PAGE
-        //offset -> 現在ページからの差分
-        //monthOffset -> 現在月からの差分
-        var monthOffset: Int
-        monthOffset = Math.abs(offset) % MAX_MONTH
-        //マイナスの場合は12から差をとる
-        if (offset < 0) monthOffset = MAX_MONTH - monthOffset
-        // n月からの差分[-n 〜 n] + n % 12 + 1 → 1~12
-        return (monthOffset + nowMonth) % MAX_MONTH + 1
-    }
 
     private fun initScheduleList() {
         //ScheduleListを表示
@@ -98,7 +85,10 @@ class CalendarFragment : Fragment() {
 
             override fun onPageSelected(position: Int) {
                 //pagerがIDLE状態の場合、現在の月をviewModelにセット矢印DataBindingでtoolbarに表示
-                if (pagerIdleFlag) binding.viewmodel?.setCurrentMonth(getCurrentMonth(position))
+                if (pagerIdleFlag) {
+                    val offsetMonth = position - DEFAULT_PAGE
+                    binding.viewmodel?.setCurrentYearMonth(offsetMonth)
+                }
             }
         })
     }
