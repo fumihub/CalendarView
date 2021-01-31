@@ -26,6 +26,10 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
     val currentMonth: LiveData<Int>
         get() = _currentMonth
 
+    private val _currentYearMonth = MutableLiveData<String>()
+    val currentYearMonth: LiveData<String>
+        get() = _currentYearMonth
+
     // for scheduleList
     private val selectedDate = MutableLiveData<Date>()
 
@@ -71,10 +75,21 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
         this._holidayCalendarDataMap.value = holidaySchedulesMap
     }
 
-    fun setCurrentMode(mode : Boolean){
+    fun setCurrentMode(mode: Boolean) {
         this._currentMode.value = mode
     }
 
+    fun setCurrentYearMonth(offsetMonth: Int) {
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.MONTH, offsetMonth)
+        val month = calendar[Calendar.MONTH] + 1
+        _currentYearMonth.value = createYearMonthWording(calendar[Calendar.YEAR], month)
+        _currentMonth.value = month
+    }
+
+    private fun createYearMonthWording(year: Int, month: Int): String {
+        return "$year / $month"
+    }
 
     //callback
     override fun onScheduleLoaded(schedules: List<Schedule>) {}
@@ -113,5 +128,6 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
         calendar.time = Date()
         _currentMonth.value = calendar[Calendar.MONTH] + 1
         selectedDate.value = Date()
+        _currentYearMonth.value = createYearMonthWording(calendar[Calendar.YEAR], calendar[Calendar.MONTH] + 1)
     }
 }
