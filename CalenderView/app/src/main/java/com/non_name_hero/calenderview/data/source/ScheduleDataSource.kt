@@ -1,8 +1,6 @@
 package com.non_name_hero.calenderview.data.source
 
-import com.non_name_hero.calenderview.data.CalendarData
-import com.non_name_hero.calenderview.data.Schedule
-import com.non_name_hero.calenderview.data.ScheduleGroup
+import com.non_name_hero.calenderview.data.*
 
 interface ScheduleDataSource {
     interface GetScheduleCallback {
@@ -22,6 +20,8 @@ interface ScheduleDataSource {
     fun getSchedule(ScheduleIds: LongArray, callback: GetScheduleCallback)
     fun setSchedule(schedule: Schedule, callback: SaveScheduleCallback)
     fun getAllSchedules(callback: GetScheduleCallback)
+    fun getAllBalances(callback: GetBalanceCallback)
+    fun getAllBalanceCategories(callback: GetBalanceCategoriesCallback)
     fun removeScheduleByScheduleId(scheduleId: Long)
 
     /**
@@ -43,6 +43,23 @@ interface ScheduleDataSource {
     //1件取得時コールバック
     interface GetScheduleGroupCallback {
         fun onScheduleGroupLoaded(group: ScheduleGroup)
+    }
+
+    //複数件取得時のコールバック
+    interface GetBalanceCallback {
+        fun onBalanceLoaded(Groups: List<Balance>)
+        fun onDataNotAvailable()
+    }
+
+    //複数件取得時のコールバック
+    interface GetBalanceCategoriesCallback {
+        fun onBalanceCategoryLoaded(Groups: List<BalanceCategory>)
+        fun onDataNotAvailable()
+    }
+
+    //1件取得時コールバック
+    interface GetBalanceCategoryCallback {
+        fun onBalanceCategoryLoaded(group: BalanceCategory)
     }
 
     // 削除時のコールバック

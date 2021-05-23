@@ -30,6 +30,14 @@ class ScheduleDataRemoteSource() : ScheduleDataSource {
         //リモートデータソースは使用しない
     }
 
+    override fun getAllBalances(callback: GetBalanceCallback) {
+        //リモートデータソースは使用しない
+    }
+
+    override fun getAllBalanceCategories(callback: GetBalanceCategoriesCallback) {
+        //リモートデータソースは使用しない
+    }
+
     override fun removeScheduleByScheduleId(scheduleId: Long) {}
     override fun getHoliday(callback: LoadHolidayCalendarDataCallback) {
         //以下は別スレッドにて実行

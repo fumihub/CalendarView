@@ -15,6 +15,22 @@ class ScheduleDataLocalSource  //コンストラクタ
      * @param scheduleIds
      * @param callback
      */
+    override fun getAllBalances(callback: GetBalanceCallback) {
+        val runnable = Runnable {
+            val schedules = schedulesDao.allBalance
+            appExecutors.mainThread.execute { callback.onBalanceLoaded(schedules) }
+        }
+        appExecutors.diskIO.execute(runnable)
+    }
+
+    override fun getAllBalanceCategories(callback: GetBalanceCategoriesCallback) {
+        val runnable = Runnable {
+            val schedules = schedulesDao.allBalanceCategory
+            appExecutors.mainThread.execute { callback.onBalanceCategoryLoaded(schedules) }
+        }
+        appExecutors.diskIO.execute(runnable)
+    }
+
     override fun getSchedule(scheduleIds: LongArray, callback: GetScheduleCallback) {
         val runnable = Runnable {
             val schedules = schedulesDao.loadSchedulesByIds(scheduleIds)
@@ -34,7 +50,7 @@ class ScheduleDataLocalSource  //コンストラクタ
 
     override fun getAllSchedules(callback: GetScheduleCallback) {
         val runnable = Runnable {
-            val schedules = schedulesDao.all
+            val schedules = schedulesDao.allSchedules
             appExecutors.mainThread.execute { callback.onScheduleLoaded(schedules) }
         }
         appExecutors.diskIO.execute(runnable)

@@ -51,6 +51,14 @@ class ScheduleRepository (
         scheduleDataLocalSource.getAllSchedules(callback)
     }
 
+    override fun getAllBalances(callback: GetBalanceCallback) {
+        scheduleDataLocalSource.getAllBalances(callback)
+    }
+
+    override fun getAllBalanceCategories(callback: GetBalanceCategoriesCallback) {
+        scheduleDataLocalSource.getAllBalanceCategories(callback)
+    }
+
     override fun removeScheduleByScheduleId(scheduleId: Long) {
         scheduleDataLocalSource.removeScheduleByScheduleId(scheduleId)
     }

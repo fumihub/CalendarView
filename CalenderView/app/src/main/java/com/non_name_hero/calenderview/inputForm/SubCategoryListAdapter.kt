@@ -11,8 +11,6 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Button
 import com.non_name_hero.calenderview.R
-import com.non_name_hero.calenderview.data.Balance
-import com.non_name_hero.calenderview.data.BalanceCategory
 import com.non_name_hero.calenderview.data.ScheduleGroup
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource.DeleteCallback
 import com.non_name_hero.calenderview.data.source.ScheduleRepository
@@ -21,32 +19,27 @@ import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDeleteDialog
 import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDialogBase.DialogCallback
 import java.util.*
 
-class ListAdapter(private val mContext: Context, activity: Activity) : BaseAdapter() {
+class SubCategoryListAdapter(private val mContext: Context, activity: Activity) : BaseAdapter() {
 
-    private var list: MutableList<ScheduleGroup>                                /*色グループのリスト*/
-    private lateinit var listBalanceCategory: MutableList<BalanceCategory>
+    private var list: MutableList<ScheduleGroup>                                /*サブカテゴリーグループのリスト*/
 
     private var mLayoutInflater: LayoutInflater = LayoutInflater.from(mContext) /**/
 
     private var repository: ScheduleRepository                                  /**/
 
-    private val mActivity: Activity                                             /*InputActivityのActivity*/
+    private val mActivity: Activity                                             /*SubCategorySelectActivityのActivity*/
 
     var deleteDialog: PigLeadDeleteDialog? = null                               /**/
 
     /*カスタムセルを拡張したらここでWigetを定義*/
     private class ViewHolder {
+        lateinit var categoryIconButton: Button                                 /*ListViewのカテゴリーアイコンボタン*/
         lateinit var categoryButton: Button                                     /*ListViewのカテゴリーボタン*/
         lateinit var destroyButton: Button                                      /*ListViewの削除ボタン*/
     }
 
     fun setList(input: List<ScheduleGroup>) {
         list = input as MutableList<ScheduleGroup>
-        notifyDataSetChanged()
-    }
-
-    fun setBalanceCategoryList(input: List<BalanceCategory>) {
-        listBalanceCategory = input as MutableList<BalanceCategory>
         notifyDataSetChanged()
     }
 
@@ -75,6 +68,7 @@ class ListAdapter(private val mContext: Context, activity: Activity) : BaseAdapt
         val view = convertView ?: mLayoutInflater.inflate(R.layout.list_cell, null).apply {
             //convertViewがnullだった場合、タグにviewHolderを設定するため、新たにviewholderを作成する
             this.tag = ViewHolder()
+            (this.tag as ViewHolder).categoryIconButton = this.findViewById(R.id.categoryIconButton)
             (this.tag as ViewHolder).categoryButton = this.findViewById(R.id.categoryButton)
             (this.tag as ViewHolder).destroyButton = this.findViewById(R.id.colorDestroyButton)
         }
