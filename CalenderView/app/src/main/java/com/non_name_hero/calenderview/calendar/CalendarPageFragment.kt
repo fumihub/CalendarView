@@ -18,8 +18,16 @@ import com.non_name_hero.calenderview.utils.PigLeadUtils
 /**
  * フラグメントにカレンダーを表示させるクラス
  */
-class CalendarPageFragment     //コンストラクタ
-(private val mProgressMonth: Int) : Fragment() {
+class CalendarPageFragment() : Fragment() {
+
+    // TODO 定数はまとめる
+    private val NUM_PAGES = 100
+    private val DEFAULT_PAGE = NUM_PAGES / 2
+
+    var mProgressMonth: Int = 0
+        set(value){
+           field = value - DEFAULT_PAGE
+        }
 
     /**
      * onCreateViewは戻り値のビューを表示させる
@@ -31,6 +39,7 @@ class CalendarPageFragment     //コンストラクタ
      */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+        this.mProgressMonth = this.tag?.replace("f","")?.toInt() ?: 0
         val binding: CalendarFragmentScreenSlidePageBinding
         //DataBinding
         binding = CalendarFragmentScreenSlidePageBinding.inflate(
@@ -69,9 +78,9 @@ class CalendarPageFragment     //コンストラクタ
             val dateArray = (binding.calendarGridView.adapter as CalendarAdapter).dateArray
             /*TODO スケジュール入力時と家計簿入力時に分ける*/
             //入力画面に引数で年月日を渡す
-            val year:Int = Integer.valueOf(PigLeadUtils.yearFormat.format(dateArray[position]))
-            val month:Int = Integer.valueOf(PigLeadUtils.monthFormat.format(dateArray[position]))
-            val day:Int = Integer.valueOf(PigLeadUtils.dayFormat.format(dateArray[position]))
+            val year: Int = Integer.valueOf(PigLeadUtils.yearFormat.format(dateArray[position]))
+            val month: Int = Integer.valueOf(PigLeadUtils.monthFormat.format(dateArray[position]))
+            val day: Int = Integer.valueOf(PigLeadUtils.dayFormat.format(dateArray[position]))
             intent.putExtra("year", year)
             intent.putExtra("month", month)
             intent.putExtra("day", day)
