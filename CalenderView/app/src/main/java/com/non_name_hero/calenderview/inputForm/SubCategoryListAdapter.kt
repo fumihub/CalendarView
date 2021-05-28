@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Button
 import com.non_name_hero.calenderview.R
+import com.non_name_hero.calenderview.data.BalanceCategory
 import com.non_name_hero.calenderview.data.ScheduleGroup
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource.DeleteCallback
 import com.non_name_hero.calenderview.data.source.ScheduleRepository
@@ -21,7 +22,7 @@ import java.util.*
 
 class SubCategoryListAdapter(private val mContext: Context, activity: Activity) : BaseAdapter() {
 
-    private var list: MutableList<ScheduleGroup>                                /*サブカテゴリーグループのリスト*/
+    private var list: MutableList<BalanceCategory>                              /*サブカテゴリーグループのリスト*/
 
     private var mLayoutInflater: LayoutInflater = LayoutInflater.from(mContext) /**/
 
@@ -38,8 +39,8 @@ class SubCategoryListAdapter(private val mContext: Context, activity: Activity) 
         lateinit var destroyButton: Button                                      /*ListViewの削除ボタン*/
     }
 
-    fun setList(input: List<ScheduleGroup>) {
-        list = input as MutableList<ScheduleGroup>
+    fun setList(input: List<BalanceCategory>) {
+        list = input as MutableList<BalanceCategory>
         notifyDataSetChanged()
     }
 
@@ -76,62 +77,64 @@ class SubCategoryListAdapter(private val mContext: Context, activity: Activity) 
         /*リストのセルを取得(viewHolder)*/
         val holder: ViewHolder = view.tag as ViewHolder
 
-        /*リストの色ボタンにテキストをセット*/
-        holder.categoryButton.text = list[position].groupName
-        /*リストの色ボタンに色をセット*/
-        holder.categoryButton.setBackgroundColor(list[position].backgroundColor)
+        /*TODO　該当のカテゴリーIDだけ表示*/
+        /*リストのカテゴリーボタンにテキストをセット*/
+        holder.categoryButton.text = list[position].categoryName
+        /*リストのカテゴリーボタンに色をセット*/
+//        holder.categoryButton.setBackgroundColor(list[position].backgroundColor)
         /*リストの色ボタンに文字色をセット*/
-        if (list[position].characterColor == "黒") { /*黒ならば*/
-            holder.categoryButton.setTextColor(Color.BLACK)
-        } else { /*白ならば*/
-            holder.categoryButton.setTextColor(Color.WHITE)
-        }
+//        if (list[position].characterColor == "黒") { /*黒ならば*/
+//            holder.categoryButton.setTextColor(Color.BLACK)
+//        } else { /*白ならば*/
+//            holder.categoryButton.setTextColor(Color.WHITE)
+//        }
 
+        /*TODO　ViewModeに切り替え*/
         //TODO　削除ボタン表示
         /*SharedPreferenceからeditFlagの値を取得*/
-        val prefs = mContext.getSharedPreferences("input_data", Context.MODE_PRIVATE)
-        if (prefs.getBoolean("editFlag", false)
-                && list[position].colorNumber != 43) {
-            holder.destroyButton.visibility = View.VISIBLE
-        } else {
-            holder.destroyButton.visibility = View.GONE
-        }
-        holder.categoryButton.setOnClickListener {
-            if (prefs.getBoolean("editFlag", false)) {
-                if (list[position].colorNumber == 43) {
-                    /* 何もしない */
-                } else {
-                    goColorCreateActivity(position)
-                }
-            } else {
-                returnInputActivity(position)
-            }
-        }
-        holder.destroyButton.setOnClickListener {
-            val scheduleGroup = list[position]
-            /*指定したpositionを削除するダイアログを作成*/
-            val dialog = deleteDialog!!.getDeleteDialog(scheduleGroup, object : DialogCallback {
-                override fun onClickPositiveBtn() {
-                    val groupId = scheduleGroup.groupId
-                    /*DBから削除*/
-                    repository.deleteScheduleGroup(groupId, object : DeleteCallback {
-                        override fun onDeleted() {
-                            list.removeAt(position)
-                            notifyDataSetChanged()
-                        }
-
-                        override fun onDataNotDeleted() {
-                            Log.d("ERROR", "削除に失敗しました。")
-                        }
-                    })
-                }
-
-                override fun onClickNegativeBtn() {
-                    /*何もしない*/
-                }
-            })
-            deleteDialog!!.showPigLeadDiaLog(dialog)
-        }
+//        val prefs = mContext.getSharedPreferences("input_data", Context.MODE_PRIVATE)
+//        if (prefs.getBoolean("editFlag", false)
+//                && list[position].colorNumber != 43) {
+//            holder.destroyButton.visibility = View.VISIBLE
+//        } else {
+//            holder.destroyButton.visibility = View.GONE
+//        }
+//        holder.categoryButton.setOnClickListener {
+//            if (prefs.getBoolean("editFlag", false)) {
+//                if (list[position].colorNumber == 43) {
+//                    /* 何もしない */
+//                } else {
+//                    goColorCreateActivity(position)
+//                }
+//            } else {
+//                returnInputActivity(position)
+//            }
+//        }
+//        holder.destroyButton.setOnClickListener {
+//            val scheduleGroup = list[position]
+//            /*指定したpositionを削除するダイアログを作成*/
+//            val dialog = deleteDialog!!.getDeleteDialog(scheduleGroup, object : DialogCallback {
+//                override fun onClickPositiveBtn() {
+//                    val groupId = scheduleGroup.groupId
+//                    /*DBから削除*/
+//                    repository.deleteScheduleGroup(groupId, object : DeleteCallback {
+//                        override fun onDeleted() {
+//                            list.removeAt(position)
+//                            notifyDataSetChanged()
+//                        }
+//
+//                        override fun onDataNotDeleted() {
+//                            Log.d("ERROR", "削除に失敗しました。")
+//                        }
+//                    })
+//                }
+//
+//                override fun onClickNegativeBtn() {
+//                    /*何もしない*/
+//                }
+//            })
+//            deleteDialog!!.showPigLeadDiaLog(dialog)
+//        }
         return view
     }
 
@@ -140,11 +143,11 @@ class SubCategoryListAdapter(private val mContext: Context, activity: Activity) 
     /*色作成画面に遷移*******************************/
     private fun goColorCreateActivity(position: Int) {
         /*色作成遷移用intent*/
-        val intentOut = Intent(mContext, ColorCreateActivity::class.java)
-        /*ボタンの色番号を遷移先へgo*/
-        intentOut.putExtra("ColorNumberPre", list[position].colorNumber)
-        /*戻り値を設定して色画面に遷移*/
-        mActivity.startActivityForResult(intentOut, REQUEST_CODE)
+//        val intentOut = Intent(mContext, ColorCreateActivity::class.java)
+//        /*ボタンの色番号を遷移先へgo*/
+//        intentOut.putExtra("ColorNumberPre", list[position].colorNumber)
+//        /*戻り値を設定して色画面に遷移*/
+//        mActivity.startActivityForResult(intentOut, REQUEST_CODE)
     }
 
     /************************************************/
@@ -152,11 +155,11 @@ class SubCategoryListAdapter(private val mContext: Context, activity: Activity) 
     /*input画面に遷移********************************/
     private fun returnInputActivity(position: Int) {
         /*新規作成画面遷移用intent*/
-        val intentOut = Intent()
-        /*ボタンの色番号を遷移先へreturn*/
-        intentOut.putExtra("ColorNumber", list[position].colorNumber)
-        mActivity.setResult(Activity.RESULT_OK, intentOut)
-        mActivity.finish()
+//        val intentOut = Intent()
+//        /*ボタンの色番号を遷移先へreturn*/
+//        intentOut.putExtra("ColorNumber", list[position].colorNumber)
+//        mActivity.setResult(Activity.RESULT_OK, intentOut)
+//        mActivity.finish()
     }
 
     /************************************************/

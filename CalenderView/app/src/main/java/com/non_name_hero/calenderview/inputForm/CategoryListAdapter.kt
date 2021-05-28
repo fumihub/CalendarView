@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Button
 import com.non_name_hero.calenderview.R
+import com.non_name_hero.calenderview.data.Category
 import com.non_name_hero.calenderview.data.ScheduleGroup
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource.DeleteCallback
 import com.non_name_hero.calenderview.data.source.ScheduleRepository
@@ -22,7 +23,7 @@ import java.util.*
 class CategoryListAdapter(private val mContext: Context, activity: Activity) : BaseAdapter() {
 
     /*TODO カテゴリーリスト作成*/
-    private var list: MutableList<ScheduleGroup>                                /*色グループのリスト*/
+    private var list: MutableList<Category>                                     /*大カテゴリ－のリスト*/
 
     private var mLayoutInflater: LayoutInflater = LayoutInflater.from(mContext) /**/
 
@@ -36,8 +37,8 @@ class CategoryListAdapter(private val mContext: Context, activity: Activity) : B
         lateinit var categoryButton: Button                                     /*ListViewのカテゴリーボタン*/
     }
 
-    fun setList(input: List<ScheduleGroup>) {
-        list = input as MutableList<ScheduleGroup>
+    fun setList(input: List<Category>) {
+        list = input as MutableList<Category>
         notifyDataSetChanged()
     }
 
@@ -72,11 +73,8 @@ class CategoryListAdapter(private val mContext: Context, activity: Activity) : B
 
         /*リストのセルを取得(viewHolder)*/
         val holder: ViewHolder = view.tag as ViewHolder
-        /*TODO　リストのカテゴリーアイコンボタンにアイコンをセット*/
-        holder.categoryButton.text = list[position].groupName
-        /*リストのカテゴリーボタンにテキストをセット*/
-        holder.categoryButton.text = list[position].groupName
 
+        /*クリックリスナー設定*/
         holder.categoryButton.setOnClickListener {
             /*サブカテゴリー選択画面遷移*/
             goSubCategorySelectActivity(position)
@@ -92,8 +90,9 @@ class CategoryListAdapter(private val mContext: Context, activity: Activity) : B
         /*サブカテゴリー選択画面遷移用intent*/
         val intentOut = Intent(mContext, SubCategorySelectActivity::class.java)
         /*カテゴリーIDをサブカテゴリー選択画面へ渡す*/
-        /*TODO カテゴリーIDを渡す*/
-        intentOut.putExtra("CategoryID", list[position].colorNumber)
+        intentOut.putExtra("CategoryID", list[position].categoryId)
+        /*カテゴリーIDをサブカテゴリー選択画面へ渡す*/
+        intentOut.putExtra("CategoryColor", list[position].categoryColor)
         /*戻り値を設定してサブカテゴリー選択画面遷移*/
         mActivity.startActivityForResult(intentOut, REQUEST_CODE)
     }
