@@ -17,11 +17,20 @@ interface ScheduleDataSource {
         fun onDataNotSaved()
     }
 
+    interface GetCategoryDataCallback {
+        fun onCategoryDataLoaded(categoryData:List<CategoryData>)
+        fun onDataNotAvailable()
+    }
+
+    interface GetCategoryCallback {
+        fun onCategoryLoaded(category:List<Category>)
+        fun onDataNotAvailable()
+    }
+
     fun getSchedule(ScheduleIds: LongArray, callback: GetScheduleCallback)
     fun setSchedule(schedule: Schedule, callback: SaveScheduleCallback)
     fun getAllSchedules(callback: GetScheduleCallback)
     fun getAllBalances(callback: GetBalanceCallback)
-    fun getAllBalanceCategories(callback: GetBalanceCategoriesCallback)
     fun removeScheduleByScheduleId(scheduleId: Long)
 
     /**
@@ -51,17 +60,6 @@ interface ScheduleDataSource {
         fun onDataNotAvailable()
     }
 
-    //複数件取得時のコールバック
-    interface GetBalanceCategoriesCallback {
-        fun onBalanceCategoryLoaded(Groups: List<BalanceCategory>)
-        fun onDataNotAvailable()
-    }
-
-    //1件取得時コールバック
-    interface GetBalanceCategoryCallback {
-        fun onBalanceCategoryLoaded(group: BalanceCategory)
-    }
-
     // 削除時のコールバック
     interface DeleteCallback {
         fun onDeleted()
@@ -85,4 +83,8 @@ interface ScheduleDataSource {
 
     fun getHoliday(callback: LoadHolidayCalendarDataCallback)
     fun getCalendarDataList(callback: LoadCalendarDataCallback)
+
+    fun getCategoryData(categoryId: Int, callback: GetCategoryDataCallback)
+
+    fun getCategory(callback: GetCategoryCallback)
 }

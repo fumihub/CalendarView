@@ -83,7 +83,7 @@
         app:layout_constraintTop_toBottomOf="@+id/priceLayout">
 
         <Button
-            android:id="@+id/categoryButton"
+            android:id="@+id/categoryIconButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -94,13 +94,13 @@
             style="?android:attr/borderlessButtonStyle"
             android:text="アイコン"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/categorySelectButton"
+            app:layout_constraintEnd_toStartOf="@+id/categoryButton"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_weight="2"/>
 
         <Button
-            android:id="@+id/categorySelectButton"
+            android:id="@+id/categoryButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="0dp"
@@ -110,7 +110,7 @@
             android:background="#00000000"
             style="?android:attr/borderlessButtonStyle"
             android:text="カテゴリー"
-            app:layout_constraintStart_toEndOf="@+id/categoryButton"
+            app:layout_constraintStart_toEndOf="@+id/categoryIconButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"

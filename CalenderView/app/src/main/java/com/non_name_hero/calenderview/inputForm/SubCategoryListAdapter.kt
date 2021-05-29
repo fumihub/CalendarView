@@ -10,8 +10,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Button
+import android.widget.ImageButton
 import com.non_name_hero.calenderview.R
 import com.non_name_hero.calenderview.data.BalanceCategory
+import com.non_name_hero.calenderview.data.CategoryData
 import com.non_name_hero.calenderview.data.ScheduleGroup
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource.DeleteCallback
 import com.non_name_hero.calenderview.data.source.ScheduleRepository
@@ -22,7 +24,7 @@ import java.util.*
 
 class SubCategoryListAdapter(private val mContext: Context, activity: Activity) : BaseAdapter() {
 
-    private var list: MutableList<BalanceCategory>                              /*サブカテゴリーグループのリスト*/
+    private var list: MutableList<CategoryData>                              /*サブカテゴリーグループのリスト*/
 
     private var mLayoutInflater: LayoutInflater = LayoutInflater.from(mContext) /**/
 
@@ -34,13 +36,13 @@ class SubCategoryListAdapter(private val mContext: Context, activity: Activity) 
 
     /*カスタムセルを拡張したらここでWigetを定義*/
     private class ViewHolder {
-        lateinit var categoryIconButton: Button                                 /*ListViewのカテゴリーアイコンボタン*/
+        lateinit var categoryIconButton: ImageButton                            /*ListViewのカテゴリーアイコンボタン*/
         lateinit var categoryButton: Button                                     /*ListViewのカテゴリーボタン*/
         lateinit var destroyButton: Button                                      /*ListViewの削除ボタン*/
     }
 
-    fun setList(input: List<BalanceCategory>) {
-        list = input as MutableList<BalanceCategory>
+    fun setList(input: List<CategoryData>) {
+        list = input as MutableList<CategoryData>
         notifyDataSetChanged()
     }
 
@@ -66,12 +68,12 @@ class SubCategoryListAdapter(private val mContext: Context, activity: Activity) 
         リサイクルされるVIewがあるとき -> Viewを生成しない。
         その後holerに格納されている参照を利用してリストのitemを更新する
          */
-        val view = convertView ?: mLayoutInflater.inflate(R.layout.list_cell, null).apply {
+        val view = convertView ?: mLayoutInflater.inflate(R.layout.category_list_cell, null).apply {
             //convertViewがnullだった場合、タグにviewHolderを設定するため、新たにviewholderを作成する
             this.tag = ViewHolder()
             (this.tag as ViewHolder).categoryIconButton = this.findViewById(R.id.categoryIconButton)
             (this.tag as ViewHolder).categoryButton = this.findViewById(R.id.categoryButton)
-            (this.tag as ViewHolder).destroyButton = this.findViewById(R.id.colorDestroyButton)
+            (this.tag as ViewHolder).destroyButton = this.findViewById(R.id.categoryDestroyButton)
         }
 
         /*リストのセルを取得(viewHolder)*/

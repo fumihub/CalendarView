@@ -7,6 +7,7 @@ import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.non_name_hero.calenderview.R
+import com.non_name_hero.calenderview.data.Category
 import com.non_name_hero.calenderview.data.ScheduleGroup
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource
 import com.non_name_hero.calenderview.data.source.ScheduleRepository
@@ -17,7 +18,7 @@ class CategorySelectActivity  /*コンストラクタ*/
 
     private lateinit var context: Context                           /*CategorySelectActivityのcontext*/
 
-    private lateinit var ListAdapter: ListAdapter                   /*カテゴリーグループリストアダプタ*/
+    private lateinit var ListAdapter: CategoryListAdapter           /*カテゴリーグループリストアダプタ*/
 
     private lateinit var listView: ListView                         /*カテゴリーグループリストビュー*/
 
@@ -37,19 +38,19 @@ class CategorySelectActivity  /*コンストラクタ*/
         listView = findViewById(R.id.listView)
 
         /*リストのアダプターを使用してViewを作成*/
-        ListAdapter = ListAdapter(context, this)
+        ListAdapter = CategoryListAdapter(context, this)
         listView.adapter = ListAdapter
 
         /*DBから情報を取得*/
-        loadColorList()
+        loadCategoryList()
     }
 
     /*List内容を更新する関数************************/
-    private fun loadColorList() {
-        repository.getListScheduleGroup(object : ScheduleDataSource.GetScheduleGroupsCallback {
-            override fun onScheduleGroupsLoaded(Groups: List<ScheduleGroup>) {
+    private fun loadCategoryList() {
+        repository.getCategory(object : ScheduleDataSource.GetCategoryCallback {
+            override fun onCategoryLoaded(category: List<Category>) {
                 //取得後の処理
-                ListAdapter.setList(Groups)
+                ListAdapter.setList(category)
             }
 
             override fun onDataNotAvailable() {}

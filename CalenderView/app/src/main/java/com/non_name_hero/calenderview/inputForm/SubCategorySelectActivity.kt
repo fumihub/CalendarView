@@ -9,6 +9,7 @@ import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.non_name_hero.calenderview.R
+import com.non_name_hero.calenderview.data.CategoryData
 import com.non_name_hero.calenderview.data.ScheduleGroup
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource
 import com.non_name_hero.calenderview.data.source.ScheduleRepository
@@ -24,7 +25,7 @@ class SubCategorySelectActivity  /*コンストラクタ*/
     private lateinit var context: Context                           /*SubCategorySelectActivityのcontext*/
 
 
-    private lateinit var ListAdapter: ListAdapter                   /*サブカテゴリーグループリストアダプタ*/
+    private lateinit var ListAdapter: SubCategoryListAdapter                   /*サブカテゴリーグループリストアダプタ*/
 
     private lateinit var listView: ListView                         /*サブカテゴリーグループリストビュー*/
 
@@ -49,13 +50,13 @@ class SubCategorySelectActivity  /*コンストラクタ*/
         listView = findViewById(R.id.listView)
 
         /*リストのアダプターを使用してViewを作成*/
-        ListAdapter = ListAdapter(context, this)
+        ListAdapter = SubCategoryListAdapter(context, this)
         //削除ダイアログを設定
         ListAdapter.deleteDialog = this
         listView.adapter = ListAdapter
 
         /*DBから情報を取得*/
-        loadColorList()
+        loadCateogoyDataList()
         /************************************************/
 
         /*編集ボタンが押されたとき***********************/
@@ -117,7 +118,7 @@ class SubCategorySelectActivity  /*コンストラクタ*/
             REQUEST_CODE -> when (resultCode) {
                 RESULT_OK -> {
                     /*DB問い合わせて更新*/
-                    loadColorList()
+                    loadCateogoyDataList()
                 }
                 RESULT_CANCELED -> {
                     /*キャンセルボタンを押して戻ってきたときの処理*/
@@ -133,11 +134,11 @@ class SubCategorySelectActivity  /*コンストラクタ*/
     /************************************************/
 
     /*List内容を更新する関数************************/
-    private fun loadColorList() {
-        repository.getListScheduleGroup(object : ScheduleDataSource.GetScheduleGroupsCallback {
-            override fun onScheduleGroupsLoaded(Groups: List<ScheduleGroup>) {
+    private fun loadCateogoyDataList() {
+        repository.getCategoryData(1,object : ScheduleDataSource.GetCategoryDataCallback {
+            override fun onCategoryDataLoaded(CategoryData: List<CategoryData>) {
                 //取得後の処理
-                ListAdapter.setList(Groups)
+                ListAdapter.setList(CategoryData)
             }
 
             override fun onDataNotAvailable() {}

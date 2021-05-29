@@ -90,4 +90,23 @@ interface SchedulesDao {
             "LEFT JOIN schedule_group g ON g.group_id = s.group_id " +
             "ORDER BY s.schedule_id DESC")
     val allCalendarDataList: List<CalendarData>
+
+    /*CategoryAndBalanceCategory*/
+    @Query("""
+        SELECT 
+            c.category_id AS categoryId, 
+            c.category_color AS categoryColor, 
+            c.image_url AS imgURL, 
+            c.big_category_name AS bigCategoryName,
+            b.balance_category_id AS balanceCategoryId, 
+            b.editable_flg AS editableFlg, 
+            b.category_name AS categoryName
+        FROM category c 
+            JOIN balance_category b ON b.category_id = c.category_id
+        WHERE 
+            c.category_id = :categoryId
+        ORDER BY c.category_id DESC
+        """)
+    fun getCategoryDataList(categoryId: Int): List<CategoryData>
+
 }

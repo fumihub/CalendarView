@@ -48,7 +48,7 @@ class InputBalanceActivity  /*コンストラクタ*/
         price = findViewById(R.id.price)
         priceText = findViewById(R.id.priceText)
         categoryButton = findViewById(R.id.categoryButton)
-        categorySelectButton = findViewById(R.id.categorySelectButton)
+        categorySelectButton = findViewById(R.id.categoryButton)
         usedDate = findViewById(R.id.usedDate)
         title = findViewById(R.id.title)
         cancelButton = findViewById(R.id.cancelButton)

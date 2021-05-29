@@ -34,10 +34,6 @@ class ScheduleDataRemoteSource() : ScheduleDataSource {
         //リモートデータソースは使用しない
     }
 
-    override fun getAllBalanceCategories(callback: GetBalanceCategoriesCallback) {
-        //リモートデータソースは使用しない
-    }
-
     override fun removeScheduleByScheduleId(scheduleId: Long) {}
     override fun getHoliday(callback: LoadHolidayCalendarDataCallback) {
         //以下は別スレッドにて実行
@@ -83,6 +79,10 @@ class ScheduleDataRemoteSource() : ScheduleDataSource {
     override fun getListScheduleGroup(callback: GetScheduleGroupsCallback) {}
     override fun updateScheduleGroup(group: ScheduleGroup, callback: SaveScheduleGroupCallback) {}
     override fun getCalendarDataList(callback: LoadCalendarDataCallback) {}
+    override fun getCategoryData(categoryId: Int, callback: GetCategoryDataCallback) {}
+
+    override fun getCategory(callback: GetCategoryCallback) {}
+
     fun <T> autoCast(obj: Any?): T? {
         return obj as T?
     }

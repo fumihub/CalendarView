@@ -37,7 +37,6 @@ class ScheduleRepository (
      * @param callback 格納後の処理
      */
     override fun setSchedule(schedule: Schedule, callback: SaveScheduleCallback) {
-        TODO("Not yet implemented")
         scheduleDataLocalSource.setSchedule(schedule, callback)
     }
 
@@ -53,10 +52,6 @@ class ScheduleRepository (
 
     override fun getAllBalances(callback: GetBalanceCallback) {
         scheduleDataLocalSource.getAllBalances(callback)
-    }
-
-    override fun getAllBalanceCategories(callback: GetBalanceCategoriesCallback) {
-        scheduleDataLocalSource.getAllBalanceCategories(callback)
     }
 
     override fun removeScheduleByScheduleId(scheduleId: Long) {
@@ -199,4 +194,24 @@ class ScheduleRepository (
             INSTANCE = null
         }
     }
+
+    /**
+     * categoryIdを指定してカテゴリデータ情報を取得
+     *
+     * @param categoryId 　カテゴリ番号
+     * @param callback    取得後の処理。引数に取得した情報をとる
+     */
+    override fun getCategoryData(categoryId: Int, callback: GetCategoryDataCallback) {
+        scheduleDataLocalSource.getCategoryData(categoryId, callback)
+    }
+
+    /**
+     * 大カテゴリ全件取得
+     *
+     * @param callback    取得後の処理。引数に取得した情報をとる
+     */
+    override fun getCategory(callback: GetCategoryCallback) {
+        scheduleDataLocalSource.getCategory(callback)
+    }
+
 }

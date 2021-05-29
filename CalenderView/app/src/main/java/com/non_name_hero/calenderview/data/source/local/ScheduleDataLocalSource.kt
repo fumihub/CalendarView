@@ -23,14 +23,6 @@ class ScheduleDataLocalSource  //コンストラクタ
         appExecutors.diskIO.execute(runnable)
     }
 
-    override fun getAllBalanceCategories(callback: GetBalanceCategoriesCallback) {
-        val runnable = Runnable {
-            val schedules = schedulesDao.allBalanceCategory
-            appExecutors.mainThread.execute { callback.onBalanceCategoryLoaded(schedules) }
-        }
-        appExecutors.diskIO.execute(runnable)
-    }
-
     override fun getSchedule(scheduleIds: LongArray, callback: GetScheduleCallback) {
         val runnable = Runnable {
             val schedules = schedulesDao.loadSchedulesByIds(scheduleIds)
@@ -128,5 +120,21 @@ class ScheduleDataLocalSource  //コンストラクタ
             }
             return INSTANCE
         }
+    }
+
+    override fun getCategoryData(categoryId: Int, callback: GetCategoryDataCallback) {
+        val runnable = Runnable {
+            val categoryData = schedulesDao.getCategoryDataList(categoryId)
+            appExecutors.mainThread.execute { callback.onCategoryDataLoaded(categoryData) }
+        }
+        appExecutors.diskIO.execute(runnable)
+    }
+
+    override fun getCategory(callback: GetCategoryCallback){
+        val runnable = Runnable {
+            val category = schedulesDao.allCategory
+            appExecutors.mainThread.execute { callback.onCategoryLoaded(category) }
+        }
+        appExecutors.diskIO.execute(runnable)
     }
 }

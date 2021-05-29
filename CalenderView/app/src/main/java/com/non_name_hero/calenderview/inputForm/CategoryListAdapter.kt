@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Button
+import android.widget.ImageButton
 import com.non_name_hero.calenderview.R
 import com.non_name_hero.calenderview.data.Category
 import com.non_name_hero.calenderview.data.ScheduleGroup
@@ -19,6 +20,9 @@ import com.non_name_hero.calenderview.utils.Injection
 import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDeleteDialog
 import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDialogBase.DialogCallback
 import java.util.*
+
+
+
 
 class CategoryListAdapter(private val mContext: Context, activity: Activity) : BaseAdapter() {
 
@@ -33,8 +37,9 @@ class CategoryListAdapter(private val mContext: Context, activity: Activity) : B
 
     /*カスタムセルを拡張したらここでWigetを定義*/
     private class ViewHolder {
-        lateinit var categoryIconButton: Button                                 /*ListViewのカテゴリーアイコンボタン*/
+        lateinit var categoryIconButton: ImageButton                            /*ListViewのカテゴリーアイコンボタン*/
         lateinit var categoryButton: Button                                     /*ListViewのカテゴリーボタン*/
+        lateinit var destroyButton: Button                                      /*ListViewの削除ボタン*/
     }
 
     fun setList(input: List<Category>) {
@@ -64,15 +69,26 @@ class CategoryListAdapter(private val mContext: Context, activity: Activity) : B
         リサイクルされるVIewがあるとき -> Viewを生成しない。
         その後holerに格納されている参照を利用してリストのitemを更新する
          */
-        val view = convertView ?: mLayoutInflater.inflate(R.layout.list_cell, null).apply {
+        val view = convertView ?: mLayoutInflater.inflate(R.layout.category_list_cell, null).apply {
             //convertViewがnullだった場合、タグにviewHolderを設定するため、新たにviewholderを作成する
             this.tag = ViewHolder()
             (this.tag as ViewHolder).categoryIconButton = this.findViewById(R.id.categoryIconButton)
             (this.tag as ViewHolder).categoryButton = this.findViewById(R.id.categoryButton)
+            (this.tag as ViewHolder).destroyButton = this.findViewById(R.id.categoryDestroyButton)
         }
 
         /*リストのセルを取得(viewHolder)*/
         val holder: ViewHolder = view.tag as ViewHolder
+
+        /*アイコンボタン設定*/
+//        val id: Int = mContext.getResources().getIdentifier(list[position].imgURL, "drawable", mContext.getPackageName())
+//        holder.categoryIconButton.setImageResource(id)
+//        holder.categoryIconButton.setImageDrawable(mContext.getResources().getDrawable(id))
+        holder.categoryIconButton.setBackgroundColor(list[position].categoryColor)
+        /*カテゴリボタン設定*/
+        holder.categoryButton.text = list[position].bigCategoryName
+        /*削除ボタン非表示*/
+        holder.destroyButton.visibility = View.GONE
 
         /*クリックリスナー設定*/
         holder.categoryButton.setOnClickListener {
@@ -91,8 +107,6 @@ class CategoryListAdapter(private val mContext: Context, activity: Activity) : B
         val intentOut = Intent(mContext, SubCategorySelectActivity::class.java)
         /*カテゴリーIDをサブカテゴリー選択画面へ渡す*/
         intentOut.putExtra("CategoryID", list[position].categoryId)
-        /*カテゴリーIDをサブカテゴリー選択画面へ渡す*/
-        intentOut.putExtra("CategoryColor", list[position].categoryColor)
         /*戻り値を設定してサブカテゴリー選択画面遷移*/
         mActivity.startActivityForResult(intentOut, REQUEST_CODE)
     }
