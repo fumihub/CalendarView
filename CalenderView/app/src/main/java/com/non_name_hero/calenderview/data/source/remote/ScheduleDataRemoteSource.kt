@@ -79,6 +79,7 @@ class ScheduleDataRemoteSource() : ScheduleDataSource {
     override fun getListScheduleGroup(callback: GetScheduleGroupsCallback) {}
     override fun updateScheduleGroup(group: ScheduleGroup, callback: SaveScheduleGroupCallback) {}
     override fun getCalendarDataList(callback: LoadCalendarDataCallback) {}
+    override fun getCategoriesData(categoryId: Int, callback: GetCategoriesDataCallback) {}
     override fun getCategoryData(categoryId: Int, callback: GetCategoryDataCallback) {}
 
     override fun getCategory(callback: GetCategoryCallback) {}

@@ -109,4 +109,20 @@ interface SchedulesDao {
         """)
     fun getCategoryDataList(categoryId: Int): List<CategoryData>
 
+    @Query("""
+        SELECT 
+            c.category_id AS categoryId, 
+            c.category_color AS categoryColor, 
+            c.image_url AS imgURL, 
+            c.big_category_name AS bigCategoryName,
+            b.balance_category_id AS balanceCategoryId, 
+            b.editable_flg AS editableFlg, 
+            b.category_name AS categoryName
+        FROM category c 
+            JOIN balance_category b ON b.category_id = c.category_id
+        WHERE 
+            b.balance_category_id = :balanceCategoryId
+        ORDER BY c.category_id DESC
+        """)
+    fun getCategoryDataByBalanceCategoryId(balanceCategoryId: Int): List<CategoryData>
 }

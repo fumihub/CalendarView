@@ -3,8 +3,6 @@ package com.non_name_hero.calenderview.inputForm
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,12 +11,8 @@ import android.widget.Button
 import android.widget.ImageButton
 import com.non_name_hero.calenderview.R
 import com.non_name_hero.calenderview.data.Category
-import com.non_name_hero.calenderview.data.ScheduleGroup
-import com.non_name_hero.calenderview.data.source.ScheduleDataSource.DeleteCallback
 import com.non_name_hero.calenderview.data.source.ScheduleRepository
 import com.non_name_hero.calenderview.utils.Injection
-import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDeleteDialog
-import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDialogBase.DialogCallback
 import java.util.*
 
 
@@ -39,6 +33,7 @@ class CategoryListAdapter(private val mContext: Context, activity: Activity) : B
     private class ViewHolder {
         lateinit var categoryIconButton: ImageButton                            /*ListViewのカテゴリーアイコンボタン*/
         lateinit var categoryButton: Button                                     /*ListViewのカテゴリーボタン*/
+        lateinit var categoryButton2: Button                                    /*ListViewの矢印ボタン*/
         lateinit var destroyButton: Button                                      /*ListViewの削除ボタン*/
     }
 
@@ -74,6 +69,7 @@ class CategoryListAdapter(private val mContext: Context, activity: Activity) : B
             this.tag = ViewHolder()
             (this.tag as ViewHolder).categoryIconButton = this.findViewById(R.id.categoryIconButton)
             (this.tag as ViewHolder).categoryButton = this.findViewById(R.id.categoryButton)
+            (this.tag as ViewHolder).categoryButton2 = this.findViewById(R.id.categoryButton2)
             (this.tag as ViewHolder).destroyButton = this.findViewById(R.id.categoryDestroyButton)
         }
 
@@ -81,9 +77,8 @@ class CategoryListAdapter(private val mContext: Context, activity: Activity) : B
         val holder: ViewHolder = view.tag as ViewHolder
 
         /*アイコンボタン設定*/
-//        val id: Int = mContext.getResources().getIdentifier(list[position].imgURL, "drawable", mContext.getPackageName())
-//        holder.categoryIconButton.setImageResource(id)
-//        holder.categoryIconButton.setImageDrawable(mContext.getResources().getDrawable(id))
+        val id: Int = mContext.getResources().getIdentifier(list[position].imgURL, "drawable", mContext.getPackageName())
+        holder.categoryIconButton.setImageResource(id)
         holder.categoryIconButton.setBackgroundColor(list[position].categoryColor)
         /*カテゴリボタン設定*/
         holder.categoryButton.text = list[position].bigCategoryName
@@ -92,6 +87,14 @@ class CategoryListAdapter(private val mContext: Context, activity: Activity) : B
 
         /*クリックリスナー設定*/
         holder.categoryButton.setOnClickListener {
+            /*サブカテゴリー選択画面遷移*/
+            goSubCategorySelectActivity(position)
+        }
+        holder.categoryButton2.setOnClickListener {
+            /*サブカテゴリー選択画面遷移*/
+            goSubCategorySelectActivity(position)
+        }
+        holder.categoryIconButton.setOnClickListener {
             /*サブカテゴリー選択画面遷移*/
             goSubCategorySelectActivity(position)
         }

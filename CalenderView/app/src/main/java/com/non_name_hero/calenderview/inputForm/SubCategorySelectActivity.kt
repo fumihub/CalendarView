@@ -25,7 +25,7 @@ class SubCategorySelectActivity  /*コンストラクタ*/
     private lateinit var context: Context                           /*SubCategorySelectActivityのcontext*/
 
 
-    private lateinit var ListAdapter: SubCategoryListAdapter                   /*サブカテゴリーグループリストアダプタ*/
+    private lateinit var ListAdapter: SubCategoryListAdapter        /*サブカテゴリーグループリストアダプタ*/
 
     private lateinit var listView: ListView                         /*サブカテゴリーグループリストビュー*/
 
@@ -33,6 +33,8 @@ class SubCategorySelectActivity  /*コンストラクタ*/
     private lateinit var subcategoryCreateButton: Button            /*サブカテゴリーグループ作成ボタン*/
 
     private lateinit var repository: ScheduleRepository             /**/
+
+    private var categoryId = 0                                      /*カテゴリID*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +58,7 @@ class SubCategorySelectActivity  /*コンストラクタ*/
         listView.adapter = ListAdapter
 
         /*DBから情報を取得*/
-        loadCateogoyDataList()
+        loadCategoriesDataList()
         /************************************************/
 
         /*編集ボタンが押されたとき***********************/
@@ -118,7 +120,7 @@ class SubCategorySelectActivity  /*コンストラクタ*/
             REQUEST_CODE -> when (resultCode) {
                 RESULT_OK -> {
                     /*DB問い合わせて更新*/
-                    loadCateogoyDataList()
+                    loadCategoriesDataList()
                 }
                 RESULT_CANCELED -> {
                     /*キャンセルボタンを押して戻ってきたときの処理*/
@@ -134,9 +136,12 @@ class SubCategorySelectActivity  /*コンストラクタ*/
     /************************************************/
 
     /*List内容を更新する関数************************/
-    private fun loadCateogoyDataList() {
-        repository.getCategoryData(1,object : ScheduleDataSource.GetCategoryDataCallback {
-            override fun onCategoryDataLoaded(CategoryData: List<CategoryData>) {
+    private fun loadCategoriesDataList() {
+        /*表示するカテゴリIDを取得*/
+        val intentIn = intent
+        categoryId = intentIn.getIntExtra("CategoryID", 1)
+        repository.getCategoriesData(categoryId,object : ScheduleDataSource.GetCategoriesDataCallback {
+            override fun onCategoriesDataLoaded(CategoryData: List<CategoryData>) {
                 //取得後の処理
                 ListAdapter.setList(CategoryData)
             }

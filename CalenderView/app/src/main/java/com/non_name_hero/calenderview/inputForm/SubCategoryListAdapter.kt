@@ -38,6 +38,7 @@ class SubCategoryListAdapter(private val mContext: Context, activity: Activity) 
     private class ViewHolder {
         lateinit var categoryIconButton: ImageButton                            /*ListViewのカテゴリーアイコンボタン*/
         lateinit var categoryButton: Button                                     /*ListViewのカテゴリーボタン*/
+        lateinit var categoryButton2: Button                                    /*ListViewの矢印ボタン*/
         lateinit var destroyButton: Button                                      /*ListViewの削除ボタン*/
     }
 
@@ -73,45 +74,58 @@ class SubCategoryListAdapter(private val mContext: Context, activity: Activity) 
             this.tag = ViewHolder()
             (this.tag as ViewHolder).categoryIconButton = this.findViewById(R.id.categoryIconButton)
             (this.tag as ViewHolder).categoryButton = this.findViewById(R.id.categoryButton)
+            (this.tag as ViewHolder).categoryButton2 = this.findViewById(R.id.categoryButton2)
             (this.tag as ViewHolder).destroyButton = this.findViewById(R.id.categoryDestroyButton)
+
         }
 
         /*リストのセルを取得(viewHolder)*/
         val holder: ViewHolder = view.tag as ViewHolder
-
-        /*TODO　該当のカテゴリーIDだけ表示*/
+        /*アイコンボタン設定*/
+        val id: Int = mContext.getResources().getIdentifier(list[position].imgURL, "drawable", mContext.getPackageName())
+        holder.categoryIconButton.setImageResource(id)
+        holder.categoryIconButton.setBackgroundColor(list[position].categoryColor)
         /*リストのカテゴリーボタンにテキストをセット*/
         holder.categoryButton.text = list[position].categoryName
-        /*リストのカテゴリーボタンに色をセット*/
-//        holder.categoryButton.setBackgroundColor(list[position].backgroundColor)
-        /*リストの色ボタンに文字色をセット*/
-//        if (list[position].characterColor == "黒") { /*黒ならば*/
-//            holder.categoryButton.setTextColor(Color.BLACK)
-//        } else { /*白ならば*/
-//            holder.categoryButton.setTextColor(Color.WHITE)
-//        }
+        /*矢印ボタン非表示*/
+        holder.categoryButton2.visibility = View.GONE
 
         /*TODO　ViewModeに切り替え*/
         //TODO　削除ボタン表示
         /*SharedPreferenceからeditFlagの値を取得*/
-//        val prefs = mContext.getSharedPreferences("input_data", Context.MODE_PRIVATE)
-//        if (prefs.getBoolean("editFlag", false)
-//                && list[position].colorNumber != 43) {
-//            holder.destroyButton.visibility = View.VISIBLE
-//        } else {
-//            holder.destroyButton.visibility = View.GONE
-//        }
-//        holder.categoryButton.setOnClickListener {
-//            if (prefs.getBoolean("editFlag", false)) {
-//                if (list[position].colorNumber == 43) {
-//                    /* 何もしない */
-//                } else {
-//                    goColorCreateActivity(position)
-//                }
-//            } else {
-//                returnInputActivity(position)
-//            }
-//        }
+        val prefs = mContext.getSharedPreferences("input_data", Context.MODE_PRIVATE)
+        if (prefs.getBoolean("editFlag", false)
+                && list[position].editableFlg) {
+            holder.destroyButton.visibility = View.VISIBLE
+        } else {
+            holder.destroyButton.visibility = View.GONE
+        }
+
+        /*クリックリスナー設定*/
+        holder.categoryButton.setOnClickListener {
+            if (prefs.getBoolean("editFlag", false)) {
+                if (list[position].editableFlg) {
+                    /* 何もしない */
+                } else {
+                    goCategoryCreateActivity(position)
+                }
+            } else {
+                returnCategorySelectActivity(position)
+            }
+        }
+        holder.categoryIconButton.setOnClickListener {
+            if (prefs.getBoolean("editFlag", false)) {
+                if (list[position].editableFlg) {
+                    /* 何もしない */
+                } else {
+                    goCategoryCreateActivity(position)
+                }
+            } else {
+                returnCategorySelectActivity(position)
+            }
+        }
+        /************************/
+
 //        holder.destroyButton.setOnClickListener {
 //            val scheduleGroup = list[position]
 //            /*指定したpositionを削除するダイアログを作成*/
@@ -137,31 +151,32 @@ class SubCategoryListAdapter(private val mContext: Context, activity: Activity) 
 //            })
 //            deleteDialog!!.showPigLeadDiaLog(dialog)
 //        }
+
         return view
     }
 
     /************************************************/
 
-    /*色作成画面に遷移*******************************/
-    private fun goColorCreateActivity(position: Int) {
-        /*色作成遷移用intent*/
-//        val intentOut = Intent(mContext, ColorCreateActivity::class.java)
-//        /*ボタンの色番号を遷移先へgo*/
-//        intentOut.putExtra("ColorNumberPre", list[position].colorNumber)
-//        /*戻り値を設定して色画面に遷移*/
-//        mActivity.startActivityForResult(intentOut, REQUEST_CODE)
+    /*カテゴリ作成画面に遷移*******************************/
+    private fun goCategoryCreateActivity(position: Int) {
+        /*カテゴリ作成画面遷移用intent*/
+        val intentOut = Intent(mContext, SubCategoryCreateActivity::class.java)
+        /*カテゴリIDを遷移先へgo*/
+        intentOut.putExtra("CategoryId", list[position].categoryId)
+        /*戻り値を設定してカテゴリ作成画面に遷移*/
+        mActivity.startActivityForResult(intentOut, REQUEST_CODE)
     }
 
     /************************************************/
 
-    /*input画面に遷移********************************/
-    private fun returnInputActivity(position: Int) {
-        /*新規作成画面遷移用intent*/
-//        val intentOut = Intent()
-//        /*ボタンの色番号を遷移先へreturn*/
-//        intentOut.putExtra("ColorNumber", list[position].colorNumber)
-//        mActivity.setResult(Activity.RESULT_OK, intentOut)
-//        mActivity.finish()
+    /*カテゴリ選択画面に遷移********************************/
+    private fun returnCategorySelectActivity(position: Int) {
+        /*カテゴリ選択画面遷移用intent*/
+        val intentOut = Intent(mContext, CategorySelectActivity::class.java)
+        /*バランスカテゴリIDを遷移先へreturn*/
+        intentOut.putExtra("BalanceCategoryId", list[position].balanceCategoryId)
+        mActivity.setResult(Activity.RESULT_OK, intentOut)
+        mActivity.finish()
     }
 
     /************************************************/

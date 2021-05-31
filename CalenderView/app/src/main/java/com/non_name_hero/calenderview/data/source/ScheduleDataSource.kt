@@ -17,9 +17,13 @@ interface ScheduleDataSource {
         fun onDataNotSaved()
     }
 
-    interface GetCategoryDataCallback {
-        fun onCategoryDataLoaded(categoryData:List<CategoryData>)
+    interface GetCategoriesDataCallback {
+        fun onCategoriesDataLoaded(categoryData:List<CategoryData>)
         fun onDataNotAvailable()
+    }
+    //1件取得時コールバック
+    interface GetCategoryDataCallback {
+        fun onCategoryDataLoaded(categoryData: CategoryData)
     }
 
     interface GetCategoryCallback {
@@ -84,7 +88,7 @@ interface ScheduleDataSource {
     fun getHoliday(callback: LoadHolidayCalendarDataCallback)
     fun getCalendarDataList(callback: LoadCalendarDataCallback)
 
-    fun getCategoryData(categoryId: Int, callback: GetCategoryDataCallback)
-
+    fun getCategoriesData(categoryId: Int, callback: GetCategoriesDataCallback)
+    fun getCategoryData(balanceCategoryId: Int, callback: GetCategoryDataCallback)
     fun getCategory(callback: GetCategoryCallback)
 }

@@ -201,8 +201,12 @@ class ScheduleRepository (
      * @param categoryId 　カテゴリ番号
      * @param callback    取得後の処理。引数に取得した情報をとる
      */
-    override fun getCategoryData(categoryId: Int, callback: GetCategoryDataCallback) {
-        scheduleDataLocalSource.getCategoryData(categoryId, callback)
+    override fun getCategoriesData(categoryId: Int, callback: GetCategoriesDataCallback) {
+        scheduleDataLocalSource.getCategoriesData(categoryId, callback)
+    }
+
+    override fun getCategoryData(balanceCategoryId: Int, callback: GetCategoryDataCallback) {
+        scheduleDataLocalSource.getCategoryData(balanceCategoryId, callback)
     }
 
     /**
