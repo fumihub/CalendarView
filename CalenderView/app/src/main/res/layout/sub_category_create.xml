@@ -41,7 +41,7 @@
         android:hint="サブカテゴリー名"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/colorCreateToolbar"/>
+        app:layout_constraintTop_toBottomOf="@+id/subCategoryCreateToolbar"/>
     <!--**********************************************-->
 
     <!--保存/キャンセルボタン****************************-->
@@ -52,7 +52,7 @@
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textColorLayout">
+        app:layout_constraintTop_toBottomOf="@+id/subCategoryCreateTitle">
 
         <Button
             android:id="@+id/cancelButton"

@@ -19,6 +19,15 @@ class BalanceCategory {
     var categoryID: Int
         private set
 
+    constructor(editableFlg: Boolean,
+                categoryName: String,
+                categoryID: Int) {
+        this.editableFlg = editableFlg
+        this.categoryName = categoryName
+        this.categoryID = categoryID
+    }
+
+    @Ignore
     constructor(balanceCategoryId: Int,
                 editableFlg: Boolean,
                 categoryName: String,

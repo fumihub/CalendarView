@@ -67,7 +67,7 @@ class CategorySelectActivity  /*コンストラクタ*/
             REQUEST_CODE -> when (resultCode) {
                 RESULT_OK -> {
                     /*バランスカテゴリID受け取り*/
-                    balanceCategoryId = data!!.getIntExtra("BalanceCategoryId", 1)
+                    balanceCategoryId = data!!.getIntExtra("BalanceCategoryId", 21)
                     /*InputBalanceActivity遷移用intent*/
                     val intentOut = Intent(this, InputBalanceActivity::class.java)
                     /*バランスカテゴリIDを遷移先へreturn*/

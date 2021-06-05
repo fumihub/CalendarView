@@ -1,5 +1,6 @@
 package com.non_name_hero.calenderview.data.source.local
 
+import com.non_name_hero.calenderview.data.BalanceCategory
 import com.non_name_hero.calenderview.data.Schedule
 import com.non_name_hero.calenderview.data.ScheduleGroup
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource
@@ -142,6 +143,23 @@ class ScheduleDataLocalSource  //コンストラクタ
         val runnable = Runnable {
             val category = schedulesDao.allCategory
             appExecutors.mainThread.execute { callback.onCategoryLoaded(category) }
+        }
+        appExecutors.diskIO.execute(runnable)
+    }
+
+    override fun insertBalanceCategory(balanceCategory: BalanceCategory, callback: SaveBalanceCategoryCallback) {
+        val runnable = Runnable {
+            schedulesDao.insertBalanceCategory(balanceCategory)
+            appExecutors.mainThread.execute { callback.onBalanceCategorySaved() }
+        }
+        appExecutors.diskIO.execute(runnable)
+    }
+
+    override fun deleteBalanceCategory(balanceCategoryId: Int, callback: DeleteCallback) {
+        val runnable = Runnable {
+            schedulesDao.deleteBalanceCategoryByBalanceCategoryId(balanceCategoryId)
+            schedulesDao.setDefaultBalanceCategoryId(balanceCategoryId)
+            appExecutors.mainThread.execute { callback.onDeleted() }
         }
         appExecutors.diskIO.execute(runnable)
     }

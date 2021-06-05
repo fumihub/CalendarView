@@ -22,9 +22,6 @@ interface SchedulesDao {
     @Query("DELETE FROM balance WHERE balance_id = :balanceId")
     fun deleteByBalanceId(balanceId: Long)
 
-    @Query("UPDATE balance SET balance_category_id = 1 WHERE balance_category_id = :balanceCategoryId")
-    fun setDefaultBalanceCategoryId(balanceCategoryId: Int)
-
     /*BalanceCategory*/
     @get:Query("SELECT * FROM balance_category ORDER BY balance_category_id")
     val allBalanceCategory: List<BalanceCategory>
@@ -125,4 +122,14 @@ interface SchedulesDao {
         ORDER BY c.category_id DESC
         """)
     fun getCategoryDataByBalanceCategoryId(balanceCategoryId: Int): List<CategoryData>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertBalanceCategory(balanceCategory: BalanceCategory)
+
+    @Query("DELETE FROM balance_category WHERE balance_category_id = :balanceCategoryId")
+    fun deleteBalanceCategoryByBalanceCategoryId(balanceCategoryId: Int)
+
+    @Query("UPDATE balance SET balance_category_id = 1 WHERE balance_category_id = :balanceCategoryId")
+    fun setDefaultBalanceCategoryId(balanceCategoryId: Int)
+
 }

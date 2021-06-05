@@ -195,7 +195,7 @@ class InputBalanceActivity  /*コンストラクタ*/
             REQUEST_CODE -> when (resultCode) {
                 RESULT_OK -> {
                     /*バランスカテゴリID受け取り*/
-                    balanceCategoryId = data!!.getIntExtra("BalanceCategoryId", 1)
+                    balanceCategoryId = data!!.getIntExtra("BalanceCategoryId", 21)
                     /*DBからbalanceCategoryIdをキーにその要素を取得*/
                     repository.getCategoryData(
                             balanceCategoryId,

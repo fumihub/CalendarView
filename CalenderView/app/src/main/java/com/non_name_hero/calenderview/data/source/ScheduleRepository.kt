@@ -2,6 +2,7 @@ package com.non_name_hero.calenderview.data.source
 
 import android.annotation.SuppressLint
 import androidx.core.util.Preconditions
+import com.non_name_hero.calenderview.data.BalanceCategory
 import com.non_name_hero.calenderview.data.CalendarData
 import com.non_name_hero.calenderview.data.Schedule
 import com.non_name_hero.calenderview.data.ScheduleGroup
@@ -216,6 +217,25 @@ class ScheduleRepository (
      */
     override fun getCategory(callback: GetCategoryCallback) {
         scheduleDataLocalSource.getCategory(callback)
+    }
+
+    /**
+     * 家計簿カテゴリ情報DBに追加する
+     *
+     * @param balanceCategory    balanceCategoryオブジェクト
+     * @param callback 　保存完了後の処理、保存失敗時の処理
+     */
+    override fun insertBalanceCategory(balanceCategory: BalanceCategory, callback: SaveBalanceCategoryCallback) {
+        scheduleDataLocalSource.insertBalanceCategory(balanceCategory, callback)
+    }
+
+    /**
+     * groupIdを指定してグループ情報を削除
+     *
+     * @param balanceCategoryId サブカテゴリID
+     */
+    override fun deleteBalanceCategory(balanceCategoryId: Int, callback: DeleteCallback) {
+        scheduleDataLocalSource.deleteBalanceCategory(balanceCategoryId, callback)
     }
 
 }

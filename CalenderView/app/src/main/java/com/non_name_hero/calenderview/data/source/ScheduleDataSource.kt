@@ -91,4 +91,18 @@ interface ScheduleDataSource {
     fun getCategoriesData(categoryId: Int, callback: GetCategoriesDataCallback)
     fun getCategoryData(balanceCategoryId: Int, callback: GetCategoryDataCallback)
     fun getCategory(callback: GetCategoryCallback)
+
+    /**
+     * BalanceCategoryのコールバック
+     * onBalanceCategorySaved() -　保存成功時の処理
+     * onDataNotSaved() - 保存失敗時の処理
+     */
+    interface SaveBalanceCategoryCallback {
+        fun onBalanceCategorySaved()
+        fun onDataNotSaved()
+    }
+
+    fun insertBalanceCategory(balanceCategory: BalanceCategory, callback: SaveBalanceCategoryCallback)
+    fun deleteBalanceCategory(balanceCategoryId: Int, callback: DeleteCallback)
+
 }
