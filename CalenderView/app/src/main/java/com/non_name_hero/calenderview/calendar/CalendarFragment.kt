@@ -12,7 +12,6 @@ import com.non_name_hero.calenderview.R
 import com.non_name_hero.calenderview.databinding.CalendarFragmentBinding
 import com.non_name_hero.calenderview.utils.ActivityUtils
 import java.lang.Boolean
-import java.util.*
 
 class CalendarFragment : Fragment() {
     private var mPager: ViewPager2? = null
@@ -99,7 +98,7 @@ class CalendarFragment : Fragment() {
      */
     private inner class CalendarPagerAdapter(f: Fragment?) : FragmentStateAdapter(f!!) {
         override fun createFragment(position: Int): Fragment {
-            return CalendarPageFragment(position - DEFAULT_PAGE)
+            return CalendarPageFragment()
         }
 
         override fun getItemCount(): Int {

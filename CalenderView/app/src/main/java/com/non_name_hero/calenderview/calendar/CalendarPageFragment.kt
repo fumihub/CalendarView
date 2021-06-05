@@ -34,6 +34,7 @@ class CalendarPageFragment() : Fragment() {
     private val DEFAULT_PAGE = NUM_PAGES / 2
 
     var mProgressMonth: Int = 0
+
         set(value) {
             field = value - DEFAULT_PAGE
         }
@@ -41,6 +42,7 @@ class CalendarPageFragment() : Fragment() {
     var mHolidayMap: Map<String, List<CalendarData>> = HashMap()
     var mCalendarMap: Map<String, List<CalendarData>> = HashMap()
     val dateArray: List<Date> = DateManager().days
+
 
     /**
      * onCreateViewは戻り値のビューを表示させる
@@ -52,7 +54,9 @@ class CalendarPageFragment() : Fragment() {
      */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+
         this.mProgressMonth = this.tag?.replace("f", "")?.toInt() ?: 0
+
         val binding: CalendarFragmentScreenSlidePageBinding
         //DataBinding
         binding = CalendarFragmentScreenSlidePageBinding.inflate(
@@ -179,6 +183,7 @@ class CalendarPageFragment() : Fragment() {
             isHoliday = true
         }
 
+
         //日曜日の場合
         if (dayOfWeek == 1 || true == isHoliday) {
             view.dateText.setTextColor(Color.RED)
@@ -186,6 +191,7 @@ class CalendarPageFragment() : Fragment() {
             view.dateText.setTextColor(Color.BLUE)
         } else {
             view.dateText.setTextColor(Color.BLACK)
+
         }
     }
 
