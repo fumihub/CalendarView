@@ -12,24 +12,24 @@ object ScheduleListBindings {
      * @param view         カレンダー
      * @param calendarData
      */
-    @BindingAdapter("app:schedules")
-    @kotlin.jvm.JvmStatic
-    fun setSchedules(view: GridView, calendarData: Map<String, List<CalendarData>>?) {
-        with(view.adapter as CalendarAdapter) {
-            if (calendarData != null) {
-                replaceData(calendarData)
-            }
-        }
-    }
-
-    @BindingAdapter("holidays")
-    @kotlin.jvm.JvmStatic
-    fun setHolidays(view: GridView, calendarData: Map<String, List<CalendarData>>?) {
-        if (calendarData != null) {
-            val adapter = view.adapter as CalendarAdapter
-            adapter.replaceHoliday(calendarData)
-        }
-    }
+//    @BindingAdapter("app:schedules")
+//    @kotlin.jvm.JvmStatic
+//    fun setSchedules(view: GridView, calendarData: Map<String, List<CalendarData>>?) {
+//        with(view.adapter as CalendarAdapter) {
+//            if (calendarData != null) {
+//                replaceData(calendarData)
+//            }
+//        }
+//    }
+//
+//    @BindingAdapter("holidays")
+//    @kotlin.jvm.JvmStatic
+//    fun setHolidays(view: GridView, calendarData: Map<String, List<CalendarData>>?) {
+//        if (calendarData != null) {
+//            val adapter = view.adapter as CalendarAdapter
+//            adapter.replaceHoliday(calendarData)
+//        }
+//    }
 
     @BindingAdapter("scheduleItems")
     @kotlin.jvm.JvmStatic

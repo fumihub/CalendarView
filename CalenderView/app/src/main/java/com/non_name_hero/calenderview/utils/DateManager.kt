@@ -5,7 +5,7 @@ import java.util.*
 
 //日付の操作を設定するクラス
 class DateManager {
-    private val mCalendar: Calendar
+    public val mCalendar: Calendar
     private var startDate: Date? = null
     val currentDate: Date
     var holiday: Date? = null
@@ -130,8 +130,9 @@ class DateManager {
         mCalendar.add(Calendar.MONTH, -1)
     }
 
-    fun jumpMonth(jump: Int) {
+    fun jumpMonth(jump: Int): DateManager {
         mCalendar.add(Calendar.MONTH, jump)
+        return this
     }
 
     //コンストラクタ
