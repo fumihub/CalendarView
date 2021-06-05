@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.util.Log
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
+import com.non_name_hero.calenderview.data.BalanceCategory
 import com.non_name_hero.calenderview.data.CalendarData
 import com.non_name_hero.calenderview.data.Schedule
 import com.non_name_hero.calenderview.data.ScheduleGroup
@@ -27,6 +28,10 @@ class ScheduleDataRemoteSource() : ScheduleDataSource {
     }
 
     override fun getAllSchedules(callback: GetScheduleCallback) {
+        //リモートデータソースは使用しない
+    }
+
+    override fun getAllBalances(callback: GetBalanceCallback) {
         //リモートデータソースは使用しない
     }
 
@@ -75,6 +80,14 @@ class ScheduleDataRemoteSource() : ScheduleDataSource {
     override fun getListScheduleGroup(callback: GetScheduleGroupsCallback) {}
     override fun updateScheduleGroup(group: ScheduleGroup, callback: SaveScheduleGroupCallback) {}
     override fun getCalendarDataList(callback: LoadCalendarDataCallback) {}
+    override fun getCategoriesData(categoryId: Int, callback: GetCategoriesDataCallback) {}
+    override fun getCategoryData(categoryId: Int, callback: GetCategoryDataCallback) {}
+
+    override fun getCategory(callback: GetCategoryCallback) {}
+    override fun insertBalanceCategory(balanceCategory: BalanceCategory, callback: SaveBalanceCategoryCallback) {}
+
+    override fun deleteBalanceCategory(balanceCategoryId: Int, callback: DeleteCallback) {}
+
     fun <T> autoCast(obj: Any?): T? {
         return obj as T?
     }

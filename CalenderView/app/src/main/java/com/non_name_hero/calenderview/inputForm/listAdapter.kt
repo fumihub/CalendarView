@@ -11,6 +11,8 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Button
 import com.non_name_hero.calenderview.R
+import com.non_name_hero.calenderview.data.Balance
+import com.non_name_hero.calenderview.data.BalanceCategory
 import com.non_name_hero.calenderview.data.ScheduleGroup
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource.DeleteCallback
 import com.non_name_hero.calenderview.data.source.ScheduleRepository
@@ -22,6 +24,7 @@ import java.util.*
 class ListAdapter(private val mContext: Context, activity: Activity) : BaseAdapter() {
 
     private var list: MutableList<ScheduleGroup>                                /*色グループのリスト*/
+    private lateinit var listBalanceCategory: MutableList<BalanceCategory>
 
     private var mLayoutInflater: LayoutInflater = LayoutInflater.from(mContext) /**/
 
@@ -39,6 +42,11 @@ class ListAdapter(private val mContext: Context, activity: Activity) : BaseAdapt
 
     fun setList(input: List<ScheduleGroup>) {
         list = input as MutableList<ScheduleGroup>
+        notifyDataSetChanged()
+    }
+
+    fun setBalanceCategoryList(input: List<BalanceCategory>) {
+        listBalanceCategory = input as MutableList<BalanceCategory>
         notifyDataSetChanged()
     }
 

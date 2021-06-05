@@ -1,5 +1,6 @@
 package com.non_name_hero.calenderview.data.source.local
 
+import com.non_name_hero.calenderview.data.BalanceCategory
 import com.non_name_hero.calenderview.data.Schedule
 import com.non_name_hero.calenderview.data.ScheduleGroup
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource
@@ -15,6 +16,14 @@ class ScheduleDataLocalSource  //コンストラクタ
      * @param scheduleIds
      * @param callback
      */
+    override fun getAllBalances(callback: GetBalanceCallback) {
+        val runnable = Runnable {
+            val schedules = schedulesDao.allBalance
+            appExecutors.mainThread.execute { callback.onBalanceLoaded(schedules) }
+        }
+        appExecutors.diskIO.execute(runnable)
+    }
+
     override fun getSchedule(scheduleIds: LongArray, callback: GetScheduleCallback) {
         val runnable = Runnable {
             val schedules = schedulesDao.loadSchedulesByIds(scheduleIds)
@@ -34,7 +43,7 @@ class ScheduleDataLocalSource  //コンストラクタ
 
     override fun getAllSchedules(callback: GetScheduleCallback) {
         val runnable = Runnable {
-            val schedules = schedulesDao.all
+            val schedules = schedulesDao.allSchedules
             appExecutors.mainThread.execute { callback.onScheduleLoaded(schedules) }
         }
         appExecutors.diskIO.execute(runnable)
@@ -112,5 +121,46 @@ class ScheduleDataLocalSource  //コンストラクタ
             }
             return INSTANCE
         }
+    }
+
+    override fun getCategoriesData(categoryId: Int, callback: GetCategoriesDataCallback) {
+        val runnable = Runnable {
+            val categoryData = schedulesDao.getCategoryDataList(categoryId)
+            appExecutors.mainThread.execute { callback.onCategoriesDataLoaded(categoryData) }
+        }
+        appExecutors.diskIO.execute(runnable)
+    }
+
+    override fun getCategoryData(balanceCategoryId: Int, callback: GetCategoryDataCallback) {
+         val runnable = Runnable {
+            val categoryData = schedulesDao.getCategoryDataByBalanceCategoryId(balanceCategoryId)[0]
+            appExecutors.mainThread.execute { callback.onCategoryDataLoaded(categoryData) }
+        }
+        appExecutors.diskIO.execute(runnable)
+    }
+
+    override fun getCategory(callback: GetCategoryCallback){
+        val runnable = Runnable {
+            val category = schedulesDao.allCategory
+            appExecutors.mainThread.execute { callback.onCategoryLoaded(category) }
+        }
+        appExecutors.diskIO.execute(runnable)
+    }
+
+    override fun insertBalanceCategory(balanceCategory: BalanceCategory, callback: SaveBalanceCategoryCallback) {
+        val runnable = Runnable {
+            schedulesDao.insertBalanceCategory(balanceCategory)
+            appExecutors.mainThread.execute { callback.onBalanceCategorySaved() }
+        }
+        appExecutors.diskIO.execute(runnable)
+    }
+
+    override fun deleteBalanceCategory(balanceCategoryId: Int, callback: DeleteCallback) {
+        val runnable = Runnable {
+            schedulesDao.deleteBalanceCategoryByBalanceCategoryId(balanceCategoryId)
+            schedulesDao.setDefaultBalanceCategoryId(balanceCategoryId)
+            appExecutors.mainThread.execute { callback.onDeleted() }
+        }
+        appExecutors.diskIO.execute(runnable)
     }
 }

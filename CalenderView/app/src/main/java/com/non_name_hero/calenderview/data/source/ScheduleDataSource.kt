@@ -1,8 +1,6 @@
 package com.non_name_hero.calenderview.data.source
 
-import com.non_name_hero.calenderview.data.CalendarData
-import com.non_name_hero.calenderview.data.Schedule
-import com.non_name_hero.calenderview.data.ScheduleGroup
+import com.non_name_hero.calenderview.data.*
 
 interface ScheduleDataSource {
     interface GetScheduleCallback {
@@ -19,9 +17,24 @@ interface ScheduleDataSource {
         fun onDataNotSaved()
     }
 
+    interface GetCategoriesDataCallback {
+        fun onCategoriesDataLoaded(categoryData:List<CategoryData>)
+        fun onDataNotAvailable()
+    }
+    //1件取得時コールバック
+    interface GetCategoryDataCallback {
+        fun onCategoryDataLoaded(categoryData: CategoryData)
+    }
+
+    interface GetCategoryCallback {
+        fun onCategoryLoaded(category:List<Category>)
+        fun onDataNotAvailable()
+    }
+
     fun getSchedule(ScheduleIds: LongArray, callback: GetScheduleCallback)
     fun setSchedule(schedule: Schedule, callback: SaveScheduleCallback)
     fun getAllSchedules(callback: GetScheduleCallback)
+    fun getAllBalances(callback: GetBalanceCallback)
     fun removeScheduleByScheduleId(scheduleId: Long)
 
     /**
@@ -43,6 +56,12 @@ interface ScheduleDataSource {
     //1件取得時コールバック
     interface GetScheduleGroupCallback {
         fun onScheduleGroupLoaded(group: ScheduleGroup)
+    }
+
+    //複数件取得時のコールバック
+    interface GetBalanceCallback {
+        fun onBalanceLoaded(Groups: List<Balance>)
+        fun onDataNotAvailable()
     }
 
     // 削除時のコールバック
@@ -68,4 +87,22 @@ interface ScheduleDataSource {
 
     fun getHoliday(callback: LoadHolidayCalendarDataCallback)
     fun getCalendarDataList(callback: LoadCalendarDataCallback)
+
+    fun getCategoriesData(categoryId: Int, callback: GetCategoriesDataCallback)
+    fun getCategoryData(balanceCategoryId: Int, callback: GetCategoryDataCallback)
+    fun getCategory(callback: GetCategoryCallback)
+
+    /**
+     * BalanceCategoryのコールバック
+     * onBalanceCategorySaved() -　保存成功時の処理
+     * onDataNotSaved() - 保存失敗時の処理
+     */
+    interface SaveBalanceCategoryCallback {
+        fun onBalanceCategorySaved()
+        fun onDataNotSaved()
+    }
+
+    fun insertBalanceCategory(balanceCategory: BalanceCategory, callback: SaveBalanceCategoryCallback)
+    fun deleteBalanceCategory(balanceCategoryId: Int, callback: DeleteCallback)
+
 }

@@ -13,7 +13,7 @@ import com.non_name_hero.calenderview.data.source.ScheduleDataSource.SaveSchedul
 import com.non_name_hero.calenderview.data.source.ScheduleRepository
 import com.non_name_hero.calenderview.utils.Injection
 
-class ColorCreateActivity  /*コンストラクタ*/
+class SubCategoryCreateActivity  /*コンストラクタ*/
     : AppCompatActivity() {
 
     private lateinit var repository: ScheduleRepository     /**/

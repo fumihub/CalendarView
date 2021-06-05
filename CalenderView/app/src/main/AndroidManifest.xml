@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.non_name_hero.calenderview">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -18,12 +19,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--入力画面アクティビティ-->
+        <!--入力画面アクティビティ(スケジューラー)-->
         <activity android:name=".inputForm.InputActivity"/>
         <activity android:name=".inputForm.ColorSelectActivity"/>
         <activity android:name=".inputForm.ColorCreateActivity"/>
         <activity android:name=".inputForm.ColorActivity"/>
+        <!--入力画面アクティビティ(家計簿)-->
         <activity android:name=".inputForm.InputBalanceActivity"/>
+        <activity android:name=".inputForm.CategorySelectActivity"/>
+        <activity android:name=".inputForm.SubCategorySelectActivity"/>
+        <activity android:name=".inputForm.SubCategoryCreateActivity"/>
         <!--広告用設定-->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

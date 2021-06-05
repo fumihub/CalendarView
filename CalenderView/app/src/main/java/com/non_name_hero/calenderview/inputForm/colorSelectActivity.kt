@@ -94,7 +94,8 @@ class ColorSelectActivity  /*コンストラクタ*/
         /*アプリ再開時にeditFlagを0にする*/
         /*リストビューから削除ボタンを非表示に*/
         jdgEditMode(false, "編集")
-
+        /*色作成ボタン表示*/
+        colorCreateButton.visibility = View.VISIBLE
     }
 
     /************************************************/

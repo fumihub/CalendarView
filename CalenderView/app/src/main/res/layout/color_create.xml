@@ -163,7 +163,7 @@
 
         </RadioGroup>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>>
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <!--**********************************************-->
 
     <!--保存/キャンセルボタン*********************************-->

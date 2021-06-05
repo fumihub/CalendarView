@@ -283,12 +283,30 @@
                 android:inputType="text"
                 android:hint="場所"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/mapLayout"
+                app:layout_constraintEnd_toStartOf="@+id/mapCheckButton"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_weight="4"/>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <ImageButton
+                android:id="@+id/mapCheckButton"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/map_icon"
+                android:scaleType="centerInside"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toEndOf="@+id/place"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <!--**********************************************-->
+
+            <!--<androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/mapLayout"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -365,9 +383,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"/>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>>
+            </androidx.constraintlayout.widget.ConstraintLayout>-->
         <!--**********************************************-->
 
         <!--メモ******************************************-->

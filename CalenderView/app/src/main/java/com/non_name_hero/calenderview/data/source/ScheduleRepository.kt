@@ -2,6 +2,7 @@ package com.non_name_hero.calenderview.data.source
 
 import android.annotation.SuppressLint
 import androidx.core.util.Preconditions
+import com.non_name_hero.calenderview.data.BalanceCategory
 import com.non_name_hero.calenderview.data.CalendarData
 import com.non_name_hero.calenderview.data.Schedule
 import com.non_name_hero.calenderview.data.ScheduleGroup
@@ -37,7 +38,6 @@ class ScheduleRepository (
      * @param callback 格納後の処理
      */
     override fun setSchedule(schedule: Schedule, callback: SaveScheduleCallback) {
-        TODO("Not yet implemented")
         scheduleDataLocalSource.setSchedule(schedule, callback)
     }
 
@@ -49,6 +49,10 @@ class ScheduleRepository (
      */
     override fun getAllSchedules(callback: GetScheduleCallback) {
         scheduleDataLocalSource.getAllSchedules(callback)
+    }
+
+    override fun getAllBalances(callback: GetBalanceCallback) {
+        scheduleDataLocalSource.getAllBalances(callback)
     }
 
     override fun removeScheduleByScheduleId(scheduleId: Long) {
@@ -191,4 +195,47 @@ class ScheduleRepository (
             INSTANCE = null
         }
     }
+
+    /**
+     * categoryIdを指定してカテゴリデータ情報を取得
+     *
+     * @param categoryId 　カテゴリ番号
+     * @param callback    取得後の処理。引数に取得した情報をとる
+     */
+    override fun getCategoriesData(categoryId: Int, callback: GetCategoriesDataCallback) {
+        scheduleDataLocalSource.getCategoriesData(categoryId, callback)
+    }
+
+    override fun getCategoryData(balanceCategoryId: Int, callback: GetCategoryDataCallback) {
+        scheduleDataLocalSource.getCategoryData(balanceCategoryId, callback)
+    }
+
+    /**
+     * 大カテゴリ全件取得
+     *
+     * @param callback    取得後の処理。引数に取得した情報をとる
+     */
+    override fun getCategory(callback: GetCategoryCallback) {
+        scheduleDataLocalSource.getCategory(callback)
+    }
+
+    /**
+     * 家計簿カテゴリ情報DBに追加する
+     *
+     * @param balanceCategory    balanceCategoryオブジェクト
+     * @param callback 　保存完了後の処理、保存失敗時の処理
+     */
+    override fun insertBalanceCategory(balanceCategory: BalanceCategory, callback: SaveBalanceCategoryCallback) {
+        scheduleDataLocalSource.insertBalanceCategory(balanceCategory, callback)
+    }
+
+    /**
+     * groupIdを指定してグループ情報を削除
+     *
+     * @param balanceCategoryId サブカテゴリID
+     */
+    override fun deleteBalanceCategory(balanceCategoryId: Int, callback: DeleteCallback) {
+        scheduleDataLocalSource.deleteBalanceCategory(balanceCategoryId, callback)
+    }
+
 }

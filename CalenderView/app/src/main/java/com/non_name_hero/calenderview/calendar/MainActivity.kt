@@ -76,18 +76,16 @@ class MainActivity : AppCompatActivity() {
 //            pigIconButton.visibility = View.GONE
 //            calendarIconButton.visibility = View.VISIBLE
 //            changeMode(true)
-            binding.apply{
-                this.viewmodel?.setCurrentMode(false)
-            }
+            binding.viewmodel?.setCurrentMode(false)
+
         }
         calendarIconButton.setOnClickListener {
             /*カレンダー画面にスケジュール内容表示*/
 //            calendarIconButton.visibility = View.GONE
 //            pigIconButton.visibility = View.VISIBLE
 //            changeMode(false)
-            binding.apply{
-                this.viewmodel?.setCurrentMode(true)
-            }
+            binding.viewmodel?.setCurrentMode(true)
+
         }
         /************************************************/
 

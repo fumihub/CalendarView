@@ -82,40 +82,37 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/priceLayout">
 
+        <ImageButton
+            android:id="@+id/categoryIconButton"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/unclassified_icon"
+            android:scaleType="centerInside"
+            style="?android:attr/borderlessButtonStyle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/categoryButton"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_weight="1"/>
+
         <Button
             android:id="@+id/categoryButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="0dp"
-            android:layout_marginBottom="10dp"
+            android:layout_margin="10dp"
             android:background="#00000000"
             style="?android:attr/borderlessButtonStyle"
-            android:text="アイコン"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/categorySelectButton"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_weight="2"/>
-
-        <Button
-            android:id="@+id/categorySelectButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="0dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="#00000000"
-            style="?android:attr/borderlessButtonStyle"
-            android:text="カテゴリー"
-            app:layout_constraintStart_toEndOf="@+id/categoryButton"
+            android:text="未分類"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:gravity="left|center_vertical"
+            app:layout_constraintStart_toEndOf="@+id/categoryIconButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintHorizontal_weight="5"/>
+            app:layout_constraintHorizontal_weight="6"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     <!--**********************************************-->

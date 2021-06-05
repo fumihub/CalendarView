@@ -12,6 +12,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -44,10 +45,7 @@ class InputActivity  /*コンストラクタ*/
     private lateinit var timeButton: Button                 /*時間入力表示ボタン*/
     private lateinit var color1: Button                     /*ColorSelectActivity遷移ボタン1*/
     private lateinit var color2: Button                     /*ColorSelectActivity遷移ボタン1*/
-    private lateinit var mapCheckButton1: Button            /*GoogleMap遷移ボタン1*/
-    private lateinit var mapCheckButton2: Button            /*GoogleMap遷移ボタン2*/
-    private lateinit var mapCheckButton3: Button            /*GoogleMap遷移ボタン3*/
-    private lateinit var mapCheckButton4: Button            /*GoogleMap遷移ボタン4*/
+    private lateinit var mapCheckButton: ImageButton        /*GoogleMap遷移ボタン*/
     private lateinit var detailButton: Button               /*詳細入力表示ボタン*/
     private lateinit var cancelButton: Button               /*キャンセルボタン*/
     private lateinit var doneButton: Button                 /*保存ボタン*/
@@ -84,10 +82,7 @@ class InputActivity  /*コンストラクタ*/
         color1 = findViewById(R.id.colorButton1)
         color2 = findViewById(R.id.colorButton2)
         detailButton = findViewById(R.id.detailButton)
-        mapCheckButton1 = findViewById(R.id.mapCheckButton1)
-        mapCheckButton2 = findViewById(R.id.mapCheckButton2)
-        mapCheckButton3 = findViewById(R.id.mapCheckButton3)
-        mapCheckButton4 = findViewById(R.id.mapCheckButton4)
+        mapCheckButton = findViewById(R.id.mapCheckButton)
         detailButton = findViewById(R.id.detailButton)
         detailButton = findViewById(R.id.detailButton)
         place = findViewById(R.id.place)
@@ -111,10 +106,7 @@ class InputActivity  /*コンストラクタ*/
         startTime.visibility = View.GONE
         endTime.visibility = View.GONE
         timeArrow.visibility = View.GONE
-        mapCheckButton1.visibility = View.GONE
-        mapCheckButton2.visibility = View.GONE
-        mapCheckButton3.visibility = View.GONE
-        mapCheckButton4.visibility = View.GONE
+        mapCheckButton.visibility = View.GONE
         place.visibility = View.GONE
         memo.visibility = View.GONE
         /*********************************************/
@@ -138,8 +130,8 @@ class InputActivity  /*コンストラクタ*/
         /*********************************************/
 
         /*初期値を設定********************************/
-        startDate.setText("$month/$day")
-        endDate.setText("$month/$day")
+        startDate.setText(String.format("%02d / %02d", month, day))
+        endDate.setText(String.format("%02d / %02d", month, day))
         /*********************************************/
 
         /*開始日時EditTextが押されたとき*************/
@@ -267,29 +259,14 @@ class InputActivity  /*コンストラクタ*/
         detailButton.setOnClickListener {
             /*詳細入力表示に*/
             detailButton.visibility = View.GONE
-            mapCheckButton1.visibility = View.VISIBLE
-            mapCheckButton2.visibility = View.VISIBLE
-            mapCheckButton3.visibility = View.VISIBLE
-            mapCheckButton4.visibility = View.VISIBLE
+            mapCheckButton.visibility = View.VISIBLE
             place.visibility = View.VISIBLE
             memo.visibility = View.VISIBLE
         }
         /*********************************************/
 
         /*マップチェックボタンが押されたとき********/
-        mapCheckButton1.setOnClickListener {
-            /*GoogleMapへ遷移*/
-            goGoogleMap()
-        }
-        mapCheckButton2.setOnClickListener {
-            /*GoogleMapへ遷移*/
-            goGoogleMap()
-        }
-        mapCheckButton3.setOnClickListener {
-            /*GoogleMapへ遷移*/
-            goGoogleMap()
-        }
-        mapCheckButton4.setOnClickListener {
+        mapCheckButton.setOnClickListener {
             /*GoogleMapへ遷移*/
             goGoogleMap()
         }
