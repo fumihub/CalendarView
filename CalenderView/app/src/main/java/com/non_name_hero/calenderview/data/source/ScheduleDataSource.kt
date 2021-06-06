@@ -103,6 +103,6 @@ interface ScheduleDataSource {
     }
 
     fun insertBalanceCategory(balanceCategory: BalanceCategory, callback: SaveBalanceCategoryCallback)
-    fun deleteBalanceCategory(balanceCategoryId: Int, callback: DeleteCallback)
+    fun deleteBalanceCategory(categoryId: Int, balanceCategoryId: Int, callback: DeleteCallback)
 
 }

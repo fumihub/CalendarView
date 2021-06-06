@@ -129,7 +129,8 @@ interface SchedulesDao {
     @Query("DELETE FROM balance_category WHERE balance_category_id = :balanceCategoryId")
     fun deleteBalanceCategoryByBalanceCategoryId(balanceCategoryId: Int)
 
-    @Query("UPDATE balance SET balance_category_id = 1 WHERE balance_category_id = :balanceCategoryId")
-    fun setDefaultBalanceCategoryId(balanceCategoryId: Int)
+    /*削除されたサブカテゴリーの家計簿記録のカテゴリーについて大カテゴリーを引き当て*/
+    @Query("UPDATE balance SET balance_category_id = :categoryId WHERE balance_category_id = :balanceCategoryId")
+    fun setDefaultBalanceCategoryId(categoryId: Int, balanceCategoryId: Int)
 
 }

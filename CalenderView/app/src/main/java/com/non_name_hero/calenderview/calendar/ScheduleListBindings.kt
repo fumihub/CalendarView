@@ -1,9 +1,14 @@
 package com.non_name_hero.calenderview.calendar
 
 import android.widget.GridView
+import android.widget.ListView
 import androidx.databinding.BindingAdapter
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.non_name_hero.calenderview.data.CalendarData
+import com.non_name_hero.calenderview.inputForm.ListAdapter
+import com.non_name_hero.calenderview.inputForm.SubCategoryListAdapter
+import com.non_name_hero.calenderview.inputForm.SubCategorySelectActivity
 
 object ScheduleListBindings {
     /**
@@ -40,6 +45,22 @@ object ScheduleListBindings {
                     setCalendarDataForScheduleList(calendarDataList)
                 }
             }
+        }
+    }
+
+    @BindingAdapter("colorEditMode")
+    @kotlin.jvm.JvmStatic
+    fun setColorEditMode(view: ListView, editMode: LiveData<Boolean>) {
+        with(view.adapter as ListAdapter) {
+            this.colorEditMode = editMode.value?:false
+        }
+    }
+
+    @BindingAdapter("editMode")
+    @kotlin.jvm.JvmStatic
+    fun setEditMode(view: ListView, editMode: LiveData<Boolean>) {
+        with(view.adapter as SubCategoryListAdapter) {
+            this.editMode = editMode.value?:false
         }
     }
 

@@ -155,10 +155,10 @@ class ScheduleDataLocalSource  //コンストラクタ
         appExecutors.diskIO.execute(runnable)
     }
 
-    override fun deleteBalanceCategory(balanceCategoryId: Int, callback: DeleteCallback) {
+    override fun deleteBalanceCategory(categoryId: Int, balanceCategoryId: Int, callback: DeleteCallback) {
         val runnable = Runnable {
             schedulesDao.deleteBalanceCategoryByBalanceCategoryId(balanceCategoryId)
-            schedulesDao.setDefaultBalanceCategoryId(balanceCategoryId)
+            schedulesDao.setDefaultBalanceCategoryId(categoryId, balanceCategoryId)
             appExecutors.mainThread.execute { callback.onDeleted() }
         }
         appExecutors.diskIO.execute(runnable)

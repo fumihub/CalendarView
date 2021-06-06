@@ -230,12 +230,12 @@ class ScheduleRepository (
     }
 
     /**
-     * groupIdを指定してグループ情報を削除
-     *
+     * balanceCategoryIdを指定してグループ情報を削除
+     * @param categoryId カテゴリID
      * @param balanceCategoryId サブカテゴリID
      */
-    override fun deleteBalanceCategory(balanceCategoryId: Int, callback: DeleteCallback) {
-        scheduleDataLocalSource.deleteBalanceCategory(balanceCategoryId, callback)
+    override fun deleteBalanceCategory(categoryId: Int, balanceCategoryId: Int, callback: DeleteCallback) {
+        scheduleDataLocalSource.deleteBalanceCategory(categoryId, balanceCategoryId, callback)
     }
 
 }

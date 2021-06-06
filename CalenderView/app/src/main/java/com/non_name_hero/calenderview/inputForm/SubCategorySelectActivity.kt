@@ -2,8 +2,8 @@ package com.non_name_hero.calenderview.inputForm
 
 import android.content.Context
 import android.content.DialogInterface
-import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -11,21 +11,28 @@ import android.widget.ListView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.databinding.DataBindingUtil
 import com.non_name_hero.calenderview.R
 import com.non_name_hero.calenderview.data.BalanceCategory
 import com.non_name_hero.calenderview.data.CategoryData
 import com.non_name_hero.calenderview.data.ScheduleGroup
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource
 import com.non_name_hero.calenderview.data.source.ScheduleRepository
+import com.non_name_hero.calenderview.databinding.ColorSelectBinding
+import com.non_name_hero.calenderview.databinding.SubCategorySelectBinding
 import com.non_name_hero.calenderview.utils.Injection
+import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadBalanceCategoryDeleteDialog
 import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDeleteDialog
 import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDialogBase
 import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDialogFragment
+import com.non_name_hero.calenderview.utils.obtainViewModel
 import java.lang.Boolean.TRUE
 import java.util.ArrayList
 
 class SubCategorySelectActivity  /*コンストラクタ*/
-    : AppCompatActivity(), PigLeadDeleteDialog {
+    : AppCompatActivity(), PigLeadBalanceCategoryDeleteDialog {
+
+    private lateinit var binding: SubCategorySelectBinding          /*SubCategorySelectActivityのbinding*/
 
     private lateinit var context: Context                           /*SubCategorySelectActivityのcontext*/
 
@@ -47,7 +54,12 @@ class SubCategorySelectActivity  /*コンストラクタ*/
         /*初期設定***************************************/
         context = this
         repository = Injection.provideScheduleRepository(context)
-        setContentView(R.layout.sub_category_select)
+        //DataBinding
+        binding = DataBindingUtil.setContentView(this, R.layout.sub_category_select)
+        /*ビューモデル設定*/
+        binding.viewModel = obtainViewModel()
+        //LifecycleOwnerを指定
+        binding.lifecycleOwner = this
         val myToolbar = findViewById<View>(R.id.subCategorySelectToolbar) as Toolbar
         editButton = findViewById(R.id.editButton)
         subcategoryCreateButton = findViewById(R.id.subcategoryCreateButton)
@@ -71,12 +83,12 @@ class SubCategorySelectActivity  /*コンストラクタ*/
             /*ボタンの文字が「編集」ならば*/
             if (editButton.text.toString() == "編集") {
                 /*リストビューに削除ボタン表示*/
-                jdgEditMode(java.lang.Boolean.TRUE, "完了")
+                jdgEditMode(true, "完了")
                 /*サブカテゴリー作成ボタン非表示*/
                 subcategoryCreateButton.visibility = View.GONE
             } else {
                 /*リストビューから削除ボタンを非表示に*/
-                jdgEditMode(java.lang.Boolean.FALSE, "編集")
+                jdgEditMode(false, "編集")
                 /*サブカテゴリー作成ボタン表示*/
                 subcategoryCreateButton.visibility = View.VISIBLE
             }
@@ -88,6 +100,8 @@ class SubCategorySelectActivity  /*コンストラクタ*/
             /*サブカテゴリー作成ポップアップ表示*/
             val subCategoryEditText: EditText = EditText(this);
             subCategoryEditText.hint = "サブカテゴリー名"
+            /*改行禁止*/
+            subCategoryEditText.inputType = InputType.TYPE_CLASS_TEXT
             AlertDialog.Builder(this)
                 .setTitle("サブカテゴリー作成")
                 .setMessage("サブカテゴリー名を入力してください。")
@@ -117,13 +131,14 @@ class SubCategorySelectActivity  /*コンストラクタ*/
     /*TODO SharedPreferenceからViewModelに変更*/
     /*編集モードかを判定する関数********************/
     private fun jdgEditMode(value: Boolean, str: String) {
-        /*SharedPreferenceでeditFlagの値を変更*/
-        val prefs = getSharedPreferences("input_data", MODE_PRIVATE)
-        val editor = prefs.edit()
-        /*SharedPreferenceにeditFlagの値を保存*/
-        editor.putBoolean("editFlag", value)
-        /*非同期処理ならapply()、同期処理ならcommit()*/
-        editor.apply()
+//        /*SharedPreferenceでeditFlagの値を変更*/
+//        val prefs = getSharedPreferences("input_data", MODE_PRIVATE)
+//        val editor = prefs.edit()
+//        /*SharedPreferenceにeditFlagの値を保存*/
+//        editor.putBoolean("editFlag", value)
+//        /*非同期処理ならapply()、同期処理ならcommit()*/
+//        editor.apply()
+        binding.viewModel?.setCurrentEditSubCategoryMode(value)
         listView.adapter = ListAdapter
         /*ボタン文字の切り替え(編集/完了)*/
         editButton.text = str
@@ -185,11 +200,12 @@ class SubCategorySelectActivity  /*コンストラクタ*/
      * @param callback ダイアログのボタン押下時の処理
      * @return dialog DialogFragmentのオブジェクト
      */
-    override fun getDeleteDialog(scheduleGroup: ScheduleGroup?, callback: PigLeadDialogBase.DialogCallback): PigLeadDialogFragment? {
+    override fun getBalanceCategoryDeleteDialog(catgegoryData: CategoryData?, callback: PigLeadDialogBase.DialogCallback): PigLeadDialogFragment? {
         /*表示させるメッセージの定義*/
-        val dialogMessages = ArrayList(listOf(*resources.getStringArray(R.array.delete_schedule_group_dialog_massage)))
+        val dialogMessages = ArrayList(listOf(*resources.getStringArray(R.array.delete_balance_category_dialog_massage)))
         /*表示メッセージに削除対象の名前を挿入*/
-        dialogMessages[0] = String.format(dialogMessages[0], scheduleGroup?.groupName)
+        dialogMessages[0] = String.format(dialogMessages[0], catgegoryData?.categoryName)
+        dialogMessages[2] = String.format(dialogMessages[2], catgegoryData?.bigCategoryName)
         val positiveBtnMessage = getString(R.string.delete_schedule_group_positive)
         val negativeBtnMessage = getString(R.string.delete_schedule_group_negative)
         /*AlertDialogを設定*/
@@ -201,6 +217,7 @@ class SubCategorySelectActivity  /*コンストラクタ*/
                 .setNegativeClickListener { dialog, which -> callback.onClickNegativeBtn() }
         return dialog
     }
+
     /************************************************/
 
     /*削除警告ダイアログ表示関数*********************/
@@ -216,4 +233,11 @@ class SubCategorySelectActivity  /*コンストラクタ*/
         private const val DELETE_DIALOG_TAG = "DELETE_DIALOG"
     }
     /************************************************/
+
+    /**
+     * ViewModelを取得する
+     * (this.obtainViewModel(Class: ViewModel)は拡張関数)
+     * @return viewModel {CalendarViewModel} カレンダー関連の情報を保持するViewModel
+     */
+    fun obtainViewModel(): SubCategorySelectViewModel = this.obtainViewModel(SubCategorySelectViewModel::class.java)
 }

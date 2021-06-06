@@ -86,7 +86,7 @@ class ScheduleDataRemoteSource() : ScheduleDataSource {
     override fun getCategory(callback: GetCategoryCallback) {}
     override fun insertBalanceCategory(balanceCategory: BalanceCategory, callback: SaveBalanceCategoryCallback) {}
 
-    override fun deleteBalanceCategory(balanceCategoryId: Int, callback: DeleteCallback) {}
+    override fun deleteBalanceCategory(categoryId: Int, balanceCategoryId: Int, callback: DeleteCallback) {}
 
     fun <T> autoCast(obj: Any?): T? {
         return obj as T?
