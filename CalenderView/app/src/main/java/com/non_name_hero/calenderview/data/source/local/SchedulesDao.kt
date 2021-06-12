@@ -50,11 +50,20 @@ interface SchedulesDao {
 
 
     /*ScheduleAndGroup*/
-    @get:Query("SELECT s.schedule_id AS scheduleId, s.title AS scheduleTitle, s.start_at_datetime AS scheduleStartAtDatetime, s.end_at_datetime AS scheduleEndAtDatetime, CASE WHEN g.group_id IS NOT NULL THEN g.group_id ELSE 1 END AS groupId, " +
-            "g.background_color AS groupTextColor, g.color_number AS groupColorNumber, g.background_color AS groupBackgroundColor " +
-            "FROM schedule s " +
-            "LEFT JOIN schedule_group g ON g.group_id = s.group_id " +
-            "ORDER BY s.schedule_id DESC")
+    @get:Query("""
+        SELECT
+            s.schedule_id AS scheduleId,
+            s.title AS scheduleTitle,
+            s.start_at_datetime AS scheduleStartAtDatetime,
+            s.end_at_datetime AS scheduleEndAtDatetime,
+            CASE WHEN g.group_id IS NOT NULL THEN g.group_id ELSE 1 END AS groupId,
+            g.background_color AS groupTextColor,
+            g.color_number AS groupColorNumber,
+            g.background_color AS groupBackgroundColor
+        FROM schedule s 
+            LEFT JOIN schedule_group g ON g.group_id = s.group_id
+        ORDER BY s.schedule_id DESC
+            """)
     val allCalendarDataList: List<CalendarData>
 
 
@@ -126,7 +135,6 @@ interface SchedulesDao {
     /*削除されたサブカテゴリーの家計簿記録のカテゴリーについて大カテゴリーを引き当て*/
     @Query("UPDATE balance SET balance_category_id = :categoryId WHERE balance_category_id = :balanceCategoryId")
     fun setDefaultBalanceCategoryId(categoryId: Int, balanceCategoryId: Int)
-
 
     /*category*/
     @get:Query("SELECT * FROM category ORDER BY category_id")
