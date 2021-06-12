@@ -2,10 +2,7 @@ package com.non_name_hero.calenderview.data.source
 
 import android.annotation.SuppressLint
 import androidx.core.util.Preconditions
-import com.non_name_hero.calenderview.data.BalanceCategory
-import com.non_name_hero.calenderview.data.CalendarData
-import com.non_name_hero.calenderview.data.Schedule
-import com.non_name_hero.calenderview.data.ScheduleGroup
+import com.non_name_hero.calenderview.data.*
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource.*
 import java.util.*
 
@@ -21,6 +18,8 @@ class ScheduleRepository (
     var mCalendarCacheIsDirty = false
     var mHolidayCacheIsDirty = false
 
+
+    /*Schedule*/
     /**
      * スケジュールIDを指定して情報を取得
      *
@@ -29,6 +28,15 @@ class ScheduleRepository (
      */
     override fun getSchedule(scheduleId: LongArray, callback: GetScheduleCallback) {
         scheduleDataLocalSource.getSchedule(scheduleId, callback)
+    }
+
+    /**
+     * 全てのスケジュールデータを取得
+     *
+     * @param callback
+     */
+    override fun getAllSchedules(callback: GetScheduleCallback) {
+        scheduleDataLocalSource.getAllSchedules(callback)
     }
 
     /**
@@ -41,51 +49,9 @@ class ScheduleRepository (
         scheduleDataLocalSource.setSchedule(schedule, callback)
     }
 
-
-    /**
-     * 全てのスケジュールデータを取得
-     *
-     * @param callback
-     */
-    override fun getAllSchedules(callback: GetScheduleCallback) {
-        scheduleDataLocalSource.getAllSchedules(callback)
-    }
-
-    override fun getAllBalances(callback: GetBalanceCallback) {
-        scheduleDataLocalSource.getAllBalances(callback)
-    }
-
+    /*スケジュール情報をDBから削除する*/
     override fun removeScheduleByScheduleId(scheduleId: Long) {
         scheduleDataLocalSource.removeScheduleByScheduleId(scheduleId)
-    }
-
-    fun holidayCacheClear() {
-        mHolidayCacheIsDirty = false
-        mCachedHolidayCalenderData = null
-    }
-
-    /**
-     * 祝日データを取得
-     *
-     * @param callback 取得後の処理
-     */
-    override fun getHoliday(callback: LoadHolidayCalendarDataCallback) {
-        if (mCachedHolidayCalenderData == null && mHolidayCacheIsDirty == false) {
-            mCachedHolidayCalenderData = ArrayList()
-            mScheduleDataRemoteSource.getHoliday(object : LoadHolidayCalendarDataCallback {
-                override fun onHolidayCalendarDataLoaded(calendarDataList: List<CalendarData>) {
-                    //キャッシュを保持
-                    mCachedHolidayCalenderData = calendarDataList
-                    callback.onHolidayCalendarDataLoaded(calendarDataList)
-                }
-
-                override fun onDataNotAvailable() {
-                    callback.onDataNotAvailable()
-                }
-            })
-        } else {
-            callback.onHolidayCalendarDataLoaded(mCachedHolidayCalenderData!!)
-        }
     }
 
     fun scheduleCacheClear() {
@@ -93,25 +59,8 @@ class ScheduleRepository (
         mCachedScheduleMap = null
     }
 
-    /**
-     * グループ情報DBに追加する
-     *
-     * @param group    グループオブジェクト
-     * @param callback 　保存完了後の処理、保存失敗時の処理
-     */
-    override fun insertScheduleGroup(group: ScheduleGroup, callback: SaveScheduleGroupCallback) {
-        scheduleDataLocalSource.insertScheduleGroup(group, callback)
-    }
 
-    /**
-     * groupIdを指定してグループ情報を削除
-     *
-     * @param groupId カラー番号
-     */
-    override fun deleteScheduleGroup(groupId: Int, callback: DeleteCallback) {
-        scheduleDataLocalSource.deleteScheduleGroup(groupId, callback)
-    }
-
+    /*ScheduleGroup*/
     /**
      * colorNumberを指定してグループ情報を取得
      *
@@ -132,6 +81,16 @@ class ScheduleRepository (
     }
 
     /**
+     * グループ情報DBに追加する
+     *
+     * @param group    グループオブジェクト
+     * @param callback 　保存完了後の処理、保存失敗時の処理
+     */
+    override fun insertScheduleGroup(group: ScheduleGroup, callback: SaveScheduleGroupCallback) {
+        scheduleDataLocalSource.insertScheduleGroup(group, callback)
+    }
+
+    /**
      * スケジュールグループを更新
      * primaryを合わせる
      * @param group 更新対象のスケジュールグループ
@@ -141,9 +100,44 @@ class ScheduleRepository (
         scheduleDataLocalSource.updateScheduleGroup(group, callback)
     }
 
-    fun calendarCacheClear() {
-        mCachedCalendarData = null
-        mCalendarCacheIsDirty = false
+    /**
+     * groupIdを指定してグループ情報を削除
+     *
+     * @param groupId カラー番号
+     */
+    override fun deleteScheduleGroup(groupId: Int, callback: DeleteCallback) {
+        scheduleDataLocalSource.deleteScheduleGroup(groupId, callback)
+    }
+
+
+    /*CalendarData*/
+    /**
+     * 祝日データを取得
+     *
+     * @param callback 取得後の処理
+     */
+    override fun getHoliday(callback: LoadHolidayCalendarDataCallback) {
+        if (mCachedHolidayCalenderData == null && mHolidayCacheIsDirty == false) {
+            mCachedHolidayCalenderData = ArrayList()
+            mScheduleDataRemoteSource.getHoliday(object : LoadHolidayCalendarDataCallback {
+                override fun onHolidayCalendarDataLoaded(calendarDataList: List<CalendarData>) {
+                    /*キャッシュを保持*/
+                    mCachedHolidayCalenderData = calendarDataList
+                    callback.onHolidayCalendarDataLoaded(calendarDataList)
+                }
+
+                override fun onDataNotAvailable() {
+                    callback.onDataNotAvailable()
+                }
+            })
+        } else {
+            callback.onHolidayCalendarDataLoaded(mCachedHolidayCalenderData!!)
+        }
+    }
+
+    fun holidayCacheClear() {
+        mHolidayCacheIsDirty = false
+        mCachedHolidayCalenderData = null
     }
 
     /**
@@ -168,6 +162,76 @@ class ScheduleRepository (
         }
     }
 
+    fun calendarCacheClear() {
+        mCachedCalendarData = null
+        mCalendarCacheIsDirty = false
+    }
+
+
+    /*Balance*/
+    override fun getAllBalances(callback: GetBalanceCallback) {
+        scheduleDataLocalSource.getAllBalances(callback)
+    }
+
+    override fun insertBalance(balance: Balance, callback: SaveBalanceCallback) {
+        scheduleDataLocalSource.insertBalance(balance, callback)
+    }
+
+    override fun removeBalanceByBalanceId(balanceId: Long) {
+        scheduleDataLocalSource.removeBalanceByBalanceId(balanceId)
+    }
+
+
+    /*CategoryData*/
+    /**
+     * categoryIdを指定してカテゴリデータ情報を全取得
+     *
+     * @param categoryId 　カテゴリ番号
+     * @param callback    取得後の処理。引数に取得した情報をとる
+     */
+    override fun getCategoriesData(categoryId: Int, callback: GetCategoriesDataCallback) {
+        scheduleDataLocalSource.getCategoriesData(categoryId, callback)
+    }
+
+    /*カテゴリデータ情報を1件取得*/
+    override fun getCategoryData(balanceCategoryId: Int, callback: GetCategoryDataCallback) {
+        scheduleDataLocalSource.getCategoryData(balanceCategoryId, callback)
+    }
+
+
+    /*Category*/
+    /**
+     * 大カテゴリ全件取得
+     *
+     * @param callback    取得後の処理。引数に取得した情報をとる
+     */
+    override fun getCategory(callback: GetCategoryCallback) {
+        scheduleDataLocalSource.getCategory(callback)
+    }
+
+
+    /*BalanceCategory*/
+    /**
+     * balanceCategory情報DBに追加する
+     *
+     * @param balanceCategory    balanceCategoryオブジェクト
+     * @param callback 　保存完了後の処理、保存失敗時の処理
+     */
+    override fun insertBalanceCategory(balanceCategory: BalanceCategory, callback: SaveBalanceCategoryCallback) {
+        scheduleDataLocalSource.insertBalanceCategory(balanceCategory, callback)
+    }
+
+    /**
+     * balanceCategoryIdを指定してbalanceCategory情報を削除
+     * @param categoryId カテゴリID
+     * @param balanceCategoryId サブカテゴリID
+     */
+    override fun deleteBalanceCategory(categoryId: Int, balanceCategoryId: Int, callback: DeleteCallback) {
+        scheduleDataLocalSource.deleteBalanceCategory(categoryId, balanceCategoryId, callback)
+    }
+
+
+    /*singleTon*/
     companion object {
         private var INSTANCE: ScheduleRepository? = null
 
@@ -195,47 +259,4 @@ class ScheduleRepository (
             INSTANCE = null
         }
     }
-
-    /**
-     * categoryIdを指定してカテゴリデータ情報を取得
-     *
-     * @param categoryId 　カテゴリ番号
-     * @param callback    取得後の処理。引数に取得した情報をとる
-     */
-    override fun getCategoriesData(categoryId: Int, callback: GetCategoriesDataCallback) {
-        scheduleDataLocalSource.getCategoriesData(categoryId, callback)
-    }
-
-    override fun getCategoryData(balanceCategoryId: Int, callback: GetCategoryDataCallback) {
-        scheduleDataLocalSource.getCategoryData(balanceCategoryId, callback)
-    }
-
-    /**
-     * 大カテゴリ全件取得
-     *
-     * @param callback    取得後の処理。引数に取得した情報をとる
-     */
-    override fun getCategory(callback: GetCategoryCallback) {
-        scheduleDataLocalSource.getCategory(callback)
-    }
-
-    /**
-     * 家計簿カテゴリ情報DBに追加する
-     *
-     * @param balanceCategory    balanceCategoryオブジェクト
-     * @param callback 　保存完了後の処理、保存失敗時の処理
-     */
-    override fun insertBalanceCategory(balanceCategory: BalanceCategory, callback: SaveBalanceCategoryCallback) {
-        scheduleDataLocalSource.insertBalanceCategory(balanceCategory, callback)
-    }
-
-    /**
-     * balanceCategoryIdを指定してグループ情報を削除
-     * @param categoryId カテゴリID
-     * @param balanceCategoryId サブカテゴリID
-     */
-    override fun deleteBalanceCategory(categoryId: Int, balanceCategoryId: Int, callback: DeleteCallback) {
-        scheduleDataLocalSource.deleteBalanceCategory(categoryId, balanceCategoryId, callback)
-    }
-
 }

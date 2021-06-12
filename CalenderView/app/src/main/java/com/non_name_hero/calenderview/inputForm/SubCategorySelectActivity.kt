@@ -46,7 +46,7 @@ class SubCategorySelectActivity  /*コンストラクタ*/
 
     private lateinit var repository: ScheduleRepository             /**/
 
-    private var categoryId = 0                                      /*カテゴリID*/
+    private var categoryId = 21                                      /*カテゴリID*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
