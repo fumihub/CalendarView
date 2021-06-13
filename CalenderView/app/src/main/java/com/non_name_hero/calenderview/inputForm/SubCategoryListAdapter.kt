@@ -18,7 +18,7 @@ import com.non_name_hero.calenderview.data.ScheduleGroup
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource.DeleteCallback
 import com.non_name_hero.calenderview.data.source.ScheduleRepository
 import com.non_name_hero.calenderview.utils.Injection
-import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDeleteDialog
+import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadBalanceCategoryDeleteDialog
 import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDialogBase.DialogCallback
 import java.util.*
 
@@ -32,7 +32,9 @@ class SubCategoryListAdapter(private val mContext: Context, activity: Activity) 
 
     private val mActivity: Activity                                             /*SubCategorySelectActivityのActivity*/
 
-    var deleteDialog: PigLeadDeleteDialog? = null                               /**/
+    var deleteDialog: PigLeadBalanceCategoryDeleteDialog? = null                /**/
+
+    var editMode: Boolean = false
 
     /*カスタムセルを拡張したらここでWigetを定義*/
     private class ViewHolder {
@@ -92,9 +94,10 @@ class SubCategoryListAdapter(private val mContext: Context, activity: Activity) 
 
         /*TODO　ViewModeに切り替え*/
         //TODO　削除ボタン表示
-        /*SharedPreferenceからeditFlagの値を取得*/
-        val prefs = mContext.getSharedPreferences("input_data", Context.MODE_PRIVATE)
-        if (prefs.getBoolean("editFlag", false)
+//        /*SharedPreferenceからeditFlagの値を取得*/
+//        val prefs = mContext.getSharedPreferences("input_data", Context.MODE_PRIVATE)
+
+        if (editMode
                 && list[position].editableFlg) {
             holder.destroyButton.visibility = View.VISIBLE
         } else {
@@ -103,71 +106,74 @@ class SubCategoryListAdapter(private val mContext: Context, activity: Activity) 
 
         /*クリックリスナー設定*/
         holder.categoryButton.setOnClickListener {
-            if (prefs.getBoolean("editFlag", false)) {
-                if (list[position].editableFlg) {
-                    /* 何もしない */
-                } else {
-                    goCategoryCreateActivity(position)
-                }
+            if (editMode) {
+                /* 何もしない */
+//                if (list[position].editableFlg) {
+//                    /* 何もしない */
+//                } else {
+//                    goCategoryCreateActivity(position)
+//                }
             } else {
                 returnCategorySelectActivity(position)
             }
         }
         holder.categoryIconButton.setOnClickListener {
-            if (prefs.getBoolean("editFlag", false)) {
-                if (list[position].editableFlg) {
-                    /* 何もしない */
-                } else {
-                    goCategoryCreateActivity(position)
-                }
+            if (editMode) {
+                /* 何もしない */
+//                if (list[position].editableFlg) {
+//                    /* 何もしない */
+//                } else {
+//                    goCategoryCreateActivity(position)
+//                }
             } else {
                 returnCategorySelectActivity(position)
             }
         }
         /************************/
 
-//        holder.destroyButton.setOnClickListener {
-//            val scheduleGroup = list[position]
-//            /*指定したpositionを削除するダイアログを作成*/
-//            val dialog = deleteDialog!!.getDeleteDialog(scheduleGroup, object : DialogCallback {
-//                override fun onClickPositiveBtn() {
-//                    val groupId = scheduleGroup.groupId
-//                    /*DBから削除*/
-//                    repository.deleteScheduleGroup(groupId, object : DeleteCallback {
-//                        override fun onDeleted() {
-//                            list.removeAt(position)
-//                            notifyDataSetChanged()
-//                        }
-//
-//                        override fun onDataNotDeleted() {
-//                            Log.d("ERROR", "削除に失敗しました。")
-//                        }
-//                    })
-//                }
-//
-//                override fun onClickNegativeBtn() {
-//                    /*何もしない*/
-//                }
-//            })
-//            deleteDialog!!.showPigLeadDiaLog(dialog)
-//        }
+        holder.destroyButton.setOnClickListener {
+            val categoryData = list[position]
+            /*指定したpositionを削除するダイアログを作成*/
+            val dialog = deleteDialog!!.getBalanceCategoryDeleteDialog(categoryData, object : DialogCallback {
+                override fun onClickPositiveBtn() {
+                    val categoryId = categoryData.categoryId
+                    val balanceCategoryId = categoryData.balanceCategoryId
+                    /*DBから削除*/
+                    repository.deleteBalanceCategory(categoryId, balanceCategoryId, object : DeleteCallback {
+                        override fun onDeleted() {
+                            list.removeAt(position)
+                            notifyDataSetChanged()
+                        }
+
+                        override fun onDataNotDeleted() {
+                            Log.d("ERROR", "削除に失敗しました。")
+                        }
+                    })
+                }
+
+                override fun onClickNegativeBtn() {
+                    /*何もしない*/
+                }
+            })
+            deleteDialog!!.showPigLeadDiaLog(dialog)
+        }
 
         return view
     }
 
     /************************************************/
 
-    /*カテゴリ作成画面に遷移*******************************/
-    private fun goCategoryCreateActivity(position: Int) {
-        /*カテゴリ作成画面遷移用intent*/
-        val intentOut = Intent(mContext, SubCategoryCreateActivity::class.java)
-        /*カテゴリIDを遷移先へgo*/
-        intentOut.putExtra("CategoryId", list[position].categoryId)
-        /*戻り値を設定してカテゴリ作成画面に遷移*/
-        mActivity.startActivityForResult(intentOut, REQUEST_CODE)
-    }
-
-    /************************************************/
+//    /*カテゴリ作成画面に遷移*******************************/
+//    private fun goCategoryCreateActivity(position: Int) {
+//        /*カテゴリ作成画面遷移用intent*/
+//        val intentOut = Intent(mContext, SubCategoryCreateActivity::class.java)
+//        /*カテゴリIDを遷移先へgo*/
+//        intentOut.putExtra("CategoryId", list[position].categoryId)
+//        /*戻り値を設定してカテゴリ作成画面に遷移*/
+//        mActivity.startActivityForResult(intentOut, REQUEST_CODE)
+//    }
+//
+//    /************************************************/
 
     /*カテゴリ選択画面に遷移********************************/
     private fun returnCategorySelectActivity(position: Int) {

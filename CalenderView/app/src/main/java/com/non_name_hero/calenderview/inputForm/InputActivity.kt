@@ -275,8 +275,8 @@ class InputActivity  /*コンストラクタ*/
         /*完了ボタンが押されたとき*******************/
         doneButton.setOnClickListener {
             /*保存処理を実行*/
-            mInputPresenter.saveSchedule(title.text.toString(), memo.text.toString(), mStartAtDatetime.time, mEndAtDatetime.time, mGroupId, 0)
             /*カレンダー表示画面に遷移*/
+            mInputPresenter.saveSchedule(title.text.toString(), memo.text.toString(), mStartAtDatetime.time, mEndAtDatetime.time, mGroupId, 0)
         }
         /*********************************************/
 

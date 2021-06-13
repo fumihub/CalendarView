@@ -34,6 +34,8 @@ class ListAdapter(private val mContext: Context, activity: Activity) : BaseAdapt
 
     var deleteDialog: PigLeadDeleteDialog? = null                               /**/
 
+    var colorEditMode: Boolean = false
+
     /*カスタムセルを拡張したらここでWigetを定義*/
     private class ViewHolder {
         lateinit var categoryButton: Button                                     /*ListViewのカテゴリーボタン*/
@@ -95,15 +97,15 @@ class ListAdapter(private val mContext: Context, activity: Activity) : BaseAdapt
 
         //TODO　削除ボタン表示
         /*SharedPreferenceからeditFlagの値を取得*/
-        val prefs = mContext.getSharedPreferences("input_data", Context.MODE_PRIVATE)
-        if (prefs.getBoolean("editFlag", false)
+//        val prefs = mContext.getSharedPreferences("input_data", Context.MODE_PRIVATE)
+        if (colorEditMode
                 && list[position].colorNumber != 43) {
             holder.destroyButton.visibility = View.VISIBLE
         } else {
             holder.destroyButton.visibility = View.GONE
         }
         holder.categoryButton.setOnClickListener {
-            if (prefs.getBoolean("editFlag", false)) {
+            if (colorEditMode) {
                 if (list[position].colorNumber == 43) {
                     /* 何もしない */
                 } else {
@@ -149,6 +151,8 @@ class ListAdapter(private val mContext: Context, activity: Activity) : BaseAdapt
         val intentOut = Intent(mContext, ColorCreateActivity::class.java)
         /*ボタンの色番号を遷移先へgo*/
         intentOut.putExtra("ColorNumberPre", list[position].colorNumber)
+        /*EditModeを遷移先へgo*/
+        intentOut.putExtra("ColorEditMode", colorEditMode)
         /*戻り値を設定して色画面に遷移*/
         mActivity.startActivityForResult(intentOut, REQUEST_CODE)
     }

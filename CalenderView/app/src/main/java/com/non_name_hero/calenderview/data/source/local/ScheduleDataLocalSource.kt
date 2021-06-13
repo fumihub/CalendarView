@@ -1,5 +1,6 @@
 package com.non_name_hero.calenderview.data.source.local
 
+import com.non_name_hero.calenderview.data.Balance
 import com.non_name_hero.calenderview.data.BalanceCategory
 import com.non_name_hero.calenderview.data.Schedule
 import com.non_name_hero.calenderview.data.ScheduleGroup
@@ -10,20 +11,8 @@ import com.non_name_hero.calenderview.utils.AppExecutors
 class ScheduleDataLocalSource  //コンストラクタ
 (val appExecutors: AppExecutors,
  val schedulesDao: SchedulesDao) : ScheduleDataSource {
-    /**
-     * スケジュールIDの配列からscheduleオブジェクト配列を取得
-     *
-     * @param scheduleIds
-     * @param callback
-     */
-    override fun getAllBalances(callback: GetBalanceCallback) {
-        val runnable = Runnable {
-            val schedules = schedulesDao.allBalance
-            appExecutors.mainThread.execute { callback.onBalanceLoaded(schedules) }
-        }
-        appExecutors.diskIO.execute(runnable)
-    }
 
+    /*Schedule*/
     override fun getSchedule(scheduleIds: LongArray, callback: GetScheduleCallback) {
         val runnable = Runnable {
             val schedules = schedulesDao.loadSchedulesByIds(scheduleIds)
@@ -35,7 +24,6 @@ class ScheduleDataLocalSource  //コンストラクタ
     override fun setSchedule(schedule: Schedule, callback: SaveScheduleCallback) {
         val runnable = Runnable {
             schedulesDao.insertSchedule(schedule)
-            //insert完了
             appExecutors.mainThread.execute { callback.onScheduleSaved() }
         }
         appExecutors.diskIO.execute(runnable)
@@ -54,6 +42,8 @@ class ScheduleDataLocalSource  //コンストラクタ
         appExecutors.diskIO.execute(runnable)
     }
 
+
+    /*ScheduleGroup*/
     override fun insertScheduleGroup(group: ScheduleGroup, callback: SaveScheduleGroupCallback) {
         val runnable = Runnable {
             schedulesDao.insertScheduleGroup(group)
@@ -95,7 +85,10 @@ class ScheduleDataLocalSource  //コンストラクタ
         appExecutors.diskIO.execute(runnable)
     }
 
+
+    /*CalendarData*/
     override fun getHoliday(callback: LoadHolidayCalendarDataCallback) {}
+
     override fun getCalendarDataList(callback: LoadCalendarDataCallback) {
         val runnable = Runnable {
             val calendarDataList = schedulesDao.allCalendarDataList
@@ -104,25 +97,37 @@ class ScheduleDataLocalSource  //コンストラクタ
         appExecutors.diskIO.execute(runnable)
     }
 
-    companion object {
-        @Volatile
-        private var INSTANCE: ScheduleDataLocalSource? = null
 
-        //シングルトン
-        @JvmStatic
-        fun getInstance(appExecutors: AppExecutors,
-                        usersDao: SchedulesDao): ScheduleDataLocalSource? {
-            if (INSTANCE == null) {
-                synchronized(ScheduleDataLocalSource::class.java) {
-                    if (INSTANCE == null) {
-                        INSTANCE = ScheduleDataLocalSource(appExecutors, usersDao)
-                    }
-                }
-            }
-            return INSTANCE
+    /*Balance*/
+    /**
+     * balanceIDの配列からbalanceオブジェクト配列を取得
+     *
+     * @param balanceIds
+     * @param callback
+     */
+    override fun getAllBalances(callback: GetBalanceCallback) {
+        val runnable = Runnable {
+            val balances = schedulesDao.allBalance
+            appExecutors.mainThread.execute { callback.onBalanceLoaded(balances) }
         }
+        appExecutors.diskIO.execute(runnable)
     }
 
+    override fun insertBalance(balance: Balance, callback: SaveBalanceCallback) {
+        val runnable = Runnable {
+            schedulesDao.insertBalance(balance)
+            appExecutors.mainThread.execute { callback.onBalanceSaved() }
+        }
+        appExecutors.diskIO.execute(runnable)
+    }
+
+    override fun removeBalanceByBalanceId(balanceId: Long) {
+        val runnable = Runnable { schedulesDao.deleteByBalanceId(balanceId) }
+        appExecutors.diskIO.execute(runnable)
+    }
+
+
+    /*CategoryData*/
     override fun getCategoriesData(categoryId: Int, callback: GetCategoriesDataCallback) {
         val runnable = Runnable {
             val categoryData = schedulesDao.getCategoryDataList(categoryId)
@@ -139,6 +144,8 @@ class ScheduleDataLocalSource  //コンストラクタ
         appExecutors.diskIO.execute(runnable)
     }
 
+
+    /*Category*/
     override fun getCategory(callback: GetCategoryCallback){
         val runnable = Runnable {
             val category = schedulesDao.allCategory
@@ -147,6 +154,8 @@ class ScheduleDataLocalSource  //コンストラクタ
         appExecutors.diskIO.execute(runnable)
     }
 
+
+    /*BalanceCategory*/
     override fun insertBalanceCategory(balanceCategory: BalanceCategory, callback: SaveBalanceCategoryCallback) {
         val runnable = Runnable {
             schedulesDao.insertBalanceCategory(balanceCategory)
@@ -155,12 +164,32 @@ class ScheduleDataLocalSource  //コンストラクタ
         appExecutors.diskIO.execute(runnable)
     }
 
-    override fun deleteBalanceCategory(balanceCategoryId: Int, callback: DeleteCallback) {
+    override fun deleteBalanceCategory(categoryId: Int, balanceCategoryId: Int, callback: DeleteCallback) {
         val runnable = Runnable {
             schedulesDao.deleteBalanceCategoryByBalanceCategoryId(balanceCategoryId)
-            schedulesDao.setDefaultBalanceCategoryId(balanceCategoryId)
+            schedulesDao.setDefaultBalanceCategoryId(categoryId, balanceCategoryId)
             appExecutors.mainThread.execute { callback.onDeleted() }
         }
         appExecutors.diskIO.execute(runnable)
+    }
+
+
+    /*singleTon*/
+    companion object {
+        @Volatile
+        private var INSTANCE: ScheduleDataLocalSource? = null
+
+        @JvmStatic
+        fun getInstance(appExecutors: AppExecutors,
+                        usersDao: SchedulesDao): ScheduleDataLocalSource? {
+            if (INSTANCE == null) {
+                synchronized(ScheduleDataLocalSource::class.java) {
+                    if (INSTANCE == null) {
+                        INSTANCE = ScheduleDataLocalSource(appExecutors, usersDao)
+                    }
+                }
+            }
+            return INSTANCE
+        }
     }
 }
