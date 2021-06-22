@@ -76,27 +76,38 @@ class CategoryListAdapter(private val mContext: Context, activity: Activity) : B
         /*リストのセルを取得(viewHolder)*/
         val holder: ViewHolder = view.tag as ViewHolder
 
-        /*アイコンボタン設定*/
-        val id: Int = mContext.getResources().getIdentifier(list[position].imgURL, "drawable", mContext.getPackageName())
-        holder.categoryIconButton.setImageResource(id)
-        holder.categoryIconButton.setBackgroundColor(list[position].categoryColor)
-        /*カテゴリボタン設定*/
-        holder.categoryButton.text = list[position].bigCategoryName
-        /*削除ボタン非表示*/
-        holder.destroyButton.visibility = View.GONE
+        /*収入の場合*/
+        if (list[position].categoryId == 1) {
+            /*すべてのボタンを非表示*/
+            holder.categoryIconButton.visibility = View.GONE
+            holder.categoryButton.visibility = View.GONE
+            holder.categoryButton2.visibility = View.GONE
+            holder.destroyButton.visibility = View.GONE
+        }
+        /*費用の場合*/
+        else {
+            /*アイコンボタン設定*/
+            val id: Int = mContext.getResources().getIdentifier(list[position].imgURL, "drawable", mContext.getPackageName())
+            holder.categoryIconButton.setImageResource(id)
+            holder.categoryIconButton.setBackgroundColor(list[position].categoryColor)
+            /*カテゴリボタン設定*/
+            holder.categoryButton.text = list[position].bigCategoryName
+            /*削除ボタン非表示*/
+            holder.destroyButton.visibility = View.GONE
 
-        /*クリックリスナー設定*/
-        holder.categoryButton.setOnClickListener {
-            /*サブカテゴリー選択画面遷移*/
-            goSubCategorySelectActivity(position)
-        }
-        holder.categoryButton2.setOnClickListener {
-            /*サブカテゴリー選択画面遷移*/
-            goSubCategorySelectActivity(position)
-        }
-        holder.categoryIconButton.setOnClickListener {
-            /*サブカテゴリー選択画面遷移*/
-            goSubCategorySelectActivity(position)
+            /*クリックリスナー設定*/
+            holder.categoryButton.setOnClickListener {
+                /*サブカテゴリー選択画面遷移*/
+                goSubCategorySelectActivity(position)
+            }
+            holder.categoryButton2.setOnClickListener {
+                /*サブカテゴリー選択画面遷移*/
+                goSubCategorySelectActivity(position)
+            }
+            holder.categoryIconButton.setOnClickListener {
+                /*サブカテゴリー選択画面遷移*/
+                goSubCategorySelectActivity(position)
+            }
         }
 
         return view

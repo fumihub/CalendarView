@@ -24,7 +24,7 @@ class CategorySelectActivity  /*コンストラクタ*/
 
     private lateinit var repository: ScheduleRepository             /**/
 
-    private var balanceCategoryId = 21                               /*サブカテゴリID*/
+    private var balanceCategoryId = 22                               /*サブカテゴリID*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,7 +67,7 @@ class CategorySelectActivity  /*コンストラクタ*/
             REQUEST_CODE -> when (resultCode) {
                 RESULT_OK -> {
                     /*バランスカテゴリID受け取り*/
-                    balanceCategoryId = data!!.getIntExtra("BalanceCategoryId", 21)
+                    balanceCategoryId = data!!.getIntExtra("BalanceCategoryId", 22)
                     /*InputBalanceActivity遷移用intent*/
                     val intentOut = Intent(this, InputBalanceActivity::class.java)
                     /*バランスカテゴリIDを遷移先へreturn*/
