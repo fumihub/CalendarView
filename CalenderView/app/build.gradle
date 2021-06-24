@@ -79,6 +79,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
+    /*通知システム用ライブラリ*/
+    implementation "com.android.support:support-compat:28.0.0"
 
 }
 tasks.withType(JavaCompile) {
