@@ -114,6 +114,7 @@ class InputBalanceActivity  /*コンストラクタ*/
                 price.setText("")
             }
         }
+        /*クリックされたとき¥0に戻す*/
         price.setOnClickListener {
             price.setText("")
         }
