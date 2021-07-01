@@ -40,14 +40,18 @@ class InputBalanceActivity  /*コンストラクタ*/
     private lateinit var usedDate: EditText                 /*使用日付*/
     private lateinit var title: EditText                    /*内容*/
 
+    private lateinit var incomeButton: Button               /*収入ボタン*/
+    private lateinit var costButton: Button                 /*費用ボタン*/
     private lateinit var categoryIconButton: ImageButton    /*カテゴリーボタン(アイコン用)*/
     private lateinit var categoryButton: Button             /*カテゴリーセレクトボタン(カテゴリー名用)*/
     private lateinit var cancelButton: Button               /*キャンセルボタン*/
     private lateinit var doneButton: Button                 /*保存ボタン*/
 
+    private var categoryId = 1                               /*カテゴリID*/
     private var balanceCategoryId = 21                       /*サブカテゴリID*/
 
     private var topZeroJudgeFlag:Boolean = false            /*先頭0判定フラグ*/
+    private var balanceFlag:Boolean = false                 /*収入費用フラグ*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +63,8 @@ class InputBalanceActivity  /*コンストラクタ*/
 
         /*入力画面表示*************************************/
         /*カレンダーセルのボタンが押された場合*/
+        incomeButton = findViewById(R.id.incomeButton)
+        costButton = findViewById(R.id.costButton)
         price = findViewById(R.id.price)
         priceText = findViewById(R.id.priceText)
         categoryIconButton = findViewById(R.id.categoryIconButton)
@@ -77,6 +83,28 @@ class InputBalanceActivity  /*コンストラクタ*/
         usedDate.setText(String.format("%02d / %02d", month, day))
         mUsedAtDatetime = Calendar.getInstance()
         mUsedAtDatetime.set(year, month - 1, day)
+        incomeButton.setBackgroundColor(0)
+        /*********************************************/
+
+        /*収入ボタンが押されたとき*************************/
+        incomeButton.setOnClickListener {
+            /*収入費用フラグON*/
+            balanceFlag = true
+            /*収入ボタンバッググランドカラーをredColor3に設定*/
+            incomeButton.setBackgroundColor(-16728065)
+            /*費用ボタンバッググランドカラーを透明に設定*/
+            costButton.setBackgroundColor(0)
+        }
+        /*********************************************/
+        /*費用ボタンが押されたとき************************/
+        costButton.setOnClickListener {
+            /*収入費用フラグOFF*/
+            balanceFlag = false
+            /*費用ボタンバッググランドカラーをblueColor3に設定*/
+            costButton.setBackgroundColor(-1027705)
+            /*収入ボタンバッググランドカラーを透明に設定*/
+            incomeButton.setBackgroundColor(0)
+        }
         /*********************************************/
 
         /*金額が入力されたとき************************/
@@ -213,11 +241,22 @@ class InputBalanceActivity  /*コンストラクタ*/
 
     /*カテゴリー選択画面遷移関数*********************/
     private fun goCategorySelectActivity() {
-        /*カテゴリー選択画面遷移用intent*/
-        /*TODO カテゴリー選択画面作成*/
-        val intentOut = Intent(this, CategorySelectActivity::class.java)
-        /*戻り値を設定して色選択画面に遷移*/
-        startActivityForResult(intentOut, InputBalanceActivity.REQUEST_CODE)
+        /*収入の場合*/
+        if (balanceFlag) {
+            /*サブカテゴリー選択画面遷移用intent*/
+            val intentSubCategorySelect = Intent(this, SubCategorySelectActivity::class.java)
+            /*カテゴリIDを引数として渡す*/
+            intentSubCategorySelect.putExtra("CategoryID", categoryId)
+            /*戻り値を設定して色選択画面に遷移*/
+            startActivityForResult(intentSubCategorySelect, REQUEST_CODE)
+        }
+        /*費用の場合*/
+        else {
+            /*カテゴリー選択画面遷移用intent*/
+            val intentCategorySelect = Intent(this, CategorySelectActivity::class.java)
+            /*戻り値を設定して色選択画面に遷移*/
+            startActivityForResult(intentCategorySelect, REQUEST_CODE)
+        }
     }
     /************************************************/
 
