@@ -8,27 +8,20 @@ import android.widget.Button
 import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.databinding.DataBindingUtil
 import com.non_name_hero.calenderview.R
-import com.non_name_hero.calenderview.calendar.CalendarViewModel
-import com.non_name_hero.calenderview.calendar.MainActivity
 import com.non_name_hero.calenderview.data.ScheduleGroup
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource.GetScheduleGroupsCallback
 import com.non_name_hero.calenderview.data.source.ScheduleRepository
-import com.non_name_hero.calenderview.databinding.ActivityMainBinding
-import com.non_name_hero.calenderview.databinding.ColorSelectBinding
 import com.non_name_hero.calenderview.utils.Injection
 import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDeleteDialog
 import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDialogBase.DialogCallback
 import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDialogFragment
-import com.non_name_hero.calenderview.utils.obtainViewModel
 
 class ColorSelectActivity  /*コンストラクタ*/
     : AppCompatActivity(), PigLeadDeleteDialog {
 
-    private lateinit var binding: ColorSelectBinding                /*ColorSelectActivityのbinding*/
-
     private lateinit var context: Context                           /*ColorSelectActivityのcontext*/
+
 
     private lateinit var ListAdapter: ListAdapter                   /*色グループリストアダプタ*/
 
@@ -39,6 +32,7 @@ class ColorSelectActivity  /*コンストラクタ*/
 
     private lateinit var repository: ScheduleRepository             /**/
 
+    private var createFlag = false                                  /*画面作成時フラグ*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,12 +40,7 @@ class ColorSelectActivity  /*コンストラクタ*/
         /*初期設定***************************************/
         context = this
         repository = Injection.provideScheduleRepository(context)
-        //DataBinding
-        binding = DataBindingUtil.setContentView(this, R.layout.color_select)
-        //LifecycleOwnerを指定
-        binding.lifecycleOwner = this
-        /*ビューモデル設定*/
-        binding.viewModel = obtainViewModel()
+        setContentView(R.layout.color_select)
         val myToolbar = findViewById<View>(R.id.colorSelectToolbar) as Toolbar
         editButton = findViewById(R.id.editButton)
         colorCreateButton = findViewById(R.id.colorCreateButton)
@@ -94,31 +83,32 @@ class ColorSelectActivity  /*コンストラクタ*/
         }
         /************************************************/
 
+        /*editFlag判定用Flag*/
+        createFlag = true
     }
 
-//    /*画面表示時処理関数*******************************/
-//    public override fun onResume() {
-//        super.onResume()
-//
-//        /*アプリ再開時にeditFlagを0にする*/
-//        /*リストビューから削除ボタンを非表示に*/
-//        jdgEditMode(false, "編集")
-//        /*色作成ボタン表示*/
-//        colorCreateButton.visibility = View.VISIBLE
-//    }
-//
-//    /************************************************/
+    /*画面表示時処理関数*******************************/
+    public override fun onResume() {
+        super.onResume()
+
+        /*アプリ再開時にeditFlagを0にする*/
+        /*リストビューから削除ボタンを非表示に*/
+        jdgEditMode(false, "編集")
+        /*色作成ボタン表示*/
+        colorCreateButton.visibility = View.VISIBLE
+    }
+
+    /************************************************/
 
     /*編集モードかを判定する関数********************/
     private fun jdgEditMode(value: Boolean, str: String) {
-//        /*SharedPreferenceでeditFlagの値を変更*/
-//        val prefs = getSharedPreferences("input_data", MODE_PRIVATE)
-//        val editor = prefs.edit()
-//        /*SharedPreferenceにeditFlagの値を保存*/
-//        editor.putBoolean("editFlag", value)
-//        /*非同期処理ならapply()、同期処理ならcommit()*/
-//        editor.apply()
-        binding.viewModel?.setCurrentEditColorMode(value)
+        /*SharedPreferenceでeditFlagの値を変更*/
+        val prefs = getSharedPreferences("input_data", MODE_PRIVATE)
+        val editor = prefs.edit()
+        /*SharedPreferenceにeditFlagの値を保存*/
+        editor.putBoolean("editFlag", value)
+        /*非同期処理ならapply()、同期処理ならcommit()*/
+        editor.apply()
         listView.adapter = ListAdapter
         /*ボタン文字の切り替え(編集/完了)*/
         editButton.text = str
@@ -211,12 +201,4 @@ class ColorSelectActivity  /*コンストラクタ*/
         private const val DELETE_DIALOG_TAG = "DELETE_DIALOG"
     }
     /************************************************/
-
-    /**
-     * ViewModelを取得する
-     * (this.obtainViewModel(Class: ViewModel)は拡張関数)
-     * @return viewModel {CalendarViewModel} カレンダー関連の情報を保持するViewModel
-     */
-    fun obtainViewModel(): ColorSelectViewModel = this.obtainViewModel(ColorSelectViewModel::class.java)
-
 }

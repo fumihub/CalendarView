@@ -3,9 +3,6 @@ package com.non_name_hero.calenderview.data.source
 import com.non_name_hero.calenderview.data.*
 
 interface ScheduleDataSource {
-
-    /*Schedule用コールバック*/
-    /*全件取得時のコールバック*/
     interface GetScheduleCallback {
         fun onScheduleLoaded(schedules: List<Schedule>)
         fun onDataNotAvailable()
@@ -15,26 +12,34 @@ interface ScheduleDataSource {
         fun onScheduleMapLoaded(scheduleStringMap: Map<String, List<Schedule>>)
     }
 
-    /**
-     * Schedule追加時コールバック
-     * onScheduleSaved() -　保存成功時の処理
-     * onDataNotSaved() - 保存失敗時の処理
-     */
     interface SaveScheduleCallback {
         fun onScheduleSaved()
         fun onDataNotSaved()
     }
 
+    interface GetCategoriesDataCallback {
+        fun onCategoriesDataLoaded(categoryData:List<CategoryData>)
+        fun onDataNotAvailable()
+    }
+    //1件取得時コールバック
+    interface GetCategoryDataCallback {
+        fun onCategoryDataLoaded(categoryData: CategoryData)
+    }
+
+    interface GetCategoryCallback {
+        fun onCategoryLoaded(category:List<Category>)
+        fun onDataNotAvailable()
+    }
+
     fun getSchedule(ScheduleIds: LongArray, callback: GetScheduleCallback)
     fun setSchedule(schedule: Schedule, callback: SaveScheduleCallback)
     fun getAllSchedules(callback: GetScheduleCallback)
+    fun getAllBalances(callback: GetBalanceCallback)
     fun removeScheduleByScheduleId(scheduleId: Long)
 
-
-    /*スケジュールグループ用コールバック*/
     /**
-     * ScheduleGroup追加時コールバック
-     * onScheduleGroupSaved() -　保存成功時の処理
+     * ScheduleGroupのコールバック
+     * onGroupSaved() -　保存成功時の処理
      * onDataNotSaved() - 保存失敗時の処理
      */
     interface SaveScheduleGroupCallback {
@@ -42,15 +47,27 @@ interface ScheduleDataSource {
         fun onDataNotSaved()
     }
 
-    /*全件取得時のコールバック*/
+    //複数件取得時のコールバック
     interface GetScheduleGroupsCallback {
         fun onScheduleGroupsLoaded(Groups: List<ScheduleGroup>)
         fun onDataNotAvailable()
     }
 
-    /*1件取得時コールバック*/
+    //1件取得時コールバック
     interface GetScheduleGroupCallback {
         fun onScheduleGroupLoaded(group: ScheduleGroup)
+    }
+
+    //複数件取得時のコールバック
+    interface GetBalanceCallback {
+        fun onBalanceLoaded(Groups: List<Balance>)
+        fun onDataNotAvailable()
+    }
+
+    // 削除時のコールバック
+    interface DeleteCallback {
+        fun onDeleted()
+        fun onDataNotDeleted()
     }
 
     fun insertScheduleGroup(group: ScheduleGroup, callback: SaveScheduleGroupCallback)
@@ -58,9 +75,6 @@ interface ScheduleDataSource {
     fun getScheduleGroup(colorNumber: Int, callback: GetScheduleGroupCallback)
     fun getListScheduleGroup(callback: GetScheduleGroupsCallback)
     fun updateScheduleGroup(group: ScheduleGroup, callback: SaveScheduleGroupCallback)
-
-
-    /*CalendarData用コールバッグ*/
     interface LoadHolidayCalendarDataCallback {
         fun onHolidayCalendarDataLoaded(calendarDataList: List<CalendarData>)
         fun onDataNotAvailable()
@@ -74,57 +88,12 @@ interface ScheduleDataSource {
     fun getHoliday(callback: LoadHolidayCalendarDataCallback)
     fun getCalendarDataList(callback: LoadCalendarDataCallback)
 
-
-    /*Balance用コールバック*/
-    /*全件取得時のコールバック*/
-    interface GetBalanceCallback {
-        fun onBalanceLoaded(Balances: List<Balance>)
-        fun onDataNotAvailable()
-    }
-
-    /**
-     * Balance追加時コールバック
-     * onBalanceSaved() -　保存成功時の処理
-     * onDataNotSaved() - 保存失敗時の処理
-     */
-    interface SaveBalanceCallback {
-        fun onBalanceSaved()
-        fun onDataNotSaved()
-    }
-
-    fun insertBalance(balance: Balance, callback: SaveBalanceCallback)
-    fun removeBalanceByBalanceId(balanceId: Long)
-    fun getAllBalances(callback: GetBalanceCallback)
-
-
-    /*CategoryData用コールバック*/
-    /*全要素取得時コールバック*/
-    interface GetCategoriesDataCallback {
-        fun onCategoriesDataLoaded(categoryData:List<CategoryData>)
-        fun onDataNotAvailable()
-    }
-    /*1件取得時コールバック*/
-    interface GetCategoryDataCallback {
-        fun onCategoryDataLoaded(categoryData: CategoryData)
-    }
-
     fun getCategoriesData(categoryId: Int, callback: GetCategoriesDataCallback)
     fun getCategoryData(balanceCategoryId: Int, callback: GetCategoryDataCallback)
-
-
-    /*Category用コールバック*/
-    /*全件取得時コールバック*/
-    interface GetCategoryCallback {
-        fun onCategoryLoaded(category:List<Category>)
-        fun onDataNotAvailable()
-    }
-
     fun getCategory(callback: GetCategoryCallback)
 
-
-    /*BalanceCategory用コールバック*/
     /**
-     * BalanceCategory追加時コールバック
+     * BalanceCategoryのコールバック
      * onBalanceCategorySaved() -　保存成功時の処理
      * onDataNotSaved() - 保存失敗時の処理
      */
@@ -134,13 +103,6 @@ interface ScheduleDataSource {
     }
 
     fun insertBalanceCategory(balanceCategory: BalanceCategory, callback: SaveBalanceCategoryCallback)
-    fun deleteBalanceCategory(categoryId: Int, balanceCategoryId: Int, callback: DeleteCallback)
+    fun deleteBalanceCategory(balanceCategoryId: Int, callback: DeleteCallback)
 
-
-    /*共通*/
-    /*削除時コールバック*/
-    interface DeleteCallback {
-        fun onDeleted()
-        fun onDataNotDeleted()
-    }
 }
