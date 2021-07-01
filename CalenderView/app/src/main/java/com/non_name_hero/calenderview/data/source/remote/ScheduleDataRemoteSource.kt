@@ -4,10 +4,7 @@ import android.content.ContentValues
 import android.util.Log
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
-import com.non_name_hero.calenderview.data.BalanceCategory
-import com.non_name_hero.calenderview.data.CalendarData
-import com.non_name_hero.calenderview.data.Schedule
-import com.non_name_hero.calenderview.data.ScheduleGroup
+import com.non_name_hero.calenderview.data.*
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource.*
 import com.non_name_hero.calenderview.utils.AppExecutors
@@ -17,37 +14,25 @@ class ScheduleDataRemoteSource() : ScheduleDataSource {
     private val PIGLEAD_SCHEDULES = "PigLeadSchedules"
     private val HOLIDAY_DOCUMENT = "holiday"
 
-    //リモートデータベース
+    /*リモートデータベース*/
     private val db: FirebaseFirestore
-    override fun getSchedule(ScheduleIds: LongArray, callback: GetScheduleCallback) {
-        //リモートデータソースは使用しない
-    }
 
-    override fun setSchedule(schedule: Schedule, callback: SaveScheduleCallback) {
-        //リモートデータソースは使用しない
-    }
+    /*CalendarData*/
+    override fun getCalendarDataList(callback: LoadCalendarDataCallback) {}
 
-    override fun getAllSchedules(callback: GetScheduleCallback) {
-        //リモートデータソースは使用しない
-    }
-
-    override fun getAllBalances(callback: GetBalanceCallback) {
-        //リモートデータソースは使用しない
-    }
-
-    override fun removeScheduleByScheduleId(scheduleId: Long) {}
     override fun getHoliday(callback: LoadHolidayCalendarDataCallback) {
-        //以下は別スレッドにて実行
+        /*以下は別スレッドにて実行*/
         db.collection(PIGLEAD_SCHEDULES)
                 .document(HOLIDAY_DOCUMENT)
                 .get()
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val document = task.result
-                        //documentにドキュメントデータがあればtrue
+                        /*documentにドキュメントデータがあればtrue*/
                         if (document!!.exists()) {
-                            val holiday = document.data //documentからholidayNameのバリューを取得
-                            //受け取ったデータを整形
+                            /*documentからholidayNameのバリューを取得*/
+                            val holiday = document.data
+                            /*受け取ったデータを整形*/
                             val holidaySchedules: MutableList<CalendarData> = ArrayList()
                             for (obj in holiday!!.values) {
                                 val holidayData = autoCast<Map<String, Any>>(obj)!!
@@ -58,7 +43,7 @@ class ScheduleDataRemoteSource() : ScheduleDataSource {
                                 data.isHoliday = true
                                 holidaySchedules.add(data)
                             }
-                            //callbackに引数を渡す(データ配列)
+                            /*callbackに引数を渡す(データ配列)*/
                             callback.onHolidayCalendarDataLoaded(holidaySchedules)
                             Log.d(ContentValues.TAG, holiday.toString())
                         } else {
@@ -71,27 +56,49 @@ class ScheduleDataRemoteSource() : ScheduleDataSource {
                 }
     }
 
-    override fun insertScheduleGroup(group: ScheduleGroup, callback: SaveScheduleGroupCallback) {}
-    override fun deleteScheduleGroup(groupId: Int, callback: DeleteCallback) {
-        //リモートでは処理しない
-    }
 
+    /*Schedule*/
+    override fun getSchedule(ScheduleIds: LongArray, callback: GetScheduleCallback) {}
+    override fun setSchedule(schedule: Schedule, callback: SaveScheduleCallback) {}
+    override fun getAllSchedules(callback: GetScheduleCallback) {}
+    override fun removeScheduleByScheduleId(scheduleId: Long) {}
+
+
+    /*ScheduleGroup*/
+    override fun insertScheduleGroup(group: ScheduleGroup, callback: SaveScheduleGroupCallback) {}
+    override fun deleteScheduleGroup(groupId: Int, callback: DeleteCallback) {}
     override fun getScheduleGroup(colorNumber: Int, callback: GetScheduleGroupCallback) {}
     override fun getListScheduleGroup(callback: GetScheduleGroupsCallback) {}
     override fun updateScheduleGroup(group: ScheduleGroup, callback: SaveScheduleGroupCallback) {}
-    override fun getCalendarDataList(callback: LoadCalendarDataCallback) {}
+
+
+    /*Balance*/
+    override fun getAllBalances(callback: GetBalanceCallback) {}
+    override fun insertBalance(balance: Balance, callback: SaveBalanceCallback) {}
+    override fun removeBalanceByBalanceId(balanceId: Long) {}
+
+
+    /*CategoryData*/
     override fun getCategoriesData(categoryId: Int, callback: GetCategoriesDataCallback) {}
     override fun getCategoryData(categoryId: Int, callback: GetCategoryDataCallback) {}
 
-    override fun getCategory(callback: GetCategoryCallback) {}
-    override fun insertBalanceCategory(balanceCategory: BalanceCategory, callback: SaveBalanceCategoryCallback) {}
 
-    override fun deleteBalanceCategory(balanceCategoryId: Int, callback: DeleteCallback) {}
+    /*Category*/
+    override fun getCategory(callback: GetCategoryCallback) {}
+
+
+    /*BalanceCategory*/
+    override fun insertBalanceCategory(balanceCategory: BalanceCategory, callback: SaveBalanceCategoryCallback) {}
+    override fun deleteBalanceCategory(categoryId: Int, balanceCategoryId: Int, callback: DeleteCallback) {}
+
+
 
     fun <T> autoCast(obj: Any?): T? {
         return obj as T?
     }
 
+
+    /*singleTon*/
     companion object {
         @Volatile
         private var INSTANCE: ScheduleDataRemoteSource? = null
@@ -103,6 +110,7 @@ class ScheduleDataRemoteSource() : ScheduleDataSource {
             return INSTANCE
         }
     }
+
 
     init {
         db = FirebaseFirestore.getInstance()

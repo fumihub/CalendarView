@@ -13,5 +13,6 @@ interface InputContract {
     //Presenterへの入力、出力のインターフェース
     interface Presenter : BasePresenter {
         fun saveSchedule(title: String?, description: String?, startAtSchedule: Date?, endAtSchedule: Date?, groupId: Int, paymentId: Int)
+        fun saveBalance(price: Long, balanceCategoryId: Int, usedAtDatetime: Date, title: String?)
     }
 }

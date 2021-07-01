@@ -35,6 +35,7 @@ class ColorCreateActivity  /*コンストラクタ*/
     private var colorNumberPre = 43                         /*色番号前回値(0~48)(デフォルトで未分類(43)に設定)*/
     private var colorNumber = 43                            /*色番号(0~48)(デフォルトで未分類(43)に設定)*/
     private var color = 0                                   /*色グループの色*/
+    private var colorEditMode = false                       /*編集モード*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,10 +58,11 @@ class ColorCreateActivity  /*コンストラクタ*/
 
         /*色ボタン情報表示*******************************/
         /*SharedPreferenceからeditFlagの値を取得*/
-        val prefs = getSharedPreferences("input_data", MODE_PRIVATE)
-        if (prefs.getBoolean("editFlag", false)) {
+//        val prefs = getSharedPreferences("input_data", MODE_PRIVATE)
+        val intentIn = intent
+        colorEditMode = intentIn.getBooleanExtra("ColorEditMode", false)
+        if (colorEditMode) {
             /*表示する色番号を取得*/
-            val intentIn = intent
             colorNumberPre = intentIn.getIntExtra("ColorNumberPre", 43)
             colorNumber = colorNumberPre
             /*DBからcolorNumberをキーにその要素を取得*/
@@ -151,8 +153,8 @@ class ColorCreateActivity  /*コンストラクタ*/
         } else {
             /*編集画面でない場合***********************/
             /*SharedPreferenceからeditFlagの値を取得*/
-            val prefs = getSharedPreferences("input_data", MODE_PRIVATE)
-            if (!prefs.getBoolean("editFlag", false)) {
+//            val prefs = getSharedPreferences("input_data", MODE_PRIVATE)
+            if (!colorEditMode) {
                 repository.insertScheduleGroup(
                         ScheduleGroup(
                                 colorNumber,
