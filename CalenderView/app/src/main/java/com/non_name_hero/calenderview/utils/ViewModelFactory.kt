@@ -8,8 +8,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.NewInstanceFactory
 import com.non_name_hero.calenderview.calendar.CalendarViewModel
 import com.non_name_hero.calenderview.data.source.ScheduleRepository
-import com.non_name_hero.calenderview.inputForm.ColorSelectViewModel
-import com.non_name_hero.calenderview.inputForm.SubCategorySelectViewModel
 
 class ViewModelFactory private constructor(private val mScheduleRepository: ScheduleRepository) : ViewModelProvider.NewInstanceFactory() {
 
@@ -18,10 +16,6 @@ class ViewModelFactory private constructor(private val mScheduleRepository: Sche
             when{
                 isAssignableFrom(CalendarViewModel::class.java) ->
                     CalendarViewModel(mScheduleRepository)
-                isAssignableFrom(ColorSelectViewModel::class.java) ->
-                    ColorSelectViewModel()
-                isAssignableFrom(SubCategorySelectViewModel::class.java) ->
-                    SubCategorySelectViewModel()
                 else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
             }
         } as T

@@ -6,6 +6,39 @@ import com.non_name_hero.calenderview.data.*
 @Dao
 interface SchedulesDao {
 
+    /*Balance*/
+    @get:Query("SELECT * FROM balance ORDER BY balance_id")
+    val allBalance: List<Balance>
+
+    @Query("SELECT * FROM balance WHERE balance_id IN (:balanceIDs)")
+    fun loadBalancesByIds(balanceIDs: LongArray): List<Balance>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertBalance(balance: Balance)
+
+    @Delete
+    fun deleteBalance(balance: Balance?)
+
+    @Query("DELETE FROM balance WHERE balance_id = :balanceId")
+    fun deleteByBalanceId(balanceId: Long)
+
+    /*BalanceCategory*/
+    @get:Query("SELECT * FROM balance_category ORDER BY balance_category_id")
+    val allBalanceCategory: List<BalanceCategory>
+
+    /*category*/
+    @get:Query("SELECT * FROM category ORDER BY category_id")
+    val allCategory: List<Category>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertCategory(category: Category)
+
+    @Update
+    fun updateCategory(categories: Category)
+
+    @Delete
+    fun deleteCategory(category: Category)
+
     /*Schedule*/
     @get:Query("SELECT * FROM schedule ORDER BY start_at_datetime, schedule_id")
     val allSchedules: List<Schedule>
@@ -25,6 +58,8 @@ interface SchedulesDao {
     @Query("DELETE FROM schedule WHERE schedule_id = :scheduleId")
     fun deleteByScheduleId(scheduleId: Long)
 
+    @Query("UPDATE schedule SET group_id = 1 WHERE group_id = :groupId")
+    fun setDefaultGroupId(groupId: Int)
 
     /*ScheduleGroup*/
     @get:Query("SELECT * FROM schedule_group ORDER BY group_id DESC")
@@ -45,10 +80,6 @@ interface SchedulesDao {
     @Query("SELECT group_id, color_number, group_name, character_color, background_color FROM schedule_group WHERE color_number = :colorNumber")
     fun getScheduleGroupByColorNumber(colorNumber: Int): List<ScheduleGroup>
 
-    @Query("UPDATE schedule SET group_id = 1 WHERE group_id = :groupId")
-    fun setDefaultGroupId(groupId: Int)
-
-
     /*ScheduleAndGroup*/
     @get:Query("""
         SELECT
@@ -66,9 +97,7 @@ interface SchedulesDao {
             """)
     val allCalendarDataList: List<CalendarData>
 
-
     /*CategoryAndBalanceCategory*/
-    /*CategoryAndBalanceCategoryの全ての要素をリストとして取り出す*/
     @Query("""
         SELECT 
             c.category_id AS categoryId, 
@@ -86,7 +115,6 @@ interface SchedulesDao {
         """)
     fun getCategoryDataList(categoryId: Int): List<CategoryData>
 
-    /*CategoryAndBalanceCategoryから１つの要素をリストとして取り出す*/
     @Query("""
         SELECT 
             c.category_id AS categoryId, 
@@ -104,39 +132,13 @@ interface SchedulesDao {
         """)
     fun getCategoryDataByBalanceCategoryId(balanceCategoryId: Int): List<CategoryData>
 
-
-    /*Balance*/
-    @get:Query("SELECT * FROM balance ORDER BY balance_id")
-    val allBalance: List<Balance>
-
-    @Query("SELECT * FROM balance WHERE balance_id IN (:balanceIds)")
-    fun loadBalancesByIds(balanceIds: LongArray): List<Balance>
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertBalance(balance: Balance)
-
-    @Delete
-    fun deleteBalance(balance: Balance?)
-
-    @Query("DELETE FROM balance WHERE balance_id = :balanceId")
-    fun deleteByBalanceId(balanceId: Long)
-
-
-    /*BalanceCategory*/
-    @get:Query("SELECT * FROM balance_category ORDER BY balance_category_id")
-    val allBalanceCategory: List<BalanceCategory>
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertBalanceCategory(balanceCategory: BalanceCategory)
 
     @Query("DELETE FROM balance_category WHERE balance_category_id = :balanceCategoryId")
     fun deleteBalanceCategoryByBalanceCategoryId(balanceCategoryId: Int)
 
-    /*削除されたサブカテゴリーの家計簿記録のカテゴリーについて大カテゴリーを引き当て*/
-    @Query("UPDATE balance SET balance_category_id = :categoryId WHERE balance_category_id = :balanceCategoryId")
-    fun setDefaultBalanceCategoryId(categoryId: Int, balanceCategoryId: Int)
+    @Query("UPDATE balance SET balance_category_id = 1 WHERE balance_category_id = :balanceCategoryId")
+    fun setDefaultBalanceCategoryId(balanceCategoryId: Int)
 
-    /*category*/
-    @get:Query("SELECT * FROM category ORDER BY category_id")
-    val allCategory: List<Category>
 }
