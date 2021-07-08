@@ -1,5 +1,6 @@
 package com.non_name_hero.calenderview.calendar
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
@@ -11,6 +12,7 @@ import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.non_name_hero.calenderview.R
 import com.non_name_hero.calenderview.databinding.ActivityMainBinding
+import com.non_name_hero.calenderview.inputForm.SettingActivity
 import com.non_name_hero.calenderview.utils.ActivityUtils
 import com.non_name_hero.calenderview.utils.obtainViewModel
 
@@ -21,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mAdView: AdView
     private lateinit var pigIconButton: ImageButton             /*家計簿画面切り替えボタン*/
     private lateinit var calendarIconButton: ImageButton        /*スケジュール画面切り替えボタン*/
+    private lateinit var settingIconButton: ImageButton         /*設定画面切り替えボタン*/
     private var createFlag = false                              /*画面作成時フラグ*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,7 +69,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        /*TODO ツールバーにスケジュール入力と家計簿入力を切り替えるボタン追加*/
+        /*設定ボタン設定*/
+        settingIconButton = findViewById(R.id.settingIconButton)
+        settingIconButton.setOnClickListener {
+            /*設定画面遷移*/
+            goSettingActivity()
+        }
+
         /*スケジュール→家計簿切り替えボタン設定********/
         pigIconButton = findViewById(R.id.pigIconButton)
         calendarIconButton = findViewById(R.id.calendarIconButton)
@@ -98,6 +107,14 @@ class MainActivity : AppCompatActivity() {
         /*balanceFlag判定用Flag*/
         createFlag = true
     }
+
+    /*設定画面遷移関数*********************/
+    private fun goSettingActivity() {
+        /*設定画面遷移用intent*/
+        val intentOut = Intent(this, SettingActivity::class.java)
+        startActivityForResult(intentOut, REQUEST_CODE)
+    }
+    /************************************************/
 
     /*画面表示時処理関数*******************************/
     public override fun onResume() {
@@ -136,4 +153,11 @@ class MainActivity : AppCompatActivity() {
      * @return viewModel {CalendarViewModel} カレンダー関連の情報を保持するViewModel
      */
     fun obtainViewModel(): CalendarViewModel = this.obtainViewModel(CalendarViewModel::class.java)
+
+    /*定数定義****************************************/
+    companion object {
+        private const val REQUEST_CODE = 1
+    }
+
+    /************************************************/
 }

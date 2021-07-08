@@ -28,7 +28,10 @@
         <activity android:name=".inputForm.InputBalanceActivity"/>
         <activity android:name=".inputForm.CategorySelectActivity"/>
         <activity android:name=".inputForm.SubCategorySelectActivity"/>
-        <activity android:name=".inputForm.SubCategoryCreateActivity"/>
+        <!--入力画面アクティビティ(設定)-->
+        <activity android:name=".inputForm.SettingActivity"/>
+        <activity android:name=".inputForm.UserSettingActivity"/>
+        <activity android:name=".inputForm.NotificationSettingActivity"/>
         <!--広告用設定-->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

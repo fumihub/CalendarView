@@ -14,4 +14,29 @@
         <item>@color/toolbar_nov</item>
         <item>@color/toolbar_dec</item>
     </array>
+
+    <array name="schedule_notification_array">
+        <item>なし</item>
+        <item>当日9時</item>
+        <item>当日8時</item>
+        <item>当日7時</item>
+        <item>当日6時</item>
+        <item>当日5時</item>
+        <item>前日23時</item>
+        <item>前日22時</item>
+        <item>前日21時</item>
+        <item>前日20時</item>
+        <item>前日19時</item>
+    </array>
+
+    <array name="balance_notification_array">
+        <item>なし</item>
+        <item>当日23時</item>
+        <item>当日22時</item>
+        <item>当日21時</item>
+        <item>当日20時</item>
+        <item>当日19時</item>
+        <item>当日18時</item>
+    </array>
+
 </resources>
