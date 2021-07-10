@@ -46,7 +46,7 @@ class SubCategorySelectActivity  /*コンストラクタ*/
 
     private lateinit var repository: ScheduleRepository             /**/
 
-    private var categoryId = 21                                      /*カテゴリID*/
+    private var categoryId = 22                                      /*カテゴリID*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -182,7 +182,7 @@ class SubCategorySelectActivity  /*コンストラクタ*/
     private fun loadCategoriesDataList() {
         /*表示するカテゴリIDを取得*/
         val intentIn = intent
-        categoryId = intentIn.getIntExtra("CategoryID", 21)
+        categoryId = intentIn.getIntExtra("CategoryID", 22)
         repository.getCategoriesData(categoryId,object : ScheduleDataSource.GetCategoriesDataCallback {
             override fun onCategoriesDataLoaded(CategoryData: List<CategoryData>) {
                 //取得後の処理

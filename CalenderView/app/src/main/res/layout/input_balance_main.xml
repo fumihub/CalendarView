@@ -30,6 +30,58 @@
 
     </androidx.appcompat.widget.Toolbar>
 
+    <!--収入、費用選択********************************-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/balanceLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputBalanceToolbar">
+
+        <Button
+            android:id="@+id/incomeButton"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/blueColor3"
+            style="?android:attr/borderlessButtonStyle"
+            android:text="収入"
+            android:textStyle="bold"
+            android:textSize="25sp"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/costButton"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_weight="1"/>
+
+        <Button
+            android:id="@+id/costButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/redColor3"
+            style="?android:attr/borderlessButtonStyle"
+            android:text="費用"
+            android:textStyle="bold"
+            android:textSize="25sp"
+            android:gravity="center"
+            app:layout_constraintStart_toEndOf="@+id/incomeButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintHorizontal_weight="1"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <!--**********************************************-->
+
     <!--金額入力**********************************-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/priceLayout"
@@ -39,7 +91,7 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputBalanceToolbar">
+        app:layout_constraintTop_toBottomOf="@+id/balanceLayout">
 
         <EditText
             android:id="@+id/price"
@@ -51,6 +103,7 @@
             android:cursorVisible="false"
             android:textAlignment="textEnd"
             android:textSize="23sp"
+            android:imeOptions="actionDone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
