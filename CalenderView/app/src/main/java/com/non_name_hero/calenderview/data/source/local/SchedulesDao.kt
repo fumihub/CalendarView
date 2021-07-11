@@ -59,7 +59,7 @@ interface SchedulesDao {
             s.start_at_datetime AS scheduleStartAtDatetime,
             s.end_at_datetime AS scheduleEndAtDatetime,
             CASE WHEN g.group_id IS NOT NULL THEN g.group_id ELSE 1 END AS groupId,
-            g.background_color AS groupTextColor,
+            g.character_color AS groupTextColor,
             g.color_number AS groupColorNumber,
             g.background_color AS groupBackgroundColor
         FROM schedule s 
@@ -78,7 +78,7 @@ interface SchedulesDao {
             s.start_at_datetime AS scheduleStartAtDatetime,
             s.end_at_datetime AS scheduleEndAtDatetime,
             CASE WHEN g.group_id IS NOT NULL THEN g.group_id ELSE 1 END AS groupId,
-            g.background_color AS groupTextColor,
+            g.character_color AS groupTextColor,
             g.color_number AS groupColorNumber,
             g.background_color AS groupBackgroundColor
         FROM schedule s 
