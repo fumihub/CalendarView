@@ -33,8 +33,7 @@ class CalendarPageFragment() : Fragment() {
     private val NUM_PAGES = 100
     private val DEFAULT_PAGE = NUM_PAGES / 2
 
-    var mProgressMonth: Int = 0
-
+    private var mProgressMonth: Int = 0
         set(value) {
             field = value - DEFAULT_PAGE
         }
@@ -67,21 +66,26 @@ class CalendarPageFragment() : Fragment() {
             this.viewmodel = (activity as MainActivity).obtainViewModel()
         }
 
-        binding.viewmodel?.holidaySchedulesMap.apply {
-            this?.observe(viewLifecycleOwner, Observer<Map<String, List<CalendarData>>> {
+        binding.viewmodel?.holidaySchedulesMap?.observe(viewLifecycleOwner, Observer<Map<String, List<CalendarData>>> {
                 mHolidayMap = it
-                // TODO 本当はスケジュールだけ更新したい
                 createCalendar(binding)
             })
-        }
 
-        createCalendar(binding)
+
+        binding.viewmodel?.calendarDataMap?.observe(viewLifecycleOwner, Observer<Map<String, List<CalendarData>>> {
+                mCalendarMap = it
+                createCalendar(binding)
+            })
+
 
         binding.executePendingBindings()
         return binding.root
     }
 
 
+    /**
+     * カレンダーをgridlayoutに生成
+     */
     private fun createCalendar(binding: CalendarFragmentScreenSlidePageBinding) {
         val mDateManager = DateManager().jumpMonth(mProgressMonth)
         val dateArray = mDateManager.days
@@ -215,23 +219,6 @@ class CalendarPageFragment() : Fragment() {
             drawable.setColor(schedule.groupBackgroundColor)
         }
         binding.root.background = drawable
-    }
-
-
-    fun replaceData(schedules: Map<String, List<CalendarData>>) {
-        setCalendarMap(schedules)
-    }
-
-    fun replaceHoliday(holidayMap: Map<String, List<CalendarData>>) {
-        setHolidayMap(holidayMap)
-    }
-
-    private fun setHolidayMap(holidayMap: Map<String, List<CalendarData>>) {
-        mHolidayMap = holidayMap
-    }
-
-    private fun setCalendarMap(calendarMap: Map<String, List<CalendarData>>) {
-        mCalendarMap = calendarMap
     }
 
 }

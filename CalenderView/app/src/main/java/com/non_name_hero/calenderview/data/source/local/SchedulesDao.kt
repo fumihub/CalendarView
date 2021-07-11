@@ -1,7 +1,9 @@
 package com.non_name_hero.calenderview.data.source.local
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.non_name_hero.calenderview.data.*
+import java.util.*
 
 @Dao
 interface SchedulesDao {
@@ -61,11 +63,52 @@ interface SchedulesDao {
             g.color_number AS groupColorNumber,
             g.background_color AS groupBackgroundColor
         FROM schedule s 
-            LEFT JOIN schedule_group g ON g.group_id = s.group_id
+            JOIN schedule_group g ON g.group_id = s.group_id
         ORDER BY s.schedule_id DESC
             """)
     val allCalendarDataList: List<CalendarData>
 
+    /**
+     * 指定月のスケジュールと家計簿を取得
+     */
+    @Query("""
+        SELECT
+            s.schedule_id AS scheduleId,
+            s.title AS scheduleTitle,
+            s.start_at_datetime AS scheduleStartAtDatetime,
+            s.end_at_datetime AS scheduleEndAtDatetime,
+            CASE WHEN g.group_id IS NOT NULL THEN g.group_id ELSE 1 END AS groupId,
+            g.background_color AS groupTextColor,
+            g.color_number AS groupColorNumber,
+            g.background_color AS groupBackgroundColor
+        FROM schedule s 
+            JOIN schedule_group g ON g.group_id = s.group_id
+        WHERE 
+            s.start_at_datetime < :startMonth
+            and s.end_at_datetime > :endMonth
+        ORDER BY s.schedule_id DESC
+            """)
+    fun getCalendarDataListByMonthPeriod(startMonth: Date, endMonth: Date): LiveData<List<CalendarData>>
+
+    @Query("""
+        SELECT
+            b.balance_id AS balanceId,
+            b.title AS title,
+            b.used_at_datetime AS usedAtDatetime,
+            b.price,
+            bc.category_name AS categoryName,
+            c.big_category_name AS bigCategoryName,
+            c.category_color AS categoryColor,
+            c.image_url AS imageUrl
+        FROM balance b
+            JOIN balance_category bc ON bc.balance_category_id = b.balance_category_id
+            JOIN category c ON bc.category_id = c.category_id
+        WHERE 
+            b.used_at_datetime < :startMonth
+            and b.used_at_datetime > :endMonth
+        ORDER BY b.balance_id DESC
+            """)
+    fun getBalanceDataListByMonthPeriod(startMonth: Date, endMonth: Date): LiveData<List<BalanceData>>
 
     /*CategoryAndBalanceCategory*/
     /*CategoryAndBalanceCategoryの全ての要素をリストとして取り出す*/

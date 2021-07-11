@@ -14,8 +14,9 @@ import com.non_name_hero.calenderview.data.CalendarData
 import com.non_name_hero.calenderview.databinding.ScheduleFragmentItemBinding
 import java.util.*
 
-class ScheduleListAdapter(private val context: Context, calendarViewModel: CalendarViewModel) : RecyclerView.Adapter<ItemViewHolder>() {
+class ScheduleListAdapter(private val context: Context, calendarViewModel: CalendarViewModel ) : RecyclerView.Adapter<ItemViewHolder>() {
     var calendarDataList: List<CalendarData>
+    var currentMode: Boolean = false
     private val viewModel: CalendarViewModel
 
     class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
