@@ -60,7 +60,15 @@ object ScheduleListBindings {
     @kotlin.jvm.JvmStatic
     fun setEditMode(view: ListView, editMode: LiveData<Boolean>) {
         with(view.adapter as SubCategoryListAdapter) {
-            this.editMode = editMode.value?:false
+            this.editMode = editMode.value ?: false
+        }
+    }
+
+    @BindingAdapter("currentMode")
+    @kotlin.jvm.JvmStatic
+    fun setCurrentMode(view: RecyclerView, mode: Boolean?) {
+        with(view.adapter as ScheduleListAdapter) {
+            this.currentMode = mode ?: true
         }
     }
 

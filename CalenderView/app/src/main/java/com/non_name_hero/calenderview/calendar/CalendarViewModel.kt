@@ -31,15 +31,21 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
         get() = _currentYearMonth
 
     // for scheduleList
-    private val selectedDate = MutableLiveData<Date>()
+    private val _selectedDate = MutableLiveData<Date>()
+    val selectedDate: LiveData<Date>
+        get() = _selectedDate
 
-    val _scheduleListData = MutableLiveData<List<CalendarData>>().apply { value = mutableListOf<CalendarData>() }
+
+    private val _scheduleListData = MutableLiveData<List<CalendarData>>().apply {
+        value = mutableListOf<CalendarData>() }
     val scheduleListData: LiveData<List<CalendarData>>
         get() = _scheduleListData
     //set(value){ _scheduleListData.value = value.value}
 
     /**
      * 現在のカレンダーモード
+     * value = ture の時にカレンダーモード
+     *         false の時に家計簿モード
      */
     private val _currentMode = MutableLiveData<Boolean>().apply { this.value = true }
     val currentMode: LiveData<Boolean>
@@ -106,18 +112,17 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
 
     // etc
     fun setScheduleItem(date: Date) {
-        if (this.calendarDataMap != null) {
-            val dateKey = PigLeadUtils.formatYYYYMMDD.format(date)
-            if (this.calendarDataMap.value?.containsValue(dateKey) ?: false) {
-                //tureならvalueがnullではない
-                _scheduleListData.value = this.calendarDataMap.value?.get(dateKey)
-            }
-
-            selectedDate.value = date
+        val dateKey = PigLeadUtils.formatYYYYMMDD.format(date)
+        if (this.calendarDataMap.value?.containsKey(dateKey) == true) {
+            //tureならvalueがnullではない
+            _scheduleListData.value = this.calendarDataMap.value?.get(dateKey)
+        }else{
+            _scheduleListData.value = mutableListOf<CalendarData>()
         }
+
+        _selectedDate.value = date
     }
 
-    fun saveScheduleItem() {}
     fun removeSchedule(scheduleId: Long) {
         schedulesRepository.removeScheduleByScheduleId(scheduleId)
         reloadCalendarData(true)
@@ -127,7 +132,7 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
         val calendar = Calendar.getInstance()
         calendar.time = Date()
         _currentMonth.value = calendar[Calendar.MONTH] + 1
-        selectedDate.value = Date()
+        _selectedDate.value = Date()
         _currentYearMonth.value = createYearMonthWording(calendar[Calendar.YEAR], calendar[Calendar.MONTH] + 1)
     }
 }
