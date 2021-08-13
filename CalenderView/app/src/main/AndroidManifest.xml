@@ -41,9 +41,14 @@
             android:value="ca-app-pub-3940256099942544~3347511713"/>
         <!--通知用設定-->
         <receiver
-            android:name=".notification.AlarmNotification"
+            android:name=".notification.ScheduleNotification"
             android:process=":remote" >
         </receiver>
+        <receiver
+            android:name=".notification.BalanceNotification"
+            android:process=":remote" >
+        </receiver>
+
 
     </application>
 

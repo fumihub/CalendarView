@@ -30,68 +30,6 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <!--ユーザーID入力***************************-->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/userIdLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userSettingToolbar">
-
-        <ImageView
-            android:id="@+id/userIcon"
-            android:layout_width="0dp"
-            android:layout_height="25dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/id_icon"
-            android:scaleType="centerInside"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/userIdText"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_chainStyle="spread" />
-
-        <TextView
-            android:id="@+id/userIdText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:gravity="left|center"
-            android:text="ユーザーID設定"
-            android:textColor="@color/blackColor"
-            android:textSize="20sp"
-            tools:ignore="HardcodedText"
-            app:layout_constraintHorizontal_weight="8"
-            app:layout_constraintStart_toEndOf="@+id/userIcon"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <EditText
-        android:id="@+id/userId"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="10dp"
-        android:hint="ユーザーIDを入力してください。"
-        android:inputType="text"
-        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userIdLayout"/>
-
-    <!--**********************************************-->
-
     <!--パスワード入力****************************-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/passwordLayout"
@@ -100,7 +38,7 @@
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userId">
+        app:layout_constraintTop_toBottomOf="@+id/userSettingToolbar">
 
         <ImageView
             android:id="@+id/password_Icon"
@@ -126,7 +64,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:gravity="left|center"
-            android:text="パスワード設定(8文字以上)"
+            android:text="パスワード設定"
             android:textColor="@color/blackColor"
             android:textSize="20sp"
             tools:ignore="HardcodedText"
@@ -137,6 +75,22 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/passwordCautionText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="left|center"
+        android:text="※8文字以内の英数字を入力してください。"
+        android:textColor="@color/redColor"
+        android:textSize="10sp"
+        tools:ignore="HardcodedText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwordLayout"/>
 
     <EditText
         android:id="@+id/password"
@@ -150,7 +104,7 @@
         android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordLayout"/>
+        app:layout_constraintTop_toBottomOf="@+id/passwordCautionText"/>
 
     <!--**********************************************-->
 
@@ -218,6 +172,7 @@
             android:layout_marginBottom="10dp"
             android:hint="year"
             android:inputType="number"
+            android:maxLength="4"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/month"
             app:layout_constraintTop_toTopOf="parent"
@@ -232,6 +187,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:hint="month"
+            android:maxLength="2"
             android:inputType="number"
             app:layout_constraintStart_toEndOf="@+id/year"
             app:layout_constraintEnd_toStartOf="@+id/day"
@@ -246,6 +202,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:hint="day"
+            android:maxLength="2"
             android:inputType="number"
             app:layout_constraintStart_toEndOf="@+id/month"
             app:layout_constraintEnd_toEndOf="parent"
