@@ -14,24 +14,24 @@ import android.os.Build
 import android.os.Process
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import com.google.firebase.FirebaseApp
 import java.util.*
 import com.non_name_hero.calenderview.calendar.MainActivity
 import com.non_name_hero.calenderview.data.Schedule
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource
 import com.non_name_hero.calenderview.data.source.ScheduleRepository
 import com.non_name_hero.calenderview.utils.Injection
+import java.text.SimpleDateFormat
 
 
 class ScheduleNotification : BroadcastReceiver() {
 
     private lateinit var repository: ScheduleRepository     /**/
 
-    private var listLen: Int = 0                            /*スケジュールの数*/
-
-    private var scheduleMessage: String = ""                /*通知に表示させるメッセージ*/
-
-
     override fun onReceive(context: Context, intent: Intent) {
+
+        /*FireBaseの初期化*/
+        FirebaseApp.initializeApp(context)
 
         repository = Injection.provideScheduleRepository(context)
 
@@ -63,48 +63,67 @@ class ScheduleNotification : BroadcastReceiver() {
                 object : ScheduleDataSource.PickUpScheduleCallback {
                     override fun onScheduleLoaded(schedules: List<Schedule>) {
                         /*スケジュール数を取得*/
-                        listLen = schedules.size
-                        /*通知に表示させるメッセージを取得(複数ある場合は改行区切りで取得)*/
-                        scheduleMessage = schedules.joinToString(separator = "\n")
-                        /*TODO 時間を取得して時間も表示*/
+                        val title = "明日の予定は" + schedules.size + "件です。"
+                        /*通知に表示させるメッセージを取得(複数ある場合は改行区切り)
+                        * 終日予定の場合：「終日　タイトル」
+                        * 時間指定の場合：「startTime-endTime　タイトル」*/
+                        val scheduleMessageList  = mutableListOf<String>()
+                        /*時間指定用フォーマット*/
+                        val df = SimpleDateFormat("HH:mm")
+                        /*スケジュールの要素を１つずつ取り出し文字列連結*/
+                        schedules.forEach {
+                            /*時間指定がある場合*/
+                            if (it.timeSettingFlag) {
+                                scheduleMessageList.add(df.format(it.startAtDatetime) + "-" + df.format(it.endAtDatetime) + "  " +it.title!!)
+                            }
+                            /*終日の場合*/
+                            else{
+                                scheduleMessageList.add("終日" + "  " +it.title!!)
+                            }
+                        }
+                        /*改行区切りでリストの要素をscheduleMessageに代入*/
+                        val scheduleMessage = scheduleMessageList.joinToString(separator = "\n")
+
+                        val scheduleNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                        val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+
+                        /*スケジュール確認NotificationChannel設定*/
+                        val scheduleChannel = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            NotificationChannel(channelId, title, NotificationManager.IMPORTANCE_DEFAULT)
+                        } else {
+                            TODO("VERSION.SDK_INT < O")
+                        }
+                        scheduleChannel.description = scheduleMessage
+                        scheduleChannel.enableVibration(true)
+                        scheduleChannel.canShowBadge()
+                        scheduleChannel.enableLights(true)
+                        scheduleChannel.lightColor = Color.BLUE
+                        /*the channel appears on the lockscreen*/
+                        scheduleChannel.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
+                        scheduleChannel.setSound(defaultSoundUri, null)
+                        scheduleChannel.setShowBadge(true)
+                        if (scheduleNotificationManager != null) {
+                            scheduleNotificationManager.createNotificationChannel(scheduleChannel)
+                            val notification = NotificationCompat.Builder(context, channelId)
+                                    .setContentTitle(title)
+                                    .setSmallIcon(R.drawable.calendar_icon)
+                                    .setContentText(scheduleMessage)
+                                    .setAutoCancel(true)
+                                    .setContentIntent(pendingScheduleIntent)
+                                    .setWhen(System.currentTimeMillis())
+                                    .setStyle(NotificationCompat.BigTextStyle()
+                                    .setBigContentTitle(title)
+                                    .bigText(scheduleMessage))
+                                    .build()
+
+                            /*通知出力*/
+                            scheduleNotificationManager.notify(1, notification)
+
+                        }
                     }
 
                     override fun onDataNotAvailable() {}
-                })
-
-        val title = "明日の予定は" +listLen + "件です。"
-        val scheduleNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-
-        /*スケジュール確認NotificationChannel設定*/
-        val scheduleChannel = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel(channelId, title, NotificationManager.IMPORTANCE_DEFAULT)
-        } else {
-            TODO("VERSION.SDK_INT < O")
-        }
-        scheduleChannel.description = scheduleMessage
-        scheduleChannel.enableVibration(true)
-        scheduleChannel.canShowBadge()
-        scheduleChannel.enableLights(true)
-        scheduleChannel.lightColor = Color.BLUE
-        /*the channel appears on the lockscreen*/
-        scheduleChannel.lockscreenVisibility = Notification.VISIBILITY_PRIVATE
-        scheduleChannel.setSound(defaultSoundUri, null)
-        scheduleChannel.setShowBadge(true)
-        if (scheduleNotificationManager != null) {
-            scheduleNotificationManager.createNotificationChannel(scheduleChannel)
-            val notification = NotificationCompat.Builder(context, channelId)
-                    .setContentTitle(title)
-                    .setSmallIcon(R.drawable.calendar_icon)
-                    .setContentText(scheduleMessage)
-                    .setAutoCancel(true)
-                    .setContentIntent(pendingScheduleIntent)
-                    .setWhen(System.currentTimeMillis())
-                    .build()
-
-            /*通知出力*/
-            scheduleNotificationManager.notify(1, notification)
-
-        }
+                }
+        )
     }
 }

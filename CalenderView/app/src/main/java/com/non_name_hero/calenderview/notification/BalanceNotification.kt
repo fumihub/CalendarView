@@ -12,6 +12,7 @@ import android.media.RingtoneManager
 import android.os.Build
 import android.os.Process
 import android.util.Log
+import androidx.core.app.NotificationCompat
 import com.non_name_hero.calenderview.R
 import com.non_name_hero.calenderview.inputForm.InputBalanceActivity
 import com.non_name_hero.calenderview.utils.PigLeadUtils
@@ -57,7 +58,7 @@ class BalanceNotification : BroadcastReceiver() {
         balanceChannel.setShowBadge(true)
         if (balanceNotificationManager != null) {
             balanceNotificationManager.createNotificationChannel(balanceChannel)
-            val notification = Notification.Builder(context, channelId)
+            val notification = NotificationCompat.Builder(context, channelId)
                     .setContentTitle(title)
                     .setSmallIcon(R.drawable.pig_icon)
                     .setContentText(balanceMessage)

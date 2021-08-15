@@ -13,7 +13,7 @@ class Schedule(@field:ColumnInfo(name = "schedule_id") @field:PrimaryKey(autoGen
                startAtDatetime: Date,
                endAtDatetime: Date?,
                groupId: Int,
-               paymentId: Int) {
+               timeSettingFlag: Boolean) {
 
     @ColumnInfo(name = "title")
     var title: String?
@@ -27,8 +27,8 @@ class Schedule(@field:ColumnInfo(name = "schedule_id") @field:PrimaryKey(autoGen
     @ColumnInfo(name = "end_at_datetime")
     var endAtDatetime: Date?
 
-    @ColumnInfo(name = "payment_id")
-    var paymentId: Int
+    @ColumnInfo(name = "time_setting_flag")
+    var timeSettingFlag: Boolean
 
     @ColumnInfo(name = "group_id", defaultValue = "1")
     var groupId: Int
@@ -52,7 +52,7 @@ class Schedule(@field:ColumnInfo(name = "schedule_id") @field:PrimaryKey(autoGen
                 startAtDatetime: Date,
                 endAtDatetime: Date?,
                 groupId: Int,
-                paymentId: Int) : this(0, title, description, startAtDatetime, endAtDatetime, groupId, paymentId) {
+                timeSettingFlag: Boolean) : this(0, title, description, startAtDatetime, endAtDatetime, groupId, timeSettingFlag) {
     }
 
     val startAtDatetime: Date?
@@ -71,7 +71,7 @@ class Schedule(@field:ColumnInfo(name = "schedule_id") @field:PrimaryKey(autoGen
         this.description = description
         mStartAtDatetime = startAtDatetime
         this.endAtDatetime = endAtDatetime
-        this.paymentId = paymentId
+        this.timeSettingFlag = timeSettingFlag
         this.groupId = groupId
         mEditable = true
     }
