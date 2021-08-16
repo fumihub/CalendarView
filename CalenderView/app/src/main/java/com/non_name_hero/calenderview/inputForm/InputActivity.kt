@@ -293,25 +293,37 @@ class InputActivity  /*コンストラクタ*/
     /*エラーチェック関数*********************************/
     private fun errorCheck(): Boolean {
         /*タイトルが入力されているかチェック*/
+        /*タイトルが入力されている場合*/
         if (title.text.toString() != "") {
 
             /*表示色が入力されているかチェック*/
+            /*表示色が入力されている場合*/
             if (color2.text.toString() != ">") {
 
                 /*時間指定の入力が開始だけまたは終了だけではないかチェック*/
+                /*開始、終了時間が入力されていない場合*/
                 if (startTime.text.toString() == ""
                         && endTime.text.toString() == "") {
                     /*時間設定判定フラグをおろす*/
                     timeSettingFlag = false
+                    /*0:01に設定*/
+                    mStartAtDatetime.set(Calendar.HOUR_OF_DAY, 0)
+                    mStartAtDatetime.set(Calendar.MINUTE, 1)
+                    /*23:59に設定*/
+                    mEndAtDatetime.set(Calendar.HOUR_OF_DAY, 23)
+                    mEndAtDatetime.set(Calendar.MINUTE, 59)
                     return true
                 }
+                /*開始、終了時間が入力されている場合*/
                 else if (startTime.text.toString() != ""
                         && endTime.text.toString() != "") {
                     /*時間設定判定フラグを立てる*/
                     timeSettingFlag = true
                     return true
                 }
+                /*開始、終了時間がどちらか一方のみが入力されている場合*/
                 else {
+                    /*開始時間がのみが入力されている場合*/
                     if (startTime.text.toString() == "") {
                         /*時間設定判定フラグをおろす*/
                         timeSettingFlag = false
@@ -319,6 +331,7 @@ class InputActivity  /*コンストラクタ*/
                         outputToast("開始時間が未入力です。")
                         return false
                     }
+                    /*終了時間がのみが入力されている場合*/
                     else {
                         /*時間設定判定フラグをおろす*/
                         timeSettingFlag = false
@@ -328,12 +341,14 @@ class InputActivity  /*コンストラクタ*/
                     }
                 }
             }
+            /*表示色が入力されていない場合*/
             else {
                 /*トースト出力*/
                 outputToast("表示色が未入力です。")
                 return false
             }
         }
+        /*タイトルが入力されていない場合*/
         else {
             /*トースト出力*/
             outputToast("タイトルが未入力です。")
