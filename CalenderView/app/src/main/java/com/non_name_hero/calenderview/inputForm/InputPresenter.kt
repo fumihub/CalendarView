@@ -9,8 +9,8 @@ import java.util.*
 
 class InputPresenter(private val inputFormView: InputContract.View, private val scheduleRepository: ScheduleRepository) : Presenter {
     override fun start() {}
-    override fun saveSchedule(title: String?, description: String?, startAtSchedule: Date?, endAtSchedule: Date?, groupId: Int, paymentId: Int) {
-        scheduleRepository.setSchedule(Schedule(title!!, description!!, startAtSchedule!!, endAtSchedule, groupId, paymentId), object : SaveScheduleCallback {
+    override fun saveSchedule(title: String?, description: String?, startAtSchedule: Date?, endAtSchedule: Date?, groupId: Int, timeSettingFlag: Boolean) {
+        scheduleRepository.setSchedule(Schedule(title!!, description!!, startAtSchedule!!, endAtSchedule, groupId, timeSettingFlag), object : SaveScheduleCallback {
             override fun onScheduleSaved() {
                 /*データの書き込みが終了した時に実行*/
                 inputFormView.finishInput()

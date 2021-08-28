@@ -7,6 +7,7 @@ import com.non_name_hero.calenderview.data.ScheduleGroup
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource.*
 import com.non_name_hero.calenderview.utils.AppExecutors
+import java.util.*
 
 class ScheduleDataLocalSource  //コンストラクタ
 (val appExecutors: AppExecutors,
@@ -39,6 +40,14 @@ class ScheduleDataLocalSource  //コンストラクタ
 
     override fun removeScheduleByScheduleId(scheduleId: Long) {
         val runnable = Runnable { schedulesDao.deleteByScheduleId(scheduleId) }
+        appExecutors.diskIO.execute(runnable)
+    }
+
+    override fun pickUpSchedules(targetStartDate: Date, targetEndDate: Date, callback: PickUpScheduleCallback) {
+        val runnable = Runnable {
+            val schedules = schedulesDao.pickUpSchedules(targetStartDate, targetEndDate)
+            appExecutors.mainThread.execute { callback.onScheduleLoaded(schedules) }
+        }
         appExecutors.diskIO.execute(runnable)
     }
 

@@ -10,10 +10,7 @@ import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.non_name_hero.calenderview.R
@@ -52,6 +49,8 @@ class InputActivity  /*コンストラクタ*/
 
     private var colorNumber = 0                             /*色番号(0~48)*/
     private var mGroupId = 0                                /*色グループID(0~)*/
+
+    private var timeSettingFlag = false                     /*時間設定判定フラグ*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -274,9 +273,12 @@ class InputActivity  /*コンストラクタ*/
 
         /*完了ボタンが押されたとき*******************/
         doneButton.setOnClickListener {
-            /*保存処理を実行*/
-            /*カレンダー表示画面に遷移*/
-            mInputPresenter.saveSchedule(title.text.toString(), memo.text.toString(), mStartAtDatetime.time, mEndAtDatetime.time, mGroupId, 0)
+            /*入力不備がなければ*/
+            if (errorCheck()) {
+                /*保存処理を実行*/
+                /*カレンダー表示画面に遷移*/
+                mInputPresenter.saveSchedule(title.text.toString(), memo.text.toString(), mStartAtDatetime.time, mEndAtDatetime.time, mGroupId, timeSettingFlag)
+            }
         }
         /*********************************************/
 
@@ -287,6 +289,85 @@ class InputActivity  /*コンストラクタ*/
         }
         /*********************************************/
     }
+
+    /*エラーチェック関数*********************************/
+    private fun errorCheck(): Boolean {
+        /*タイトルが入力されているかチェック*/
+        /*タイトルが入力されている場合*/
+        if (title.text.toString() != "") {
+
+            /*表示色が入力されているかチェック*/
+            /*表示色が入力されている場合*/
+            if (color2.text.toString() != ">") {
+
+                /*時間指定の入力が開始だけまたは終了だけではないかチェック*/
+                /*開始、終了時間が入力されていない場合*/
+                if (startTime.text.toString() == ""
+                        && endTime.text.toString() == "") {
+                    /*時間設定判定フラグをおろす*/
+                    timeSettingFlag = false
+                    /*0:01に設定*/
+                    mStartAtDatetime.set(Calendar.HOUR_OF_DAY, 0)
+                    mStartAtDatetime.set(Calendar.MINUTE, 1)
+                    /*23:59に設定*/
+                    mEndAtDatetime.set(Calendar.HOUR_OF_DAY, 23)
+                    mEndAtDatetime.set(Calendar.MINUTE, 59)
+                    return true
+                }
+                /*開始、終了時間が入力されている場合*/
+                else if (startTime.text.toString() != ""
+                        && endTime.text.toString() != "") {
+                    /*時間設定判定フラグを立てる*/
+                    timeSettingFlag = true
+                    return true
+                }
+                /*開始、終了時間がどちらか一方のみが入力されている場合*/
+                else {
+                    /*開始時間がのみが入力されている場合*/
+                    if (startTime.text.toString() == "") {
+                        /*時間設定判定フラグをおろす*/
+                        timeSettingFlag = false
+                        /*トースト出力*/
+                        outputToast("開始時間が未入力です。")
+                        return false
+                    }
+                    /*終了時間がのみが入力されている場合*/
+                    else {
+                        /*時間設定判定フラグをおろす*/
+                        timeSettingFlag = false
+                        /*トースト出力*/
+                        outputToast("終了時間が未入力です。")
+                        return false
+                    }
+                }
+            }
+            /*表示色が入力されていない場合*/
+            else {
+                /*トースト出力*/
+                outputToast("表示色が未入力です。")
+                return false
+            }
+        }
+        /*タイトルが入力されていない場合*/
+        else {
+            /*トースト出力*/
+            outputToast("タイトルが未入力です。")
+            return false
+        }
+    }
+    /************************************************/
+
+    /*トースト出力関数************************************/
+    private fun outputToast(str: String) {
+        /*トースト表示*/
+        val errorToast = Toast.makeText(
+                applicationContext,
+                str,
+                Toast.LENGTH_SHORT
+        )
+        errorToast.show()
+    }
+    /************************************************/
 
     /*色画面遷移関数*********************************/
     private fun goColorSelectActivity() {

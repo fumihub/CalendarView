@@ -15,9 +15,6 @@ interface SchedulesDao {
     @Query("SELECT * FROM schedule WHERE schedule_id IN (:scheduleIds)")
     fun loadSchedulesByIds(scheduleIds: LongArray): List<Schedule>
 
-    @Query("SELECT * FROM schedule WHERE start_at_datetime >= :targetYearMonth AND end_at_datetime <= :targetYearMonth")
-    fun findByYearMonth(targetYearMonth: String): List<Schedule>
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertSchedule(schedule: Schedule)
 
@@ -26,6 +23,9 @@ interface SchedulesDao {
 
     @Query("DELETE FROM schedule WHERE schedule_id = :scheduleId")
     fun deleteByScheduleId(scheduleId: Long)
+
+    @Query("SELECT * FROM schedule WHERE start_at_datetime >= :targetStartDate AND end_at_datetime <= :targetEndDate")
+    fun pickUpSchedules(targetStartDate: Date, targetEndDate: Date): List<Schedule>
 
 
     /*ScheduleGroup*/
