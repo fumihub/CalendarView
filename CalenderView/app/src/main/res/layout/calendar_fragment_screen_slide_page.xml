@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="android.view.View" />
         <variable
             name="viewmodel"
             type="com.non_name_hero.calenderview.calendar.CalendarViewModel" />
@@ -37,7 +38,8 @@
             android:text=" in: ¥xxxx out: ¥xxxx"
             android:textAlignment="center"
             android:textColor="@color/blueColor"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:visibility="@{viewmodel.currentMode ? View.VISIBLE :View.INVISIBLE}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

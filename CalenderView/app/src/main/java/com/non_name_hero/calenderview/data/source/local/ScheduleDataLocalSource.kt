@@ -122,6 +122,21 @@ class ScheduleDataLocalSource  //コンストラクタ
         appExecutors.diskIO.execute(runnable)
     }
 
+    /**
+     * balanceDataを取得しcallbackを実行
+     *
+     * @param startMonth 取得範囲の開始月
+     * @param endMonth 取得範囲の終了月
+     */
+    override fun getBalanceData(startMonth: Date, endMonth: Date, callback: GetBalanceDataCallback) {
+        val runnable = Runnable {
+            val balanceDataList = schedulesDao.getBalanceDataListByMonthPeriod(startMonth, endMonth)
+            appExecutors.mainThread.execute { callback.onBalanceDataLoaded(balanceDataList) }
+        }
+        appExecutors.diskIO.execute(runnable)
+
+    }
+
     override fun insertBalance(balance: Balance, callback: SaveBalanceCallback) {
         val runnable = Runnable {
             schedulesDao.insertBalance(balance)

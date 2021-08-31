@@ -1,5 +1,6 @@
 package com.non_name_hero.calenderview.utils
 
+import com.non_name_hero.calenderview.data.BalanceData
 import com.non_name_hero.calenderview.data.CalendarData
 import com.non_name_hero.calenderview.data.Schedule
 import java.text.SimpleDateFormat
@@ -45,18 +46,48 @@ object PigLeadUtils {
         val calendarDataMap: MutableMap<String, MutableList<CalendarData>> = HashMap()
         var calendarDataLists: MutableList<CalendarData>
         for (data in calendarDataList) {
+            // 日付キーを生成
             val date = formatYYYYMMDD.format(data.scheduleStartAtDatetime)
             if (calendarDataMap.containsKey(date)) {
                 //calendarDataMap[date]が非nullであることは保証される
                 calendarDataLists = calendarDataMap[date]!!
                 calendarDataLists.add(data)
+                // 重複するデータを削除してArrayListを再構成する
                 calendarDataLists = ArrayList(LinkedHashSet(calendarDataLists))
             } else {
                 calendarDataLists = ArrayList()
                 calendarDataLists.add(data)
             }
+            // 日付をキーとして値にデータのリストを格納
             calendarDataMap[date] = calendarDataLists
         }
         return calendarDataMap
+    }
+    /**
+     * List<BalanceData> から Map<String></String>, List<CalendarData>>へ変換する
+     * @param balanceDataList
+     * @return scheduleMap 日付をキーとする家計簿データのHashMapを取得
+     */
+    fun getBalanceDataMapByBalanceDataList(balanceDataList: List<BalanceData>): Map<String, MutableList<BalanceData>> {
+        val calendarBalanceDataMap: MutableMap<String, MutableList<BalanceData>> = HashMap()
+        var balanceDataLists: MutableList<BalanceData>
+        // 日付に家計簿データをマッピング
+        for (data in balanceDataList) {
+            // 日付キーを生成
+            val date = formatYYYYMMDD.format(data.usedAtDatetime)
+            if (calendarBalanceDataMap.containsKey(date)) {
+                //balanceDataMap[date]が非nullであることは保証される
+                balanceDataLists = calendarBalanceDataMap[date]!!
+                balanceDataLists.add(data)
+                // 重複するデータを削除してArrayListを再構成する
+                balanceDataLists = ArrayList(LinkedHashSet(balanceDataLists))
+            } else {
+                balanceDataLists = ArrayList()
+                balanceDataLists.add(data)
+            }
+            // 日付をキーとして値にデータのリストを格納
+            calendarBalanceDataMap[date] = balanceDataLists
+        }
+        return calendarBalanceDataMap
     }
 }

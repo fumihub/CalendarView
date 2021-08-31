@@ -95,7 +95,7 @@ interface SchedulesDao {
             b.balance_id AS balanceId,
             b.title AS title,
             b.used_at_datetime AS usedAtDatetime,
-            b.price,
+            b.price AS price,
             bc.category_name AS categoryName,
             c.big_category_name AS bigCategoryName,
             c.category_color AS categoryColor,
@@ -103,9 +103,9 @@ interface SchedulesDao {
         FROM balance b
             JOIN balance_category bc ON bc.balance_category_id = b.balance_category_id
             JOIN category c ON bc.category_id = c.category_id
-        WHERE 
-            b.used_at_datetime < :startMonth
-            and b.used_at_datetime > :endMonth
+        WHERE
+            b.used_at_datetime >= :startMonth
+            and b.used_at_datetime <= :endMonth
         ORDER BY b.balance_id DESC
             """)
     fun getBalanceDataListByMonthPeriod(startMonth: Date, endMonth: Date): LiveData<List<BalanceData>>
