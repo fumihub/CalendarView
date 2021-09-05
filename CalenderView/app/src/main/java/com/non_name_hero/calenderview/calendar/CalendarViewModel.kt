@@ -63,7 +63,7 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
      * value = ture の時にカレンダーモード
      *         false の時に家計簿モード
      */
-    private val _currentMode = MutableLiveData<Boolean>().apply { this.value = true }
+    private val _currentMode = MutableLiveData<Boolean>().apply { this.value = false }
     val currentMode: LiveData<Boolean>
         get() = _currentMode
 
