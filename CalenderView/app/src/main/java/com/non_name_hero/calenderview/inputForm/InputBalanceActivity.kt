@@ -107,12 +107,8 @@ class InputBalanceActivity  /*コンストラクタ*/
         /*金額入力テキストから離れた時*/
         price.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
-                price.setText("")
+                price.setText("0")
             }
-        }
-        /*クリックされたとき¥0に戻す*/
-        price.setOnClickListener {
-            price.setText("")
         }
         /*******************************/
 
@@ -122,7 +118,7 @@ class InputBalanceActivity  /*コンストラクタ*/
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                var priceStr: String = ""
+                var priceStr: String = "0"
                 topZeroJudgeFlag = true
 
                 s?.asIterable()?.forEach { char ->
