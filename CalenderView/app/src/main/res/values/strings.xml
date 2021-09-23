@@ -17,4 +17,7 @@
     </string-array>
     <string name="delete_schedule_group_positive">削除</string>
     <string name="delete_schedule_group_negative">キャンセル</string>
+
+    <string name="drawer_open">Drawer Open</string>
+    <string name="drawer_close">Drawer Close</string>
 </resources>

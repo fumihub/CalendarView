@@ -82,6 +82,10 @@ dependencies {
     /*通知システム用ライブラリ*/
     implementation "com.android.support:support-compat:28.0.0"
 
+    /*ドロワーレイアウト用ライブラリ*/
+    implementation "androidx.drawerlayout:drawerlayout:1.1.1"
+    implementation 'com.google.android.material:material:1.4.0'
+    
 }
 tasks.withType(JavaCompile) {
     options.compilerArgs << '-Xlint:unchecked'
@@ -89,3 +93,5 @@ tasks.withType(JavaCompile) {
 repositories {
     mavenCentral()
 }
+
+

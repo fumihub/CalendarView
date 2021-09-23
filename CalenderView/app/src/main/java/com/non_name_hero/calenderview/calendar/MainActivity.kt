@@ -1,36 +1,48 @@
 package com.non_name_hero.calenderview.calendar
 
+import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.widget.ImageButton
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
+import com.google.android.material.navigation.NavigationView
 import com.non_name_hero.calenderview.R
 import com.non_name_hero.calenderview.databinding.ActivityMainBinding
 import com.non_name_hero.calenderview.inputForm.SettingActivity
 import com.non_name_hero.calenderview.utils.ActivityUtils
 import com.non_name_hero.calenderview.utils.obtainViewModel
+import androidx.drawerlayout.widget.DrawerLayout
+import android.view.Menu
+import android.util.Log
+import androidx.core.view.GravityCompat
 
-class MainActivity : AppCompatActivity() {
+
+
+
+
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     /*TODO accountingTextをどこに実装したらいいかわからない
     *  　　家計簿画面の時のみ表示したい*/
-//    private lateinit var accountingText: TextView
+    private lateinit var binding: ActivityMainBinding
     private lateinit var mAdView: AdView
     private lateinit var pigIconButton: ImageButton             /*家計簿画面切り替えボタン*/
     private lateinit var calendarIconButton: ImageButton        /*スケジュール画面切り替えボタン*/
-    private lateinit var settingIconButton: ImageButton         /*設定画面切り替えボタン*/
     private var createFlag = false                              /*画面作成時フラグ*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(R.style.AppTheme)
         //DataBinding
-        val binding: ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
 //        /*スケジュール画面では表示しない*/
 //        accountingText = findViewById(R.id.accounting)
@@ -69,13 +81,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        /*設定ボタン設定*/
-        settingIconButton = findViewById(R.id.settingIconButton)
-        settingIconButton.setOnClickListener {
-            /*設定画面遷移*/
-            goSettingActivity()
-        }
-
         /*スケジュール→家計簿切り替えボタン設定********/
         pigIconButton = findViewById(R.id.pigIconButton)
         calendarIconButton = findViewById(R.id.calendarIconButton)
@@ -99,6 +104,7 @@ class MainActivity : AppCompatActivity() {
         /************************************************/
 
         //Toolbarをセット
+        val myToolbar = findViewById<View>(R.id.mainToolbar) as Toolbar
         setSupportActionBar(binding.mainToolbar)
 
         //bindingを即時反映
@@ -106,7 +112,53 @@ class MainActivity : AppCompatActivity() {
 
         /*balanceFlag判定用Flag*/
         createFlag = true
+
+        /*DrawerToggle*/
+        val drawer = findViewById<View>(R.id.drawerLayout) as DrawerLayout
+        val toggle = ActionBarDrawerToggle(
+                this, drawer, myToolbar,
+                R.string.drawer_open,
+                R.string.drawer_close)
+        drawer.addDrawerListener(toggle)
+        toggle.syncState()
+
+        /*NavigationView Listener*/
+        val navigationView = findViewById<View>(R.id.navigationView) as NavigationView
+        navigationView.setNavigationItemSelectedListener(this)
+
     }
+
+    /*NavigationView用関数*********************/
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+
+        when (item.itemId) {
+            /*カレンダーボタンが押された時*/
+            R.id.schedule -> {
+                /*カレンダーにスケジュール表示*/
+                binding.viewmodel?.setCurrentMode(true)
+            }
+            /*家計簿ボタンが押された時*/
+            R.id.balance -> {
+                /*カレンダーに家計簿表示*/
+                binding.viewmodel?.setCurrentMode(false)
+            }
+            /*家計簿サマリーボタンが押された時*/
+            R.id.balanceSummary -> {
+                Log.d(ContentValues.TAG, "balanceSummary Selected!")
+            }
+            /*設定ボタンが押された時*/
+            R.id.setting -> {
+                Log.d(ContentValues.TAG, "setting Selected!")
+                /*設定画面遷移*/
+                goSettingActivity()
+            }
+        }
+
+        val drawer = findViewById<View>(R.id.drawerLayout) as DrawerLayout
+        drawer.closeDrawer(GravityCompat.START)
+        return true
+    }
+    /************************************************/
 
     /*設定画面遷移関数*********************/
     private fun goSettingActivity() {
@@ -158,6 +210,5 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private const val REQUEST_CODE = 1
     }
-
     /************************************************/
 }
