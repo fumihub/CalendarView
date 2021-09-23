@@ -20,10 +20,6 @@ import com.non_name_hero.calenderview.data.source.ScheduleRepository
 import com.non_name_hero.calenderview.utils.Injection
 import com.non_name_hero.calenderview.inputForm.InputContract.Presenter
 import java.util.*
-import android.app.AlarmManager
-
-import android.app.PendingIntent
-import com.non_name_hero.calenderview.notification.AlarmNotification
 
 
 class InputBalanceActivity  /*コンストラクタ*/
@@ -111,12 +107,8 @@ class InputBalanceActivity  /*コンストラクタ*/
         /*金額入力テキストから離れた時*/
         price.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
-                price.setText("")
+                price.setText("0")
             }
-        }
-        /*クリックされたとき¥0に戻す*/
-        price.setOnClickListener {
-            price.setText("")
         }
         /*******************************/
 
@@ -126,7 +118,7 @@ class InputBalanceActivity  /*コンストラクタ*/
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                var priceStr: String = ""
+                var priceStr: String = "0"
                 topZeroJudgeFlag = true
 
                 s?.asIterable()?.forEach { char ->
@@ -210,32 +202,6 @@ class InputBalanceActivity  /*コンストラクタ*/
             /*カレンダー表示画面に遷移*/
             finish()
         }
-        /*********************************************/
-
-
-        /*指定時間通知システム***************************/
-        val intent: Intent? = Intent(this, AlarmNotification::class.java)
-
-        //①Notificationを起動させる為。
-        val sender = PendingIntent.getBroadcast(this, 0, intent, 0)
-
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = System.currentTimeMillis()
-        calendar[Calendar.HOUR_OF_DAY] = 16 //9時にセット
-
-        calendar[Calendar.MINUTE] = 19 //0分
-
-        calendar[Calendar.SECOND] = 0 //0秒
-
-        calendar[Calendar.MILLISECOND] = 0 //カンマ0秒
-
-        if (calendar.timeInMillis < System.currentTimeMillis()) {
-            calendar.add(Calendar.DAY_OF_YEAR, 1)
-        } //もし時間が過去の場合は1年先でセット
-
-
-        val alarm = getSystemService(ALARM_SERVICE) as AlarmManager
-        alarm[AlarmManager.RTC_WAKEUP, calendar.timeInMillis] = sender
         /*********************************************/
 
     }

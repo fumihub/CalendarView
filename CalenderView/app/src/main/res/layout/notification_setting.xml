@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/inputBalanceToolbar"
+        android:id="@+id/notificationSettingToolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFEB3B"
@@ -18,11 +18,11 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/inputBalanceToolbar_title"
+            android:id="@+id/notificationSettingToolbar_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="新規作成"
+            android:text="通知設定"
             android:textColor="@color/blackColor"
             android:textSize="25sp"
             android:textStyle="bold"
@@ -30,172 +30,122 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <!--収入、費用選択********************************-->
+    <!--スケジュール確認日時設定入力***************************-->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/balanceLayout"
+        android:id="@+id/scheduleCheckLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputBalanceToolbar">
+        app:layout_constraintTop_toBottomOf="@+id/notificationSettingToolbar">
 
-        <Button
-            android:id="@+id/incomeButton"
+        <ImageView
+            android:id="@+id/calendarIcon"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="25dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="@color/blueColor3"
-            style="?android:attr/borderlessButtonStyle"
-            android:text="収入"
-            android:textStyle="bold"
-            android:textSize="25sp"
-            android:gravity="center"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/costButton"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_weight="1"/>
-
-        <Button
-            android:id="@+id/costButton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="@color/redColor3"
-            style="?android:attr/borderlessButtonStyle"
-            android:text="費用"
-            android:textStyle="bold"
-            android:textSize="25sp"
-            android:gravity="center"
-            app:layout_constraintStart_toEndOf="@+id/incomeButton"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@drawable/calendar_icon"
+            android:scaleType="centerInside"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/scheduleCheckDateText"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintHorizontal_weight="1"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-    <!--**********************************************-->
-
-    <!--金額入力**********************************-->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/priceLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/balanceLayout">
-
-        <EditText
-            android:id="@+id/price"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="0"
-            android:ems="10"
-            android:inputType="number"
-            android:alpha="0"
-            android:cursorVisible="false"
-            android:textAlignment="textEnd"
-            android:textSize="23sp"
-            android:imeOptions="actionDone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintHorizontal_chainStyle="spread" />
 
         <TextView
-            android:id="@+id/priceText"
-            android:layout_width="match_parent"
+            android:id="@+id/scheduleCheckDateText"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="￥0"
-            android:textAlignment="textEnd"
-            android:textStyle="bold"
-            android:textSize="23sp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:gravity="left|center"
+            android:text="スケジュール確認通知日時設定"
             android:textColor="@color/blackColor"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="@id/price"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textSize="20sp"
+            tools:ignore="HardcodedText"
+            app:layout_constraintHorizontal_weight="8"
+            app:layout_constraintStart_toEndOf="@+id/calendarIcon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Spinner
+        android:id="@+id/scheduleSpinner"
+        android:spinnerMode="dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:textSize="100sp"
+        android:entries="@array/schedule_notification_array"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scheduleCheckLayout"/>
     <!--**********************************************-->
 
-    <!--カテゴリー入力********************************-->
+    <!--入出金確認日時設定入力****************************-->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/categoryLayout"
+        android:id="@+id/balanceCheckLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/priceLayout">
+        app:layout_constraintTop_toBottomOf="@+id/scheduleSpinner">
 
-        <ImageButton
-            android:id="@+id/categoryIconButton"
+        <ImageView
+            android:id="@+id/pigIcon"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_margin="10dp"
-            android:background="@drawable/unclassified_icon"
+            android:layout_height="25dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/pig_icon"
             android:scaleType="centerInside"
-            style="?android:attr/borderlessButtonStyle"
+            app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/categoryButton"
+            app:layout_constraintEnd_toStartOf="@+id/balanceCheckDateText"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_weight="1"/>
+            app:layout_constraintHorizontal_chainStyle="spread" />
 
-        <Button
-            android:id="@+id/categoryButton"
+        <TextView
+            android:id="@+id/balanceCheckDateText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="#00000000"
-            style="?android:attr/borderlessButtonStyle"
-            android:text="未分類"
-            android:textStyle="bold"
-            android:textSize="15sp"
-            android:gravity="left|center_vertical"
-            app:layout_constraintStart_toEndOf="@+id/categoryIconButton"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:gravity="left|center"
+            android:text="入出金確認通知日時設定"
+            android:textColor="@color/blackColor"
+            android:textSize="20sp"
+            tools:ignore="HardcodedText"
+            app:layout_constraintHorizontal_weight="8"
+            app:layout_constraintStart_toEndOf="@+id/pigIcon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintHorizontal_weight="6"/>
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-    <!--**********************************************-->
 
-    <!--使用日付入力**********************************-->
-    <EditText
-        android:id="@+id/usedDate"
+    <Spinner
+        android:id="@+id/balanceSpinner"
+        android:spinnerMode="dialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:focusable="false"
-        android:hint="使用日付"
-        android:inputType="date"
+        android:textSize="100sp"
+        android:entries="@array/balance_notification_array"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/categoryLayout"/>
-    <!--**********************************************-->
-
-    <!--内容入力**********************************-->
-    <EditText
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:hint="内容"
-        android:inputType="text"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/usedDate"/>
+        app:layout_constraintTop_toBottomOf="@+id/balanceCheckLayout"/>
     <!--**********************************************-->
 
     <!--完了/キャンセルボタン********************************-->
@@ -206,7 +156,7 @@
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title">
+        app:layout_constraintTop_toBottomOf="@+id/balanceSpinner">
 
         <Button
             android:id="@+id/cancelButton"

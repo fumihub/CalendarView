@@ -36,15 +36,25 @@
         <activity android:name=".inputForm.InputBalanceActivity"/>
         <activity android:name=".inputForm.CategorySelectActivity"/>
         <activity android:name=".inputForm.SubCategorySelectActivity"/>
+        <!--入力画面アクティビティ(設定)-->
+        <activity android:name=".inputForm.SettingActivity"/>
+        <activity android:name=".inputForm.UserSettingActivity"/>
+        <activity android:name=".inputForm.NotificationSettingActivity"/>
+
         <!--広告用設定-->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3940256099942544~3347511713"/>
         <!--通知用設定-->
         <receiver
-            android:name=".notification.AlarmNotification"
+            android:name=".notification.ScheduleNotification"
             android:process=":remote" >
         </receiver>
+        <receiver
+            android:name=".notification.BalanceNotification"
+            android:process=":remote" >
+        </receiver>
+
 
     </application>
 

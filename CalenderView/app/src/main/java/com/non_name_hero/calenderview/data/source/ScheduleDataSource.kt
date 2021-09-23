@@ -1,6 +1,7 @@
 package com.non_name_hero.calenderview.data.source
 
 import com.non_name_hero.calenderview.data.*
+import java.util.*
 
 interface ScheduleDataSource {
 
@@ -31,8 +32,10 @@ interface ScheduleDataSource {
         fun onDataNotAvailable()
     }
 
-    interface GetScheduleMapCallback {
-        fun onScheduleMapLoaded(scheduleStringMap: Map<String, List<Schedule>>)
+    /*日付指定スケジュール取得時のコールバック*/
+    interface PickUpScheduleCallback {
+        fun onScheduleLoaded(schedules: List<Schedule>)
+        fun onDataNotAvailable()
     }
 
     /**
@@ -49,6 +52,7 @@ interface ScheduleDataSource {
     fun setSchedule(schedule: Schedule, callback: SaveScheduleCallback)
     fun getAllSchedules(callback: GetScheduleCallback)
     fun removeScheduleByScheduleId(scheduleId: Long)
+    fun pickUpSchedules(targetStartDate: Date, targetEndDate: Date, callback: PickUpScheduleCallback)
 
 
     /*スケジュールグループ用コールバック*/

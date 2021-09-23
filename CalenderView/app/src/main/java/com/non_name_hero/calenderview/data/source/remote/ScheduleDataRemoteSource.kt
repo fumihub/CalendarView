@@ -123,6 +123,7 @@ class ScheduleDataRemoteSource() : ScheduleDataSource {
     override fun setSchedule(schedule: Schedule, callback: SaveScheduleCallback) {}
     override fun getAllSchedules(callback: GetScheduleCallback) {}
     override fun removeScheduleByScheduleId(scheduleId: Long) {}
+    override fun pickUpSchedules(targetStartDate: Date, targetEndDate: Date, callback: PickUpScheduleCallback) {}
 
 
     /*ScheduleGroup*/

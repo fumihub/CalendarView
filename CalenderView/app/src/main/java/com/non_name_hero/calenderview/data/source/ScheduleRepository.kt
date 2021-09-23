@@ -13,7 +13,6 @@ class ScheduleRepository (
     var mCachedHolidayCalenderData: List<CalendarData>? = null
     var mCachedCalendarData: List<CalendarData>? = null
     var mCachedScheduleMap: Map<String, List<Schedule>>? = null
-    var mCachedCalendarDataMap: Map<String, List<CalendarData>>? = null
     var mCacheIsDirty = false
     var mCalendarCacheIsDirty = false
     var mHolidayCacheIsDirty = false
@@ -62,6 +61,10 @@ class ScheduleRepository (
     /*スケジュール情報をDBから削除する*/
     override fun removeScheduleByScheduleId(scheduleId: Long) {
         scheduleDataLocalSource.removeScheduleByScheduleId(scheduleId)
+    }
+
+    override fun pickUpSchedules(targetStartDate: Date, targetEndDate: Date, callback: PickUpScheduleCallback) {
+        scheduleDataLocalSource.pickUpSchedules(targetStartDate, targetEndDate, callback)
     }
 
     fun scheduleCacheClear() {
