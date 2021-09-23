@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/loginToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFEB3B"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/loginToolbar_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="ログイン"
+            android:textColor="@color/blackColor"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <!--PigLeadアイコン********************************-->
+    <ImageView
+        android:id="@+id/pigLeadIcon"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_margin="30dp"
+        android:background="@drawable/pig_lead_icon"
+        android:scaleType="centerInside"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginToolbar" />
+    <!--**********************************************-->
+
+    <!--ユーザーID入力**********************************-->
+    <TextView
+        android:id="@+id/mailAddressText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="left|center"
+        android:text="メールアドレス"
+        android:textColor="@color/blackColor"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pigLeadIcon"
+        tools:ignore="HardcodedText" />
+
+    <EditText
+        android:id="@+id/mailAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+        android:hint="メールアドレスを入力してください。"
+        android:inputType="textVisiblePassword"
+        android:imeOptions="actionDone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mailAddressText" />
+    <!--**********************************************-->
+
+    <!--パスワード入力**********************************-->
+    <TextView
+        android:id="@+id/passwordText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="left|center"
+        android:text="パスワード"
+        android:textColor="@color/blackColor"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mailAddress"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/passwordCautionText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="left|center"
+        android:text="※8文字以内の英数字を入力してください。"
+        android:textColor="@color/redColor"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwordText"
+        tools:ignore="HardcodedText" />
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+        android:hint="パスワードを入力してください。"
+        android:inputType="textPassword"
+        android:imeOptions="actionDone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwordCautionText" />
+    <!--**********************************************-->
+
+    <!--次回ログイン時にユーザー情報省略チェックボックス**************-->
+    <CheckBox
+        android:id="@+id/checkbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onCheckboxClicked"
+        android:text="ユーザー情報を記憶する"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password" />
+
+    <!--ログイン/キャンセルボタン********************************-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/finishLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkbox">
+
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="10dp"
+            android:text="キャンセル"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/loginButton"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/loginButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:text="ログイン"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/cancelButton"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <!--**********************************************-->
+
+    <!--色作成ボタン**********************************-->
+    <Button
+        android:id="@+id/userCreateButton"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="#00000000"
+        android:gravity="left|center_vertical"
+        android:text="新規ユーザー作成　>>"
+        android:textColor="@color/colorPrimary"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/finishLayout" />
+    <!--**********************************************-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>
