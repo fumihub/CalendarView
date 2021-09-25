@@ -43,7 +43,7 @@
         app:layout_constraintTop_toBottomOf="@+id/loginToolbar" />
     <!--**********************************************-->
 
-    <!--ユーザーID入力**********************************-->
+    <!--メールアドレス入力**********************************-->
     <TextView
         android:id="@+id/mailAddressText"
         android:layout_width="match_parent"
