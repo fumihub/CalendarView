@@ -7,10 +7,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.non_name_hero.calenderview.R
@@ -191,9 +188,11 @@ class InputBalanceActivity  /*コンストラクタ*/
 
         /*完了ボタンが押されたとき*******************/
         doneButton.setOnClickListener {
-            /*保存処理を実行*/
-            /*カレンダー表示画面に遷移*/
-            mInputPresenter.saveBalance(price.text.toString().toLong(), balanceCategoryId, mUsedAtDatetime.time, title.text.toString())
+            if (errorCheck()) {
+                /*保存処理を実行*/
+                /*カレンダー表示画面に遷移*/
+                mInputPresenter.saveBalance(price.text.toString().toLong(), balanceCategoryId, mUsedAtDatetime.time, title.text.toString())
+            }
         }
         /*********************************************/
 
@@ -205,6 +204,40 @@ class InputBalanceActivity  /*コンストラクタ*/
         /*********************************************/
 
     }
+
+    /*エラーチェック関数*********************************/
+    private fun errorCheck(): Boolean {
+        /*金額が入力されているかチェック*/
+        /*金額が入力されている場合*/
+        if (price.text.toString() != "0") {
+
+            /*12:00に設定*/
+            mUsedAtDatetime.set(Calendar.HOUR_OF_DAY, 12)
+            mUsedAtDatetime.set(Calendar.MINUTE, 0)
+            return true
+
+        }
+        /*金額が入力されていない場合*/
+        else {
+            /*トースト出力*/
+            outputToast("金額を入力してください。")
+            return false
+        }
+    }
+    /************************************************/
+
+    /*トースト出力関数************************************/
+    private fun outputToast(str: String) {
+        /*トースト表示*/
+        val errorToast = Toast.makeText(
+                applicationContext,
+                str,
+                Toast.LENGTH_SHORT
+        )
+        errorToast.show()
+    }
+    /************************************************/
+
 
     /*カテゴリー選択画面遷移関数*********************/
     private fun goCategorySelectActivity() {
