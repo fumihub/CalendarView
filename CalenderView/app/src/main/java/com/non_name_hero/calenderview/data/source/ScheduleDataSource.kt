@@ -5,6 +5,19 @@ import java.util.*
 
 interface ScheduleDataSource {
 
+
+    /**
+     * UserInfo変更時コールバック
+     * onUserInfoSaved() -　保存成功時の処理
+     * onDataNotAvailable() - 保存失敗時の処理
+     */
+    interface ChangeUserInfoCallback {
+        fun onUserInfoSaved()
+        fun onDataNotAvailable()
+    }
+
+    fun changeUserInfo(mailAddress: String, newPassword: String, callback: ChangeUserInfoCallback)
+
     /*Schedule用コールバック*/
     /*全件取得時のコールバック*/
     interface GetScheduleCallback {

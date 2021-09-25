@@ -13,9 +13,47 @@ import java.util.*
 class ScheduleDataRemoteSource() : ScheduleDataSource {
     private val PIGLEAD_SCHEDULES = "PigLeadSchedules"
     private val HOLIDAY_DOCUMENT = "holiday"
+    private val PIGLEAD_USERS = "PigLeadUsers"
 
     /*リモートデータベース*/
     private val db: FirebaseFirestore
+
+    /*DBにメールアドレスの登録がない場合、ドキュメントID自動作成でメールアドレスとパスワードを登録*/
+    override fun changeUserInfo(mailAddress: String, newPassword: String, callback: ChangeUserInfoCallback) {
+
+        /*メールアドレスが一致するドキュメントを取得*/
+        db.collection(PIGLEAD_USERS)
+                .whereEqualTo("mailAddress", mailAddress)
+                .get()
+                .addOnSuccessListener { documents ->
+                    /*メールアドレスが一致するドキュメントがあれば*/
+                    if (documents.size() != 0) {
+                        val userInfo = hashMapOf(
+                                "mailAddress" to mailAddress,
+                                "password" to newPassword
+                        )
+                        /*以下は別スレッドにて実行*/
+                        db.collection(PIGLEAD_USERS)
+                                .document(documents.documents[0].id)
+                                .set(userInfo)
+                                .addOnSuccessListener { documentReference ->
+                                    /*callbackに呼び出し*/
+                                    callback.onUserInfoSaved()
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.w(ContentValues.TAG, "Error password changing is failure")
+                                }
+                    }
+                    /*メールアドレスが一致するドキュメントがなければ*/
+                    else {
+                        Log.w(ContentValues.TAG, "Error mailAddress don't exist")
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(ContentValues.TAG, "Error getting documents: ", exception)
+                }
+    }
+
 
     /*CalendarData*/
     override fun getCalendarDataList(callback: LoadCalendarDataCallback) {}

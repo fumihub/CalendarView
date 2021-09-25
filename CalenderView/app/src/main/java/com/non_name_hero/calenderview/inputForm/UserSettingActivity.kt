@@ -7,11 +7,23 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.non_name_hero.calenderview.R
+import com.non_name_hero.calenderview.data.source.ScheduleDataSource
+import com.non_name_hero.calenderview.data.source.ScheduleRepository
+import com.non_name_hero.calenderview.utils.Injection
 import java.util.*
+import android.text.style.UnderlineSpan
+
+import android.text.SpannableString
+
+
+
 
 class UserSettingActivity  /*コンストラクタ*/
     : AppCompatActivity() {
 
+    private lateinit var repository: ScheduleRepository     /**/
+
+    private lateinit var mailAddress: EditText          /*メールアドレス確認*/
     private lateinit var password: EditText             /*パスワード設定*/
     private lateinit var year: EditText                 /*生年月日　年*/
     private lateinit var month: EditText                /*生年月日　月*/
@@ -20,13 +32,19 @@ class UserSettingActivity  /*コンストラクタ*/
     private lateinit var cancelButton: Button           /*キャンセルボタン*/
     private lateinit var doneButton: Button             /*保存ボタン*/
 
+    private var prePassword: String = ""                /*変更前のパスワード*/
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         /*初期設定***************************************/
+        repository = Injection.provideScheduleRepository(applicationContext)
+        val prefs = getSharedPreferences("input_data", Context.MODE_PRIVATE)
+        val editor = prefs.edit()
         setContentView(R.layout.user_setting)
         val myToolbar = findViewById<View>(R.id.userSettingToolbar) as Toolbar
         setSupportActionBar(myToolbar)
+        mailAddress = findViewById(R.id.mailAddress)
         password = findViewById(R.id.password)
         year = findViewById(R.id.year)
         month = findViewById(R.id.month)
@@ -35,13 +53,15 @@ class UserSettingActivity  /*コンストラクタ*/
         doneButton = findViewById(R.id.doneButton)
         /************************************************/
 
-        /*パスワード設定***********************************/
-        /*TODO SharePreferenceからパスワードを取得する*/
-//        password.hint =
+        /*ユーザー情報設定***********************************/
+        /*SharedPreferenceからメールアドレスの値を取得*/
+        mailAddress.setText(prefs.getString("mailAddress", ""))
+        /*SharedPreferenceからパスワードの値を取得*/
+        prePassword = prefs.getString("password", "")!!
+        password.setText(prePassword)
         /***********************************************/
 
         /*誕生日設定*************************************/
-        val prefs = getSharedPreferences("input_data", Context.MODE_PRIVATE)
         year.setText(prefs.getString("yearStr", ""))
         month.setText(prefs.getString("monthStr", ""))
         day.setText(prefs.getString("dayStr", ""))
@@ -50,8 +70,36 @@ class UserSettingActivity  /*コンストラクタ*/
         /*完了ボタンが押されたとき*******************/
         doneButton.setOnClickListener {
             /*保存処理を実行*/
-            /*TODO パスワードの変更内容をFireBase,SharedPreferenceに反映*/
 
+            /*パスワード変更処理*/
+            /*パスワードの変更があれば*/
+            if (prePassword != password.text.toString()) {
+                /*パスワードの変更をSharedPreferenceに反映*/
+                /*SharedPreferenceにパスワードの値を保存*/
+                editor.putString("password", password.text.toString())
+
+                /*非同期処理ならapply()、同期処理ならcommit()*/
+                editor.apply()
+
+                /*パスワードの変更内容をFireBaseに反映*/
+                repository.changeUserInfo(mailAddress.text.toString(), password.text.toString(), object : ScheduleDataSource.ChangeUserInfoCallback {
+                    override fun onUserInfoSaved() {
+                        /*パスワード変更成功ログ*/
+                        outputToast("パスワードの変更に成功しました。")
+                    }
+                    /*ユーザーの作成に失敗した場合*/
+                    override fun onDataNotAvailable() {
+                        /*エラー出力*/
+                        outputToast("パスワードの変更に失敗しました。")
+                    }
+                })
+                /****************************************/
+            }
+            /*パスワードの変更がなければ*/
+            else {
+                /*エラー出力*/
+                outputToast("パスワードの変更はされませんでした。")
+            }
 
             /*誕生日判定*************************************/
             val yearStr = year.text.toString()
