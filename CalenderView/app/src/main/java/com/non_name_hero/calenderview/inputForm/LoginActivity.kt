@@ -1,30 +1,19 @@
 package com.non_name_hero.calenderview.inputForm
 
-
-import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.non_name_hero.calenderview.R
-import com.non_name_hero.calenderview.data.CategoryData
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource
 import com.non_name_hero.calenderview.data.source.ScheduleRepository
 import com.non_name_hero.calenderview.utils.Injection
-import com.non_name_hero.calenderview.inputForm.InputContract.Presenter
-import java.util.*
-import android.app.AlarmManager
-
-import android.app.PendingIntent
 import android.content.Context
 import android.view.KeyEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import com.non_name_hero.calenderview.calendar.MainActivity
-import com.non_name_hero.calenderview.notification.AlarmNotification
 
 
 class LoginActivity  /*コンストラクタ*/
