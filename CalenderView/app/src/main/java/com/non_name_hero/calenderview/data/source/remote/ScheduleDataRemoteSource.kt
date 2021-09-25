@@ -38,7 +38,7 @@ class ScheduleDataRemoteSource() : ScheduleDataSource {
                                 .add(userInfo)
                                 .addOnSuccessListener { documentReference ->
                                     /*callbackに引数を渡す(existFlag)*/
-                                    callback.onUserInfoSaved(true)
+                                    callback.onUserInfoSaved(false)
                                 }
                                 .addOnFailureListener { e ->
 
@@ -48,7 +48,7 @@ class ScheduleDataRemoteSource() : ScheduleDataSource {
                     else {
                         Log.w(ContentValues.TAG, "Error already exist mailAddress")
                         /*callbackに引数を渡す(existFlag)*/
-                        callback.onUserInfoSaved(false)
+                        callback.onUserInfoSaved(true)
                     }
                 }
                 .addOnFailureListener { exception ->

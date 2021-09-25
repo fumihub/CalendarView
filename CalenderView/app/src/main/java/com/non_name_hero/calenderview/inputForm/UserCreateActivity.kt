@@ -103,12 +103,14 @@ class UserCreateActivity  /*コンストラクタ*/
             if (successFlag) {
                 repository.setUserInfo(mailAddress.text.toString(), password.text.toString(), object : ScheduleDataSource.SaveUserInfoCallback {
                     override fun onUserInfoSaved(existFlag: Boolean) {
-                        if (existFlag) {
+                        /*ユーザー情報がなければ*/
+                        if (!existFlag) {
                             /*ユーザーの作成に成功した場合*/
                             /*ログイン画面に遷移*/
                             outputToast("ユーザーの作成に成功しました。")
                             returnLoginActivity()
                         }
+                        /*ユーザー情報があれば*/
                         else {
                             /*エラー出力*/
                             outputToast("メールアドレスがすでに存在します。")
