@@ -36,8 +36,13 @@ class ScheduleDataRemoteSource() : ScheduleDataSource {
                         /*以下は別スレッドにて実行*/
                         db.collection(PIGLEAD_USERS)
                                 .add(userInfo)
-                        /*callbackに引数を渡す(existFlag)*/
-                        callback.onUserInfoSaved(true)
+                                .addOnSuccessListener { documentReference ->
+                                    /*callbackに引数を渡す(existFlag)*/
+                                    callback.onUserInfoSaved(true)
+                                }
+                                .addOnFailureListener { e ->
+
+                                }
                     }
                     /*メールアドレスが一致するドキュメントがあれば*/
                     else {
