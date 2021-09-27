@@ -192,6 +192,8 @@ class InputBalanceActivity  /*コンストラクタ*/
                 /*保存処理を実行*/
                 /*カレンダー表示画面に遷移*/
                 mInputPresenter.saveBalance(price.text.toString().toLong(), balanceCategoryId, mUsedAtDatetime.time, title.text.toString())
+                /*トースト出力*/
+                outputToast("家計簿を登録しました。")
             }
         }
         /*********************************************/
