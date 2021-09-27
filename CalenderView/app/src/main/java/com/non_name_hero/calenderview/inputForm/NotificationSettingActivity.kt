@@ -2,8 +2,6 @@ package com.non_name_hero.calenderview.inputForm
 
 import android.app.AlarmManager
 import android.app.PendingIntent
-import android.content.Context.ALARM_SERVICE
-import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.os.Bundle
 import android.view.View

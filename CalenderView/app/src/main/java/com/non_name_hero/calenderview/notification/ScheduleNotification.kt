@@ -1,5 +1,6 @@
 package com.non_name_hero.calenderview.notification;
 
+import android.annotation.SuppressLint
 import com.non_name_hero.calenderview.R
 import android.app.Notification
 import android.app.NotificationChannel
@@ -12,8 +13,10 @@ import android.graphics.Color
 import android.media.RingtoneManager
 import android.os.Build
 import android.os.Process
+import android.text.Html.*
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.core.text.HtmlCompat
 import com.google.firebase.FirebaseApp
 import java.util.*
 import com.non_name_hero.calenderview.calendar.MainActivity
@@ -61,24 +64,31 @@ class ScheduleNotification : BroadcastReceiver() {
                 targetStartDate,
                 targetEndDate,
                 object : ScheduleDataSource.PickUpScheduleCallback {
+                    @SuppressLint("WrongConstant")
                     override fun onScheduleLoaded(schedules: List<Schedule>) {
                         /*スケジュール数を取得*/
-                        val title = "明日の予定は" + schedules.size + "件です。"
+                        val html = "<html><b>明日の予定は " + schedules.size + " 件です。</b></html>"
+                        val title = HtmlCompat.fromHtml(html, FROM_HTML_MODE_COMPACT)
                         /*通知に表示させるメッセージを取得(複数ある場合は改行区切り)
                         * 終日予定の場合：「終日　タイトル」
                         * 時間指定の場合：「startTime-endTime　タイトル」*/
                         val scheduleMessageList  = mutableListOf<String>()
                         /*時間指定用フォーマット*/
                         val df = SimpleDateFormat("HH:mm")
-                        /*スケジュールの要素を１つずつ取り出し文字列連結*/
-                        schedules.forEach {
-                            /*時間指定がある場合*/
-                            if (it.timeSettingFlag) {
-                                scheduleMessageList.add(df.format(it.startAtDatetime) + "-" + df.format(it.endAtDatetime) + "  " +it.title!!)
-                            }
-                            /*終日の場合*/
-                            else{
-                                scheduleMessageList.add("終日" + "  " +it.title!!)
+                        /*スケジュールの要素が0でなければ*/
+                        if (schedules.isNotEmpty()) {
+                            /*空白行追加*/
+                            scheduleMessageList.add("")
+                            /*スケジュールの要素を１つずつ取り出し文字列連結*/
+                            schedules.forEach {
+                                /*時間指定がある場合*/
+                                if (it.timeSettingFlag) {
+                                    scheduleMessageList.add(df.format(it.startAtDatetime) + "-" + df.format(it.endAtDatetime) + "  " +it.title!!)
+                                }
+                                /*終日の場合*/
+                                else{
+                                    scheduleMessageList.add("終日" + "  " +it.title!!)
+                                }
                             }
                         }
                         /*改行区切りでリストの要素をscheduleMessageに代入*/
@@ -93,6 +103,7 @@ class ScheduleNotification : BroadcastReceiver() {
                         } else {
                             TODO("VERSION.SDK_INT < O")
                         }
+                        scheduleChannel.description = title.toString()
                         scheduleChannel.description = scheduleMessage
                         scheduleChannel.enableVibration(true)
                         scheduleChannel.canShowBadge()
