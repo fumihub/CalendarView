@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -117,6 +118,8 @@ class SubCategorySelectActivity  /*コンストラクタ*/
                                     override fun onBalanceCategorySaved() {
                                         //リストビュー更新
                                         loadCategoriesDataList()
+                                        /*トースト出力*/
+                                        outputToast("サブカテゴリーを追加しました。")
                                     }
 
                                     override fun onDataNotSaved() {}
@@ -127,6 +130,18 @@ class SubCategorySelectActivity  /*コンストラクタ*/
         }
         /************************************************/
     }
+
+    /*トースト出力関数************************************/
+    private fun outputToast(str: String) {
+        /*トースト表示*/
+        val errorToast = Toast.makeText(
+                applicationContext,
+                str,
+                Toast.LENGTH_SHORT
+        )
+        errorToast.show()
+    }
+    /************************************************/
 
     /*TODO SharedPreferenceからViewModelに変更*/
     /*編集モードかを判定する関数********************/

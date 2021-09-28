@@ -115,6 +115,18 @@ class ColorCreateActivity  /*コンストラクタ*/
         /************************************************/
     }
 
+    /*トースト出力関数************************************/
+    private fun outputToast(str: String) {
+        /*トースト表示*/
+        val errorToast = Toast.makeText(
+                applicationContext,
+                str,
+                Toast.LENGTH_SHORT
+        )
+        errorToast.show()
+    }
+    /************************************************/
+
     /*色画面遷移関数************************************/
     private fun goColorActivity() {
         /*色画面遷移用intent*/
@@ -165,6 +177,8 @@ class ColorCreateActivity  /*コンストラクタ*/
                         object : SaveScheduleGroupCallback {
                             override fun onScheduleGroupSaved() {
                                 /*色選択画面遷移*/
+                                /*トースト出力*/
+                                outputToast("色を追加しました。")
                                 setResult(RESULT_OK, intentOut)
                                 finish()
                             }
@@ -186,6 +200,8 @@ class ColorCreateActivity  /*コンストラクタ*/
                         object : SaveScheduleGroupCallback {
                             override fun onScheduleGroupSaved() {
                                 /*色選択画面遷移*/
+                                /*トースト出力*/
+                                outputToast("色を編集しました。")
                                 setResult(RESULT_OK, intentOut)
                                 finish()
                             }
