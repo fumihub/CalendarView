@@ -16,18 +16,14 @@ import androidx.databinding.DataBindingUtil
 import com.non_name_hero.calenderview.R
 import com.non_name_hero.calenderview.data.BalanceCategory
 import com.non_name_hero.calenderview.data.CategoryData
-import com.non_name_hero.calenderview.data.ScheduleGroup
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource
 import com.non_name_hero.calenderview.data.source.ScheduleRepository
-import com.non_name_hero.calenderview.databinding.ColorSelectBinding
 import com.non_name_hero.calenderview.databinding.SubCategorySelectBinding
 import com.non_name_hero.calenderview.utils.Injection
 import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadBalanceCategoryDeleteDialog
-import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDeleteDialog
 import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDialogBase
 import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDialogFragment
 import com.non_name_hero.calenderview.utils.obtainViewModel
-import java.lang.Boolean.TRUE
 import java.util.ArrayList
 
 class SubCategorySelectActivity  /*コンストラクタ*/
@@ -49,17 +45,19 @@ class SubCategorySelectActivity  /*コンストラクタ*/
 
     private var categoryId = 22                                      /*カテゴリID*/
 
+    private var errorFlag = false                                   /*エラーチェック用フラグ*/
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         /*初期設定***************************************/
         context = this
         repository = Injection.provideScheduleRepository(context)
-        //DataBinding
+        /*DataBinding*/
         binding = DataBindingUtil.setContentView(this, R.layout.sub_category_select)
         /*ビューモデル設定*/
         binding.viewModel = obtainViewModel()
-        //LifecycleOwnerを指定
+        /*LifecycleOwnerを指定*/
         binding.lifecycleOwner = this
         val myToolbar = findViewById<View>(R.id.subCategorySelectToolbar) as Toolbar
         editButton = findViewById(R.id.editButton)
@@ -71,7 +69,7 @@ class SubCategorySelectActivity  /*コンストラクタ*/
 
         /*リストのアダプターを使用してViewを作成*/
         ListAdapter = SubCategoryListAdapter(context, this)
-        //削除ダイアログを設定
+        /*削除ダイアログを設定*/
         ListAdapter.deleteDialog = this
         listView.adapter = ListAdapter
 
@@ -108,23 +106,61 @@ class SubCategorySelectActivity  /*コンストラクタ*/
                 .setMessage("サブカテゴリー名を入力してください。")
                 .setView(subCategoryEditText)
                 .setPositiveButton("保存", DialogInterface.OnClickListener {_, _ ->
-                        repository.insertBalanceCategory(
-                                BalanceCategory(
-                                        TRUE,
-                                        subCategoryEditText.text.toString(),
-                                        categoryId
-                                ),
-                                object : ScheduleDataSource.SaveBalanceCategoryCallback {
-                                    override fun onBalanceCategorySaved() {
-                                        //リストビュー更新
-                                        loadCategoriesDataList()
-                                        /*トースト出力*/
-                                        outputToast("サブカテゴリーを追加しました。")
-                                    }
 
-                                    override fun onDataNotSaved() {}
+                    /*エラーチェック用フラグ初期化*/
+                    errorFlag = false
+
+                    /*サブカテゴリー名が入力されていなければ*/
+                    if (subCategoryEditText.text.toString() == "") {
+                        /*エラー出力*/
+                        outputToast("サブカテゴリー名を入力してください。")
+                        outputToast("サブカテゴリー作成に失敗しました。")
+                    }
+                    /*サブカテゴリー名が入力されていれば*/
+                    else {
+                        /*現在のカテゴリーリスト取得*/
+                        repository.getCategoriesData(categoryId,object : ScheduleDataSource.GetCategoriesDataCallback {
+                            override fun onCategoriesDataLoaded(CategoryData: List<CategoryData>) {
+
+                                CategoryData.forEach{
+                                    /*同名のサブカテゴリーが存在する場合*/
+                                    if (it.categoryName.equals(subCategoryEditText.text.toString(), ignoreCase = true)) {
+                                        errorFlag = true
+                                    }
                                 }
-                        )
+
+                                /*同名のサブカテゴリーが存在する場合*/
+                                if (errorFlag) {
+                                    /*エラー出力*/
+                                    outputToast("同名のサブカテゴリーが存在します。")
+                                    outputToast("サブカテゴリー作成に失敗しました。")
+                                }
+                                /*同名のサブカテゴリーが存在しなかった場合*/
+                                else {
+                                    repository.insertBalanceCategory(
+                                            BalanceCategory(
+                                                    true,
+                                                    subCategoryEditText.text.toString(),
+                                                    categoryId
+                                            ),
+                                            object : ScheduleDataSource.SaveBalanceCategoryCallback {
+                                                override fun onBalanceCategorySaved() {
+                                                    /*リストビュー更新*/
+                                                    loadCategoriesDataList()
+                                                    /*トースト出力*/
+                                                    outputToast("サブカテゴリーを追加しました。")
+                                                }
+
+                                                override fun onDataNotSaved() {}
+                                            }
+                                    )
+                                }
+                            }
+
+                            override fun onDataNotAvailable() {}
+                        })
+                    }
+
                 })
                 .show();
         }
