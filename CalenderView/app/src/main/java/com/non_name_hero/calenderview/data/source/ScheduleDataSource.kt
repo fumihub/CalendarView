@@ -5,7 +5,22 @@ import java.util.*
 
 interface ScheduleDataSource {
 
+    /*UserInfo用コールバッグ*/
+    interface GetUserInfoCallback {
+        fun onUserInfoLoaded(password: String)
+        fun onDataNotAvailable()
+    }
 
+    /**
+     * User追加時コールバック
+     * onUserInfoSaved() -　保存成功時の処理
+     * onDataNotAvailable() - 保存失敗時の処理
+     */
+    interface SaveUserInfoCallback {
+        fun onUserInfoSaved(existFlag: Boolean)
+        fun onDataNotAvailable()
+    }
+    
     /**
      * UserInfo変更時コールバック
      * onUserInfoSaved() -　保存成功時の処理
@@ -16,6 +31,8 @@ interface ScheduleDataSource {
         fun onDataNotAvailable()
     }
 
+    fun getUserInfo(mailAddress: String, callback: GetUserInfoCallback)
+    fun setUserInfo(mailAddress: String, password: String, callback: SaveUserInfoCallback)
     fun changeUserInfo(mailAddress: String, newPassword: String, callback: ChangeUserInfoCallback)
 
     /*Schedule用コールバック*/

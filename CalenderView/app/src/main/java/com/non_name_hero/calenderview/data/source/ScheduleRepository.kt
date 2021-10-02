@@ -22,6 +22,16 @@ class ScheduleRepository (
     }
 
 
+    /*UserInfo*/
+    override fun getUserInfo(mailAdress: String, callback: GetUserInfoCallback) {
+        mScheduleDataRemoteSource.getUserInfo(mailAdress, callback)
+    }
+
+    override fun setUserInfo(mailAdress: String, password: String, callback: SaveUserInfoCallback) {
+        mScheduleDataRemoteSource.setUserInfo(mailAdress, password, callback)
+    }
+
+
     /*Schedule*/
     /**
      * スケジュールIDを指定して情報を取得

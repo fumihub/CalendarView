@@ -18,7 +18,71 @@ class ScheduleDataRemoteSource() : ScheduleDataSource {
     /*リモートデータベース*/
     private val db: FirebaseFirestore
 
+    /*UserInfo*/
     /*DBにメールアドレスの登録がない場合、ドキュメントID自動作成でメールアドレスとパスワードを登録*/
+    override fun setUserInfo(mailAddress: String, password: String, callback: SaveUserInfoCallback) {
+
+        /*メールアドレスが一致するドキュメントを取得*/
+        db.collection(PIGLEAD_USERS)
+                .whereEqualTo("mailAddress", mailAddress)
+                .get()
+                .addOnSuccessListener { documents ->
+                    /*メールアドレスが一致するドキュメントがなければ*/
+                    if (documents.size() == 0) {
+                        val userInfo = hashMapOf(
+                                "mailAddress" to mailAddress,
+                                "password" to password
+                        )
+                        /*以下は別スレッドにて実行*/
+                        db.collection(PIGLEAD_USERS)
+                                .add(userInfo)
+                                .addOnSuccessListener { documentReference ->
+                                    /*callbackに引数を渡す(existFlag)*/
+                                    callback.onUserInfoSaved(false)
+                                }
+                                .addOnFailureListener { e ->
+
+                                }
+                    }
+                    /*メールアドレスが一致するドキュメントがあれば*/
+                    else {
+                        Log.w(ContentValues.TAG, "Error already exist mailAddress")
+                        /*callbackに引数を渡す(existFlag)*/
+                        callback.onUserInfoSaved(true)
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(ContentValues.TAG, "Error getting documents: ", exception)
+                }
+    }
+
+    /*メールアドレスを指定して、パスワードを取得する*/
+    override fun getUserInfo(mailAddress: String, callback: GetUserInfoCallback) {
+        /*以下は別スレッドにて実行*/
+        /*メールアドレスが一致するドキュメントを取得*/
+        db.collection(PIGLEAD_USERS)
+                .whereEqualTo("mailAddress", mailAddress)
+                .get()
+                .addOnSuccessListener { documents ->
+                    /*メールアドレスが一致するドキュメントがあれば*/
+                    if (documents.size() != 0) {
+                        /*callbackに引数を渡す(パスワード)*/
+                        callback.onUserInfoLoaded(documents.documents[0].get("password") as String)
+                        Log.d(ContentValues.TAG, "${documents.documents[0].id} => ${documents.documents[0].data}")
+                    }
+                    /*メールアドレスが一致するドキュメントがなければ*/
+                    else {
+                        /*callbackに引数を渡す(空文字)*/
+                        callback.onUserInfoLoaded("")
+                        Log.w(ContentValues.TAG, "Error no mailAddress")
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(ContentValues.TAG, "Error getting documents: ", exception)
+                }
+    }
+  
+    /*メールアドレスを指定してパスワードを変更*/
     override fun changeUserInfo(mailAddress: String, newPassword: String, callback: ChangeUserInfoCallback) {
 
         /*メールアドレスが一致するドキュメントを取得*/
