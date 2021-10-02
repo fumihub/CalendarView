@@ -1,5 +1,6 @@
 package com.non_name_hero.calenderview.notification
 
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -11,8 +12,10 @@ import android.graphics.Color
 import android.media.RingtoneManager
 import android.os.Build
 import android.os.Process
+import android.text.Html.*
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.core.text.HtmlCompat
 import com.non_name_hero.calenderview.R
 import com.non_name_hero.calenderview.inputForm.InputBalanceActivity
 import com.non_name_hero.calenderview.utils.PigLeadUtils
@@ -20,6 +23,7 @@ import java.util.*
 
 class BalanceNotification : BroadcastReceiver() {
 
+    @SuppressLint("WrongConstant")
     override fun onReceive(context: Context, intent: Intent) {
         Log.d("AlarmBroadcastReceiver", "onReceive() pid=" + Process.myPid())
         val requestCode = intent.getIntExtra("RequestCode", 0)
@@ -34,10 +38,10 @@ class BalanceNotification : BroadcastReceiver() {
         balanceIntent.putExtra("day", day)
         val pendingBalanceIntent = PendingIntent.getActivity(context, requestCode, balanceIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         val channelId = "default"
-        val title = "Balance Check"
+        val title = HtmlCompat.fromHtml("<html><b>Balance Check</b></html>", FROM_HTML_MODE_COMPACT)
 
         /*メッセージ(家計簿入力忘れ防止)*/
-        val balanceMessage = "入力忘れの入出金はございませんか？"
+        val balanceMessage = HtmlCompat.fromHtml("<html><font color='red'>入力忘れの入出金はございませんか？</font></html>", FROM_HTML_MODE_COMPACT)
         val balanceNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
 
@@ -47,7 +51,8 @@ class BalanceNotification : BroadcastReceiver() {
         } else {
             TODO("VERSION.SDK_INT < O")
         }
-        balanceChannel.description = balanceMessage
+        balanceChannel.description = title.toString()
+        balanceChannel.description = balanceMessage.toString()
         balanceChannel.enableVibration(true)
         balanceChannel.canShowBadge()
         balanceChannel.enableLights(true)

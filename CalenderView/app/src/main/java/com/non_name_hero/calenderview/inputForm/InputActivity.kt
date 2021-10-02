@@ -278,6 +278,8 @@ class InputActivity  /*コンストラクタ*/
                 /*保存処理を実行*/
                 /*カレンダー表示画面に遷移*/
                 mInputPresenter.saveSchedule(title.text.toString(), memo.text.toString(), mStartAtDatetime.time, mEndAtDatetime.time, mGroupId, timeSettingFlag)
+                /*トースト出力*/
+                outputToast("スケジュールを登録しました。")
             }
         }
         /*********************************************/
@@ -317,9 +319,26 @@ class InputActivity  /*コンストラクタ*/
                 /*開始、終了時間が入力されている場合*/
                 else if (startTime.text.toString() != ""
                         && endTime.text.toString() != "") {
-                    /*時間設定判定フラグを立てる*/
-                    timeSettingFlag = true
-                    return true
+
+                    /*開始時間が終了時間よりも遅い場合*/
+                    if (mStartAtDatetime > mEndAtDatetime) {
+
+                        /*時間設定判定フラグをおろす*/
+                        timeSettingFlag = false
+                        /*トースト出力*/
+                        outputToast("開始時間よりも終了時間が早く設定されています。")
+                        return false
+
+                    }
+                    /*開始時間が終了時間よりも早い場合*/
+                    else {
+
+                        /*時間設定判定フラグを立てる*/
+                        timeSettingFlag = true
+                        return true
+
+                    }
+
                 }
                 /*開始、終了時間がどちらか一方のみが入力されている場合*/
                 else {

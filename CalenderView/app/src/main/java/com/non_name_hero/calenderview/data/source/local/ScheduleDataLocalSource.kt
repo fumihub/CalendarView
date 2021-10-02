@@ -13,12 +13,12 @@ class ScheduleDataLocalSource  //コンストラクタ
 (val appExecutors: AppExecutors,
  val schedulesDao: SchedulesDao) : ScheduleDataSource {
 
-
     /*UserInfo*/
     override fun getUserInfo(mailAdress: String, callback: GetUserInfoCallback) {}
 
     override fun setUserInfo(mailAdress: String, password: String, callback: SaveUserInfoCallback) {}
 
+    override fun changeUserInfo(mailAddress: String, newPassword: String, callback: ChangeUserInfoCallback) {}
 
     /*Schedule*/
     override fun getSchedule(scheduleIds: LongArray, callback: GetScheduleCallback) {

@@ -81,6 +81,42 @@ class ScheduleDataRemoteSource() : ScheduleDataSource {
                     Log.w(ContentValues.TAG, "Error getting documents: ", exception)
                 }
     }
+  
+    /*メールアドレスを指定してパスワードを変更*/
+    override fun changeUserInfo(mailAddress: String, newPassword: String, callback: ChangeUserInfoCallback) {
+
+        /*メールアドレスが一致するドキュメントを取得*/
+        db.collection(PIGLEAD_USERS)
+                .whereEqualTo("mailAddress", mailAddress)
+                .get()
+                .addOnSuccessListener { documents ->
+                    /*メールアドレスが一致するドキュメントがあれば*/
+                    if (documents.size() != 0) {
+                        val userInfo = hashMapOf(
+                                "mailAddress" to mailAddress,
+                                "password" to newPassword
+                        )
+                        /*以下は別スレッドにて実行*/
+                        db.collection(PIGLEAD_USERS)
+                                .document(documents.documents[0].id)
+                                .set(userInfo)
+                                .addOnSuccessListener { documentReference ->
+                                    /*callbackに呼び出し*/
+                                    callback.onUserInfoSaved()
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.w(ContentValues.TAG, "Error password changing is failure")
+                                }
+                    }
+                    /*メールアドレスが一致するドキュメントがなければ*/
+                    else {
+                        Log.w(ContentValues.TAG, "Error mailAddress don't exist")
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(ContentValues.TAG, "Error getting documents: ", exception)
+                }
+    }
 
 
     /*CalendarData*/

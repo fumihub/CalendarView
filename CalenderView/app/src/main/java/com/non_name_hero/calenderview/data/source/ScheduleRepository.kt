@@ -17,6 +17,10 @@ class ScheduleRepository (
     var mCalendarCacheIsDirty = false
     var mHolidayCacheIsDirty = false
 
+    override fun changeUserInfo(mailAddress: String, newPassword: String, callback: ChangeUserInfoCallback) {
+        mScheduleDataRemoteSource.changeUserInfo(mailAddress, newPassword, callback)
+    }
+
 
     /*UserInfo*/
     override fun getUserInfo(mailAdress: String, callback: GetUserInfoCallback) {

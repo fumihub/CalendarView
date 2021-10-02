@@ -2,8 +2,6 @@ package com.non_name_hero.calenderview.inputForm
 
 import android.app.AlarmManager
 import android.app.PendingIntent
-import android.content.Context.ALARM_SERVICE
-import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -77,13 +75,14 @@ class NotificationSettingActivity  /*コンストラクタ*/
 
         /*scheduleStrが「なし」の場合*/
         if (scheduleStr == "なし") {
-
+            /*エラー出力*/
+            outputToast("スケジュール通知の設定はされませんでした。")
         }
         /*scheduleStrが「なし」でない場合*/
         else {
             /*スケジュール指定時間通知システム***************************/
             val scheduleTime = intArrayOf(23, 22, 21, 20, 19, 18)
-            val scheduleIntent: Intent? = Intent(this, ScheduleNotification::class.java)
+            val scheduleIntent: Intent = Intent(this, ScheduleNotification::class.java)
 
             /*Notificationを起動*/
             val scheduleSender = PendingIntent.getBroadcast(this, 0, scheduleIntent, 0)
@@ -104,6 +103,10 @@ class NotificationSettingActivity  /*コンストラクタ*/
             val scheduleAlarm = getSystemService(ALARM_SERVICE) as AlarmManager
             scheduleAlarm[AlarmManager.RTC_WAKEUP, scheduleCalendar.timeInMillis] = scheduleSender
             /*********************************************/
+
+            /*確認ログ出力*/
+            outputToast("スケジュール通知は「" + scheduleStr + "」に設定されました。")
+
         }
         /************************************************/
     }
@@ -126,13 +129,14 @@ class NotificationSettingActivity  /*コンストラクタ*/
 
         /*balanceStrが「なし」の場合*/
         if (balanceStr == "なし") {
-
+            /*エラー出力*/
+            outputToast("入出金確認通知の設定はされませんでした。")
         }
         /*balanceStrが「なし」でない場合*/
         else {
             /*入出金指定時間通知システム***************************/
             val balanceTime = intArrayOf(23, 22, 21, 20, 19, 18)
-            val balanceIntent: Intent? = Intent(this, BalanceNotification::class.java)
+            val balanceIntent: Intent = Intent(this, BalanceNotification::class.java)
 
             /*Notificationを起動*/
             val balanceSender = PendingIntent.getBroadcast(this, 0, balanceIntent, 0)
@@ -153,8 +157,25 @@ class NotificationSettingActivity  /*コンストラクタ*/
             val balanceAlarm = getSystemService(ALARM_SERVICE) as AlarmManager
             balanceAlarm[AlarmManager.RTC_WAKEUP, balanceCalendar.timeInMillis] = balanceSender
             /*********************************************/
+
+            /*確認ログ出力*/
+            outputToast("入出金確認通知は「" + balanceStr + "」に設定されました。")
+
         }
         /************************************************/
     }
     /************************************************/
+
+    /*トースト出力関数************************************/
+    private fun outputToast(str: String) {
+        /*トースト表示*/
+        val errorToast = Toast.makeText(
+                applicationContext,
+                str,
+                Toast.LENGTH_SHORT
+        )
+        errorToast.show()
+    }
+    /************************************************/
+
 }
