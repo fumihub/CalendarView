@@ -109,7 +109,7 @@ interface ScheduleDataSource {
         fun onBalanceDataLoaded(balanceLiveData: LiveData<List<BalanceData>>)
         fun onDataNotAvailable()
     }
-    fun getBalanceData(startMonth: Date, endMonth: Date, callback: GetBalanceDataCallback)
+    fun getBalanceData(startMonth: Date?, endMonth: Date?, callback: GetBalanceDataCallback)
 
     /*CategoryData用コールバック*/
     /*全要素取得時コールバック*/

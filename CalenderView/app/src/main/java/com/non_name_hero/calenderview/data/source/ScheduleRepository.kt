@@ -193,7 +193,7 @@ class ScheduleRepository (
     /**
      * カレンダーの表示(家計簿)データを取得
      */
-    override fun getBalanceData(startMonth: Date, endMonth: Date, callback: GetBalanceDataCallback) {
+    override fun getBalanceData(startMonth: Date?, endMonth: Date?, callback: GetBalanceDataCallback) {
         if (cachedBalanceData.value?.isEmpty() == true && !balanceDataCacheIsDirty) {
             scheduleDataLocalSource.getBalanceData(
                 startMonth,
