@@ -56,8 +56,9 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
     val balanceDataMap: LiveData<Map<String, List<BalanceData>>>
         get() = _balanceDataMap
 
+    // Livedataが変更された場合に実行される処理を定義
     private val balanceDataListLiveDataObserver =
-        Observer<List<BalanceData>> { balanceDataList -> _balanceDataMap.value = PigLeadUtils.getBalanceDataMapByBalanceDataList(balanceDataList) }
+        Observer<List<BalanceData>> { balanceDataList -> _balanceDataMap.value = PigLeadUtils.getBalanceCalendarDataMapByBalanceDataList(balanceDataList) }
     /**
      * 現在のカレンダーモード
      * value = ture の時にカレンダーモード
@@ -131,18 +132,19 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
     /**
      * 家計簿データの取得
      */
-    fun reloadBalanceData(startMonth: Date = Date(), forceUpdate: Boolean = false){
+    private fun reloadBalanceData(startMonth: Date? = null, forceUpdate: Boolean = false){
         if (forceUpdate) {
             // TODO LiveDataでは不要？
             schedulesRepository.balanceDataCacheClear()
         }
-        val calendar = Calendar.getInstance()
-        calendar.time = startMonth
-        calendar.set(Calendar.DAY_OF_MONTH, 0)
-        val startTargetMonth = calendar.time
-        calendar.add(Calendar.MONTH, 1)
-        val endTargetMonth = calendar.time
-        schedulesRepository.getBalanceData(startMonth = startTargetMonth,endMonth = endTargetMonth ,this)
+        //TODO: 月指定で取得処理をする
+//        val calendar = Calendar.getInstance()
+//        calendar.time = startMonth
+//        calendar.set(Calendar.DAY_OF_MONTH, 0)
+//        val startTargetMonth = calendar.time
+//        calendar.add(Calendar.MONTH, 1)
+//        val endTargetMonth = calendar.time
+        schedulesRepository.getBalanceData(startMonth = null,endMonth = null ,this)
     }
 
     /**
@@ -151,6 +153,7 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
     override fun onBalanceDataLoaded(balanceLiveData: LiveData<List<BalanceData>>) {
         _balanceListData = balanceLiveData
         Log.d("balanceData", balanceLiveData.value.toString())
+        // Livedataの監視
         balanceListData.observeForever(balanceDataListLiveDataObserver)
     }
 

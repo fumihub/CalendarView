@@ -29,8 +29,7 @@ object PigLeadUtils {
                 scheduleLists.add(schedule)
                 scheduleLists = ArrayList(LinkedHashSet(scheduleLists))
             } else {
-                scheduleLists = ArrayList()
-                scheduleLists.add(schedule)
+                scheduleLists = mutableListOf(schedule)
             }
             scheduleMap[date] = scheduleLists
         }
@@ -38,10 +37,10 @@ object PigLeadUtils {
     }
 
     /**
-     * List<CalendarData> から Map<String></String>, List<CalendarData>>へ変換する
+     * List<CalendarData> から Map<String>, List<CalendarData>>へ変換する
      * @param calendarDataList
-     * @return scheduleMap -　Map<String></String>, List<Calendardata>>
-    </Calendardata></CalendarData></CalendarData> */
+     * @return scheduleMap<Calendardata>
+     **/
     fun getCalendarDataMapByCalendarDataList(calendarDataList: List<CalendarData>): Map<String, MutableList<CalendarData>> {
         val calendarDataMap: MutableMap<String, MutableList<CalendarData>> = HashMap()
         var calendarDataLists: MutableList<CalendarData>
@@ -55,35 +54,29 @@ object PigLeadUtils {
                 // 重複するデータを削除してArrayListを再構成する
                 calendarDataLists = ArrayList(LinkedHashSet(calendarDataLists))
             } else {
-                calendarDataLists = ArrayList()
-                calendarDataLists.add(data)
+                calendarDataLists = mutableListOf(data)
             }
             // 日付をキーとして値にデータのリストを格納
             calendarDataMap[date] = calendarDataLists
         }
         return calendarDataMap
     }
-    /**
-     * List<BalanceData> から Map<String></String>, List<CalendarData>>へ変換する
-     * @param balanceDataList
-     * @return scheduleMap 日付をキーとする家計簿データのHashMapを取得
-     */
-    fun getBalanceDataMapByBalanceDataList(balanceDataList: List<BalanceData>): Map<String, MutableList<BalanceData>> {
+
+    fun getBalanceCalendarDataMapByBalanceDataList(balanceDataList: List<BalanceData>): Map<String, MutableList<BalanceData>> {
         val calendarBalanceDataMap: MutableMap<String, MutableList<BalanceData>> = HashMap()
         var balanceDataLists: MutableList<BalanceData>
         // 日付に家計簿データをマッピング
         for (data in balanceDataList) {
             // 日付キーを生成
-            val date = formatYYYYMMDD.format(data.usedAtDatetime)
+            val date = data.timestamp
             if (calendarBalanceDataMap.containsKey(date)) {
-                //balanceDataMap[date]が非nullであることは保証される
+                // すでにその日にちのデータがある場合は値を取得した上で追加
                 balanceDataLists = calendarBalanceDataMap[date]!!
+                // 同じbalanceType(収支タイプ)が同じ要素がなければ要素を追加
                 balanceDataLists.add(data)
-                // 重複するデータを削除してArrayListを再構成する
-                balanceDataLists = ArrayList(LinkedHashSet(balanceDataLists))
             } else {
-                balanceDataLists = ArrayList()
-                balanceDataLists.add(data)
+                // すでにその日にちのデータがない場合は新規にArrayList作成
+                balanceDataLists = mutableListOf(data)
             }
             // 日付をキーとして値にデータのリストを格納
             calendarBalanceDataMap[date] = balanceDataLists
