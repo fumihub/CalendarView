@@ -12,12 +12,13 @@
         android:id="@+id/scheduleText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/scheduleTextSize"
-        android:text="@{balanceData.title}"
+        android:textSize="@dimen/balanceTextSize"
+        android:text="@{balanceData.priceText}"
         android:textColor="@{Color.WHITE}"
+        android:gravity="right"
         android:ellipsize="end"
         android:singleLine="true"
         android:paddingBottom="@dimen/schedule_padding"
         android:layout_margin="@dimen/schedule_margin"
-        android:gravity="center_horizontal"/>
+        />
 </layout>
