@@ -60,10 +60,10 @@ class ScheduleDataLocalSource  //コンストラクタ
 
 
     /*ScheduleGroup*/
-    override fun insertScheduleGroup(group: ScheduleGroup, callback: SaveScheduleGroupCallback) {
+    override fun insertScheduleGroup(colorNumber: Int, colorCreateTitle: String, textColor: String, color: Int, callback: SaveScheduleGroupCallback) {
         val runnable = Runnable {
-            schedulesDao.insertScheduleGroup(group)
-            appExecutors.mainThread.execute { callback.onScheduleGroupSaved() }
+            val primaryKey = schedulesDao.insertScheduleGroup(colorNumber, colorCreateTitle, textColor, color)
+            appExecutors.mainThread.execute { callback.onScheduleGroupSaved(primaryKey) }
         }
         appExecutors.diskIO.execute(runnable)
     }
@@ -93,10 +93,10 @@ class ScheduleDataLocalSource  //コンストラクタ
         appExecutors.diskIO.execute(runnable)
     }
 
-    override fun updateScheduleGroup(group: ScheduleGroup, callback: SaveScheduleGroupCallback) {
+    override fun updateScheduleGroup(groupId: Int, colorNumber: Int, colorCreateTitle: String, textColor: String, color: Int, callback: UpdateScheduleGroupCallback) {
         val runnable = Runnable {
-            schedulesDao.updateScheduleGroup(group)
-            appExecutors.mainThread.execute { callback.onScheduleGroupSaved() }
+            val updateLine = schedulesDao.updateScheduleGroup(groupId, colorNumber, colorCreateTitle, textColor, color)
+            appExecutors.mainThread.execute { callback.onScheduleGroupSaved(updateLine) }
         }
         appExecutors.diskIO.execute(runnable)
     }
@@ -172,10 +172,10 @@ class ScheduleDataLocalSource  //コンストラクタ
 
 
     /*BalanceCategory*/
-    override fun insertBalanceCategory(balanceCategory: BalanceCategory, callback: SaveBalanceCategoryCallback) {
+    override fun insertBalanceCategory(editFlag: Boolean, balanceCategoryName: String, categoryId: Int, callback: SaveBalanceCategoryCallback) {
         val runnable = Runnable {
-            schedulesDao.insertBalanceCategory(balanceCategory)
-            appExecutors.mainThread.execute { callback.onBalanceCategorySaved() }
+            val primaryKey = schedulesDao.insertBalanceCategory(editFlag, balanceCategoryName, categoryId)
+            appExecutors.mainThread.execute { callback.onBalanceCategorySaved(primaryKey) }
         }
         appExecutors.diskIO.execute(runnable)
     }
