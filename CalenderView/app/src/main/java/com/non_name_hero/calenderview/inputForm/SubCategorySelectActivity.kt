@@ -45,7 +45,6 @@ class SubCategorySelectActivity  /*コンストラクタ*/
 
     private var categoryId = 22                                      /*カテゴリID*/
 
-    private var errorFlag = false                                   /*エラーチェック用フラグ*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -107,8 +106,6 @@ class SubCategorySelectActivity  /*コンストラクタ*/
                 .setView(subCategoryEditText)
                 .setPositiveButton("保存", DialogInterface.OnClickListener {_, _ ->
 
-                    /*エラーチェック用フラグ初期化*/
-                    errorFlag = false
 
                     /*サブカテゴリー名が入力されていなければ*/
                     if (subCategoryEditText.text.toString() == "") {
