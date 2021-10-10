@@ -4,16 +4,19 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import com.non_name_hero.calenderview.utils.PigLeadUtils
 import java.util.*
 
 @Entity(tableName = "schedule")
-class Schedule(@field:ColumnInfo(name = "schedule_id") @field:PrimaryKey(autoGenerate = true) var scheduleId: Long,
-               title: String,
-               description: String,
-               startAtDatetime: Date,
-               endAtDatetime: Date?,
-               groupId: Int,
-               timeSettingFlag: Boolean) {
+class Schedule(
+    @field:ColumnInfo(name = "schedule_id") @field:PrimaryKey(autoGenerate = true) var scheduleId: Long,
+    title: String,
+    description: String,
+    startAtDatetime: Date,
+    endAtDatetime: Date?,
+    groupId: Int,
+    timeSettingFlag: Boolean
+) {
 
     @ColumnInfo(name = "title")
     var title: String?
@@ -34,10 +37,10 @@ class Schedule(@field:ColumnInfo(name = "schedule_id") @field:PrimaryKey(autoGen
     var groupId: Int
 
     @ColumnInfo(name = "start_timestamp")
-    var startTimestamp: String? = null
+    var startTimestamp: String = ""
 
     @ColumnInfo(name = "end_timestamp")
-    var endTimestamp: String? = null
+    var endTimestamp: String = ""
 
     //DBでは管理されないフィールド
     @Ignore
@@ -47,12 +50,14 @@ class Schedule(@field:ColumnInfo(name = "schedule_id") @field:PrimaryKey(autoGen
     var isHoliday = false
 
     @Ignore
-    constructor(title: String,
-                description: String,
-                startAtDatetime: Date,
-                endAtDatetime: Date?,
-                groupId: Int,
-                timeSettingFlag: Boolean) : this(0, title, description, startAtDatetime, endAtDatetime, groupId, timeSettingFlag) {
+    constructor(
+        title: String,
+        description: String,
+        startAtDatetime: Date,
+        endAtDatetime: Date?,
+        groupId: Int,
+        timeSettingFlag: Boolean
+    ) : this(0, title, description, startAtDatetime, endAtDatetime, groupId, timeSettingFlag) {
     }
 
     val startAtDatetime: Date?
@@ -73,6 +78,8 @@ class Schedule(@field:ColumnInfo(name = "schedule_id") @field:PrimaryKey(autoGen
         this.endAtDatetime = endAtDatetime
         this.timeSettingFlag = timeSettingFlag
         this.groupId = groupId
+        this.startTimestamp = PigLeadUtils.formatYYYYMMDD.format(startAtDatetime)
+        this.endTimestamp = PigLeadUtils.formatYYYYMMDD.format(endAtDatetime)
         mEditable = true
     }
 }
