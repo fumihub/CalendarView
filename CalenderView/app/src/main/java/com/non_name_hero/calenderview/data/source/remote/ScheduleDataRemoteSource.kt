@@ -13,9 +13,111 @@ import java.util.*
 class ScheduleDataRemoteSource() : ScheduleDataSource {
     private val PIGLEAD_SCHEDULES = "PigLeadSchedules"
     private val HOLIDAY_DOCUMENT = "holiday"
+    private val PIGLEAD_USERS = "PigLeadUsers"
 
     /*リモートデータベース*/
     private val db: FirebaseFirestore
+
+    /*UserInfo*/
+    /*DBにメールアドレスの登録がない場合、ドキュメントID自動作成でメールアドレスとパスワードを登録*/
+    override fun setUserInfo(mailAddress: String, password: String, callback: SaveUserInfoCallback) {
+
+        /*メールアドレスが一致するドキュメントを取得*/
+        db.collection(PIGLEAD_USERS)
+                .whereEqualTo("mailAddress", mailAddress)
+                .get()
+                .addOnSuccessListener { documents ->
+                    /*メールアドレスが一致するドキュメントがなければ*/
+                    if (documents.size() == 0) {
+                        val userInfo = hashMapOf(
+                                "mailAddress" to mailAddress,
+                                "password" to password
+                        )
+                        /*以下は別スレッドにて実行*/
+                        db.collection(PIGLEAD_USERS)
+                                .add(userInfo)
+                                .addOnSuccessListener { documentReference ->
+                                    /*callbackに引数を渡す(existFlag)*/
+                                    callback.onUserInfoSaved(false)
+                                }
+                                .addOnFailureListener { e ->
+
+                                }
+                    }
+                    /*メールアドレスが一致するドキュメントがあれば*/
+                    else {
+                        Log.w(ContentValues.TAG, "Error already exist mailAddress")
+                        /*callbackに引数を渡す(existFlag)*/
+                        callback.onUserInfoSaved(true)
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(ContentValues.TAG, "Error getting documents: ", exception)
+                }
+    }
+
+    /*メールアドレスを指定して、パスワードを取得する*/
+    override fun getUserInfo(mailAddress: String, callback: GetUserInfoCallback) {
+        /*以下は別スレッドにて実行*/
+        /*メールアドレスが一致するドキュメントを取得*/
+        db.collection(PIGLEAD_USERS)
+                .whereEqualTo("mailAddress", mailAddress)
+                .get()
+                .addOnSuccessListener { documents ->
+                    /*メールアドレスが一致するドキュメントがあれば*/
+                    if (documents.size() != 0) {
+                        /*callbackに引数を渡す(パスワード)*/
+                        callback.onUserInfoLoaded(documents.documents[0].get("password") as String)
+                        Log.d(ContentValues.TAG, "${documents.documents[0].id} => ${documents.documents[0].data}")
+                    }
+                    /*メールアドレスが一致するドキュメントがなければ*/
+                    else {
+                        /*callbackに引数を渡す(空文字)*/
+                        callback.onUserInfoLoaded("")
+                        Log.w(ContentValues.TAG, "Error no mailAddress")
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(ContentValues.TAG, "Error getting documents: ", exception)
+                }
+    }
+  
+    /*メールアドレスを指定してパスワードを変更*/
+    override fun changeUserInfo(mailAddress: String, newPassword: String, callback: ChangeUserInfoCallback) {
+
+        /*メールアドレスが一致するドキュメントを取得*/
+        db.collection(PIGLEAD_USERS)
+                .whereEqualTo("mailAddress", mailAddress)
+                .get()
+                .addOnSuccessListener { documents ->
+                    /*メールアドレスが一致するドキュメントがあれば*/
+                    if (documents.size() != 0) {
+                        val userInfo = hashMapOf(
+                                "mailAddress" to mailAddress,
+                                "password" to newPassword
+                        )
+                        /*以下は別スレッドにて実行*/
+                        db.collection(PIGLEAD_USERS)
+                                .document(documents.documents[0].id)
+                                .set(userInfo)
+                                .addOnSuccessListener { documentReference ->
+                                    /*callbackに呼び出し*/
+                                    callback.onUserInfoSaved()
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.w(ContentValues.TAG, "Error password changing is failure")
+                                }
+                    }
+                    /*メールアドレスが一致するドキュメントがなければ*/
+                    else {
+                        Log.w(ContentValues.TAG, "Error mailAddress don't exist")
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.w(ContentValues.TAG, "Error getting documents: ", exception)
+                }
+    }
+
 
     /*CalendarData*/
     override fun getCalendarDataList(callback: LoadCalendarDataCallback) {}
@@ -66,11 +168,11 @@ class ScheduleDataRemoteSource() : ScheduleDataSource {
 
 
     /*ScheduleGroup*/
-    override fun insertScheduleGroup(group: ScheduleGroup, callback: SaveScheduleGroupCallback) {}
+    override fun insertScheduleGroup(colorNumber: Int, colorCreateTitle: String, textColor: String, color: Int, callback: SaveScheduleGroupCallback) {}
     override fun deleteScheduleGroup(groupId: Int, callback: DeleteCallback) {}
     override fun getScheduleGroup(colorNumber: Int, callback: GetScheduleGroupCallback) {}
     override fun getListScheduleGroup(callback: GetScheduleGroupsCallback) {}
-    override fun updateScheduleGroup(group: ScheduleGroup, callback: SaveScheduleGroupCallback) {}
+    override fun updateScheduleGroup(groupId: Int, colorNumber: Int, colorCreateTitle: String, textColor: String, color: Int, callback: UpdateScheduleGroupCallback) {}
 
 
     /*Balance*/
@@ -91,7 +193,7 @@ class ScheduleDataRemoteSource() : ScheduleDataSource {
 
 
     /*BalanceCategory*/
-    override fun insertBalanceCategory(balanceCategory: BalanceCategory, callback: SaveBalanceCategoryCallback) {}
+    override fun insertBalanceCategory(editFlag: Boolean, balanceCategoryName: String, categoryId: Int, callback: SaveBalanceCategoryCallback) {}
     override fun deleteBalanceCategory(categoryId: Int, balanceCategoryId: Int, callback: DeleteCallback) {}
 
 

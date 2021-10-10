@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".calendar.MainActivity"
+        <!--ログイン画面-->
+        <activity android:name=".inputForm.LoginActivity"
             android:theme="@style/SplashTheme">
             <!--thema=起動時の画像-->
             <intent-filter>
@@ -22,6 +23,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--新規ユーザー作成画面-->
+        <activity android:name=".inputForm.UserCreateActivity"/>
+        <!--カレンダー画面-->
+        <activity android:name=".calendar.MainActivity"/>
         <!--入力画面アクティビティ(スケジューラー)-->
         <activity android:name=".inputForm.InputActivity"/>
         <activity android:name=".inputForm.ColorSelectActivity"/>
@@ -35,6 +40,7 @@
         <activity android:name=".inputForm.SettingActivity"/>
         <activity android:name=".inputForm.UserSettingActivity"/>
         <activity android:name=".inputForm.NotificationSettingActivity"/>
+
         <!--広告用設定-->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"

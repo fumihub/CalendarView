@@ -6,6 +6,36 @@ import java.util.*
 
 interface ScheduleDataSource {
 
+    /*UserInfo用コールバッグ*/
+    interface GetUserInfoCallback {
+        fun onUserInfoLoaded(password: String)
+        fun onDataNotAvailable()
+    }
+
+    /**
+     * User追加時コールバック
+     * onUserInfoSaved() -　保存成功時の処理
+     * onDataNotAvailable() - 保存失敗時の処理
+     */
+    interface SaveUserInfoCallback {
+        fun onUserInfoSaved(existFlag: Boolean)
+        fun onDataNotAvailable()
+    }
+    
+    /**
+     * UserInfo変更時コールバック
+     * onUserInfoSaved() -　保存成功時の処理
+     * onDataNotAvailable() - 保存失敗時の処理
+     */
+    interface ChangeUserInfoCallback {
+        fun onUserInfoSaved()
+        fun onDataNotAvailable()
+    }
+
+    fun getUserInfo(mailAddress: String, callback: GetUserInfoCallback)
+    fun setUserInfo(mailAddress: String, password: String, callback: SaveUserInfoCallback)
+    fun changeUserInfo(mailAddress: String, newPassword: String, callback: ChangeUserInfoCallback)
+
     /*Schedule用コールバック*/
     /*全件取得時のコールバック*/
     interface GetScheduleCallback {
@@ -39,11 +69,21 @@ interface ScheduleDataSource {
     /*スケジュールグループ用コールバック*/
     /**
      * ScheduleGroup追加時コールバック
-     * onScheduleGroupSaved() -　保存成功時の処理
+     * onScheduleGroupSaved(primaryKey) -　保存成功時の処理
      * onDataNotSaved() - 保存失敗時の処理
      */
     interface SaveScheduleGroupCallback {
-        fun onScheduleGroupSaved()
+        fun onScheduleGroupSaved(primaryKey: Long)
+        fun onDataNotSaved()
+    }
+
+    /**
+     * ScheduleGroup編集時コールバック
+     * onScheduleGroupSaved(updateLine) -　保存成功時の処理
+     * onDataNotSaved() - 保存失敗時の処理
+     */
+    interface UpdateScheduleGroupCallback {
+        fun onScheduleGroupSaved(updateLine: Int)
         fun onDataNotSaved()
     }
 
@@ -58,11 +98,11 @@ interface ScheduleDataSource {
         fun onScheduleGroupLoaded(group: ScheduleGroup)
     }
 
-    fun insertScheduleGroup(group: ScheduleGroup, callback: SaveScheduleGroupCallback)
+    fun insertScheduleGroup(colorNumber: Int, colorCreateTitle: String, textColor: String, color: Int, callback: SaveScheduleGroupCallback)
     fun deleteScheduleGroup(groupId: Int, callback: DeleteCallback)
     fun getScheduleGroup(colorNumber: Int, callback: GetScheduleGroupCallback)
     fun getListScheduleGroup(callback: GetScheduleGroupsCallback)
-    fun updateScheduleGroup(group: ScheduleGroup, callback: SaveScheduleGroupCallback)
+    fun updateScheduleGroup(groupId: Int, colorNumber: Int, colorCreateTitle: String, textColor: String, color: Int, callback: UpdateScheduleGroupCallback)
 
 
     /*CalendarData用コールバッグ*/
@@ -139,15 +179,15 @@ interface ScheduleDataSource {
     /*BalanceCategory用コールバック*/
     /**
      * BalanceCategory追加時コールバック
-     * onBalanceCategorySaved() -　保存成功時の処理
+     * onBalanceCategorySaved(primaryKey) -　保存成功時の処理
      * onDataNotSaved() - 保存失敗時の処理
      */
     interface SaveBalanceCategoryCallback {
-        fun onBalanceCategorySaved()
+        fun onBalanceCategorySaved(primaryKey: Long)
         fun onDataNotSaved()
     }
 
-    fun insertBalanceCategory(balanceCategory: BalanceCategory, callback: SaveBalanceCategoryCallback)
+    fun insertBalanceCategory(editFlag: Boolean, balanceCategoryName: String, categoryId: Int, callback: SaveBalanceCategoryCallback)
     fun deleteBalanceCategory(categoryId: Int, balanceCategoryId: Int, callback: DeleteCallback)
 
 

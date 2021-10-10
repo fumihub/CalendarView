@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -15,18 +16,14 @@ import androidx.databinding.DataBindingUtil
 import com.non_name_hero.calenderview.R
 import com.non_name_hero.calenderview.data.BalanceCategory
 import com.non_name_hero.calenderview.data.CategoryData
-import com.non_name_hero.calenderview.data.ScheduleGroup
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource
 import com.non_name_hero.calenderview.data.source.ScheduleRepository
-import com.non_name_hero.calenderview.databinding.ColorSelectBinding
 import com.non_name_hero.calenderview.databinding.SubCategorySelectBinding
 import com.non_name_hero.calenderview.utils.Injection
 import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadBalanceCategoryDeleteDialog
-import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDeleteDialog
 import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDialogBase
 import com.non_name_hero.calenderview.utils.dialogUtils.PigLeadDialogFragment
 import com.non_name_hero.calenderview.utils.obtainViewModel
-import java.lang.Boolean.TRUE
 import java.util.ArrayList
 
 class SubCategorySelectActivity  /*コンストラクタ*/
@@ -48,17 +45,18 @@ class SubCategorySelectActivity  /*コンストラクタ*/
 
     private var categoryId = 22                                      /*カテゴリID*/
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         /*初期設定***************************************/
         context = this
         repository = Injection.provideScheduleRepository(context)
-        //DataBinding
+        /*DataBinding*/
         binding = DataBindingUtil.setContentView(this, R.layout.sub_category_select)
         /*ビューモデル設定*/
         binding.viewModel = obtainViewModel()
-        //LifecycleOwnerを指定
+        /*LifecycleOwnerを指定*/
         binding.lifecycleOwner = this
         val myToolbar = findViewById<View>(R.id.subCategorySelectToolbar) as Toolbar
         editButton = findViewById(R.id.editButton)
@@ -70,7 +68,7 @@ class SubCategorySelectActivity  /*コンストラクタ*/
 
         /*リストのアダプターを使用してViewを作成*/
         ListAdapter = SubCategoryListAdapter(context, this)
-        //削除ダイアログを設定
+        /*削除ダイアログを設定*/
         ListAdapter.deleteDialog = this
         listView.adapter = ListAdapter
 
@@ -107,26 +105,61 @@ class SubCategorySelectActivity  /*コンストラクタ*/
                 .setMessage("サブカテゴリー名を入力してください。")
                 .setView(subCategoryEditText)
                 .setPositiveButton("保存", DialogInterface.OnClickListener {_, _ ->
+
+
+                    /*サブカテゴリー名が入力されていなければ*/
+                    if (subCategoryEditText.text.toString() == "") {
+                        /*エラー出力*/
+                        outputToast("サブカテゴリー名を入力してください。")
+                        outputToast("サブカテゴリー作成に失敗しました。")
+                    }
+                    /*サブカテゴリー名が入力されていれば*/
+                    else {
+                        /*同名のサブカテゴリーがない場合サブカテゴリー追加*/
                         repository.insertBalanceCategory(
-                                BalanceCategory(
-                                        TRUE,
-                                        subCategoryEditText.text.toString(),
-                                        categoryId
-                                ),
+                                true,
+                                subCategoryEditText.text.toString(),
+                                categoryId
+                                ,
                                 object : ScheduleDataSource.SaveBalanceCategoryCallback {
-                                    override fun onBalanceCategorySaved() {
-                                        //リストビュー更新
-                                        loadCategoriesDataList()
+                                    override fun onBalanceCategorySaved(primaryKey: Long) {
+                                        /*追加するサブカテゴリーが存在してなかったら*/
+                                        if (primaryKey > 0L) {
+                                            /*リストビュー更新*/
+                                            loadCategoriesDataList()
+                                            /*トースト出力*/
+                                            outputToast("サブカテゴリーを追加しました。")
+                                        }
+                                        /*追加するサブカテゴリーが存在していたら*/
+                                        else {
+                                            /*エラー出力*/
+                                            outputToast("同名のサブカテゴリーが存在します。")
+                                            outputToast("サブカテゴリー作成に失敗しました。")
+                                        }
                                     }
 
                                     override fun onDataNotSaved() {}
                                 }
                         )
+                    }
+
                 })
                 .show();
         }
         /************************************************/
     }
+
+    /*トースト出力関数************************************/
+    private fun outputToast(str: String) {
+        /*トースト表示*/
+        val errorToast = Toast.makeText(
+                applicationContext,
+                str,
+                Toast.LENGTH_SHORT
+        )
+        errorToast.show()
+    }
+    /************************************************/
 
     /*TODO SharedPreferenceからViewModelに変更*/
     /*編集モードかを判定する関数********************/

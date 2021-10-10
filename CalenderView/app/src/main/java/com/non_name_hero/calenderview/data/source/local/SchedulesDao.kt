@@ -32,11 +32,15 @@ interface SchedulesDao {
     @get:Query("SELECT * FROM schedule_group ORDER BY group_id DESC")
     val allScheduleGroup: List<ScheduleGroup>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertScheduleGroup(scheduleGroup: ScheduleGroup)
+    /*同名の色グループが存在していなければ、色グループ追加(大文字小文字区別なし)*/
+    /*戻り値：primaryKey*/
+    @Query("INSERT INTO schedule_group(color_number, group_name, character_color, background_color) SELECT :colorNumber, :colorCreateTitle, :textColor, :color WHERE NOT EXISTS (SELECT 1 FROM schedule_group WHERE group_name like :colorCreateTitle)")
+    fun insertScheduleGroup(colorNumber: Int, colorCreateTitle: String, textColor: String, color: Int): Long
 
-    @Update
-    fun updateScheduleGroup(groups: ScheduleGroup)
+    /*同名の色グループが存在していなければ、色グループを編集(大文字小文字区別なし)*/
+    /*戻り値：更新された行数=groupIdが一致するものだけのため「0」か「1」*/
+    @Query("UPDATE schedule_group SET color_number = :colorNumber, group_name = :colorCreateTitle, character_color = :textColor, background_color = :color WHERE group_id = :groupId AND NOT EXISTS (SELECT 1 FROM schedule_group WHERE group_name like :colorCreateTitle)")
+    fun updateScheduleGroup(groupId: Int, colorNumber: Int, colorCreateTitle: String, textColor: String, color: Int): Int
 
     @Delete
     fun deleteScheduleGroup(group: ScheduleGroup)
@@ -186,8 +190,10 @@ interface SchedulesDao {
     @get:Query("SELECT * FROM balance_category ORDER BY balance_category_id")
     val allBalanceCategory: List<BalanceCategory>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertBalanceCategory(balanceCategory: BalanceCategory)
+    /*同名のカテゴリーが存在していなければ、カテゴリー追加(大文字小文字区別なし)*/
+    /*戻り値：primaryKey*/
+    @Query("INSERT INTO balance_category(editable_flg, category_name, category_id) SELECT :editFlag, :balanceCategoryName, :categoryId WHERE NOT EXISTS (SELECT 1 FROM balance_category WHERE category_name like :balanceCategoryName)")
+    fun insertBalanceCategory(editFlag: Boolean, balanceCategoryName: String, categoryId: Int): Long
 
     @Query("DELETE FROM balance_category WHERE balance_category_id = :balanceCategoryId")
     fun deleteBalanceCategoryByBalanceCategoryId(balanceCategoryId: Int)
