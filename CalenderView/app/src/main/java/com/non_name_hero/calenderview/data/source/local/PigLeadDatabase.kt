@@ -31,7 +31,7 @@ abstract class PigLeadDatabase : RoomDatabase() {
                                     db.execSQL("INSERT INTO schedule_group VALUES"
                                             + "(1, 43, '未分類', '白', -9404272)")/*灰色*/
 
-                                    /*Category用データベース初期値（categoryID, categoryColor, imgURL, bigCategoryName）*/
+                                    /*Category用データベース初期値（categoryID, categoryColor, imgURL, bigCategoryName, balanceType）*/
                                     /*収入*/
                                     db.execSQL("INSERT INTO category VALUES"
                                             + "(1, -16728065,'income_icon', '収入', 1)")/*水色*/
