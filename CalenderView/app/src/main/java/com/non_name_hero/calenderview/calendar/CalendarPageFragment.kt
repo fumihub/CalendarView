@@ -1,6 +1,7 @@
 package com.non_name_hero.calenderview.calendar
 
 import android.content.Intent
+import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
@@ -8,16 +9,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.gridlayout.widget.GridLayout
 import androidx.lifecycle.Observer
+import com.google.common.io.Resources.getResource
+import com.google.rpc.context.AttributeContext
 import com.non_name_hero.calenderview.R
 import com.non_name_hero.calenderview.data.BalanceData
 import com.non_name_hero.calenderview.data.CalendarData
 import com.non_name_hero.calenderview.databinding.*
 import com.non_name_hero.calenderview.inputForm.InputActivity
 import com.non_name_hero.calenderview.inputForm.InputBalanceActivity
+import com.non_name_hero.calenderview.utils.BalanceType
 import com.non_name_hero.calenderview.utils.DateManager
 import com.non_name_hero.calenderview.utils.PigLeadUtils
 import java.util.*
@@ -200,7 +205,7 @@ class CalendarPageFragment() : Fragment() {
                 }
                 // セル長押し時の動作
                 calendarCellBinding.root.setOnLongClickListener { v ->
-                    val currentMode = binding?.viewmodel?.currentMode?.value ?: true //
+                    val currentMode = binding?.viewmodel?.currentMode?.value ?: true
                     val intent = if (currentMode) Intent(
                         context,
                         InputBalanceActivity::class.java
@@ -273,9 +278,9 @@ class CalendarPageFragment() : Fragment() {
     }
 
     /**
-     * スケジュールをセットする
+     * 収支をセットする
      *
-     * @param schedule
+     * @param balanceData
      * @param root
      * @return textView
      */
@@ -286,7 +291,16 @@ class CalendarPageFragment() : Fragment() {
         //Drawableで背景を指定
         val drawable = GradientDrawable()
         drawable.cornerRadius = 10f
-        drawable.setColor(balanceData.categoryColor)
+        // balanceType(収入or支出)によって色を変更
+        val itemBackgroundColor: Int =
+            when (balanceData.balanceType) {
+                BalanceType.INCOME ->
+                    ContextCompat.getColor(requireActivity(), R.color.blueColor3)
+                BalanceType.EXPENSES ->
+                    ContextCompat.getColor(requireActivity(), R.color.redColor3)
+                else -> ContextCompat.getColor(requireActivity(), R.color.redColor3)
+            }
+        drawable.setColor(itemBackgroundColor)
         binding.root.background = drawable
     }
 
