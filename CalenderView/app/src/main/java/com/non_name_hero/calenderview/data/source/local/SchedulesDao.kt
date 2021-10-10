@@ -174,6 +174,7 @@ interface SchedulesDao {
     val allBalanceCategory: List<BalanceCategory>
 
     /*同名のカテゴリーが存在していなければ、カテゴリー追加(大文字小文字区別なし)*/
+    /*戻り値：primaryKey*/
     @Query("INSERT INTO balance_category(editable_flg, category_name, category_id) SELECT :editFlag, :balanceCategoryName, :categoryId WHERE NOT EXISTS (SELECT 1 FROM balance_category WHERE category_name like :balanceCategoryName)")
     fun insertBalanceCategory(editFlag: Boolean, balanceCategoryName: String, categoryId: Int): Long
 
