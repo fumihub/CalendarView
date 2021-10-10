@@ -61,7 +61,7 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
         Observer<List<BalanceData>> { balanceDataList -> _balanceDataMap.value = PigLeadUtils.getBalanceCalendarDataMapByBalanceDataList(balanceDataList) }
     /**
      * 現在のカレンダーモード
-     * value = ture の時にカレンダーモード
+     * value = true の時にカレンダーモード
      *         false の時に家計簿モード
      */
     private val _currentMode = MutableLiveData<Boolean>().apply { this.value = false }
