@@ -38,7 +38,6 @@ class ColorCreateActivity  /*コンストラクタ*/
     private var color = 0                                   /*色グループの色*/
     private var colorEditMode = false                       /*編集モード*/
 
-    private var errorFlag = false                           /*エラーチェック用フラグ*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -166,8 +165,6 @@ class ColorCreateActivity  /*コンストラクタ*/
 //            val prefs = getSharedPreferences("input_data", MODE_PRIVATE)
             if (!colorEditMode) {
 
-                /*エラーチェック用フラグ初期化*/
-                errorFlag = false
 
                 /*同名の色グループ名がない場合色グループを追加*/
                 repository.insertScheduleGroup(
@@ -201,8 +198,6 @@ class ColorCreateActivity  /*コンストラクタ*/
             /*編集画面の場合***************************/
             } else {
 
-                /*エラーチェック用フラグ初期化*/
-                errorFlag = false
 
                 /*同名の色グループ名がない場合色グループを編集*/
                 repository.updateScheduleGroup(
