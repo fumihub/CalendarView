@@ -86,21 +86,28 @@ class ScheduleRepository (
     /**
      * グループ情報DBに追加する
      *
-     * @param group    グループオブジェクト
-     * @param callback 　保存完了後の処理、保存失敗時の処理
+     * @param colorNumber       色番号
+     * @param colorCreateTitle  色グループ名
+     * @param textColor         文字色
+     * @param color             背景色
+     * @param callback          保存完了後の処理、保存失敗時の処理
      */
-    override fun insertScheduleGroup(group: ScheduleGroup, callback: SaveScheduleGroupCallback) {
-        scheduleDataLocalSource.insertScheduleGroup(group, callback)
+    override fun insertScheduleGroup(colorNumber: Int, colorCreateTitle: String, textColor: String, color: Int, callback: SaveScheduleGroupCallback) {
+        scheduleDataLocalSource.insertScheduleGroup(colorNumber, colorCreateTitle, textColor, color, callback)
     }
 
     /**
      * スケジュールグループを更新
      * primaryを合わせる
-     * @param group 更新対象のスケジュールグループ
-     * @param callback コールバック
+     * @param groupId           グループID
+     * @param colorNumber       色番号
+     * @param colorCreateTitle  色グループ名
+     * @param textColor         文字色
+     * @param color             背景色
+     * @param callback          コールバック
      */
-    override fun updateScheduleGroup(group: ScheduleGroup, callback: SaveScheduleGroupCallback) {
-        scheduleDataLocalSource.updateScheduleGroup(group, callback)
+    override fun updateScheduleGroup(groupId: Int, colorNumber: Int, colorCreateTitle: String, textColor: String, color: Int, callback: UpdateScheduleGroupCallback) {
+        scheduleDataLocalSource.updateScheduleGroup(groupId, colorNumber, colorCreateTitle, textColor, color, callback)
     }
 
     /**
@@ -217,11 +224,13 @@ class ScheduleRepository (
     /**
      * balanceCategory情報DBに追加する
      *
-     * @param balanceCategory    balanceCategoryオブジェクト
-     * @param callback 　保存完了後の処理、保存失敗時の処理
+     * @param editFlag              編集可能フラグ
+     * @param balanceCategoryName   バランスカテゴリー名
+     * @param categoryId            カテゴリーID
+     * @param callback              保存完了後の処理、保存失敗時の処理
      */
-    override fun insertBalanceCategory(balanceCategory: BalanceCategory, callback: SaveBalanceCategoryCallback) {
-        scheduleDataLocalSource.insertBalanceCategory(balanceCategory, callback)
+    override fun insertBalanceCategory(editFlag: Boolean, balanceCategoryName: String, categoryId: Int, callback: SaveBalanceCategoryCallback) {
+        scheduleDataLocalSource.insertBalanceCategory(editFlag, balanceCategoryName, categoryId, callback)
     }
 
     /**

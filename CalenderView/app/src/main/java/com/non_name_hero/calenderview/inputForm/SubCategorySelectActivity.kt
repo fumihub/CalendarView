@@ -118,47 +118,32 @@ class SubCategorySelectActivity  /*コンストラクタ*/
                     }
                     /*サブカテゴリー名が入力されていれば*/
                     else {
-                        /*現在のカテゴリーリスト取得*/
-                        repository.getCategoriesData(categoryId,object : ScheduleDataSource.GetCategoriesDataCallback {
-                            override fun onCategoriesDataLoaded(CategoryData: List<CategoryData>) {
-
-                                CategoryData.forEach{
-                                    /*同名のサブカテゴリーが存在する場合*/
-                                    if (it.categoryName.equals(subCategoryEditText.text.toString(), ignoreCase = true)) {
-                                        errorFlag = true
+                        /*同名のサブカテゴリーがない場合サブカテゴリー追加*/
+                        repository.insertBalanceCategory(
+                                true,
+                                subCategoryEditText.text.toString(),
+                                categoryId
+                                ,
+                                object : ScheduleDataSource.SaveBalanceCategoryCallback {
+                                    override fun onBalanceCategorySaved(primaryKey: Long) {
+                                        /*追加するサブカテゴリーが存在してなかったら*/
+                                        if (primaryKey > 0L) {
+                                            /*リストビュー更新*/
+                                            loadCategoriesDataList()
+                                            /*トースト出力*/
+                                            outputToast("サブカテゴリーを追加しました。")
+                                        }
+                                        /*追加するサブカテゴリーが存在していたら*/
+                                        else {
+                                            /*エラー出力*/
+                                            outputToast("同名のサブカテゴリーが存在します。")
+                                            outputToast("サブカテゴリー作成に失敗しました。")
+                                        }
                                     }
-                                }
 
-                                /*同名のサブカテゴリーが存在する場合*/
-                                if (errorFlag) {
-                                    /*エラー出力*/
-                                    outputToast("同名のサブカテゴリーが存在します。")
-                                    outputToast("サブカテゴリー作成に失敗しました。")
+                                    override fun onDataNotSaved() {}
                                 }
-                                /*同名のサブカテゴリーが存在しなかった場合*/
-                                else {
-                                    repository.insertBalanceCategory(
-                                            BalanceCategory(
-                                                    true,
-                                                    subCategoryEditText.text.toString(),
-                                                    categoryId
-                                            ),
-                                            object : ScheduleDataSource.SaveBalanceCategoryCallback {
-                                                override fun onBalanceCategorySaved() {
-                                                    /*リストビュー更新*/
-                                                    loadCategoriesDataList()
-                                                    /*トースト出力*/
-                                                    outputToast("サブカテゴリーを追加しました。")
-                                                }
-
-                                                override fun onDataNotSaved() {}
-                                            }
-                                    )
-                                }
-                            }
-
-                            override fun onDataNotAvailable() {}
-                        })
+                        )
                     }
 
                 })

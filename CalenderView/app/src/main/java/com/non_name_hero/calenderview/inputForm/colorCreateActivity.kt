@@ -169,51 +169,33 @@ class ColorCreateActivity  /*コンストラクタ*/
                 /*エラーチェック用フラグ初期化*/
                 errorFlag = false
 
-                /*現在の色グループリスト取得*/
-                repository.getListScheduleGroup(object : ScheduleDataSource.GetScheduleGroupsCallback {
-                    override fun onScheduleGroupsLoaded(Groups: List<ScheduleGroup>) {
-
-                        Groups.forEach{
-                            /*同名の色が存在する場合*/
-                            if (it.groupName.equals(colorCreateTitle.text.toString(), ignoreCase = true)) {
-                                errorFlag = true
+                /*同名の色グループ名がない場合色グループを追加*/
+                repository.insertScheduleGroup(
+                        colorNumber,
+                        colorCreateTitle.text.toString(),
+                        textColor,
+                        color,
+                        object : ScheduleDataSource.SaveScheduleGroupCallback {
+                            override fun onScheduleGroupSaved(primaryKey: Long) {
+                                /*追加する色が存在してなかったら*/
+                                if (primaryKey > 0L) {
+                                    /*色選択画面遷移*/
+                                    /*トースト出力*/
+                                    outputToast("色を追加しました。")
+                                    setResult(RESULT_OK, intentOut)
+                                    finish()
+                                }
+                                /*追加する色が存在していたら*/
+                                else {
+                                    /*エラー出力*/
+                                    outputToast("同名の色が存在します。")
+                                    outputToast("色作成に失敗しました。")
+                                }
                             }
+
+                            override fun onDataNotSaved() {}
                         }
-
-                        /*同名の色が存在する場合*/
-                        if (errorFlag) {
-                            /*エラー出力*/
-                            outputToast("同名の色が存在します。")
-                            outputToast("色の作成に失敗しました。")
-                        }
-                        /*同名の色が存在しなかった場合*/
-                        else {
-
-                            /*色グループの追加*/
-                            repository.insertScheduleGroup(
-                                    ScheduleGroup(
-                                            colorNumber,
-                                            colorCreateTitle.text.toString(),
-                                            textColor,
-                                            color
-                                    ),
-                                    object : SaveScheduleGroupCallback {
-                                        override fun onScheduleGroupSaved() {
-                                            /*色選択画面遷移*/
-                                            /*トースト出力*/
-                                            outputToast("色を追加しました。")
-                                            setResult(RESULT_OK, intentOut)
-                                            finish()
-                                        }
-
-                                        override fun onDataNotSaved() {}
-                                    }
-                            )
-                        }
-                    }
-
-                    override fun onDataNotAvailable() {}
-                })
+                )
             /*******************************************/
 
             /*編集画面の場合***************************/
@@ -222,52 +204,34 @@ class ColorCreateActivity  /*コンストラクタ*/
                 /*エラーチェック用フラグ初期化*/
                 errorFlag = false
 
-                /*現在の色グループリスト取得*/
-                repository.getListScheduleGroup(object : ScheduleDataSource.GetScheduleGroupsCallback {
-                    override fun onScheduleGroupsLoaded(Groups: List<ScheduleGroup>) {
-
-                        Groups.forEach{
-                            /*同名の色が存在する場合*/
-                            if (it.groupName.equals(colorCreateTitle.text.toString(), ignoreCase = true)) {
-                                errorFlag = true
+                /*同名の色グループ名がない場合色グループを編集*/
+                repository.updateScheduleGroup(
+                        groupId,
+                        colorNumber,
+                        colorCreateTitle.text.toString(),
+                        textColor,
+                        color,
+                        object : ScheduleDataSource.UpdateScheduleGroupCallback {
+                            override fun onScheduleGroupSaved(updateLIne: Int) {
+                                /*編集する色が存在してなかったら*/
+                                if (updateLIne != 0) {
+                                    /*色選択画面遷移*/
+                                    /*トースト出力*/
+                                    outputToast("色を編集しました。")
+                                    setResult(RESULT_OK, intentOut)
+                                    finish()
+                                }
+                                /*編集する色が存在していたら*/
+                                else {
+                                    /*エラー出力*/
+                                    outputToast("同名の色が存在します。")
+                                    outputToast("色の編集に失敗しました。")
+                                }
                             }
+
+                            override fun onDataNotSaved() {}
                         }
-
-                        /*同名の色が存在する場合*/
-                        if (errorFlag) {
-                            /*エラー出力*/
-                            outputToast("同名の色が存在します。")
-                            outputToast("色の編集に失敗しました。")
-                        }
-                        /*同名の色が存在しなかった場合*/
-                        else {
-
-                            /*色グループの編集*/
-                            repository.updateScheduleGroup(
-                                    ScheduleGroup(
-                                            groupId,
-                                            colorNumber,
-                                            colorCreateTitle.text.toString(),
-                                            textColor,
-                                            color
-                                    ),
-                                    object : SaveScheduleGroupCallback {
-                                        override fun onScheduleGroupSaved() {
-                                            /*色選択画面遷移*/
-                                            /*トースト出力*/
-                                            outputToast("色を編集しました。")
-                                            setResult(RESULT_OK, intentOut)
-                                            finish()
-                                        }
-
-                                        override fun onDataNotSaved() {}
-                                    })
-                        }
-                    }
-
-                    override fun onDataNotAvailable() {}
-                })
-
+                )
             }
             /*******************************************/
         }

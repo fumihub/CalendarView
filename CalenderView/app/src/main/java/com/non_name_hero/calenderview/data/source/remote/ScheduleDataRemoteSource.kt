@@ -66,11 +66,11 @@ class ScheduleDataRemoteSource() : ScheduleDataSource {
 
 
     /*ScheduleGroup*/
-    override fun insertScheduleGroup(group: ScheduleGroup, callback: SaveScheduleGroupCallback) {}
+    override fun insertScheduleGroup(colorNumber: Int, colorCreateTitle: String, textColor: String, color: Int, callback: SaveScheduleGroupCallback) {}
     override fun deleteScheduleGroup(groupId: Int, callback: DeleteCallback) {}
     override fun getScheduleGroup(colorNumber: Int, callback: GetScheduleGroupCallback) {}
     override fun getListScheduleGroup(callback: GetScheduleGroupsCallback) {}
-    override fun updateScheduleGroup(group: ScheduleGroup, callback: SaveScheduleGroupCallback) {}
+    override fun updateScheduleGroup(groupId: Int, colorNumber: Int, colorCreateTitle: String, textColor: String, color: Int, callback: UpdateScheduleGroupCallback) {}
 
 
     /*Balance*/
@@ -89,7 +89,7 @@ class ScheduleDataRemoteSource() : ScheduleDataSource {
 
 
     /*BalanceCategory*/
-    override fun insertBalanceCategory(balanceCategory: BalanceCategory, callback: SaveBalanceCategoryCallback) {}
+    override fun insertBalanceCategory(editFlag: Boolean, balanceCategoryName: String, categoryId: Int, callback: SaveBalanceCategoryCallback) {}
     override fun deleteBalanceCategory(categoryId: Int, balanceCategoryId: Int, callback: DeleteCallback) {}
 
 
