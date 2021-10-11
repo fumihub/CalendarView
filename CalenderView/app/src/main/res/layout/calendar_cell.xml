@@ -10,6 +10,9 @@
         <variable
             name="holiday"
             type="String"/>
+        <variable
+            name="viewmodel"
+            type="com.non_name_hero.calenderview.calendar.CalendarViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,9 +25,10 @@
             android:id="@+id/dateText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/scheduleList"
-            android:gravity="left"
+            app:layout_constraintTop_toTopOf="@id/calendarCell"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:gravity="start"
             android:textAlignment="gravity"
             android:textSize="@dimen/textSize"
             android:textStyle="bold"
@@ -35,10 +39,21 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="vertical"
+            android:visibility="@{viewmodel.currentMode?View.GONE:View.VISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/dateText"></LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/balanceList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:visibility="@{viewmodel.currentMode?View.VISIBLE:View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dateText"></LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

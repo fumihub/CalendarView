@@ -10,8 +10,10 @@ import com.non_name_hero.calenderview.utils.AppExecutors
 import java.util.*
 
 class ScheduleDataLocalSource  //コンストラクタ
-(val appExecutors: AppExecutors,
- val schedulesDao: SchedulesDao) : ScheduleDataSource {
+    (
+    val appExecutors: AppExecutors,
+    val schedulesDao: SchedulesDao
+) : ScheduleDataSource {
 
     /*UserInfo*/
     override fun getUserInfo(mailAdress: String, callback: GetUserInfoCallback) {}
@@ -50,7 +52,11 @@ class ScheduleDataLocalSource  //コンストラクタ
         appExecutors.diskIO.execute(runnable)
     }
 
-    override fun pickUpSchedules(targetStartDate: Date, targetEndDate: Date, callback: PickUpScheduleCallback) {
+    override fun pickUpSchedules(
+        targetStartDate: Date,
+        targetEndDate: Date,
+        callback: PickUpScheduleCallback
+    ) {
         val runnable = Runnable {
             val schedules = schedulesDao.pickUpSchedules(targetStartDate, targetEndDate)
             appExecutors.mainThread.execute { callback.onScheduleLoaded(schedules) }
@@ -129,6 +135,29 @@ class ScheduleDataLocalSource  //コンストラクタ
         appExecutors.diskIO.execute(runnable)
     }
 
+    /**
+     * balanceDataを取得しcallbackを実行
+     *
+     * @param startMonth 取得範囲の開始月
+     * @param endMonth 取得範囲の終了月
+     */
+    override fun getBalanceData(
+        startMonth: Date?,
+        endMonth: Date?,
+        callback: GetBalanceDataCallback
+    ) {
+        val runnable = Runnable {
+            val balanceDataList = if (startMonth != null && endMonth != null) {
+                schedulesDao.getBalanceDataListByMonthPeriod(startMonth, endMonth)
+            } else {
+                schedulesDao.getBalanceDataList()
+            }
+            appExecutors.mainThread.execute { callback.onBalanceDataLoaded(balanceDataList) }
+        }
+        appExecutors.diskIO.execute(runnable)
+
+    }
+
     override fun insertBalance(balance: Balance, callback: SaveBalanceCallback) {
         val runnable = Runnable {
             schedulesDao.insertBalance(balance)
@@ -153,7 +182,7 @@ class ScheduleDataLocalSource  //コンストラクタ
     }
 
     override fun getCategoryData(balanceCategoryId: Int, callback: GetCategoryDataCallback) {
-         val runnable = Runnable {
+        val runnable = Runnable {
             val categoryData = schedulesDao.getCategoryDataByBalanceCategoryId(balanceCategoryId)[0]
             appExecutors.mainThread.execute { callback.onCategoryDataLoaded(categoryData) }
         }
@@ -162,7 +191,7 @@ class ScheduleDataLocalSource  //コンストラクタ
 
 
     /*Category*/
-    override fun getCategory(callback: GetCategoryCallback){
+    override fun getCategory(callback: GetCategoryCallback) {
         val runnable = Runnable {
             val category = schedulesDao.allCategory
             appExecutors.mainThread.execute { callback.onCategoryLoaded(category) }
@@ -180,7 +209,11 @@ class ScheduleDataLocalSource  //コンストラクタ
         appExecutors.diskIO.execute(runnable)
     }
 
-    override fun deleteBalanceCategory(categoryId: Int, balanceCategoryId: Int, callback: DeleteCallback) {
+    override fun deleteBalanceCategory(
+        categoryId: Int,
+        balanceCategoryId: Int,
+        callback: DeleteCallback
+    ) {
         val runnable = Runnable {
             schedulesDao.deleteBalanceCategoryByBalanceCategoryId(balanceCategoryId)
             schedulesDao.setDefaultBalanceCategoryId(categoryId, balanceCategoryId)
@@ -196,8 +229,10 @@ class ScheduleDataLocalSource  //コンストラクタ
         private var INSTANCE: ScheduleDataLocalSource? = null
 
         @JvmStatic
-        fun getInstance(appExecutors: AppExecutors,
-                        usersDao: SchedulesDao): ScheduleDataLocalSource? {
+        fun getInstance(
+            appExecutors: AppExecutors,
+            usersDao: SchedulesDao
+        ): ScheduleDataLocalSource? {
             if (INSTANCE == null) {
                 synchronized(ScheduleDataLocalSource::class.java) {
                     if (INSTANCE == null) {

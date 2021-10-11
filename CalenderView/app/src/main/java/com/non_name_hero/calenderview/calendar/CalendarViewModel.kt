@@ -1,8 +1,12 @@
 package com.non_name_hero.calenderview.calendar
 
+import android.util.Log
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
+import com.non_name_hero.calenderview.data.BalanceData
 import com.non_name_hero.calenderview.data.CalendarData
 import com.non_name_hero.calenderview.data.Schedule
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource.*
@@ -10,7 +14,7 @@ import com.non_name_hero.calenderview.data.source.ScheduleRepository
 import com.non_name_hero.calenderview.utils.PigLeadUtils
 import java.util.*
 
-class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : ViewModel(), GetScheduleCallback, LoadCalendarDataCallback, LoadHolidayCalendarDataCallback {
+class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : ViewModel(), GetScheduleCallback, LoadCalendarDataCallback, LoadHolidayCalendarDataCallback, GetBalanceDataCallback {
     // for calendar
     val schedules = MutableLiveData<Map<String, List<Schedule>>>()
 
@@ -42,18 +46,32 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
         get() = _scheduleListData
     //set(value){ _scheduleListData.value = value.value}
 
+    // for Calendar Balance mode
+    private var _balanceListData :LiveData<List<BalanceData>> = MutableLiveData<List<BalanceData>>().apply {
+        value = mutableListOf<BalanceData>() }
+    val balanceListData: LiveData<List<BalanceData>>
+        get() = _balanceListData
+
+    private val _balanceDataMap = MutableLiveData<Map<String, List<BalanceData>>>()
+    val balanceDataMap: LiveData<Map<String, List<BalanceData>>>
+        get() = _balanceDataMap
+
+    // Livedataが変更された場合に実行される処理を定義
+    private val balanceDataListLiveDataObserver =
+        Observer<List<BalanceData>> { balanceDataList -> _balanceDataMap.value = PigLeadUtils.getBalanceCalendarDataMapByBalanceDataList(balanceDataList) }
     /**
      * 現在のカレンダーモード
-     * value = ture の時にカレンダーモード
+     * value = true の時にカレンダーモード
      *         false の時に家計簿モード
      */
-    private val _currentMode = MutableLiveData<Boolean>().apply { this.value = true }
+    private val _currentMode = MutableLiveData<Boolean>().apply { this.value = false }
     val currentMode: LiveData<Boolean>
         get() = _currentMode
 
     fun start() {
         loadHolidaySchedules()
         reloadCalendarData(true)
+        reloadBalanceData()
     }
 
     fun reloadCalendarData(forceUpdate: Boolean) {
@@ -108,7 +126,36 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
         setHolidayCalendarDataMap(PigLeadUtils.getCalendarDataMapByCalendarDataList(calendarDataList))
     }
 
+
     override fun onDataNotAvailable() {}
+
+    /**
+     * 家計簿データの取得
+     */
+    private fun reloadBalanceData(startMonth: Date? = null, forceUpdate: Boolean = false){
+        if (forceUpdate) {
+            // TODO LiveDataでは不要？
+            schedulesRepository.balanceDataCacheClear()
+        }
+        //TODO: 月指定で取得処理をする
+//        val calendar = Calendar.getInstance()
+//        calendar.time = startMonth
+//        calendar.set(Calendar.DAY_OF_MONTH, 0)
+//        val startTargetMonth = calendar.time
+//        calendar.add(Calendar.MONTH, 1)
+//        val endTargetMonth = calendar.time
+        schedulesRepository.getBalanceData(startMonth = null,endMonth = null ,this)
+    }
+
+    /**
+     * roomから家計簿データを取得時のcallback
+     */
+    override fun onBalanceDataLoaded(balanceLiveData: LiveData<List<BalanceData>>) {
+        _balanceListData = balanceLiveData
+        Log.d("balanceData", balanceLiveData.value.toString())
+        // Livedataの監視
+        balanceListData.observeForever(balanceDataListLiveDataObserver)
+    }
 
     // etc
     fun setScheduleItem(date: Date) {
@@ -134,5 +181,10 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
         _currentMonth.value = calendar[Calendar.MONTH] + 1
         _selectedDate.value = Date()
         _currentYearMonth.value = createYearMonthWording(calendar[Calendar.YEAR], calendar[Calendar.MONTH] + 1)
+    }
+
+    override fun onCleared() {
+        balanceListData.removeObserver(balanceDataListLiveDataObserver)
+        super.onCleared()
     }
 }

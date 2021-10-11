@@ -1,5 +1,6 @@
 package com.non_name_hero.calenderview.data.source
 
+import androidx.lifecycle.LiveData
 import com.non_name_hero.calenderview.data.*
 import java.util.*
 
@@ -140,6 +141,15 @@ interface ScheduleDataSource {
     fun removeBalanceByBalanceId(balanceId: Long)
     fun getAllBalances(callback: GetBalanceCallback)
 
+    /* BalanceData　*/
+    /**
+     * BalanceData取得コールバック
+     */
+    interface GetBalanceDataCallback {
+        fun onBalanceDataLoaded(balanceLiveData: LiveData<List<BalanceData>>)
+        fun onDataNotAvailable()
+    }
+    fun getBalanceData(startMonth: Date?, endMonth: Date?, callback: GetBalanceDataCallback)
 
     /*CategoryData用コールバック*/
     /*全要素取得時コールバック*/

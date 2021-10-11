@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.graphics.Color"/>
+        <variable
+            name="balanceData"
+            type="com.non_name_hero.calenderview.data.BalanceData" />
+    </data>
+    <TextView
+        android:id="@+id/scheduleText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/balanceTextSize"
+        android:text="@{balanceData.priceText}"
+        android:textColor="@{Color.WHITE}"
+        android:gravity="right"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:paddingBottom="@dimen/schedule_padding"
+        android:layout_margin="@dimen/schedule_margin"
+        />
+</layout>

@@ -1,6 +1,7 @@
 package com.non_name_hero.calenderview.data
 
 import androidx.room.*
+import com.non_name_hero.calenderview.utils.BalanceType
 
 @Entity(tableName = "category", indices = [Index(value = ["category_id"], unique = true)])
 class Category {
@@ -19,6 +20,9 @@ class Category {
     var bigCategoryName: String
         private set
 
+    @ColumnInfo(name = "balance_type")
+    var balanceType: Int
+
     constructor(categoryId: Int,
                 categoryColor: Int,
                 imgURL: String,
@@ -27,6 +31,11 @@ class Category {
         this.categoryColor = categoryColor
         this.imgURL = imgURL
         this.bigCategoryName = bigCategoryName
+        this.balanceType = if (this.categoryId == 1) {
+            BalanceType.INCOME.typeId!!
+        } else {
+            BalanceType.EXPENSES.typeId!!
+        }
     }
 
 }

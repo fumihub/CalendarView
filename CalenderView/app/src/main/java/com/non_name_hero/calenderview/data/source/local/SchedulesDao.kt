@@ -94,25 +94,42 @@ interface SchedulesDao {
             """)
     fun getCalendarDataListByMonthPeriod(startMonth: Date, endMonth: Date): LiveData<List<CalendarData>>
 
+    /**
+     * TODO: 月指定で取得する
+     * -- WHERE
+     * -- b.used_at_datetime >= :startMonth
+     * -- and b.used_at_datetime <= :endMonth
+     */
     @Query("""
         SELECT
-            b.balance_id AS balanceId,
-            b.title AS title,
-            b.used_at_datetime AS usedAtDatetime,
-            b.price,
-            bc.category_name AS categoryName,
-            c.big_category_name AS bigCategoryName,
-            c.category_color AS categoryColor,
-            c.image_url AS imageUrl
+            b.timestamp AS timestamp,
+            c.balance_type AS balanceType,
+            sum(b.price) AS price,
+            count(*) AS count
         FROM balance b
             JOIN balance_category bc ON bc.balance_category_id = b.balance_category_id
             JOIN category c ON bc.category_id = c.category_id
-        WHERE 
-            b.used_at_datetime < :startMonth
-            and b.used_at_datetime > :endMonth
-        ORDER BY b.balance_id DESC
+        WHERE
+            b.used_at_datetime >= :startMonth
+            and b.used_at_datetime <= :endMonth
+        GROUP BY timestamp, c.balance_type
+        ORDER BY b.timestamp, c.balance_type
             """)
     fun getBalanceDataListByMonthPeriod(startMonth: Date, endMonth: Date): LiveData<List<BalanceData>>
+
+    @Query("""
+        SELECT
+            b.timestamp AS timestamp,
+            c.balance_type AS balanceType,
+            sum(b.price) AS price,
+            count(*) AS count
+        FROM balance b
+            JOIN balance_category bc ON bc.balance_category_id = b.balance_category_id
+            JOIN category c ON bc.category_id = c.category_id
+        GROUP BY timestamp, c.balance_type
+        ORDER BY b.timestamp, c.balance_type
+            """)
+    fun getBalanceDataList(): LiveData<List<BalanceData>>
 
     /*CategoryAndBalanceCategory*/
     /*CategoryAndBalanceCategoryの全ての要素をリストとして取り出す*/

@@ -9,7 +9,7 @@ import com.non_name_hero.calenderview.data.*
 /**
  * The Room Database that contains the Task table.
  */
-@Database(entities = [Schedule::class, ScheduleGroup::class, Balance::class, BalanceCategory::class, Category::class], version = 2, exportSchema = false)
+@Database(entities = [Schedule::class, ScheduleGroup::class, Balance::class, BalanceCategory::class, Category::class], version = 1, exportSchema = false)
 @TypeConverters(Converter::class)
 abstract class PigLeadDatabase : RoomDatabase() {
     abstract fun scheduleDao(): SchedulesDao
@@ -31,53 +31,53 @@ abstract class PigLeadDatabase : RoomDatabase() {
                                     db.execSQL("INSERT INTO schedule_group VALUES"
                                             + "(1, 43, '未分類', '白', -9404272)")/*灰色*/
 
-                                    /*Category用データベース初期値（categoryID, categoryColor, imgURL, bigCategoryName）*/
+                                    /*Category用データベース初期値（categoryID, categoryColor, imgURL, bigCategoryName, balanceType）*/
                                     /*収入*/
                                     db.execSQL("INSERT INTO category VALUES"
-                                            + "(1, -16728065, 'income_icon', '収入')")/*水色*/
+                                            + "(1, -16728065,'income_icon', '収入', 1)")/*水色*/
                                     /*費用*/
                                     db.execSQL("INSERT INTO category VALUES"
-                                            + "(2, -1027705, 'eat_icon', '食費')")/*明るい赤色*/
+                                            + "(2, -1027705,'eat_icon', '食費', 0)")/*明るい赤色*/
                                     db.execSQL("INSERT INTO category VALUES"
-                                            + "(3, -65281, 'train_icon', '交通費')")/*赤紫色*/
+                                            + "(3, -65281,'train_icon', '交通費', 0)")/*赤紫色*/
                                     db.execSQL("INSERT INTO category VALUES"
-                                            + "(4, -15348, 'outdoor_icon', '遊び')")/*黄土色*/
+                                            + "(4, -15348,'outdoor_icon', '遊び', 0)")/*黄土色*/
                                     db.execSQL("INSERT INTO category VALUES"
-                                            + "(5, -103155, 'hobby_icon', '趣味')")/*濃いオレンジ色*/
+                                            + "(5, -103155,'hobby_icon', '趣味', 0)")/*濃いオレンジ色*/
                                     db.execSQL("INSERT INTO category VALUES"
-                                            + "(6, -2040, 'clothes_icon', '衣服')")/*黄色*/
+                                            + "(6, -2040,'clothes_icon', '衣服', 0)")/*黄色*/
                                     db.execSQL("INSERT INTO category VALUES"
-                                            + "(7, -17443, 'beauty_icon', '化粧品')")/*パステルピンク*/
+                                            + "(7, -17443,'beauty_icon', '化粧品', 0)")/*パステルピンク*/
                                     db.execSQL("INSERT INTO category VALUES"
-                                            + "(8, -1120744, 'unisex_beauty_parlor_icon', '理美容院')")/*ライム色*/
+                                            + "(8, -1120744,'unisex_beauty_parlor_icon', '理美容院', 0)")/*ライム色*/
                                     db.execSQL("INSERT INTO category VALUES"
-                                            + "(9, -5579350, 'smartphone_icon', '通信費')")/*パステル緑色*/
+                                            + "(9, -5579350,'smartphone_icon', '通信費', 0)")/*パステル緑色*/
                                     db.execSQL("INSERT INTO category VALUES"
-                                            + "(10, -5374161, 'dairy_icon', '日用品')")/*黄緑色*/
+                                            + "(10, -5374161,'dairy_icon', '日用品', 0)")/*黄緑色*/
                                     db.execSQL("INSERT INTO category VALUES"
-                                            + "(11, -69, 'fitness_icon', '健康')")/*パステル黄色*/
+                                            + "(11, -69,'fitness_icon', '健康', 0)")/*パステル黄色*/
                                     db.execSQL("INSERT INTO category VALUES"
-                                            + "(12, -6693377, 'tap_icon', '水道・光熱費')")/*パステル青色*/
+                                            + "(12, -6693377,'tap_icon', '水道・光熱費', 0)")/*パステル青色*/
                                     db.execSQL("INSERT INTO category VALUES"
-                                            + "(13, -956798, 'mtg_icon', '交際費')")/*朱色*/
+                                            + "(13, -956798,'mtg_icon', '交際費', 0)")/*朱色*/
                                     db.execSQL("INSERT INTO category VALUES"
-                                            + "(14, -7876885, 'study_icon', '教養・教育費')")/*暗い水色*/
+                                            + "(14, -7876885,'study_icon', '教養・教育費', 0)")/*暗い水色*/
                                     db.execSQL("INSERT INTO category VALUES"
-                                            + "(15, -2232662, 'hospital_icon', '医療費')")/*パステル黄緑*/
+                                            + "(15, -2232662,'hospital_icon', '医療費', 0)")/*パステル黄緑*/
                                     db.execSQL("INSERT INTO category VALUES"
-                                            + "(16, -1146130, 'car_icon', '自動車')")/*薄い赤紫色*/
+                                            + "(16, -1146130,'car_icon', '自動車', 0)")/*薄い赤紫色*/
                                     db.execSQL("INSERT INTO category VALUES"
-                                            + "(17, -16713062, 'house_icon', '住宅')")/*明るい緑*/
+                                            + "(17, -16713062,'house_icon', '住宅', 0)")/*明るい緑*/
                                     db.execSQL("INSERT INTO category VALUES"
-                                            + "(18, -551896, 'insurance_icon', '保険')")/*薄いオレンジ*/
+                                            + "(18, -551896,'insurance_icon', '保険', 0)")/*薄いオレンジ*/
                                     db.execSQL("INSERT INTO category VALUES"
-                                            + "(19, -4431586, 'money_icon', '税・社会保障')")/*こげちゃ色*/
+                                            + "(19, -4431586,'money_icon', '税・社会保障', 0)")/*こげちゃ色*/
                                     db.execSQL("INSERT INTO category VALUES"
-                                            + "(20, -16711681, 'furniture_icon', '特別な出費')")/*明るい青色*/
+                                            + "(20, -16711681,'furniture_icon', '特別な出費', 0)")/*明るい青色*/
                                     db.execSQL("INSERT INTO category VALUES"
-                                            + "(21, 0, 'other_icon', 'その他')")/*白色*/
+                                            + "(21, 0,'other_icon', 'その他', 0)")/*白色*/
                                     db.execSQL("INSERT INTO category VALUES"
-                                            + "(22, 0, 'unclassified_icon', '未分類')")/*白色*/
+                                            + "(22, 0,'unclassified_icon', '未分類', 0)")/*白色*/
 
                                     /*BalanceCategory用データベース初期値（balanceCategoryId, editableFlg, categoryName, categoryID）*/
                                     /*収入*/

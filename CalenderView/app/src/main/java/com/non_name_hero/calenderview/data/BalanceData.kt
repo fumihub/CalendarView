@@ -1,26 +1,22 @@
 package com.non_name_hero.calenderview.data
 
 import androidx.room.Ignore
+import com.non_name_hero.calenderview.utils.BalanceType
 import java.util.*
 
 class BalanceData {
 
-    var balanceId: Long = 0
+    var timestamp: String = ""
 
-    var title: String? = null
-
-    var usedAtDatetime: Date? = null
+    var balanceType: BalanceType = BalanceType.EXPENSES
 
     var price: Long = 0
 
-    var bigCategoryName: String? = null
-
-    var categoryName: String? = null
-
-    var categoryColor: Int = 0
-
-    var imageUrl: String? = null
+    var count: Int = 0
 
     @Ignore
-    var kind = 0
+    var priceText: String = ""
+        get() {
+            return String.format("%,d円", this.price)
+        }
 }
