@@ -101,7 +101,11 @@ class NotificationSettingActivity  /*コンストラクタ*/
             }
 
             val scheduleAlarm = getSystemService(ALARM_SERVICE) as AlarmManager
-            scheduleAlarm[AlarmManager.RTC_WAKEUP, scheduleCalendar.timeInMillis] = scheduleSender
+            /*AlarmManager.RTC_WAKEUPで端末スリープ時に起動させるようにする*/
+            /*1回だけ通知の場合はalarmManager.set()を使う*/
+            scheduleAlarm.setRepeating(AlarmManager.RTC_WAKEUP, scheduleCalendar.timeInMillis,
+            /*一日毎にアラームを呼び出す*/
+            AlarmManager.INTERVAL_DAY, scheduleSender)
             /*********************************************/
 
             /*確認ログ出力*/
@@ -155,7 +159,11 @@ class NotificationSettingActivity  /*コンストラクタ*/
             }
 
             val balanceAlarm = getSystemService(ALARM_SERVICE) as AlarmManager
-            balanceAlarm[AlarmManager.RTC_WAKEUP, balanceCalendar.timeInMillis] = balanceSender
+            /*AlarmManager.RTC_WAKEUPで端末スリープ時に起動させるようにする*/
+            /*1回だけ通知の場合はalarmManager.set()を使う*/
+            balanceAlarm.setRepeating(AlarmManager.RTC_WAKEUP, balanceCalendar.timeInMillis,
+            /*一日毎にアラームを呼び出す*/
+            AlarmManager.INTERVAL_DAY, balanceSender)
             /*********************************************/
 
             /*確認ログ出力*/
