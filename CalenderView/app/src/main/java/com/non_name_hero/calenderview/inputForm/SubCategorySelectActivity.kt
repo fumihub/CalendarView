@@ -2,13 +2,16 @@ package com.non_name_hero.calenderview.inputForm
 
 import android.content.Context
 import android.content.DialogInterface
+import android.os.Build
 import android.os.Bundle
-import android.text.InputType
+import android.text.*
+import android.text.Html.*
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ListView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -215,17 +218,23 @@ class SubCategorySelectActivity  /*コンストラクタ*/
      * @param callback ダイアログのボタン押下時の処理
      * @return dialog DialogFragmentのオブジェクト
      */
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun getBalanceCategoryDeleteDialog(catgegoryData: CategoryData?, callback: PigLeadDialogBase.DialogCallback): PigLeadDialogFragment? {
         /*表示させるメッセージの定義*/
-        val dialogMessages = ArrayList(listOf(*resources.getStringArray(R.array.delete_balance_category_dialog_massage)))
-        /*表示メッセージに削除対象の名前を挿入*/
-        dialogMessages[0] = String.format(dialogMessages[0], catgegoryData?.categoryName)
-        dialogMessages[2] = String.format(dialogMessages[2], catgegoryData?.bigCategoryName)
+        val html = """
+                <html>
+                |<h1><u><font color='#FF4081'>削除確認</font></u></h1>
+                |<br>
+                |「<b>${catgegoryData?.categoryName}</b>」<br>
+                |このサブカテゴリーを削除します。<br>
+                |設定されていた家計簿は「<b>${catgegoryData?.bigCategoryName}</b>」に変更されます。</html>""".trimMargin()
+        val dialogMessage = fromHtml(html, FROM_HTML_MODE_COMPACT)
+
         val positiveBtnMessage = getString(R.string.delete_schedule_group_positive)
         val negativeBtnMessage = getString(R.string.delete_schedule_group_negative)
         /*AlertDialogを設定*/
         val dialog = PigLeadDialogFragment(context)
-        dialog.setDialogMessage(dialogMessages)
+        dialog.setDialogMessage(dialogMessage)
                 .setPositiveBtnMessage(positiveBtnMessage)
                 .setNegativeBtnMessage(negativeBtnMessage)
                 .setPositiveClickListener { dialog, which -> callback.onClickPositiveBtn() }

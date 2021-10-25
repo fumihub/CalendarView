@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
+import android.text.Spanned
 import androidx.fragment.app.DialogFragment
 import com.non_name_hero.calenderview.R
 import java.lang.Boolean
@@ -12,7 +13,7 @@ import java.util.*
 
 class PigLeadDialogFragment : DialogFragment {
     private var appContext: Context
-    private var dialogMessage: String
+    private lateinit var dialogMessage: Spanned
     private var positiveBtnMessage: String
     private var negativeBtnMessage: String
     private var positiveClickListener: DialogInterface.OnClickListener? = null
@@ -20,13 +21,13 @@ class PigLeadDialogFragment : DialogFragment {
 
     constructor(context: Context) {
         appContext = context
-        dialogMessage = context.getString(R.string.dialog_massage_default)
+//        dialogMessage = context.getString(R.string.dialog_massage_default)
         positiveBtnMessage = context.getString(R.string.dialog_positive_default)
         negativeBtnMessage = context.getString(R.string.dialog_negative_default)
     }
 
     constructor(context: Context,
-                title: String,
+                title: Spanned,
                 positiveMessage: String,
                 positiveListener: DialogInterface.OnClickListener?,
                 negativeMassage: String,
@@ -52,30 +53,30 @@ class PigLeadDialogFragment : DialogFragment {
         this.appContext = appContext
     }
 
-    fun setDialogMessage(message: String): PigLeadDialogFragment {
+    fun setDialogMessage(message: Spanned): PigLeadDialogFragment {
         dialogMessage = message
         return this
     }
 
-    /**
-     * メッセージ配列を結合して設定
-     * @param messageList
-     * @return
-     */
-    fun setDialogMessage(messageList: ArrayList<String?>): PigLeadDialogFragment {
-        val buffer = StringBuilder()
-        var firstTimeFrag = Boolean.TRUE
-        for (message in messageList) {
-            if (firstTimeFrag) {
-                firstTimeFrag = Boolean.FALSE
-            } else {
-                buffer.append("\n")
-            }
-            buffer.append(message)
-        }
-        dialogMessage = buffer.toString()
-        return this
-    }
+//    /**
+//     * メッセージ配列を結合して設定
+//     * @param messageList
+//     * @return
+//     */
+//    fun setDialogMessage(messageList: ArrayList<String?>): PigLeadDialogFragment {
+//        val buffer = StringBuilder()
+//        var firstTimeFrag = Boolean.TRUE
+//        for (message in messageList) {
+//            if (firstTimeFrag) {
+//                firstTimeFrag = Boolean.FALSE
+//            } else {
+//                buffer.append("\n")
+//            }
+//            buffer.append(message)
+//        }
+//        dialogMessage = buffer.toString()
+//        return this
+//    }
 
     fun setPositiveBtnMessage(positiveBtnMessage: String): PigLeadDialogFragment {
         this.positiveBtnMessage = positiveBtnMessage

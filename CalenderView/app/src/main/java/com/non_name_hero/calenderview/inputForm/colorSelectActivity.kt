@@ -2,10 +2,13 @@ package com.non_name_hero.calenderview.inputForm
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.text.Html
 import android.view.View
 import android.widget.Button
 import android.widget.ListView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
@@ -178,16 +181,23 @@ class ColorSelectActivity  /*コンストラクタ*/
      * @param callback ダイアログのボタン押下時の処理
      * @return dialog DialogFragmentのオブジェクト
      */
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun getDeleteDialog(scheduleGroup: ScheduleGroup?, callback: DialogCallback): PigLeadDialogFragment? {
         /*表示させるメッセージの定義*/
-        val dialogMessages = ArrayList(listOf(*resources.getStringArray(R.array.delete_schedule_group_dialog_massage)))
-        /*表示メッセージに削除対象の名前を挿入*/
-        dialogMessages[0] = String.format(dialogMessages[0], scheduleGroup?.groupName)
+        val html = """
+                <html>
+                |<h1><u><font color='#FF4081'>削除確認</font></u></h1>
+                |<br>
+                |「<b>${scheduleGroup?.groupName}</b>」<br>
+                |このグループを削除します。<br>
+                |設定されていた予定は「<b>未分類</b>」に変更されます。</html>""".trimMargin()
+        val dialogMessage = Html.fromHtml(html, Html.FROM_HTML_MODE_COMPACT)
+
         val positiveBtnMessage = getString(R.string.delete_schedule_group_positive)
         val negativeBtnMessage = getString(R.string.delete_schedule_group_negative)
         /*AlertDialogを設定*/
         val dialog = PigLeadDialogFragment(context)
-        dialog.setDialogMessage(dialogMessages)
+        dialog.setDialogMessage(dialogMessage)
                 .setPositiveBtnMessage(positiveBtnMessage)
                 .setNegativeBtnMessage(negativeBtnMessage)
                 .setPositiveClickListener { dialog, which -> callback.onClickPositiveBtn() }

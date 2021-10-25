@@ -129,8 +129,8 @@ class InputActivity  /*コンストラクタ*/
         /*********************************************/
 
         /*初期値を設定********************************/
-        startDate.setText(String.format("%02d / %02d", month, day))
-        endDate.setText(String.format("%02d / %02d", month, day))
+        startDate.setText(String.format("%04d/%02d/%02d", year, month, day))
+        endDate.setText(String.format("%04d/%02d/%02d", year, month, day))
         /*********************************************/
 
         /*開始日時EditTextが押されたとき*************/
@@ -144,7 +144,7 @@ class InputActivity  /*コンストラクタ*/
                     this@InputActivity,
                     { _, year, month, dayOfMonth ->
                         /*setした日付を取得して表示*/
-                        startDate.setText(String.format("%02d / %02d", month + 1, dayOfMonth))
+                        startDate.setText(String.format("%04d/%02d/%02d", year, month + 1, dayOfMonth))
                         /*Calendarオブジェクトを作成*/
                         mStartAtDatetime.set(year, month, dayOfMonth)
                     },
@@ -170,7 +170,7 @@ class InputActivity  /*コンストラクタ*/
                     this@InputActivity,
                     { _, year, month, dayOfMonth ->
                         /*setした日付を取得して表示*/
-                        endDate.setText(String.format("%02d / %02d", month + 1, dayOfMonth))
+                        endDate.setText(String.format("%04d/%02d/%02d", year, month + 1, dayOfMonth))
                         mEndAtDatetime.set(year, month, dayOfMonth)
                     },
                     year,
