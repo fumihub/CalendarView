@@ -106,9 +106,9 @@ class InputBalanceActivity  /*コンストラクタ*/
             val id: Int = getResources().getIdentifier("income_icon", "drawable", getPackageName())
             categoryIconButton.setImageResource(id)
             categoryIconButton.setBackgroundColor(-16728065)
-            balanceCategoryId = 1
+            balanceCategoryId = INCOME_DEFAULT_ID
             /*リストのカテゴリーボタンにテキストをセット*/
-            categoryButton.text = "給与"
+            categoryButton.text = INCOME_DEFAULT_TEXT
         }
         /*********************************************/
         /*費用ボタンが押されたとき************************/
@@ -124,9 +124,9 @@ class InputBalanceActivity  /*コンストラクタ*/
             val id: Int = getResources().getIdentifier("unclassified_icon", "drawable", getPackageName())
             categoryIconButton.setImageResource(id)
             categoryIconButton.setBackgroundColor(0)
-            balanceCategoryId = 29
+            balanceCategoryId = EXPENSES_DEFAULT_ID
             /*リストのカテゴリーボタンにテキストをセット*/
-            categoryButton.text = "未分類"
+            categoryButton.text = EXPENSES_DEFAULT_TEXT
         }
         /*********************************************/
 
@@ -374,13 +374,6 @@ class InputBalanceActivity  /*コンストラクタ*/
 
     /************************************************/
 
-    /*定数定義****************************************/
-    companion object {
-        private const val REQUEST_CODE = 1
-        private const val REPEAT_DIALOG_TAG = "REPEAT_DIALOG"
-    }
-    /************************************************/
-
     /*inputBalanceActivityを終了させる関数**************/
     override fun finishInput() {
 
@@ -429,4 +422,16 @@ class InputBalanceActivity  /*コンストラクタ*/
         mInputPresenter = presenter!!
     }
     /************************************************/
+    
+    /*定数定義****************************************/
+    companion object {
+        private const val REQUEST_CODE = 1
+        private const val INCOME_DEFAULT_ID = 1
+        private const val EXPENSES_DEFAULT_ID = 29
+        private const val INCOME_DEFAULT_TEXT = "給与"
+        private const val EXPENSES_DEFAULT_TEXT = "未分類"
+        private const val REPEAT_DIALOG_TAG = "REPEAT_DIALOG"
+    }
+    /************************************************/
+    
 }
