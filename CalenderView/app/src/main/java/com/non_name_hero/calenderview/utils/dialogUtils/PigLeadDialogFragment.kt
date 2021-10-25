@@ -21,7 +21,6 @@ class PigLeadDialogFragment : DialogFragment {
 
     constructor(context: Context) {
         appContext = context
-//        dialogMessage = context.getString(R.string.dialog_massage_default)
         positiveBtnMessage = context.getString(R.string.dialog_positive_default)
         negativeBtnMessage = context.getString(R.string.dialog_negative_default)
     }
@@ -57,26 +56,6 @@ class PigLeadDialogFragment : DialogFragment {
         dialogMessage = message
         return this
     }
-
-//    /**
-//     * メッセージ配列を結合して設定
-//     * @param messageList
-//     * @return
-//     */
-//    fun setDialogMessage(messageList: ArrayList<String?>): PigLeadDialogFragment {
-//        val buffer = StringBuilder()
-//        var firstTimeFrag = Boolean.TRUE
-//        for (message in messageList) {
-//            if (firstTimeFrag) {
-//                firstTimeFrag = Boolean.FALSE
-//            } else {
-//                buffer.append("\n")
-//            }
-//            buffer.append(message)
-//        }
-//        dialogMessage = buffer.toString()
-//        return this
-//    }
 
     fun setPositiveBtnMessage(positiveBtnMessage: String): PigLeadDialogFragment {
         this.positiveBtnMessage = positiveBtnMessage
