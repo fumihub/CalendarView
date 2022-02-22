@@ -234,6 +234,16 @@ class ScheduleRepository (
             callback.onBalanceDataLoaded(cachedBalanceData)
         }
     }
+
+    /**
+     * 収支のサマリーを取得する
+     *
+     * @param callback データ取得時の処理。引数に取得したデータをとる
+     */
+    override fun getBalanceSummary(callback: GetBalanceSummaryCallback) {
+       scheduleDataLocalSource.getBalanceSummary(callback)
+    }
+
     /**
      * カレンダーの表示(家計簿)キャッシュデータを初期化
      */

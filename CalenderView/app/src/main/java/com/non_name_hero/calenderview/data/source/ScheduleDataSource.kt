@@ -151,6 +151,12 @@ interface ScheduleDataSource {
     }
     fun getBalanceData(startMonth: Date?, endMonth: Date?, callback: GetBalanceDataCallback)
 
+    interface GetBalanceSummaryCallback {
+        fun onBalanceDataLoaded(balanceData: List<BalanceData>)
+        fun onDataNotAvailable()
+    }
+    fun getBalanceSummary(callback:GetBalanceSummaryCallback)
+
     /*CategoryData用コールバック*/
     /*全要素取得時コールバック*/
     interface GetCategoriesDataCallback {

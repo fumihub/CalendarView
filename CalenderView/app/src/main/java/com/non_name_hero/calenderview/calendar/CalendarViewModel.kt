@@ -11,6 +11,7 @@ import com.non_name_hero.calenderview.data.CalendarData
 import com.non_name_hero.calenderview.data.Schedule
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource.*
 import com.non_name_hero.calenderview.data.source.ScheduleRepository
+import com.non_name_hero.calenderview.utils.BalanceType
 import com.non_name_hero.calenderview.utils.PigLeadUtils
 import java.util.*
 
@@ -58,7 +59,23 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
 
     // Livedataが変更された場合に実行される処理を定義
     private val balanceDataListLiveDataObserver =
-        Observer<List<BalanceData>> { balanceDataList -> _balanceDataMap.value = PigLeadUtils.getBalanceCalendarDataMapByBalanceDataList(balanceDataList) }
+        Observer<List<BalanceData>> { balanceDataList ->
+            _balanceDataMap.value = PigLeadUtils.getBalanceCalendarDataMapByBalanceDataList(balanceDataList)
+        }
+
+    /**
+     * 収入のサマリー
+     */
+    private val _balanceIncomeSummary = MutableLiveData<String>()
+    val balanceIncomeSummary: LiveData<String>
+        get() = _balanceIncomeSummary
+    /**
+     * 支出のサマリー
+     */
+    private val _balanceExpenseSummary = MutableLiveData<String>()
+    val balanceExpenseSummary: LiveData<String>
+        get() = _balanceExpenseSummary
+
     /**
      * 現在のカレンダーモード
      * value = true の時にカレンダーモード
@@ -72,6 +89,28 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
         loadHolidaySchedules()
         reloadCalendarData(true)
         reloadBalanceData()
+        reloadBalanceSummary()
+    }
+
+    /**
+     * 家計簿データの取得処理
+     */
+    private fun reloadBalanceSummary() {
+        schedulesRepository.getBalanceSummary(object: GetBalanceSummaryCallback {
+            override fun onBalanceDataLoaded(balanceData: List<BalanceData>) {
+                balanceData.forEach { balanceData->
+                    if(balanceData.balanceType === BalanceType.INCOME){
+                        _balanceIncomeSummary.value = balanceData.priceText
+                    }else if (balanceData.balanceType === BalanceType.EXPENSES){
+                        _balanceExpenseSummary.value = balanceData.priceText
+                    }
+                }
+            }
+            override fun onDataNotAvailable() {
+                Log.w("warn", "fail get balance summary or Empty Data" )
+            }
+        })
+
     }
 
     fun reloadCalendarData(forceUpdate: Boolean) {

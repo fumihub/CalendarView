@@ -1,9 +1,7 @@
 package com.non_name_hero.calenderview.data.source.local
 
-import com.non_name_hero.calenderview.data.Balance
-import com.non_name_hero.calenderview.data.BalanceCategory
-import com.non_name_hero.calenderview.data.Schedule
-import com.non_name_hero.calenderview.data.ScheduleGroup
+import androidx.lifecycle.LiveData
+import com.non_name_hero.calenderview.data.*
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource.*
 import com.non_name_hero.calenderview.utils.AppExecutors
@@ -156,6 +154,19 @@ class ScheduleDataLocalSource  //コンストラクタ
         }
         appExecutors.diskIO.execute(runnable)
 
+    }
+
+    override fun getBalanceSummary(callback: GetBalanceSummaryCallback) {
+        val runnable = Runnable {
+            val balanceSummary:List<BalanceData> = schedulesDao.getBalanceSummary()
+            if (balanceSummary.isNotEmpty()){
+                appExecutors.mainThread.execute { callback.onBalanceDataLoaded(balanceSummary) }
+            }else{
+                appExecutors.mainThread.execute { callback.onDataNotAvailable() }
+
+            }
+        }
+        appExecutors.diskIO.execute(runnable)
     }
 
     override fun insertBalance(balance: Balance, callback: SaveBalanceCallback) {
