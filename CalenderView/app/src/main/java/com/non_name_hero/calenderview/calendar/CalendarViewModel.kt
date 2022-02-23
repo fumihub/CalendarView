@@ -27,6 +27,10 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
     val calendarDataMap: LiveData<Map<String, List<CalendarData>>>
         get() = _calendarDataMap
 
+    private val _currentDate = MutableLiveData<Date>()
+    val currentDate: LiveData<Date>
+        get() = _currentDate
+
     private val _currentMonth = MutableLiveData<Int>()
     val currentMonth: LiveData<Int>
         get() = _currentMonth
@@ -42,26 +46,36 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
 
 
     private val _scheduleListData = MutableLiveData<List<CalendarData>>().apply {
-        value = mutableListOf<CalendarData>() }
+        value = mutableListOf<CalendarData>()
+    }
     val scheduleListData: LiveData<List<CalendarData>>
         get() = _scheduleListData
     //set(value){ _scheduleListData.value = value.value}
 
     // for Calendar Balance mode
-    private var _balanceListData :LiveData<List<BalanceData>> = MutableLiveData<List<BalanceData>>().apply {
-        value = mutableListOf<BalanceData>() }
+    private var _balanceListData: LiveData<List<BalanceData>> = MutableLiveData<List<BalanceData>>().apply {
+        value = mutableListOf<BalanceData>()
+    }
     val balanceListData: LiveData<List<BalanceData>>
         get() = _balanceListData
 
-    private val _balanceDataMap = MutableLiveData<Map<String, List<BalanceData>>>()
+    private val _balanceDataMap = MutableLiveData<Map<String, List<BalanceData>>>(mapOf())
     val balanceDataMap: LiveData<Map<String, List<BalanceData>>>
         get() = _balanceDataMap
 
     // Livedataが変更された場合に実行される処理を定義
     private val balanceDataListLiveDataObserver =
-        Observer<List<BalanceData>> { balanceDataList ->
-            _balanceDataMap.value = PigLeadUtils.getBalanceCalendarDataMapByBalanceDataList(balanceDataList)
-        }
+            Observer<List<BalanceData>> { balanceDataList ->
+                _balanceDataMap.value = PigLeadUtils.getBalanceCalendarDataMapByBalanceDataList(balanceDataList)
+            }
+
+    /**
+     * 月ごとの収支サマリーデータ
+     * Map: 年月: 集計された収支サマリーデータ
+     */
+    private val _balanceSummaryMap = MutableLiveData<Map<String, List<BalanceData>>>()
+    val balanceSummaryMap: LiveData<Map<String, List<BalanceData>>>
+        get() = _balanceSummaryMap
 
     /**
      * 収入のサマリー
@@ -69,6 +83,7 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
     private val _balanceIncomeSummary = MutableLiveData<String>()
     val balanceIncomeSummary: LiveData<String>
         get() = _balanceIncomeSummary
+
     /**
      * 支出のサマリー
      */
@@ -96,18 +111,22 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
      * 家計簿データの取得処理
      */
     private fun reloadBalanceSummary() {
-        schedulesRepository.getBalanceSummary(object: GetBalanceSummaryCallback {
+        schedulesRepository.getBalanceSummary(null, object : GetBalanceSummaryCallback {
             override fun onBalanceDataLoaded(balanceData: List<BalanceData>) {
-                balanceData.forEach { balanceData->
-                    if(balanceData.balanceType === BalanceType.INCOME){
-                        _balanceIncomeSummary.value = balanceData.priceText
-                    }else if (balanceData.balanceType === BalanceType.EXPENSES){
-                        _balanceExpenseSummary.value = balanceData.priceText
+                // サマリーMapの生成
+                val map = mutableMapOf<String, List<BalanceData>>()
+                balanceData.forEach {
+                    if (map.containsKey(it.timestamp)) {
+                        map[it.timestamp] = map[it.timestamp]!! + listOf(it)
+                    } else {
+                        map[it.timestamp] = listOf(it)
                     }
                 }
+                _balanceSummaryMap.value = map
             }
+
             override fun onDataNotAvailable() {
-                Log.w("warn", "fail get balance summary or Empty Data" )
+                Log.w("warn", "fail get balance summary or Empty Data")
             }
         })
 
@@ -148,6 +167,13 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
         val month = calendar[Calendar.MONTH] + 1
         _currentYearMonth.value = createYearMonthWording(calendar[Calendar.YEAR], month)
         _currentMonth.value = month
+        _currentDate.value = calendar.time
+    }
+
+    fun getPageYearMonth(offsetMonth: Int): Date {
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.MONTH, offsetMonth)
+        return calendar.time
     }
 
     private fun createYearMonthWording(year: Int, month: Int): String {
@@ -171,7 +197,7 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
     /**
      * 家計簿データの取得
      */
-    private fun reloadBalanceData(startMonth: Date? = null, forceUpdate: Boolean = false){
+    private fun reloadBalanceData(startMonth: Date? = null, forceUpdate: Boolean = false) {
         if (forceUpdate) {
             // TODO LiveDataでは不要？
             schedulesRepository.balanceDataCacheClear()
@@ -183,7 +209,7 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
 //        val startTargetMonth = calendar.time
 //        calendar.add(Calendar.MONTH, 1)
 //        val endTargetMonth = calendar.time
-        schedulesRepository.getBalanceData(startMonth = null,endMonth = null ,this)
+        schedulesRepository.getBalanceData(startMonth = null, endMonth = null, this)
     }
 
     /**
@@ -202,7 +228,7 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
         if (this.calendarDataMap.value?.containsKey(dateKey) == true) {
             //tureならvalueがnullではない
             _scheduleListData.value = this.calendarDataMap.value?.get(dateKey)
-        }else{
+        } else {
             _scheduleListData.value = mutableListOf<CalendarData>()
         }
 
@@ -220,6 +246,7 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
         _currentMonth.value = calendar[Calendar.MONTH] + 1
         _selectedDate.value = Date()
         _currentYearMonth.value = createYearMonthWording(calendar[Calendar.YEAR], calendar[Calendar.MONTH] + 1)
+        _currentDate.value = Date()
     }
 
     override fun onCleared() {

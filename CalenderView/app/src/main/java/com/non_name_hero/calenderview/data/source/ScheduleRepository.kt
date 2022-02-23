@@ -238,10 +238,11 @@ class ScheduleRepository (
     /**
      * 収支のサマリーを取得する
      *
+     * @param yearMonth 取得したいサマリーの年月を指定
      * @param callback データ取得時の処理。引数に取得したデータをとる
      */
-    override fun getBalanceSummary(callback: GetBalanceSummaryCallback) {
-       scheduleDataLocalSource.getBalanceSummary(callback)
+    override fun getBalanceSummary(yearMonth:Date?, callback: GetBalanceSummaryCallback) {
+       scheduleDataLocalSource.getBalanceSummary(yearMonth ,callback)
     }
 
     /**

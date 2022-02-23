@@ -25,6 +25,7 @@ import com.non_name_hero.calenderview.inputForm.InputBalanceActivity
 import com.non_name_hero.calenderview.utils.BalanceType
 import com.non_name_hero.calenderview.utils.DateManager
 import com.non_name_hero.calenderview.utils.PigLeadUtils
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -57,47 +58,67 @@ class CalendarPageFragment() : Fragment() {
      * @return 表示されるView
      */
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
 
         this.mProgressMonth = this.tag?.replace("f", "")?.toInt() ?: 0
 
         //DataBinding
         val binding: CalendarFragmentScreenSlidePageBinding =
-            CalendarFragmentScreenSlidePageBinding.inflate(
-                inflater,
-                container,
-                false
-            ).apply() {
-                this.lifecycleOwner = viewLifecycleOwner
-                this.viewmodel = (activity as MainActivity).obtainViewModel()
-            }
+                CalendarFragmentScreenSlidePageBinding.inflate(
+                        inflater,
+                        container,
+                        false
+                ).apply() {
+                    this.lifecycleOwner = viewLifecycleOwner
+                    this.viewmodel = (activity as MainActivity).obtainViewModel()
+                }
 
         binding.viewmodel?.holidaySchedulesMap?.observe(
-            viewLifecycleOwner,
-            Observer<Map<String, List<CalendarData>>> {
-                mHolidayMap = it
-                createCalendar(binding)
-            })
+                viewLifecycleOwner,
+                Observer<Map<String, List<CalendarData>>> {
+                    mHolidayMap = it
+                    createCalendar(binding)
+                })
 
 
         binding.viewmodel?.calendarDataMap?.observe(
-            viewLifecycleOwner,
-            Observer<Map<String, List<CalendarData>>> {
-                mCalendarMap = it
-                createCalendar(binding)
-            })
+                viewLifecycleOwner,
+                Observer<Map<String, List<CalendarData>>> {
+                    mCalendarMap = it
+                    createCalendar(binding)
+                })
 
         binding.viewmodel?.balanceDataMap?.observe(
-            viewLifecycleOwner,
-            Observer<Map<String, List<BalanceData>>> {
-                this.balanceDataMap = it
-                createCalendar(binding)
-            })
+                viewLifecycleOwner,
+                Observer<Map<String, List<BalanceData>>> {
+                    this.balanceDataMap = it
+                    createCalendar(binding)
+                    createSummary(binding)
+                })
 
         binding.executePendingBindings()
         return binding.root
+    }
+
+    /**
+     * サマリー情報の更新
+     */
+    private fun createSummary(binding: CalendarFragmentScreenSlidePageBinding) {
+        var income = "0円"
+        var expense = "0円"
+        val sdFormat = SimpleDateFormat("yyyy.MM")
+        val pageYearMonth = sdFormat.format(binding.viewmodel?.getPageYearMonth(offsetMonth = mProgressMonth ))
+        val balanceSummary = binding.viewmodel?.balanceSummaryMap?.value?.get(pageYearMonth)
+        balanceSummary?.forEach { balanceData ->
+            if (balanceData.balanceType === BalanceType.INCOME) {
+                income = balanceData.priceText
+            } else if (balanceData.balanceType === BalanceType.EXPENSES) {
+                expense = balanceData.priceText
+            }
+        }
+        binding.accounting.text = getString(R.string.balance_summary).format(income, expense)
     }
 
 
@@ -125,13 +146,13 @@ class CalendarPageFragment() : Fragment() {
                 val cellDateYYYYMMDD = PigLeadUtils.formatYYYYMMDD.format(cellDate)
                 // カレンダーセル生成
                 calendarCellBinding = DataBindingUtil.bind(
-                    inflater.inflate(
-                        R.layout.calendar_cell,
-                        binding.calendarGridView,
-                        false
-                    )
+                        inflater.inflate(
+                                R.layout.calendar_cell,
+                                binding.calendarGridView,
+                                false
+                        )
                 )
-                    ?: throw IllegalStateException()
+                        ?: throw IllegalStateException()
                 calendarCellBinding.apply {
                     this.lifecycleOwner = viewLifecycleOwner
                     this.viewmodel = (activity as MainActivity).obtainViewModel()
@@ -149,42 +170,42 @@ class CalendarPageFragment() : Fragment() {
                     //当日の背景を黄色に
                     if (mDateManager.currentDate == cellDate) {
                         calendarCellBinding.calendarCell.setBackgroundColor(
-                            ContextCompat.getColor(
-                                context!!,
-                                R.color.currentDayColor
-                            )
+                                ContextCompat.getColor(
+                                        context!!,
+                                        R.color.currentDayColor
+                                )
                         )
                     } else {
                         calendarCellBinding.calendarCell.setBackgroundColor(Color.WHITE)
                     }
                 } else {
                     calendarCellBinding.calendarCell.setBackgroundColor(
-                        ContextCompat.getColor(
-                            context!!,
-                            R.color.notCurrentMonth
-                        )
+                            ContextCompat.getColor(
+                                    context!!,
+                                    R.color.notCurrentMonth
+                            )
                     )
                 }
 
                 //祝日、日曜日を赤、土曜日を青に
                 setCalendarCellBase(
-                    calendarCellBinding,
-                    PigLeadUtils.formatYYYYMMDD.format(cellDate),
-                    mDateManager.getDayOfWeek(cellDate)
+                        calendarCellBinding,
+                        PigLeadUtils.formatYYYYMMDD.format(cellDate),
+                        mDateManager.getDayOfWeek(cellDate)
                 )
 
                 // 表示データをセルに追記
                 val scheduleList = binding.viewmodel?.calendarDataMap?.value?.get(cellDateYYYYMMDD)
-                    ?: emptyList()
+                        ?: emptyList()
                 val balanceList = binding.viewmodel?.balanceDataMap?.value?.get(cellDateYYYYMMDD)
-                    ?: emptyList()
+                        ?: emptyList()
                 // 表示データを表示(3行まで)を追加
                 for (i in 0..3) {
                     // 表示する要素が存在するか
                     val isCalendarData =
-                        binding.viewmodel?.calendarDataMap?.value?.containsKey(cellDateYYYYMMDD) == true && i < scheduleList.size
+                            binding.viewmodel?.calendarDataMap?.value?.containsKey(cellDateYYYYMMDD) == true && i < scheduleList.size
                     val isBalanceData =
-                        binding.viewmodel?.balanceDataMap?.value?.containsKey(cellDateYYYYMMDD) == true && i < balanceList.size
+                            binding.viewmodel?.balanceDataMap?.value?.containsKey(cellDateYYYYMMDD) == true && i < balanceList.size
                     // 表示する要素がなければスキップ
                     if (!isCalendarData && !isBalanceData) {
                         break
@@ -207,8 +228,8 @@ class CalendarPageFragment() : Fragment() {
                 calendarCellBinding.root.setOnLongClickListener { v ->
                     val currentMode = binding?.viewmodel?.currentMode?.value ?: true
                     val intent = if (currentMode) Intent(
-                        context,
-                        InputBalanceActivity::class.java
+                            context,
+                            InputBalanceActivity::class.java
                     ) else Intent(context, InputActivity::class.java)
                     /*TODO スケジュール入力時と家計簿入力時に分ける*/
                     //入力画面に引数で年月日を渡す
@@ -293,13 +314,13 @@ class CalendarPageFragment() : Fragment() {
         drawable.cornerRadius = 10f
         // balanceType(収入or支出)によって色を変更
         val itemBackgroundColor: Int =
-            when (balanceData.balanceType) {
-                BalanceType.INCOME ->
-                    ContextCompat.getColor(requireActivity(), R.color.blueColor3)
-                BalanceType.EXPENSES ->
-                    ContextCompat.getColor(requireActivity(), R.color.redColor3)
-                else -> ContextCompat.getColor(requireActivity(), R.color.redColor3)
-            }
+                when (balanceData.balanceType) {
+                    BalanceType.INCOME ->
+                        ContextCompat.getColor(requireActivity(), R.color.blueColor3)
+                    BalanceType.EXPENSES ->
+                        ContextCompat.getColor(requireActivity(), R.color.redColor3)
+                    else -> ContextCompat.getColor(requireActivity(), R.color.redColor3)
+                }
         drawable.setColor(itemBackgroundColor)
         binding.root.background = drawable
     }

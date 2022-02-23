@@ -5,12 +5,13 @@ import com.non_name_hero.calenderview.data.*
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource
 import com.non_name_hero.calenderview.data.source.ScheduleDataSource.*
 import com.non_name_hero.calenderview.utils.AppExecutors
+import java.text.SimpleDateFormat
 import java.util.*
 
 class ScheduleDataLocalSource  //コンストラクタ
-    (
-    val appExecutors: AppExecutors,
-    val schedulesDao: SchedulesDao
+(
+        val appExecutors: AppExecutors,
+        val schedulesDao: SchedulesDao
 ) : ScheduleDataSource {
 
     /*UserInfo*/
@@ -51,9 +52,9 @@ class ScheduleDataLocalSource  //コンストラクタ
     }
 
     override fun pickUpSchedules(
-        targetStartDate: Date,
-        targetEndDate: Date,
-        callback: PickUpScheduleCallback
+            targetStartDate: Date,
+            targetEndDate: Date,
+            callback: PickUpScheduleCallback
     ) {
         val runnable = Runnable {
             val schedules = schedulesDao.pickUpSchedules(targetStartDate, targetEndDate)
@@ -140,9 +141,9 @@ class ScheduleDataLocalSource  //コンストラクタ
      * @param endMonth 取得範囲の終了月
      */
     override fun getBalanceData(
-        startMonth: Date?,
-        endMonth: Date?,
-        callback: GetBalanceDataCallback
+            startMonth: Date?,
+            endMonth: Date?,
+            callback: GetBalanceDataCallback
     ) {
         val runnable = Runnable {
             val balanceDataList = if (startMonth != null && endMonth != null) {
@@ -156,14 +157,24 @@ class ScheduleDataLocalSource  //コンストラクタ
 
     }
 
-    override fun getBalanceSummary(callback: GetBalanceSummaryCallback) {
+    /**
+     * 家計簿のサマリーを取得
+     * @param yearMonth 期間を指定。nullで全期間の集計
+     * @param callback 取得完了後の処理
+     */
+    override fun getBalanceSummary(yearMonth: Date?, callback: GetBalanceSummaryCallback) {
         val runnable = Runnable {
-            val balanceSummary:List<BalanceData> = schedulesDao.getBalanceSummary()
-            if (balanceSummary.isNotEmpty()){
+            val balanceSummary: List<BalanceData> = if (yearMonth !== null) {
+                val sdFormat = SimpleDateFormat("yyyy.MM")
+                val dateStr = sdFormat.format(yearMonth)
+                schedulesDao.getBalanceSummary(dateStr)
+            } else {
+                schedulesDao.getBalanceSummary()
+            }
+            if (balanceSummary.isNotEmpty()) {
                 appExecutors.mainThread.execute { callback.onBalanceDataLoaded(balanceSummary) }
-            }else{
+            } else {
                 appExecutors.mainThread.execute { callback.onDataNotAvailable() }
-
             }
         }
         appExecutors.diskIO.execute(runnable)
@@ -221,9 +232,9 @@ class ScheduleDataLocalSource  //コンストラクタ
     }
 
     override fun deleteBalanceCategory(
-        categoryId: Int,
-        balanceCategoryId: Int,
-        callback: DeleteCallback
+            categoryId: Int,
+            balanceCategoryId: Int,
+            callback: DeleteCallback
     ) {
         val runnable = Runnable {
             schedulesDao.deleteBalanceCategoryByBalanceCategoryId(balanceCategoryId)
@@ -241,8 +252,8 @@ class ScheduleDataLocalSource  //コンストラクタ
 
         @JvmStatic
         fun getInstance(
-            appExecutors: AppExecutors,
-            usersDao: SchedulesDao
+                appExecutors: AppExecutors,
+                usersDao: SchedulesDao
         ): ScheduleDataLocalSource? {
             if (INSTANCE == null) {
                 synchronized(ScheduleDataLocalSource::class.java) {
