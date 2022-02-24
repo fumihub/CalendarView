@@ -146,7 +146,7 @@ interface ScheduleDataSource {
      * BalanceData取得コールバック
      */
     interface GetBalanceDataCallback {
-        fun onBalanceDataLoaded(balanceLiveData: LiveData<List<BalanceData>>)
+        fun onBalanceDataLoaded(balanceData: List<BalanceData>)
         fun onDataNotAvailable()
     }
     fun getBalanceData(startMonth: Date?, endMonth: Date?, callback: GetBalanceDataCallback)

@@ -115,7 +115,7 @@ interface SchedulesDao {
         GROUP BY timestamp, c.balance_type
         ORDER BY b.timestamp, c.balance_type
             """)
-    fun getBalanceDataListByMonthPeriod(startMonth: Date, endMonth: Date): LiveData<List<BalanceData>>
+    fun getBalanceDataListByMonthPeriod(startMonth: Date, endMonth: Date): List<BalanceData>
 
     @Query("""
         SELECT
@@ -129,7 +129,7 @@ interface SchedulesDao {
         GROUP BY timestamp, c.balance_type
         ORDER BY b.timestamp, c.balance_type
             """)
-    fun getBalanceDataList(): LiveData<List<BalanceData>>
+    fun getBalanceDataList(): List<BalanceData>
 
     /*CategoryAndBalanceCategory*/
     /*CategoryAndBalanceCategoryの全ての要素をリストとして取り出す*/

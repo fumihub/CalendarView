@@ -18,7 +18,7 @@ class ScheduleRepository (
     var mCacheIsDirty = false
     var mCalendarCacheIsDirty = false
     var mHolidayCacheIsDirty = false
-    var cachedBalanceData: LiveData<List<BalanceData>> = MutableLiveData<List<BalanceData>>().apply { this.value = emptyList() }
+    var cachedBalanceData: List<BalanceData>? = null//: LiveData<List<BalanceData>> = MutableLiveData<List<BalanceData>>().apply { this.value = emptyList() }
     var balanceDataCacheIsDirty = false
 
     override fun changeUserInfo(mailAddress: String, newPassword: String, callback: ChangeUserInfoCallback) {
@@ -214,14 +214,14 @@ class ScheduleRepository (
      * カレンダーの表示(家計簿)データを取得
      */
     override fun getBalanceData(startMonth: Date?, endMonth: Date?, callback: GetBalanceDataCallback) {
-        if (cachedBalanceData.value?.isEmpty() == true && !balanceDataCacheIsDirty) {
+        if (cachedBalanceData == null && !balanceDataCacheIsDirty) {
             scheduleDataLocalSource.getBalanceData(
                 startMonth,
                 endMonth,
                 object : GetBalanceDataCallback {
-                    override fun onBalanceDataLoaded(balanceLiveData: LiveData<List<BalanceData>>) {
+                    override fun onBalanceDataLoaded(balanceData: List<BalanceData>) {
                         balanceDataCacheIsDirty = true
-                        callback.onBalanceDataLoaded(balanceLiveData)
+                        callback.onBalanceDataLoaded(balanceData)
                     }
 
                     override fun onDataNotAvailable() {
@@ -231,7 +231,7 @@ class ScheduleRepository (
 
                 })
         } else {
-            callback.onBalanceDataLoaded(cachedBalanceData)
+            callback.onBalanceDataLoaded(cachedBalanceData!!)
         }
     }
     /**
@@ -239,7 +239,7 @@ class ScheduleRepository (
      */
     fun balanceDataCacheClear() {
         balanceDataCacheIsDirty = false
-        cachedBalanceData = MutableLiveData<List<BalanceData>>().apply { this.value = emptyList() }
+        cachedBalanceData = null
     }
 
     /*CategoryData*/

@@ -46,6 +46,7 @@ class CalendarFragment : Fragment() {
         super.onResume()
         // カレンダーのスケジュールを更新
         binding.viewmodel?.reloadCalendarData(true)
+        binding.viewmodel?.reloadBalanceData(forceUpdate = true)
     }
 
     private fun loadData() {

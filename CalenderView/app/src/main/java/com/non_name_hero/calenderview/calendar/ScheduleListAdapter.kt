@@ -11,11 +11,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.non_name_hero.calenderview.R
 import com.non_name_hero.calenderview.calendar.ScheduleListAdapter.ItemViewHolder
 import com.non_name_hero.calenderview.data.CalendarData
+import com.non_name_hero.calenderview.data.BalanceData
 import com.non_name_hero.calenderview.databinding.ScheduleFragmentItemBinding
 import java.util.*
 
 class ScheduleListAdapter(private val context: Context, calendarViewModel: CalendarViewModel ) : RecyclerView.Adapter<ItemViewHolder>() {
     var calendarDataList: List<CalendarData>
+    var balanceDataList: List<BalanceData>
     var currentMode: Boolean = false
     private val viewModel: CalendarViewModel
 
@@ -32,6 +34,7 @@ class ScheduleListAdapter(private val context: Context, calendarViewModel: Calen
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         setDrawable(holder.binding, position)
         holder.binding.calendarData = calendarDataList[position]
+        holder.binding.balanceData = balanceDataList[position]
         holder.binding.executePendingBindings()
     }
 
@@ -41,6 +44,11 @@ class ScheduleListAdapter(private val context: Context, calendarViewModel: Calen
 
     fun setCalendarDataForScheduleList(calendarData: List<CalendarData>) {
         calendarDataList = calendarData
+        notifyDataSetChanged()
+    }
+
+    fun setBalanceDataForScheduleList(balanceData: List<BalanceData>) {
+        balanceDataList = balanceData
         notifyDataSetChanged()
     }
 
@@ -65,8 +73,17 @@ class ScheduleListAdapter(private val context: Context, calendarViewModel: Calen
         notifyItemRangeRemoved(position, itemCount)
     }
 
+//    fun removeBalanceItem(position: Int) {
+//        //TODO 削除処理
+//        val balanceData = balanceDataList[position]
+//        balanceDataList.toMutableList().removeAt(position)
+//        viewModel.removeSchedule(balanceData.balanceId)
+//        notifyItemRangeRemoved(position, itemCount)
+//    }
+
     init {
         calendarDataList = ArrayList()
+        balanceDataList = ArrayList()
         viewModel = calendarViewModel
     }
 }

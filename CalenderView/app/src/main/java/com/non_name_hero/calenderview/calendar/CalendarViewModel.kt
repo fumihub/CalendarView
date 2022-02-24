@@ -47,7 +47,7 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
     //set(value){ _scheduleListData.value = value.value}
 
     // for Calendar Balance mode
-    private var _balanceListData :LiveData<List<BalanceData>> = MutableLiveData<List<BalanceData>>().apply {
+    private var _balanceListData = MutableLiveData<List<BalanceData>>().apply {
         value = mutableListOf<BalanceData>() }
     val balanceListData: LiveData<List<BalanceData>>
         get() = _balanceListData
@@ -132,7 +132,7 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
     /**
      * 家計簿データの取得
      */
-    private fun reloadBalanceData(startMonth: Date? = null, forceUpdate: Boolean = false){
+    fun reloadBalanceData(startMonth: Date? = null, forceUpdate: Boolean = false){
         if (forceUpdate) {
             // TODO LiveDataでは不要？
             schedulesRepository.balanceDataCacheClear()
@@ -150,11 +150,13 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
     /**
      * roomから家計簿データを取得時のcallback
      */
-    override fun onBalanceDataLoaded(balanceLiveData: LiveData<List<BalanceData>>) {
-        _balanceListData = balanceLiveData
-        Log.d("balanceData", balanceLiveData.value.toString())
+    override fun onBalanceDataLoaded(balanceData: List<BalanceData>) {
+        _balanceListData.value = balanceData
+        Log.d("balanceData", balanceData.toString())
+
+        _balanceDataMap.value = PigLeadUtils.getBalanceCalendarDataMapByBalanceDataList(balanceData)
         // Livedataの監視
-        balanceListData.observeForever(balanceDataListLiveDataObserver)
+//        balanceListData.observeForever(balanceDataListLiveDataObserver)
     }
 
     // etc
@@ -170,10 +172,27 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
         _selectedDate.value = date
     }
 
+    fun setBalanceItem(date: Date) {
+        val dateKey = PigLeadUtils.formatYYYYMMDD.format(date)
+        if (this._balanceDataMap.value?.containsKey(dateKey) == true) {
+            //tureならvalueがnullではない
+            _balanceListData.value = this.balanceDataMap.value?.get(dateKey)
+        }else{
+            _balanceListData.value = mutableListOf<BalanceData>()
+        }
+
+        _selectedDate.value = date
+    }
+
     fun removeSchedule(scheduleId: Long) {
         schedulesRepository.removeScheduleByScheduleId(scheduleId)
         reloadCalendarData(true)
     }
+
+//    fun removeBalance(balanceId: Long) {
+//        schedulesRepository.removeBalanceByBalanceId(balanceId)
+//        reloadBalanceData()
+//    }
 
     init {
         val calendar = Calendar.getInstance()
@@ -184,7 +203,7 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
     }
 
     override fun onCleared() {
-        balanceListData.removeObserver(balanceDataListLiveDataObserver)
+//        balanceListData.removeObserver(balanceDataListLiveDataObserver)
         super.onCleared()
     }
 }
