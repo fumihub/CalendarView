@@ -81,7 +81,8 @@ object ScheduleListBindings {
     @kotlin.jvm.JvmStatic
     fun setCurrentMode(view: RecyclerView, mode: Boolean?) {
         with(view.adapter as ScheduleListAdapter) {
-            this.currentMode = mode ?: true
+            this.currentMode = mode ?: false
+            this.notifyDataSetChanged()
         }
     }
 

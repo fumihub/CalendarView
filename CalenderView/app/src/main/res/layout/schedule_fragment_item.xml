@@ -7,8 +7,8 @@
         <import type="android.view.View"/>
         <import type="com.non_name_hero.calenderview.utils.BalanceType"/>
         <variable
-            name="viewmodel"
-            type="com.non_name_hero.calenderview.calendar.CalendarViewModel"/>
+            name="currentMode"
+            type="Boolean"/>
         <variable
             name="calendarData"
             type="com.non_name_hero.calenderview.data.CalendarData" />
@@ -31,7 +31,7 @@
             android:padding="@dimen/schedule_list_fragment_item_padding"
             android:text="@{calendarData.scheduleTitle}"
             android:textColor="@{calendarData.getTextColor() ? Color.BLACK : Color.WHITE}"
-            android:visibility="@{viewmodel.currentMode?View.GONE:View.VISIBLE}"
+            android:visibility="@{currentMode?View.GONE:View.VISIBLE}"
             />
 
         <!--クリックした日付の家計簿-->
@@ -41,9 +41,9 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/schedule_list_fragment_item_padding"
             android:text="@{balanceData.priceText}"
-            android:textColor="#00000000"
+            android:textColor="@{Color.WHITE}"
             android:background="@{balanceData.balanceType == BalanceType.EXPENSES ? @color/redColor3 : @color/blueColor3}"
-            android:visibility="@{viewmodel.currentMode?View.VISIBLE:View.GONE}"
+            android:visibility="@{currentMode?View.VISIBLE:View.GONE}"
             />
 
     </LinearLayout>

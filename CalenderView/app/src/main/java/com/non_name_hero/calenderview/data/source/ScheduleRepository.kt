@@ -1,5 +1,6 @@
 package com.non_name_hero.calenderview.data.source
 
+import android.util.Log
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -215,21 +216,22 @@ class ScheduleRepository (
      */
     override fun getBalanceData(startMonth: Date?, endMonth: Date?, callback: GetBalanceDataCallback) {
         if (cachedBalanceData == null && !balanceDataCacheIsDirty) {
-            scheduleDataLocalSource.getBalanceData(
-                startMonth,
-                endMonth,
-                object : GetBalanceDataCallback {
-                    override fun onBalanceDataLoaded(balanceData: List<BalanceData>) {
-                        balanceDataCacheIsDirty = true
-                        callback.onBalanceDataLoaded(balanceData)
-                    }
+                scheduleDataLocalSource.getBalanceData(
+                        startMonth,
+                        endMonth,
+                        object : GetBalanceDataCallback {
+                            override fun onBalanceDataLoaded(balanceData: List<BalanceData>) {
+                                balanceDataCacheIsDirty = true
+                                cachedBalanceData = balanceData
+                                callback.onBalanceDataLoaded(balanceData)
+                            }
 
-                    override fun onDataNotAvailable() {
-                        callback.onDataNotAvailable()
-                    }
+                            override fun onDataNotAvailable() {
+                                callback.onDataNotAvailable()
+                            }
 
 
-                })
+                        })
         } else {
             callback.onBalanceDataLoaded(cachedBalanceData!!)
         }

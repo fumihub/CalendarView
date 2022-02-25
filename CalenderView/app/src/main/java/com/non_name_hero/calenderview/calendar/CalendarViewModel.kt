@@ -1,7 +1,6 @@
 package com.non_name_hero.calenderview.calendar
 
 import android.util.Log
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -41,14 +40,16 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
 
 
     private val _scheduleListData = MutableLiveData<List<CalendarData>>().apply {
-        value = mutableListOf<CalendarData>() }
+        value = mutableListOf<CalendarData>()
+    }
     val scheduleListData: LiveData<List<CalendarData>>
         get() = _scheduleListData
     //set(value){ _scheduleListData.value = value.value}
 
     // for Calendar Balance mode
     private var _balanceListData = MutableLiveData<List<BalanceData>>().apply {
-        value = mutableListOf<BalanceData>() }
+        value = mutableListOf<BalanceData>()
+    }
     val balanceListData: LiveData<List<BalanceData>>
         get() = _balanceListData
 
@@ -58,11 +59,12 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
 
     // Livedataが変更された場合に実行される処理を定義
     private val balanceDataListLiveDataObserver =
-        Observer<List<BalanceData>> { balanceDataList -> _balanceDataMap.value = PigLeadUtils.getBalanceCalendarDataMapByBalanceDataList(balanceDataList) }
+            Observer<List<BalanceData>> { balanceDataList -> _balanceDataMap.value = PigLeadUtils.getBalanceCalendarDataMapByBalanceDataList(balanceDataList) }
+
     /**
      * 現在のカレンダーモード
-     * value = true の時にカレンダーモード
-     *         false の時に家計簿モード
+     * value = false の時にカレンダーモード
+     *         true の時に家計簿モード
      */
     private val _currentMode = MutableLiveData<Boolean>().apply { this.value = false }
     val currentMode: LiveData<Boolean>
@@ -72,6 +74,7 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
         loadHolidaySchedules()
         reloadCalendarData(true)
         reloadBalanceData()
+        setBalanceItem(Date())
     }
 
     fun reloadCalendarData(forceUpdate: Boolean) {
@@ -132,7 +135,7 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
     /**
      * 家計簿データの取得
      */
-    fun reloadBalanceData(startMonth: Date? = null, forceUpdate: Boolean = false){
+    fun reloadBalanceData(startMonth: Date? = null, forceUpdate: Boolean = false) {
         if (forceUpdate) {
             // TODO LiveDataでは不要？
             schedulesRepository.balanceDataCacheClear()
@@ -144,16 +147,14 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
 //        val startTargetMonth = calendar.time
 //        calendar.add(Calendar.MONTH, 1)
 //        val endTargetMonth = calendar.time
-        schedulesRepository.getBalanceData(startMonth = null,endMonth = null ,this)
+        schedulesRepository.getBalanceData(startMonth = null, endMonth = null, this)
     }
 
     /**
      * roomから家計簿データを取得時のcallback
      */
     override fun onBalanceDataLoaded(balanceData: List<BalanceData>) {
-        _balanceListData.value = balanceData
         Log.d("balanceData", balanceData.toString())
-
         _balanceDataMap.value = PigLeadUtils.getBalanceCalendarDataMapByBalanceDataList(balanceData)
         // Livedataの監視
 //        balanceListData.observeForever(balanceDataListLiveDataObserver)
@@ -165,7 +166,7 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
         if (this.calendarDataMap.value?.containsKey(dateKey) == true) {
             //tureならvalueがnullではない
             _scheduleListData.value = this.calendarDataMap.value?.get(dateKey)
-        }else{
+        } else {
             _scheduleListData.value = mutableListOf<CalendarData>()
         }
 
@@ -173,6 +174,10 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
     }
 
     fun setBalanceItem(date: Date) {
+        // TODO 日付ごとのbalance情報取得が必要なら新しく作る必要がある
+        // balanceDataはその日のサマリー情報(支出と収入それぞれの合計値)しか持たないため
+        // 暫定的な対応として、仕様と異なるが月間のサマリー情報を表示させる
+        /*
         val dateKey = PigLeadUtils.formatYYYYMMDD.format(date)
         if (this._balanceDataMap.value?.containsKey(dateKey) == true) {
             //tureならvalueがnullではない
@@ -180,7 +185,27 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
         }else{
             _balanceListData.value = mutableListOf<BalanceData>()
         }
+        */
+        val calendar = Calendar.getInstance()
+        calendar.time = date
+        calendar.set(Calendar.DAY_OF_MONTH, 1)
+        calendar.set(Calendar.HOUR, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        val start = calendar.time
+        calendar.add(Calendar.MONTH, 1)
+        val end = calendar.time
+        schedulesRepository.balanceDataCacheClear()
+        schedulesRepository.getBalanceData(startMonth = start, endMonth = end, object : GetBalanceDataCallback {
+            override fun onBalanceDataLoaded(balanceData: List<BalanceData>) {
+                _balanceListData.value = balanceData
+            }
 
+            override fun onDataNotAvailable() {
+                TODO("Not yet implemented")
+            }
+        })
+        // 月間サマリー取得
         _selectedDate.value = date
     }
 
