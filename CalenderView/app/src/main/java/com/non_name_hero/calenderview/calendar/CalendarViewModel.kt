@@ -78,20 +78,6 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
         get() = _balanceSummaryMap
 
     /**
-     * 収入のサマリー
-     */
-    private val _balanceIncomeSummary = MutableLiveData<String>()
-    val balanceIncomeSummary: LiveData<String>
-        get() = _balanceIncomeSummary
-
-    /**
-     * 支出のサマリー
-     */
-    private val _balanceExpenseSummary = MutableLiveData<String>()
-    val balanceExpenseSummary: LiveData<String>
-        get() = _balanceExpenseSummary
-
-    /**
      * 現在のカレンダーモード
      * value = true の時にカレンダーモード
      *         false の時に家計簿モード

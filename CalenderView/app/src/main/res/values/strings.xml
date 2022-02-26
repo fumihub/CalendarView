@@ -9,5 +9,5 @@
     <string name="delete_schedule_group_negative">キャンセル</string>
     <string name="repeat_balance_positive">続けて入力</string>
     <string name="repeat_balance_negative">完了</string>
-    <string name="balance_summary">収入：%1$s 支出：%2$s</string>
+    <string name="balance_summary">収入：%1$s  支出：%2$s</string>
 </resources>
