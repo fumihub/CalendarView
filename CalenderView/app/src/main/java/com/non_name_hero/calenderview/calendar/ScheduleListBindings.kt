@@ -5,6 +5,7 @@ import android.widget.ListView
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
+import com.non_name_hero.calenderview.data.BalanceCategoryData
 import com.non_name_hero.calenderview.data.BalanceData
 import com.non_name_hero.calenderview.data.CalendarData
 import com.non_name_hero.calenderview.inputForm.ListAdapter
@@ -51,11 +52,11 @@ object ScheduleListBindings {
 
     @BindingAdapter("balanceItems")
     @kotlin.jvm.JvmStatic
-    fun setBalanceListItems(view: RecyclerView, balanceDataList: List<BalanceData>?) {
+    fun setBalanceListItems(view: RecyclerView, balanceCategoryDataList: List<BalanceCategoryData>?) {
         with(view.adapter as ScheduleListAdapter) {
-            if (balanceDataList != null) {
-                if (this.balanceDataList != balanceDataList) {
-                    setBalanceDataForScheduleList(balanceDataList)
+            if (balanceCategoryDataList != null) {
+                if (this.balanceCategoryDataList != balanceCategoryDataList) {
+                    setBalanceCategoryDataForScheduleList(balanceCategoryDataList)
                 }
             }
         }

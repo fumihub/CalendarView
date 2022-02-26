@@ -9,7 +9,7 @@ import com.non_name_hero.calenderview.data.source.ScheduleDataSource.*
 import com.non_name_hero.calenderview.utils.PigLeadUtils
 import java.util.*
 
-class ScheduleRepository (
+class ScheduleRepository(
         val scheduleDataLocalSource: ScheduleDataSource,
         val mScheduleDataRemoteSource: ScheduleDataSource
 ) : ScheduleDataSource {
@@ -216,26 +216,36 @@ class ScheduleRepository (
      */
     override fun getBalanceData(startMonth: Date?, endMonth: Date?, callback: GetBalanceDataCallback) {
         if (cachedBalanceData == null && !balanceDataCacheIsDirty) {
-                scheduleDataLocalSource.getBalanceData(
-                        startMonth,
-                        endMonth,
-                        object : GetBalanceDataCallback {
-                            override fun onBalanceDataLoaded(balanceData: List<BalanceData>) {
-                                balanceDataCacheIsDirty = true
-                                cachedBalanceData = balanceData
-                                callback.onBalanceDataLoaded(balanceData)
-                            }
+            scheduleDataLocalSource.getBalanceData(
+                    startMonth,
+                    endMonth,
+                    object : GetBalanceDataCallback {
+                        override fun onBalanceDataLoaded(balanceData: List<BalanceData>) {
+                            balanceDataCacheIsDirty = true
+                            cachedBalanceData = balanceData
+                            callback.onBalanceDataLoaded(balanceData)
+                        }
 
-                            override fun onDataNotAvailable() {
-                                callback.onDataNotAvailable()
-                            }
+                        override fun onDataNotAvailable() {
+                            callback.onDataNotAvailable()
+                        }
 
 
-                        })
+                    })
         } else {
             callback.onBalanceDataLoaded(cachedBalanceData!!)
         }
     }
+
+    /* BalanceCategoryData */
+
+    /**
+     * カレンダーの表示(家計簿)データを取得
+     */
+    override fun getBalanceCategoryData(startMonth: Date, endMonth: Date, callback: GetBalanceCategoryDataCallback) {
+        scheduleDataLocalSource.getBalanceCategoryData(startMonth, endMonth, callback)
+    }
+
     /**
      * カレンダーの表示(家計簿)キャッシュデータを初期化
      */

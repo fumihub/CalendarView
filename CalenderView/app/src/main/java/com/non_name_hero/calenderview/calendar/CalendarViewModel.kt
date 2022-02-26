@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
+import com.non_name_hero.calenderview.data.BalanceCategoryData
 import com.non_name_hero.calenderview.data.BalanceData
 import com.non_name_hero.calenderview.data.CalendarData
 import com.non_name_hero.calenderview.data.Schedule
@@ -47,11 +48,11 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
     //set(value){ _scheduleListData.value = value.value}
 
     // for Calendar Balance mode
-    private var _balanceListData = MutableLiveData<List<BalanceData>>().apply {
-        value = mutableListOf<BalanceData>()
+    private var _balanceCategoryListData = MutableLiveData<List<BalanceCategoryData>>().apply {
+        value = mutableListOf<BalanceCategoryData>()
     }
-    val balanceListData: LiveData<List<BalanceData>>
-        get() = _balanceListData
+    val balanceCategoryListData: LiveData<List<BalanceCategoryData>>
+        get() = _balanceCategoryListData
 
     private val _balanceDataMap = MutableLiveData<Map<String, List<BalanceData>>>()
     val balanceDataMap: LiveData<Map<String, List<BalanceData>>>
@@ -174,18 +175,6 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
     }
 
     fun setBalanceItem(date: Date) {
-        // TODO 日付ごとのbalance情報取得が必要なら新しく作る必要がある
-        // balanceDataはその日のサマリー情報(支出と収入それぞれの合計値)しか持たないため
-        // 暫定的な対応として、仕様と異なるが月間のサマリー情報を表示させる
-        /*
-        val dateKey = PigLeadUtils.formatYYYYMMDD.format(date)
-        if (this._balanceDataMap.value?.containsKey(dateKey) == true) {
-            //tureならvalueがnullではない
-            _balanceListData.value = this.balanceDataMap.value?.get(dateKey)
-        }else{
-            _balanceListData.value = mutableListOf<BalanceData>()
-        }
-        */
         val calendar = Calendar.getInstance()
         calendar.time = date
         calendar.set(Calendar.DAY_OF_MONTH, 1)
@@ -196,13 +185,13 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
         calendar.add(Calendar.MONTH, 1)
         val end = calendar.time
         schedulesRepository.balanceDataCacheClear()
-        schedulesRepository.getBalanceData(startMonth = start, endMonth = end, object : GetBalanceDataCallback {
-            override fun onBalanceDataLoaded(balanceData: List<BalanceData>) {
-                _balanceListData.value = balanceData
+        schedulesRepository.getBalanceCategoryData(startMonth = start, endMonth = end, object : GetBalanceCategoryDataCallback {
+            override fun onBalanceCategoryDataLoaded(balanceCategoryData: List<BalanceCategoryData>) {
+                _balanceCategoryListData.value = balanceCategoryData
             }
 
             override fun onDataNotAvailable() {
-                TODO("Not yet implemented")
+                Log.e("balanceCategoryData", "balanceCategoryData not available")
             }
         })
         // 月間サマリー取得

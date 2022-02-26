@@ -11,6 +11,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.non_name_hero.calenderview.R
 import com.non_name_hero.calenderview.calendar.ScheduleListAdapter.ItemViewHolder
+import com.non_name_hero.calenderview.data.BalanceCategoryData
 import com.non_name_hero.calenderview.data.CalendarData
 import com.non_name_hero.calenderview.data.BalanceData
 import com.non_name_hero.calenderview.databinding.ScheduleFragmentItemBinding
@@ -18,7 +19,7 @@ import java.util.*
 
 class ScheduleListAdapter(private val context: Context, calendarViewModel: CalendarViewModel ) : RecyclerView.Adapter<ItemViewHolder>() {
     var calendarDataList: List<CalendarData>
-    var balanceDataList: List<BalanceData>
+    var balanceCategoryDataList: List<BalanceCategoryData>
     var currentMode: Boolean = false
     private val viewModel: CalendarViewModel
 
@@ -35,7 +36,7 @@ class ScheduleListAdapter(private val context: Context, calendarViewModel: Calen
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         setDrawable(holder.binding, position)
         if(currentMode){
-            holder.binding.balanceData = balanceDataList[position]
+            holder.binding.balanceCategoryData = balanceCategoryDataList[position]
         }else{
             holder.binding.calendarData = calendarDataList[position]
         }
@@ -45,7 +46,7 @@ class ScheduleListAdapter(private val context: Context, calendarViewModel: Calen
     override fun getItemCount(): Int {
         Log.d("currentMode: ", currentMode.toString())
         return if(currentMode){
-            this.balanceDataList.size
+            this.balanceCategoryDataList.size
         }else{
             this.calendarDataList.size
         }
@@ -56,8 +57,8 @@ class ScheduleListAdapter(private val context: Context, calendarViewModel: Calen
         notifyDataSetChanged()
     }
 
-    fun setBalanceDataForScheduleList(balanceData: List<BalanceData>) {
-        balanceDataList = balanceData
+    fun setBalanceCategoryDataForScheduleList(balanceCategoryData: List<BalanceCategoryData>) {
+        balanceCategoryDataList = balanceCategoryData
         notifyDataSetChanged()
     }
 
@@ -100,7 +101,7 @@ class ScheduleListAdapter(private val context: Context, calendarViewModel: Calen
 
     init {
         calendarDataList = ArrayList()
-        balanceDataList = ArrayList()
+        balanceCategoryDataList = ArrayList()
         viewModel = calendarViewModel
     }
 }

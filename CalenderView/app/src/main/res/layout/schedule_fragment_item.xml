@@ -13,8 +13,8 @@
             name="calendarData"
             type="com.non_name_hero.calenderview.data.CalendarData" />
         <variable
-            name="balanceData"
-            type="com.non_name_hero.calenderview.data.BalanceData" />
+            name="balanceCategoryData"
+            type="com.non_name_hero.calenderview.data.BalanceCategoryData" />
     </data>
 
     <LinearLayout
@@ -40,9 +40,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/schedule_list_fragment_item_padding"
-            android:text="@{balanceData.priceText}"
+            android:text="@{balanceCategoryData.priceText}"
             android:textColor="@{Color.WHITE}"
-            android:background="@{balanceData.balanceType == BalanceType.EXPENSES ? @color/redColor3 : @color/blueColor3}"
+            android:background="@{balanceCategoryData.balanceType == BalanceType.EXPENSES ? @color/redColor3 : @color/blueColor3}"
             android:visibility="@{currentMode?View.VISIBLE:View.GONE}"
             />
 
