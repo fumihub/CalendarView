@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">CalenderView</string>
+    <string name="app_name">PigLead</string>
     <string name="black">黒</string>
     <string name="dialog_massage_default"></string>
     <string name="dialog_positive_default">はい</string>
