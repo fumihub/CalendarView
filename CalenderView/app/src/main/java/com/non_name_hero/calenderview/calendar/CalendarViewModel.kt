@@ -90,14 +90,14 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
         loadHolidaySchedules()
         reloadCalendarData(true)
         reloadBalanceData()
-        reloadBalanceSummary()
+        reloadBalanceSummary(Date())
     }
 
     /**
      * 家計簿データの取得処理
      */
-    private fun reloadBalanceSummary() {
-        schedulesRepository.getBalanceSummary(null, object : GetBalanceSummaryCallback {
+    fun reloadBalanceSummary(yearMonth:Date? = null) {
+        schedulesRepository.getBalanceSummary(yearMonth= yearMonth, object : GetBalanceSummaryCallback {
             override fun onBalanceDataLoaded(balanceData: List<BalanceData>) {
                 // サマリーMapの生成
                 val map = mutableMapOf<String, List<BalanceData>>()

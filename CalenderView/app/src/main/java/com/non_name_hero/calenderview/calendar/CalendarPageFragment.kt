@@ -42,6 +42,16 @@ class CalendarPageFragment() : Fragment() {
         set(value) {
             field = value - DEFAULT_PAGE
         }
+    private val pageDate: Date
+        get() {
+            val calendar = Calendar.getInstance()
+            calendar.add(Calendar.MONTH, this.mProgressMonth)
+            calendar.clear(Calendar.DAY_OF_MONTH)
+            calendar.clear(Calendar.HOUR)
+            calendar.clear(Calendar.MINUTE)
+            calendar.clear(Calendar.SECOND)
+            return calendar.time
+        }
 
     var mHolidayMap: Map<String, List<CalendarData>> = HashMap()
     var mCalendarMap: Map<String, List<CalendarData>> = HashMap()
@@ -95,6 +105,10 @@ class CalendarPageFragment() : Fragment() {
                 Observer<Map<String, List<BalanceData>>> {
                     this.balanceDataMap = it
                     createCalendar(binding)
+                })
+
+        binding.viewmodel?.balanceSummaryMap?.observe(viewLifecycleOwner,
+                {
                     createSummary(binding)
                 })
 
@@ -108,9 +122,10 @@ class CalendarPageFragment() : Fragment() {
     private fun createSummary(binding: CalendarFragmentScreenSlidePageBinding) {
         var income = "0円"
         var expense = "0円"
+        val viewModel = binding.viewmodel
         val sdFormat = SimpleDateFormat("yyyy.MM")
-        val pageYearMonth = sdFormat.format(binding.viewmodel?.getPageYearMonth(offsetMonth = mProgressMonth ))
-        val balanceSummary = binding.viewmodel?.balanceSummaryMap?.value?.get(pageYearMonth)
+        val pageYearMonth = sdFormat.format(pageDate) // getPageYearMonthはUtil関数にした方が良いかも
+        val balanceSummary = viewModel?.balanceSummaryMap?.value?.get(pageYearMonth)
         balanceSummary?.forEach { balanceData ->
             if (balanceData.balanceType === BalanceType.INCOME) {
                 income = balanceData.priceText

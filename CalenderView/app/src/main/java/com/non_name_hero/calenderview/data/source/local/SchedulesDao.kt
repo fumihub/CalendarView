@@ -171,7 +171,7 @@ interface SchedulesDao {
     /* 家計簿サマリー情報を取得 */
     @Query("""
         SELECT 
-            b.timestamp AS timestamp,
+            substr(b.timestamp,1,7) as timestamp,
             sum(price) as price,
             c.balance_type as balanceType,
             count(c.balance_type) as count
@@ -179,7 +179,7 @@ interface SchedulesDao {
         JOIN balance_category bc ON b.balance_category_id = bc.balance_category_id 
         JOIN category c ON bc.category_id = c.category_id
         WHERE b.timestamp like :yearMonth || "%"
-        GROUP BY c.balance_type
+        GROUP BY substr(b.timestamp,1,7), c.balance_type
     """)
     fun getBalanceSummary(yearMonth:String): List<BalanceData>
 
@@ -193,7 +193,7 @@ interface SchedulesDao {
         FROM balance b 
         JOIN balance_category bc ON b.balance_category_id = bc.balance_category_id 
         JOIN category c ON bc.category_id = c.category_id
-        GROUP BY timestamp, c.balance_type
+        GROUP BY substr(b.timestamp,1,7), c.balance_type
     """)
     fun getBalanceSummary(): List<BalanceData>
 
