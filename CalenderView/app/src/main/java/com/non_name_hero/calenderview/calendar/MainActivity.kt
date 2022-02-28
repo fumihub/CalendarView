@@ -1,8 +1,8 @@
 package com.non_name_hero.calenderview.calendar
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
-import android.view.View
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -76,25 +76,33 @@ class MainActivity : AppCompatActivity() {
             goSettingActivity()
         }
 
-        /*スケジュール→家計簿切り替えボタン設定********/
+        /*初期設定*/
         pigIconButton = findViewById(R.id.pigIconButton)
         calendarIconButton = findViewById(R.id.calendarIconButton)
 //        calendarIconButton.visibility = View.GONE
+        val primary_color = Color.parseColor("#3A55EB")
+        calendarIconButton.setColorFilter(primary_color)
+
+        /*スケジュール→家計簿切り替えボタン設定********/
         pigIconButton.setOnClickListener {
             /*カレンダー画面に家計簿内容表示*/
 //            pigIconButton.visibility = View.GONE
 //            calendarIconButton.visibility = View.VISIBLE
 //            changeMode(true)
-            binding.viewmodel?.setCurrentMode(false)
-
+            binding.viewmodel?.setCurrentMode(true)
+            /*現在表示の画面を色でわかりやすく表示(表示中：プライマリーカラー、非表示中：灰色)*/
+            calendarIconButton.setColorFilter(null)
+            pigIconButton.setColorFilter(primary_color)
         }
         calendarIconButton.setOnClickListener {
             /*カレンダー画面にスケジュール内容表示*/
 //            calendarIconButton.visibility = View.GONE
 //            pigIconButton.visibility = View.VISIBLE
 //            changeMode(false)
-            binding.viewmodel?.setCurrentMode(true)
-
+            binding.viewmodel?.setCurrentMode(false)
+            /*現在表示の画面を色でわかりやすく表示(表示中：プライマリーカラー、非表示中：灰色)*/
+            pigIconButton.setColorFilter(null)
+            calendarIconButton.setColorFilter(primary_color)
         }
         /************************************************/
 

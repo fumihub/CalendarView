@@ -29,73 +29,18 @@
             app:layout_constraintBottom_toTopOf="@id/calendar_fragment_container"
             app:layout_constraintDimensionRatio=""
             app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="-36dp">
+            tools:layout_editor_absoluteX="16dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/toolbarLayout"
+            <TextView
+                android:id="@+id/mainToolbar_title"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
-
-                <TextView
-                    android:id="@+id/mainToolbar_title"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:gravity="left|center_vertical"
-                    android:text="@{viewmodel.currentYearMonth}"
-                    android:textColor="@color/blackColor1"
-                    android:textSize="25sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/iconLayout"
-                    app:layout_constraintHorizontal_weight="8"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="HardcodedText" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/iconLayout"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_weight="2"
-                    app:layout_constraintStart_toEndOf="@+id/mainToolbar_title"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <ImageButton
-                        android:id="@+id/pigIconButton"
-                        android:layout_width="0dp"
-                        android:layout_height="35dp"
-                        android:layout_margin="10dp"
-                        android:background="@drawable/pig_icon"
-                        android:scaleType="centerInside"
-                        android:visibility="@{viewmodel.currentMode ? View.VISIBLE:View.GONE }"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="@+id/iconLayout"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageButton
-                        android:id="@+id/calendarIconButton"
-                        android:layout_width="0dp"
-                        android:layout_height="35dp"
-                        android:layout_margin="10dp"
-                        android:background="@drawable/calendar_icon"
-                        android:scaleType="centerInside"
-                        android:visibility="@{viewmodel.currentMode  ? View.GONE : View.VISIBLE }"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="@+id/iconLayout"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                android:gravity="left|center_vertical"
+                android:text="@{viewmodel.currentYearMonth}"
+                android:textColor="@color/blackColor1"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
 
         </androidx.appcompat.widget.Toolbar>
 
@@ -103,53 +48,83 @@
             android:id="@+id/calendar_fragment_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@id/settingLayout"
+            app:layout_constraintBottom_toTopOf="@id/NavigationLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/mainToolbar">
 
         </FrameLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/settingLayout"
+            android:id="@+id/NavigationLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_margin="5dp"
+            app:layout_constraintBottom_toTopOf="@id/adView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/calendar_fragment_container">
 
+            <!--スケジュールボタン/家計簿ボタン-->
             <ImageButton
-                android:id="@+id/settingIconButton"
+                android:id="@+id/calendarIconButton"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_margin="10dp"
-                android:background="@drawable/setting_icon"
+                android:layout_height="35dp"
+                android:layout_margin="5dp"
+                android:src="@drawable/calendar_icon"
+                android:background="@color/whiteColor"
                 android:scaleType="centerInside"
-                style="?android:attr/borderlessButtonStyle"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/adView"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_weight="1"/>
-            <!--広告のデザイン-->
-            <com.google.android.gms.ads.AdView
-                android:id="@+id/adView"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                app:adSize="BANNER"
-                app:adUnitId="ca-app-pub-3940256099942544/6300978111"
-                app:layout_constraintStart_toEndOf="@+id/settingIconButton"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/pigIconButton"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_chainStyle="spread"
-                app:layout_constraintHorizontal_weight="6">
-            </com.google.android.gms.ads.AdView>
+                app:layout_constraintHorizontal_weight="1"/>
+
+            <ImageButton
+                android:id="@+id/pigIconButton"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_margin="5dp"
+                android:src="@drawable/pig_icon"
+                android:background="@color/whiteColor"
+                android:scaleType="centerInside"
+                style="?android:attr/borderlessButtonStyle"
+                app:layout_constraintStart_toEndOf="@+id/calendarIconButton"
+                app:layout_constraintEnd_toStartOf="@+id/settingIconButton"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_weight="1"/>
+
+            <!--設定ボタン-->
+            <ImageButton
+                android:id="@+id/settingIconButton"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:layout_margin="5dp"
+                android:src="@drawable/setting_icon"
+                android:background="@color/whiteColor"
+                android:scaleType="centerInside"
+                style="?android:attr/borderlessButtonStyle"
+                app:layout_constraintStart_toEndOf="@+id/pigIconButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_weight="1"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--広告のデザイン-->
+        <com.google.android.gms.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            app:adSize="BANNER"
+            app:adUnitId="ca-app-pub-3940256099942544/6300978111"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/NavigationLayout">
+        </com.google.android.gms.ads.AdView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

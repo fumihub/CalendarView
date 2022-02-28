@@ -71,7 +71,7 @@ class CalendarFragment : Fragment() {
         // pagerを設定
         mPager = rootView.findViewById<View>(R.id.pager) as ViewPager2
         mPagerAdapter = CalendarPagerAdapter(this)
-        mPager!!.offscreenPageLimit = 5
+        mPager!!.offscreenPageLimit = 2
         mPager!!.adapter = mPagerAdapter
         mPager!!.setCurrentItem(DEFAULT_PAGE, false)
         mPager!!.registerOnPageChangeCallback(object : OnPageChangeCallback() {
