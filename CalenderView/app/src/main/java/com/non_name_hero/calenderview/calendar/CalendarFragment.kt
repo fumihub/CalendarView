@@ -48,6 +48,8 @@ class CalendarFragment : Fragment() {
         // カレンダーのスケジュールを更新
         binding.viewmodel?.reloadCalendarData(true)
         binding.viewmodel?.reloadBalanceData(forceUpdate = true)
+        // 家計簿のサマリーを更新
+        binding.viewmodel?.reloadBalanceSummary(null)
     }
 
     private fun loadData() {
@@ -96,6 +98,7 @@ class CalendarFragment : Fragment() {
                     val date = calendar.time
                     // 家計簿一覧取得作成(下部)
                     binding.viewmodel?.setBalanceItem(date)
+                    binding.viewmodel?.reloadBalanceSummary()
                 }
             }
         })

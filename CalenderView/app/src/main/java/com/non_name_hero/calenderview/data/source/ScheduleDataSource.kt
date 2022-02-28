@@ -2,6 +2,7 @@ package com.non_name_hero.calenderview.data.source
 
 import androidx.lifecycle.LiveData
 import com.non_name_hero.calenderview.data.*
+import java.time.YearMonth
 import java.util.*
 
 interface ScheduleDataSource {
@@ -160,6 +161,15 @@ interface ScheduleDataSource {
         fun onDataNotAvailable()
     }
     fun getBalanceCategoryData(startMonth: Date, endMonth: Date, callback: GetBalanceCategoryDataCallback)
+
+    /**
+     * 家計簿のサマリー取得コールバック
+     */
+    interface GetBalanceSummaryCallback {
+        fun onBalanceDataLoaded(balanceData: List<BalanceData>)
+        fun onDataNotAvailable()
+    }
+    fun getBalanceSummary(yearMonth: Date?,callback:GetBalanceSummaryCallback)
 
     /*CategoryData用コールバック*/
     /*全要素取得時コールバック*/
