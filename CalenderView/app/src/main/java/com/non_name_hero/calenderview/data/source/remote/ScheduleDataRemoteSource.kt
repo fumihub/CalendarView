@@ -182,6 +182,7 @@ class ScheduleDataRemoteSource() : ScheduleDataSource {
 
     /* BalanceData */
     override fun getBalanceData(startMonth: Date?, endMonth: Date?, callback: GetBalanceDataCallback) {}
+    override fun getBalanceCategoryData(startMonth: Date, endMonth: Date, callback: GetBalanceCategoryDataCallback) {}
     override fun getBalanceSummary(yearMonth: Date?,callback: GetBalanceSummaryCallback) {}
 
     /*CategoryData*/

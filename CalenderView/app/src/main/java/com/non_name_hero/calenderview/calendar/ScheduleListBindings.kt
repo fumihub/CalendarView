@@ -5,6 +5,8 @@ import android.widget.ListView
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
+import com.non_name_hero.calenderview.data.BalanceCategoryData
+import com.non_name_hero.calenderview.data.BalanceData
 import com.non_name_hero.calenderview.data.CalendarData
 import com.non_name_hero.calenderview.inputForm.ListAdapter
 import com.non_name_hero.calenderview.inputForm.SubCategoryListAdapter
@@ -48,6 +50,18 @@ object ScheduleListBindings {
         }
     }
 
+    @BindingAdapter("balanceItems")
+    @kotlin.jvm.JvmStatic
+    fun setBalanceListItems(view: RecyclerView, balanceCategoryDataList: List<BalanceCategoryData>?) {
+        with(view.adapter as ScheduleListAdapter) {
+            if (balanceCategoryDataList != null) {
+                if (this.balanceCategoryDataList != balanceCategoryDataList) {
+                    setBalanceCategoryDataForScheduleList(balanceCategoryDataList)
+                }
+            }
+        }
+    }
+
     @BindingAdapter("colorEditMode")
     @kotlin.jvm.JvmStatic
     fun setColorEditMode(view: ListView, editMode: LiveData<Boolean>) {
@@ -68,7 +82,8 @@ object ScheduleListBindings {
     @kotlin.jvm.JvmStatic
     fun setCurrentMode(view: RecyclerView, mode: Boolean?) {
         with(view.adapter as ScheduleListAdapter) {
-            this.currentMode = mode ?: true
+            this.currentMode = mode ?: false
+            this.notifyDataSetChanged()
         }
     }
 

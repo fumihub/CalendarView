@@ -4,9 +4,17 @@
 
     <data>
         <import type="android.graphics.Color"/>
+        <import type="android.view.View"/>
+        <import type="com.non_name_hero.calenderview.utils.BalanceType"/>
+        <variable
+            name="currentMode"
+            type="Boolean"/>
         <variable
             name="calendarData"
             type="com.non_name_hero.calenderview.data.CalendarData" />
+        <variable
+            name="balanceCategoryData"
+            type="com.non_name_hero.calenderview.data.BalanceCategoryData" />
     </data>
 
     <LinearLayout
@@ -15,6 +23,7 @@
         android:layout_margin="@dimen/schedule_list_margin"
         android:orientation="horizontal">
 
+        <!--クリックした日付のスケジュール-->
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
@@ -22,7 +31,21 @@
             android:padding="@dimen/schedule_list_fragment_item_padding"
             android:text="@{calendarData.scheduleTitle}"
             android:textColor="@{calendarData.getTextColor() ? Color.BLACK : Color.WHITE}"
+            android:visibility="@{currentMode?View.GONE:View.VISIBLE}"
             />
+
+        <!--クリックした日付の家計簿-->
+        <TextView
+            android:id="@+id/balanceText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/schedule_list_fragment_item_padding"
+            android:text="@{balanceCategoryData.priceText}"
+            android:textColor="@{Color.WHITE}"
+            android:background="@{balanceCategoryData.balanceType == BalanceType.EXPENSES ? @color/redColor3 : @color/blueColor3}"
+            android:visibility="@{currentMode?View.VISIBLE:View.GONE}"
+            />
+
     </LinearLayout>
 
 </layout>

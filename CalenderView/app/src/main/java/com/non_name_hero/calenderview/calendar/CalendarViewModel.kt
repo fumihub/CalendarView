@@ -1,11 +1,11 @@
 package com.non_name_hero.calenderview.calendar
 
 import android.util.Log
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
+import com.non_name_hero.calenderview.data.BalanceCategoryData
 import com.non_name_hero.calenderview.data.BalanceData
 import com.non_name_hero.calenderview.data.CalendarData
 import com.non_name_hero.calenderview.data.Schedule
@@ -53,6 +53,12 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
     //set(value){ _scheduleListData.value = value.value}
 
     // for Calendar Balance mode
+    private var _balanceCategoryListData = MutableLiveData<List<BalanceCategoryData>>().apply {
+        value = mutableListOf<BalanceCategoryData>()
+    }
+    val balanceCategoryListData: LiveData<List<BalanceCategoryData>>
+        get() = _balanceCategoryListData
+
     private var _balanceListData: LiveData<List<BalanceData>> = MutableLiveData<List<BalanceData>>().apply {
         value = mutableListOf<BalanceData>()
     }
@@ -79,8 +85,8 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
 
     /**
      * 現在のカレンダーモード
-     * value = true の時にカレンダーモード
-     *         false の時に家計簿モード
+     * value = false の時にカレンダーモード
+     *         true の時に家計簿モード
      */
     private val _currentMode = MutableLiveData<Boolean>().apply { this.value = false }
     val currentMode: LiveData<Boolean>
@@ -90,6 +96,7 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
         loadHolidaySchedules()
         reloadCalendarData(true)
         reloadBalanceData()
+        setBalanceItem(Date())
         reloadBalanceSummary(Date())
     }
 
@@ -183,7 +190,7 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
     /**
      * 家計簿データの取得
      */
-    private fun reloadBalanceData(startMonth: Date? = null, forceUpdate: Boolean = false) {
+    fun reloadBalanceData(startMonth: Date? = null, forceUpdate: Boolean = false) {
         if (forceUpdate) {
             // TODO LiveDataでは不要？
             schedulesRepository.balanceDataCacheClear()
@@ -201,11 +208,11 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
     /**
      * roomから家計簿データを取得時のcallback
      */
-    override fun onBalanceDataLoaded(balanceLiveData: LiveData<List<BalanceData>>) {
-        _balanceListData = balanceLiveData
-        Log.d("balanceData", balanceLiveData.value.toString())
+    override fun onBalanceDataLoaded(balanceData: List<BalanceData>) {
+        Log.d("balanceData", balanceData.toString())
+        _balanceDataMap.value = PigLeadUtils.getBalanceCalendarDataMapByBalanceDataList(balanceData)
         // Livedataの監視
-        balanceListData.observeForever(balanceDataListLiveDataObserver)
+//        balanceListData.observeForever(balanceDataListLiveDataObserver)
     }
 
     // etc
@@ -221,10 +228,39 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
         _selectedDate.value = date
     }
 
+    fun setBalanceItem(date: Date) {
+        val calendar = Calendar.getInstance()
+        calendar.time = date
+        calendar.set(Calendar.DAY_OF_MONTH, 1)
+        calendar.set(Calendar.HOUR, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        val start = calendar.time
+        calendar.add(Calendar.MONTH, 1)
+        val end = calendar.time
+        schedulesRepository.balanceDataCacheClear()
+        schedulesRepository.getBalanceCategoryData(startMonth = start, endMonth = end, object : GetBalanceCategoryDataCallback {
+            override fun onBalanceCategoryDataLoaded(balanceCategoryData: List<BalanceCategoryData>) {
+                _balanceCategoryListData.value = balanceCategoryData
+            }
+
+            override fun onDataNotAvailable() {
+                Log.e("balanceCategoryData", "balanceCategoryData not available")
+            }
+        })
+        // 月間サマリー取得
+        _selectedDate.value = date
+    }
+
     fun removeSchedule(scheduleId: Long) {
         schedulesRepository.removeScheduleByScheduleId(scheduleId)
         reloadCalendarData(true)
     }
+
+//    fun removeBalance(balanceId: Long) {
+//        schedulesRepository.removeBalanceByBalanceId(balanceId)
+//        reloadBalanceData()
+//    }
 
     init {
         val calendar = Calendar.getInstance()
@@ -236,7 +272,7 @@ class CalendarViewModel(private val schedulesRepository: ScheduleRepository) : V
     }
 
     override fun onCleared() {
-        balanceListData.removeObserver(balanceDataListLiveDataObserver)
+//        balanceListData.removeObserver(balanceDataListLiveDataObserver)
         super.onCleared()
     }
 }

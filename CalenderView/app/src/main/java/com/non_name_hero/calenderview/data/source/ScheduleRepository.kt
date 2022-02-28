@@ -1,5 +1,6 @@
 package com.non_name_hero.calenderview.data.source
 
+import android.util.Log
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,7 +9,7 @@ import com.non_name_hero.calenderview.data.source.ScheduleDataSource.*
 import com.non_name_hero.calenderview.utils.PigLeadUtils
 import java.util.*
 
-class ScheduleRepository (
+class ScheduleRepository(
         val scheduleDataLocalSource: ScheduleDataSource,
         val mScheduleDataRemoteSource: ScheduleDataSource
 ) : ScheduleDataSource {
@@ -18,7 +19,7 @@ class ScheduleRepository (
     var mCacheIsDirty = false
     var mCalendarCacheIsDirty = false
     var mHolidayCacheIsDirty = false
-    var cachedBalanceData: LiveData<List<BalanceData>> = MutableLiveData<List<BalanceData>>().apply { this.value = emptyList() }
+    var cachedBalanceData: List<BalanceData>? = null//: LiveData<List<BalanceData>> = MutableLiveData<List<BalanceData>>().apply { this.value = emptyList() }
     var balanceDataCacheIsDirty = false
 
     override fun changeUserInfo(mailAddress: String, newPassword: String, callback: ChangeUserInfoCallback) {
@@ -214,26 +215,35 @@ class ScheduleRepository (
      * カレンダーの表示(家計簿)データを取得
      */
     override fun getBalanceData(startMonth: Date?, endMonth: Date?, callback: GetBalanceDataCallback) {
-        if (cachedBalanceData.value?.isEmpty() == true && !balanceDataCacheIsDirty) {
+        if (cachedBalanceData == null && !balanceDataCacheIsDirty) {
             scheduleDataLocalSource.getBalanceData(
-                startMonth,
-                endMonth,
-                object : GetBalanceDataCallback {
-                    override fun onBalanceDataLoaded(balanceLiveData: LiveData<List<BalanceData>>) {
-                        balanceDataCacheIsDirty = true
-                        callback.onBalanceDataLoaded(balanceLiveData)
-                    }
+                    startMonth,
+                    endMonth,
+                    object : GetBalanceDataCallback {
+                        override fun onBalanceDataLoaded(balanceData: List<BalanceData>) {
+                            balanceDataCacheIsDirty = true
+                            cachedBalanceData = balanceData
+                            callback.onBalanceDataLoaded(balanceData)
+                        }
 
-                    override fun onDataNotAvailable() {
-                        callback.onDataNotAvailable()
-                    }
+                        override fun onDataNotAvailable() {
+                            callback.onDataNotAvailable()
+                        }
 
 
-                })
+                    })
         } else {
-            callback.onBalanceDataLoaded(cachedBalanceData)
+            callback.onBalanceDataLoaded(cachedBalanceData!!)
         }
     }
+
+    /* BalanceCategoryData */
+
+    /**
+     * カレンダーの表示(家計簿)データを取得
+     */
+    override fun getBalanceCategoryData(startMonth: Date, endMonth: Date, callback: GetBalanceCategoryDataCallback) {
+        scheduleDataLocalSource.getBalanceCategoryData(startMonth, endMonth, callback)
 
     /**
      * 収支のサマリーを取得する
@@ -250,7 +260,7 @@ class ScheduleRepository (
      */
     fun balanceDataCacheClear() {
         balanceDataCacheIsDirty = false
-        cachedBalanceData = MutableLiveData<List<BalanceData>>().apply { this.value = emptyList() }
+        cachedBalanceData = null
     }
 
     /*CategoryData*/

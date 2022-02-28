@@ -147,11 +147,24 @@ interface ScheduleDataSource {
      * BalanceData取得コールバック
      */
     interface GetBalanceDataCallback {
-        fun onBalanceDataLoaded(balanceLiveData: LiveData<List<BalanceData>>)
+        fun onBalanceDataLoaded(balanceData: List<BalanceData>)
         fun onDataNotAvailable()
     }
     fun getBalanceData(startMonth: Date?, endMonth: Date?, callback: GetBalanceDataCallback)
 
+    /* BalanceCategoryData　*/
+    /**
+     * BalanceCategoryData取得コールバック
+     */
+    interface GetBalanceCategoryDataCallback {
+        fun onBalanceCategoryDataLoaded(balanceCategoryData: List<BalanceCategoryData>)
+        fun onDataNotAvailable()
+    }
+    fun getBalanceCategoryData(startMonth: Date, endMonth: Date, callback: GetBalanceCategoryDataCallback)
+
+    /**
+     * 家計簿のサマリー取得コールバック
+     */
     interface GetBalanceSummaryCallback {
         fun onBalanceDataLoaded(balanceData: List<BalanceData>)
         fun onDataNotAvailable()

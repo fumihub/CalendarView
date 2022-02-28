@@ -12,6 +12,7 @@ import com.non_name_hero.calenderview.R
 import com.non_name_hero.calenderview.databinding.CalendarFragmentBinding
 import com.non_name_hero.calenderview.utils.ActivityUtils
 import java.lang.Boolean
+import java.util.*
 
 class CalendarFragment : Fragment() {
     private var mPager: ViewPager2? = null
@@ -46,6 +47,7 @@ class CalendarFragment : Fragment() {
         super.onResume()
         // カレンダーのスケジュールを更新
         binding.viewmodel?.reloadCalendarData(true)
+        binding.viewmodel?.reloadBalanceData(forceUpdate = true)
         // 家計簿のサマリーを更新
         binding.viewmodel?.reloadBalanceSummary(null)
     }
@@ -89,6 +91,13 @@ class CalendarFragment : Fragment() {
                 if (pagerIdleFlag) {
                     val offsetMonth = position - DEFAULT_PAGE
                     binding.viewmodel?.setCurrentYearMonth(offsetMonth)
+
+                    // 開いている月のDateを生成
+                    val calendar = Calendar.getInstance()
+                    calendar.add(Calendar.MONTH, offsetMonth)
+                    val date = calendar.time
+                    // 家計簿一覧取得作成(下部)
+                    binding.viewmodel?.setBalanceItem(date)
                     binding.viewmodel?.reloadBalanceSummary()
                 }
             }

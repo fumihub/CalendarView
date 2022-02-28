@@ -158,6 +158,17 @@ class ScheduleDataLocalSource  //コンストラクタ
     }
 
     /**
+     * balanceCategoryDataを取得しcallbackを実行
+     *
+     * @param startMonth 取得範囲の開始月
+     * @param endMonth 取得範囲の終了月
+     */
+    override fun getBalanceCategoryData(startMonth: Date, endMonth: Date, callback: GetBalanceCategoryDataCallback) {
+        val runnable = Runnable {
+            val balanceCategoryDataList = schedulesDao.getBalanceCategoryDataListByMonthPeriod(startMonth, endMonth)
+            appExecutors.mainThread.execute { callback.onBalanceCategoryDataLoaded(balanceCategoryDataList) }
+
+    /**
      * 家計簿のサマリーを取得
      * @param yearMonth 期間を指定。nullで全期間の集計
      * @param callback 取得完了後の処理

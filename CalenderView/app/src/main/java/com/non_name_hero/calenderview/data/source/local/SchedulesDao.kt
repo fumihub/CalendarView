@@ -104,6 +104,28 @@ interface SchedulesDao {
         SELECT
             b.timestamp AS timestamp,
             c.balance_type AS balanceType,
+            b.price AS price,
+            bc.category_name AS categoryName
+        FROM balance b
+            JOIN balance_category bc ON bc.balance_category_id = b.balance_category_id
+            JOIN category c ON bc.category_id = c.category_id
+        WHERE
+            b.used_at_datetime >= :startMonth
+            and b.used_at_datetime <= :endMonth
+        ORDER BY b.timestamp, c.balance_type
+            """)
+    fun getBalanceCategoryDataListByMonthPeriod(startMonth: Date, endMonth: Date): List<BalanceCategoryData>
+
+    /**
+     * TODO: 月指定で取得する
+     * -- WHERE
+     * -- b.used_at_datetime >= :startMonth
+     * -- and b.used_at_datetime <= :endMonth
+     */
+    @Query("""
+        SELECT
+            b.timestamp AS timestamp,
+            c.balance_type AS balanceType,
             sum(b.price) AS price,
             count(*) AS count
         FROM balance b
@@ -115,7 +137,7 @@ interface SchedulesDao {
         GROUP BY timestamp, c.balance_type
         ORDER BY b.timestamp, c.balance_type
             """)
-    fun getBalanceDataListByMonthPeriod(startMonth: Date, endMonth: Date): LiveData<List<BalanceData>>
+    fun getBalanceDataListByMonthPeriod(startMonth: Date, endMonth: Date): List<BalanceData>
 
     @Query("""
         SELECT
@@ -129,7 +151,7 @@ interface SchedulesDao {
         GROUP BY timestamp, c.balance_type
         ORDER BY b.timestamp, c.balance_type
             """)
-    fun getBalanceDataList(): LiveData<List<BalanceData>>
+    fun getBalanceDataList(): List<BalanceData>
 
     /*CategoryAndBalanceCategory*/
     /*CategoryAndBalanceCategoryの全ての要素をリストとして取り出す*/
