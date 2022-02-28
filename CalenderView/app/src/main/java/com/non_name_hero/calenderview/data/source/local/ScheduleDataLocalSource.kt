@@ -167,6 +167,8 @@ class ScheduleDataLocalSource  //コンストラクタ
         val runnable = Runnable {
             val balanceCategoryDataList = schedulesDao.getBalanceCategoryDataListByMonthPeriod(startMonth, endMonth)
             appExecutors.mainThread.execute { callback.onBalanceCategoryDataLoaded(balanceCategoryDataList) }
+        }
+    }
 
     /**
      * 家計簿のサマリーを取得

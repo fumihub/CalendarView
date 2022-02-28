@@ -244,6 +244,7 @@ class ScheduleRepository(
      */
     override fun getBalanceCategoryData(startMonth: Date, endMonth: Date, callback: GetBalanceCategoryDataCallback) {
         scheduleDataLocalSource.getBalanceCategoryData(startMonth, endMonth, callback)
+    }
 
     /**
      * 収支のサマリーを取得する
