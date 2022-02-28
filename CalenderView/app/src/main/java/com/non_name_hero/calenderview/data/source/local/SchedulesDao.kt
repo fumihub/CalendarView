@@ -168,6 +168,34 @@ interface SchedulesDao {
         """)
     fun getCategoryDataByBalanceCategoryId(balanceCategoryId: Int): List<CategoryData>
 
+    /* 家計簿サマリー情報を取得 */
+    @Query("""
+        SELECT 
+            substr(b.timestamp,1,7) as timestamp,
+            sum(price) as price,
+            c.balance_type as balanceType,
+            count(c.balance_type) as count
+        FROM balance b 
+        JOIN balance_category bc ON b.balance_category_id = bc.balance_category_id 
+        JOIN category c ON bc.category_id = c.category_id
+        WHERE b.timestamp like :yearMonth || "%"
+        GROUP BY substr(b.timestamp,1,7), c.balance_type
+    """)
+    fun getBalanceSummary(yearMonth:String): List<BalanceData>
+
+    /* 家計簿サマリー情報の取得(全期間) */
+    @Query("""
+        SELECT 
+            substr(b.timestamp,1,7) AS timestamp,
+            sum(price) as price,
+            c.balance_type as balanceType,
+            count(c.balance_type) as count
+        FROM balance b 
+        JOIN balance_category bc ON b.balance_category_id = bc.balance_category_id 
+        JOIN category c ON bc.category_id = c.category_id
+        GROUP BY substr(b.timestamp,1,7), c.balance_type
+    """)
+    fun getBalanceSummary(): List<BalanceData>
 
     /*Balance*/
     @get:Query("SELECT * FROM balance ORDER BY balance_id")

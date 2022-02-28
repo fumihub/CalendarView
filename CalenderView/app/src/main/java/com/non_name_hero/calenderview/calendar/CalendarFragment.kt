@@ -46,6 +46,8 @@ class CalendarFragment : Fragment() {
         super.onResume()
         // カレンダーのスケジュールを更新
         binding.viewmodel?.reloadCalendarData(true)
+        // 家計簿のサマリーを更新
+        binding.viewmodel?.reloadBalanceSummary(null)
     }
 
     private fun loadData() {
@@ -87,6 +89,7 @@ class CalendarFragment : Fragment() {
                 if (pagerIdleFlag) {
                     val offsetMonth = position - DEFAULT_PAGE
                     binding.viewmodel?.setCurrentYearMonth(offsetMonth)
+                    binding.viewmodel?.reloadBalanceSummary()
                 }
             }
         })
