@@ -109,7 +109,7 @@ class CalendarPageFragment() : Fragment() {
 
         binding.viewmodel?.balanceSummaryMap?.observe(viewLifecycleOwner,
                 {
-                    createSummary(binding)
+                    createSummary(binding, it)
                 })
 
         binding.executePendingBindings()
@@ -119,14 +119,13 @@ class CalendarPageFragment() : Fragment() {
     /**
      * サマリー情報の更新
      */
-    private fun createSummary(binding: CalendarFragmentScreenSlidePageBinding) {
+    private fun createSummary(binding: CalendarFragmentScreenSlidePageBinding, summary: Map<String, List<BalanceData>>) {
         var income = "0円"
         var expense = "0円"
-        val viewModel = binding.viewmodel
         val sdFormat = SimpleDateFormat("yyyy.MM")
-        val pageYearMonth = sdFormat.format(pageDate) // getPageYearMonthはUtil関数にした方が良いかも
-        val balanceSummary = viewModel?.balanceSummaryMap?.value?.get(pageYearMonth)
-        balanceSummary?.forEach { balanceData ->
+        val pageYearMonth = sdFormat.format(pageDate)
+        val balanceSummary = summary[pageYearMonth] ?: listOf()
+        balanceSummary.forEach { balanceData ->
             if (balanceData.balanceType === BalanceType.INCOME) {
                 income = balanceData.priceText
             } else if (balanceData.balanceType === BalanceType.EXPENSES) {
