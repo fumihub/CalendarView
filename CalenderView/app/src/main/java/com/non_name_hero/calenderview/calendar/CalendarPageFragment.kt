@@ -236,7 +236,6 @@ class CalendarPageFragment() : Fragment() {
                 // セルタップ時の動作
                 calendarCellBinding.root.setOnClickListener { _ ->
                     binding.viewmodel?.setScheduleItem(cellDate)
-                    binding.viewmodel?.setBalanceItem(cellDate)
                     true
                 }
                 // セル長押し時の動作

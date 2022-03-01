@@ -168,6 +168,7 @@ class ScheduleDataLocalSource  //コンストラクタ
             val balanceCategoryDataList = schedulesDao.getBalanceCategoryDataListByMonthPeriod(startMonth, endMonth)
             appExecutors.mainThread.execute { callback.onBalanceCategoryDataLoaded(balanceCategoryDataList) }
         }
+        appExecutors.diskIO.execute(runnable)
     }
 
     /**

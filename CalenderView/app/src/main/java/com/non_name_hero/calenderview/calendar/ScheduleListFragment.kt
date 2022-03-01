@@ -28,22 +28,23 @@ class ScheduleListFragment : Fragment() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(context)
         // setItemTouchHelperの設定
-        val itemDecor = ItemTouchHelper(
-                object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN,
-                        ItemTouchHelper.RIGHT) {
-                    override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
-                        val fromPos = viewHolder.adapterPosition
-                        val toPos = target.adapterPosition
-                        adapter.notifyItemMoved(fromPos, toPos)
-                        return true
-                    }
-
-                    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                        val fromPos = viewHolder.adapterPosition
-                        adapter.removeScheduleItem(fromPos)
-                    }
-                })
-        itemDecor.attachToRecyclerView(binding.scheduleRecyclerView)
+        // TODO スケジュール/家計簿 削除機能について検討する。
+//        val itemDecor = ItemTouchHelper(
+//                object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN,
+//                        ItemTouchHelper.RIGHT) {
+//                    override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+//                        val fromPos = viewHolder.adapterPosition
+//                        val toPos = target.adapterPosition
+//                        adapter.notifyItemMoved(fromPos, toPos)
+//                        return true
+//                    }
+//
+//                    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+//                        val fromPos = viewHolder.adapterPosition
+//                        adapter.removeScheduleItem(fromPos)
+//                    }
+//                })
+//        itemDecor.attachToRecyclerView(binding.scheduleRecyclerView)
         return binding.root
     }
 
